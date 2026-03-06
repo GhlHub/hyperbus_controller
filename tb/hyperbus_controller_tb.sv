@@ -359,6 +359,118 @@ module hyperbus_controller_tb;
         end
     endtask
 
+    task automatic axi_full_same_cycle_rw_check(
+        input logic [31:0] rd_addr,
+        input logic [31:0] wr_addr,
+        input logic [31:0] wr_data,
+        input logic [31:0] exp_rd_data
+    );
+        time t_aw_hs;
+        time t_ar_acc;
+        time t_b_seen;
+        time t_r_seen;
+        logic aw_hs;
+        logic ar_acc;
+        logic b_seen;
+        logic r_seen;
+        logic [31:0] rd_one [0:31];
+        begin
+            t_aw_hs = 0;
+            t_ar_acc = 0;
+            t_b_seen = 0;
+            t_r_seen = 0;
+            aw_hs = 1'b0;
+            ar_acc = 1'b0;
+            b_seen = 1'b0;
+            r_seen = 1'b0;
+
+            // Issue AW and AR in the same AXI cycle.
+            @(posedge axi_aclk);
+            s_axi_awaddr  <= wr_addr;
+            s_axi_awlen   <= 8'd0;
+            s_axi_awsize  <= 3'd2;
+            s_axi_awburst <= 2'b01;
+            s_axi_awvalid <= 1'b1;
+
+            s_axi_araddr  <= rd_addr;
+            s_axi_arlen   <= 8'd0;
+            s_axi_arsize  <= 3'd2;
+            s_axi_arburst <= 2'b01;
+            s_axi_arvalid <= 1'b1;
+
+            // W beat will be sent immediately after AW handshake.
+            s_axi_wdata   <= wr_data;
+            s_axi_wstrb   <= 4'hF;
+            s_axi_wlast   <= 1'b1;
+            s_axi_wvalid  <= 1'b0;
+
+            while (!aw_hs) begin
+                @(posedge axi_aclk);
+                if (!aw_hs && s_axi_awvalid && s_axi_awready) begin
+                    aw_hs = 1'b1;
+                    t_aw_hs = $time;
+                    s_axi_awvalid <= 1'b0;
+                    s_axi_wvalid  <= 1'b1;
+                end
+            end
+
+            // Complete single-beat W.
+            `WAIT_AXI_COND(s_axi_wready && s_axi_wvalid, "same-cycle test W handshake")
+            @(negedge axi_aclk);
+            s_axi_wvalid <= 1'b0;
+            s_axi_wlast  <= 1'b0;
+
+            // Hold ARVALID until a reliable acceptance window. This avoids
+            // false handshakes from stale-high ARREADY while AW is still active.
+            while (!ar_acc) begin
+                @(posedge axi_aclk);
+                if (s_axi_arvalid && s_axi_arready && !s_axi_awvalid) begin
+                    ar_acc = 1'b1;
+                    t_ar_acc = $time;
+                    s_axi_arvalid <= 1'b0;
+                end
+            end
+
+            // Criterion: for same-cycle AW+AR request, write service should complete
+            // before read service (B must be observed before first R beat).
+            s_axi_bready <= 1'b1;
+            s_axi_rready <= 1'b1;
+            while (!(b_seen && r_seen)) begin
+                @(posedge axi_aclk);
+                if (!b_seen && s_axi_bvalid) begin
+                    b_seen = 1'b1;
+                    t_b_seen = $time;
+                end
+                if (!r_seen && s_axi_rvalid) begin
+                    r_seen = 1'b1;
+                    t_r_seen = $time;
+                    if (s_axi_rdata !== exp_rd_data) begin
+                        $fatal(1, "Same-cycle RW readback mismatch: got=0x%08x exp=0x%08x", s_axi_rdata, exp_rd_data);
+                    end
+                    if (!s_axi_rlast) begin
+                        $fatal(1, "Same-cycle RW missing RLAST on single-beat read");
+                    end
+                end
+            end
+
+            if (!(t_b_seen <= t_r_seen)) begin
+                $fatal(1, "Same-cycle RW service-order failed: B @%0t, first R @%0t (AW @%0t ARacc @%0t)",
+                       t_b_seen, t_r_seen, t_aw_hs, t_ar_acc);
+            end
+            @(posedge axi_aclk);
+            s_axi_bready <= 1'b0;
+            s_axi_rready <= 1'b0;
+
+            // Verify the write committed to memory.
+            axi_full_read_burst(wr_addr, 1, rd_one);
+            if (rd_one[0] !== wr_data) begin
+                $fatal(1, "Same-cycle RW write-commit mismatch: got=0x%08x exp=0x%08x", rd_one[0], wr_data);
+            end
+
+            $display("TEST PASS: same-cycle AXI-full read+write arbitration and data integrity");
+        end
+    endtask
+
     task automatic run_axil_self_checks;
         begin
             // Identification and configuration register defaults.
@@ -437,6 +549,15 @@ module hyperbus_controller_tb;
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x11553300", rd_data[0]);
         end
         $display("TEST PASS: WSTRB masked write/read 0x11553300");
+
+        // Simultaneous AW+AR request test: write must be serviced first.
+        axi_full_write_burst(32'h0000_01A0, 1, 32'hCAFEBABE, 4'hF);
+        axi_full_same_cycle_rw_check(
+            32'h0000_01A0, // read old data
+            32'h0000_01A4, // write new data
+            32'h1234ABCD,
+            32'hCAFEBABE
+        );
 
         // AXI-full multi-beat burst sweep (self-checking): 2..32 beats.
         for (beats = 2; beats <= 32; beats++) begin
