@@ -238,8 +238,15 @@ module hyperbus_controller #(
             end
 
             // AR
-            s_axi_arready <= (!rd_active) && (!cmd_fifo_full) && (s_axi_arsize == 3'd2) && (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31);
-            if ((!rd_active) && (!cmd_fifo_full) && (s_axi_arsize == 3'd2) && (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31) && s_axi_arvalid) begin
+            // Write-priority arbitration:
+            // if AWVALID and ARVALID arrive together, service write first.
+            s_axi_arready <= (!rd_active) && (!aw_pending) && (!s_axi_awvalid) &&
+                             (!cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
+                             (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31);
+            if ((!rd_active) && (!aw_pending) && (!s_axi_awvalid) &&
+                (!cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
+                (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31) &&
+                s_axi_arvalid) begin
                 cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
                 cmd_fifo_wr_en_full <= 1'b1;
                 rd_active <= 1'b1;
