@@ -304,6 +304,9 @@ module hyperbus_controller #(
 
     logic [AXIL_ADDR_WIDTH-1:0] axil_awaddr_q;
     logic axil_aw_seen;
+    logic axil_aw_can_accept;
+    logic axil_w_can_accept;
+    logic axil_ar_can_accept;
 
     function automatic [31:0] axil_to_hb_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
@@ -340,26 +343,29 @@ module hyperbus_controller #(
 
             // Backpressure AXI-Lite command issuance when AXI-Full is actively
             // driving command-issue paths to prevent command FIFO write collisions.
-            s_axil_awready <= (axil_state == AXIL_IDLE) && !axil_aw_seen &&
-                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
-            s_axil_wready  <= (axil_state == AXIL_IDLE) && axil_aw_seen &&
-                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
-            s_axil_arready <= (axil_state == AXIL_IDLE) && !cmd_fifo_full &&
-                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            axil_aw_can_accept = (axil_state == AXIL_IDLE) && !axil_aw_seen &&
+                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            axil_w_can_accept  = (axil_state == AXIL_IDLE) && axil_aw_seen &&
+                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            axil_ar_can_accept = (axil_state == AXIL_IDLE) && !cmd_fifo_full &&
+                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            s_axil_awready <= axil_aw_can_accept;
+            s_axil_wready  <= axil_w_can_accept;
+            s_axil_arready <= axil_ar_can_accept;
 
-            if (s_axil_awready && s_axil_awvalid) begin
+            if (axil_aw_can_accept && s_axil_awvalid) begin
                 axil_awaddr_q <= s_axil_awaddr;
                 axil_aw_seen <= 1'b1;
             end
 
-            if ((axil_state == AXIL_IDLE) && axil_aw_seen && s_axil_wready && s_axil_wvalid && !cmd_fifo_full) begin
+            if ((axil_state == AXIL_IDLE) && axil_aw_seen && axil_w_can_accept && s_axil_wvalid && !cmd_fifo_full) begin
                 cmd_fifo_din_axil <= {1'b1, 1'b1, 1'b1, axil_to_hb_addr(axil_awaddr_q), 8'd1, s_axil_wdata};
                 cmd_fifo_wr_en_axil <= 1'b1;
                 axil_aw_seen <= 1'b0;
                 axil_state <= AXIL_WR_WAIT_B;
             end
 
-            if ((axil_state == AXIL_IDLE) && s_axil_arready && s_axil_arvalid) begin
+            if (axil_ar_can_accept && s_axil_arvalid) begin
                 // For AXI-Lite reads, carry ARADDR[1] in wdata[0] to select return halfword lane.
                 cmd_fifo_din_axil <= {1'b1, 1'b0, 1'b1, axil_to_hb_addr(s_axil_araddr), 8'd1, {31'h0, s_axil_araddr[1]}};
                 cmd_fifo_wr_en_axil <= 1'b1;

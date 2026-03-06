@@ -359,6 +359,134 @@ module hyperbus_controller_tb;
         end
     endtask
 
+    task automatic axil_wait_no_bvalid(
+        input int    cycles,
+        input string label
+    );
+        int i;
+        begin
+            for (i = 0; i < cycles; i++) begin
+                @(posedge axi_aclk);
+                if (s_axil_bvalid) begin
+                    $fatal(1, "Unexpected AXI-Lite BVALID during %s at cycle %0d", label, i);
+                end
+            end
+        end
+    endtask
+
+    task automatic axil_wait_no_rvalid(
+        input int    cycles,
+        input string label
+    );
+        int i;
+        begin
+            for (i = 0; i < cycles; i++) begin
+                @(posedge axi_aclk);
+                if (s_axil_rvalid) begin
+                    $fatal(1, "Unexpected AXI-Lite RVALID during %s at cycle %0d", label, i);
+                end
+            end
+        end
+    endtask
+
+    task automatic axil_write_hold_awvalid(
+        input logic [15:0] addr,
+        input logic [31:0] data,
+        input int          hold_cycles
+    );
+        begin
+            // Hold AWVALID beyond handshake to stress stale-ready behavior.
+            @(posedge axi_aclk);
+            s_axil_awaddr  <= addr;
+            s_axil_awvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_awready, "s_axil_awready (hold-awvalid)")
+            repeat (hold_cycles) @(posedge axi_aclk);
+            s_axil_awvalid <= 1'b0;
+
+            s_axil_wdata  <= data;
+            s_axil_wstrb  <= 4'hF;
+            s_axil_wvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_wready, "s_axil_wready (hold-awvalid)")
+            @(posedge axi_aclk);
+            s_axil_wvalid <= 1'b0;
+
+            s_axil_bready <= 1'b1;
+            `WAIT_AXI_COND(s_axil_bvalid, "s_axil_bvalid (hold-awvalid)")
+            @(posedge axi_aclk);
+            s_axil_bready <= 1'b0;
+        end
+    endtask
+
+    task automatic axil_read_hold_arvalid(
+        input  logic [15:0] addr,
+        input  int          hold_cycles,
+        output logic [31:0] data
+    );
+        begin
+            // Hold ARVALID beyond handshake to stress stale-ready behavior.
+            @(posedge axi_aclk);
+            s_axil_araddr  <= addr;
+            s_axil_arvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_arready, "s_axil_arready (hold-arvalid)")
+            repeat (hold_cycles) @(posedge axi_aclk);
+            s_axil_arvalid <= 1'b0;
+
+            s_axil_rready <= 1'b1;
+            `WAIT_AXI_COND(s_axil_rvalid, "s_axil_rvalid (hold-arvalid)")
+            data = s_axil_rdata;
+            @(posedge axi_aclk);
+            s_axil_rready <= 1'b0;
+        end
+    endtask
+
+    task automatic run_axil_hold_valid_stress;
+        logic [31:0] rd32;
+        int push_base;
+        begin
+            // 1) Held-AWVALID write request must enqueue exactly one AXI-Lite cmd.
+            push_base = axil_cmd_push_count;
+            axil_write_hold_awvalid(16'h0800, 32'h0000_8F2F, 3);
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite AWVALID-hold expected exactly 1 cmd push, got %0d",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_wait_no_bvalid(80, "AXI-Lite AWVALID-hold duplicate-B check");
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite AWVALID-hold saw delayed duplicate cmd push (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+
+            // 2) Readback request is a separate command and should enqueue exactly one cmd.
+            push_base = axil_cmd_push_count;
+            axil_expect_read16(16'h0800, 16'h8F2F, "AXI-Lite AWVALID-hold write/readback @0x0800");
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite AWVALID-hold readback expected exactly 1 cmd push, got %0d",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_wait_no_rvalid(80, "AXI-Lite AWVALID-hold readback duplicate-R check");
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite AWVALID-hold readback saw delayed duplicate cmd push (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+
+            // 3) Held-ARVALID read request must enqueue exactly one AXI-Lite cmd.
+            push_base = axil_cmd_push_count;
+            axil_read_hold_arvalid(16'h0000, 3, rd32);
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite ARVALID-hold expected exactly 1 cmd push, got %0d",
+                       (axil_cmd_push_count - push_base));
+            end
+            check_eq32(rd32, axil_lane16(16'h0000, 16'h0C81), "AXI-Lite ARVALID-hold read @0x0000");
+            axil_wait_no_rvalid(80, "AXI-Lite ARVALID-hold duplicate-R check");
+            if ((axil_cmd_push_count - push_base) != 1) begin
+                $fatal(1, "AXI-Lite ARVALID-hold saw delayed duplicate cmd push (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+
+            $display("TEST PASS: AXI-Lite AWVALID/ARVALID hold stress");
+        end
+    endtask
+
     task automatic axi_full_same_cycle_rw_check(
         input logic [31:0] rd_addr,
         input logic [31:0] wr_addr,
@@ -489,8 +617,19 @@ module hyperbus_controller_tb;
 
     int k;
     int beats;
+    int axil_cmd_push_count;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
+
+    // Count AXI-Lite command FIFO push pulses from DUT for explicit
+    // "exactly one command accepted per request" checks.
+    always @(posedge axi_aclk or negedge axi_aresetn) begin
+        if (!axi_aresetn) begin
+            axil_cmd_push_count <= 0;
+        end else if (dut.cmd_fifo_wr_en_axil) begin
+            axil_cmd_push_count <= axil_cmd_push_count + 1;
+        end
+    end
 
     initial begin
         // Defaults
@@ -533,6 +672,7 @@ module hyperbus_controller_tb;
 
         // AXI-Lite register path self-checks (fatal on first mismatch).
         run_axil_self_checks();
+        run_axil_hold_valid_stress();
 
         // Partial-byte write check using WSTRB -> RWDS byte masks.
         axi_full_write_burst(32'h0000_0180, 1, 32'h1122_3344, 4'hF);
