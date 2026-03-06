@@ -94,8 +94,14 @@ Contains self-checking cases for:
 - AXI-full 2-beat write/read burst
 - AXI-full 32-beat write/read burst
 
-## Flow Diagram
+## Flow Diagrams
 
-A multi-beat AXI write flow diagram is available at:
+Multi-beat AXI flow diagrams are available at:
 
 - `doc/multibeat_axi_write_flow.jpg`
+- `doc/multibeat_axi_read_flow.jpg`
+
+Diagram generator scripts:
+
+- `doc/multibeat_axi_write_flow.py`
+- `doc/multibeat_axi_read_flow.py`
