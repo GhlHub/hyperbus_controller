@@ -1,7 +1,7 @@
 verilog xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
 "../../infinion/infineon-s70kl1282-hyperram-verilog-model-simulationmodels-en/s70kl1282.v" \
 
-sv xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
+sv xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" -i "../../tb" \
 "../../rtl/hyperbus_fifo_bank_xilinx.sv" \
 "../../rtl/hyperbus_phy_xilinx.sv" \
 "../../rtl/hyperbus_axi_lite_frontend.sv" \
