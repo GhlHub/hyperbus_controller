@@ -13,3 +13,6 @@ build/
 xsim.dir/
 .nfs*
 *.wdb
+.cxl/
+*.pb
+.cxl*
