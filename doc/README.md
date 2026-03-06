@@ -48,9 +48,15 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
 
 - AW supports INCR bursts, 32-bit beats, `AWLEN <= 31` (max 32 beats / 128 bytes).
 - W channel pushes directly into `u_wr_fifo` on `WVALID && WREADY`.
+- `WLAST` protocol is checked:
+  - `WLAST=1` is required only on the final accepted beat.
+  - Early or missing-final `WLAST` is flagged as a write protocol error.
 - Write command is issued to `u_cmd_fifo` at final accepted beat.
 - If `u_cmd_fifo` is full at final beat, command issue is deferred until space is available.
 - B response is returned after HyperBus write completion token (`u_b_fifo`).
+- `BRESP` behavior:
+  - `OKAY (2'b00)` for normal write bursts.
+  - `SLVERR (2'b10)` for malformed `WLAST` bursts.
 
 ### Reads
 
@@ -89,10 +95,13 @@ Primary testbench:
 Contains self-checking cases for:
 
 - AXI-lite ID/CR defaults and CR0 write/readback
+- AXI-lite held-valid stress (`AWVALID`/`ARVALID` held extra cycles) with
+  command-push counting checks (`exactly one command per request`)
 - AXI-full single-beat write/read
 - AXI-full WSTRB masked write/read
-- AXI-full 2-beat write/read burst
-- AXI-full 32-beat write/read burst
+- AXI-full malformed `WLAST` checks (early and missing-final) expecting `SLVERR`
+- AXI-full same-cycle read+write request arbitration/data-integrity check
+- AXI-full burst sweep from 2 to 32 beats (write/read, self-checking)
 
 ## Flow Diagrams
 
