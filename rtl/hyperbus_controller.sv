@@ -157,9 +157,9 @@ module hyperbus_controller #(
 
     logic [31:0] rdata_hold;
     logic rdata_hold_valid;
+    logic rd_refill_wait;
 
     logic b_pop_pending;
-    logic rd_pop_pending;
     logic axil_rsp_pop_pending;
     // Drive write FIFO directly from AXI W-channel handshake to avoid
     // one-cycle skew between data and enqueue.
@@ -188,9 +188,9 @@ module hyperbus_controller #(
             cmd_fifo_wr_en_full <= 1'b0;
             cmd_fifo_din_full <= '0;
             b_pop_pending <= 1'b0;
-            rd_pop_pending <= 1'b0;
             rdata_hold <= '0;
             rdata_hold_valid <= 1'b0;
+            rd_refill_wait <= 1'b0;
         end else begin
             cmd_fifo_wr_en_full <= 1'b0;
             rd_fifo_rd_en <= 1'b0;
@@ -236,27 +236,36 @@ module hyperbus_controller #(
                 cmd_fifo_wr_en_full <= 1'b1;
                 rd_active <= 1'b1;
                 rd_beats_left <= s_axi_arlen + 8'd1;
-                rd_pop_pending <= 1'b0;
+                rdata_hold_valid <= 1'b0;
+                rd_refill_wait <= 1'b0;
             end
 
-            if (!s_axi_rvalid && !rd_pop_pending && rd_active && !rd_fifo_empty) begin
-                rd_fifo_rd_en <= 1'b1;
-                rd_pop_pending <= 1'b1;
+            // FWFT RD FIFO consumes with a 1-cycle refill wait after pop so we don't
+            // re-sample the same dout word on the pop edge.
+            if (rd_refill_wait) begin
+                rd_refill_wait <= 1'b0;
+            end else if (!rdata_hold_valid && rd_active && !rd_fifo_empty) begin
+                rdata_hold <= rd_fifo_dout;
+                rdata_hold_valid <= 1'b1;
             end
-            if (rd_pop_pending && rd_fifo_dout_valid) begin
+
+            if (!s_axi_rvalid && rdata_hold_valid) begin
                 s_axi_rvalid <= 1'b1;
-                s_axi_rdata <= rd_fifo_dout;
+                s_axi_rdata <= rdata_hold;
                 s_axi_rresp <= 2'b00;
                 s_axi_rlast <= (rd_beats_left == 8'd1);
-                rd_pop_pending <= 1'b0;
             end
             if (s_axi_rvalid && s_axi_rready) begin
+                // Pop consumed FWFT word; next word appears after a short update delay.
+                rd_fifo_rd_en <= 1'b1;
                 s_axi_rvalid <= 1'b0;
+                rdata_hold_valid <= 1'b0;
+                rd_refill_wait <= 1'b1;
                 if (rd_beats_left != 0) rd_beats_left <= rd_beats_left - 8'd1;
                 if (rd_beats_left == 8'd1) begin
                     rd_active <= 1'b0;
                     s_axi_rlast <= 1'b0;
-                    rd_pop_pending <= 1'b0;
+                    rd_refill_wait <= 1'b0;
                 end
             end
         end
@@ -1003,8 +1012,8 @@ module hyperbus_controller #(
             if (rd_fifo_rd_en) begin
                 $display("[%0t][AXI] RD_FIFO POP_REQ", $time);
             end
-            if (rd_fifo_dout_valid) begin
-                $display("[%0t][AXI] RD_FIFO POP_DATA data=0x%08h", $time, rd_fifo_dout);
+            if (s_axi_rvalid && s_axi_rready) begin
+                $display("[%0t][AXI] RD_FIFO POP_DATA data=0x%08h", $time, s_axi_rdata);
             end
             if (b_fifo_rd_en) begin
                 $display("[%0t][AXI] B_FIFO POP_REQ", $time);
