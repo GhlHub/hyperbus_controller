@@ -1,0 +1,101 @@
+# HyperBus Controller Documentation
+
+## Overview
+
+This project implements a HyperBus/HyperRAM controller with:
+
+- AXI4-Full slave data path (32-bit, burst capable up to 128 bytes)
+- AXI4-Lite slave register/config path (32-bit single-beat transactions)
+- HyperBus physical interface using Xilinx primitives
+
+Target assumptions include:
+
+- AXI clock: 50 MHz
+- HyperBus clock: 200 MHz
+- External 90-degree HyperBus sample clock: `i_hb_clk_200_samp_90`
+
+Main RTL:
+
+- `rtl/hyperbus_controller.sv`
+- `rtl/hyperbus_phy_xilinx.sv`
+- `rtl/hyperbus_fifo_bank_xilinx.sv`
+
+## Block Partitioning
+
+- `hyperbus_controller.sv`
+  - AXI-full front-end/state handling
+  - AXI-lite front-end/state handling
+  - HyperBus transaction FSM
+  - Command/address/data formatting and control logic
+- `hyperbus_phy_xilinx.sv`
+  - Non-FIFO Xilinx primitive PHY (`BUFGCE`, `ODDRE1`, `OBUFDS`, `IOBUF`, `IDDRE1`)
+- `hyperbus_fifo_bank_xilinx.sv`
+  - All XPM async FIFOs (`xpm_fifo_async`)
+
+## FIFO Configuration
+
+All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
+
+- `u_cmd_fifo`: async, standard mode, depth 32, width 75
+- `u_wr_fifo`: async, FWFT mode, depth 256, width 36 (`WSTRB+WDATA`)
+- `u_rd_fifo`: async, FWFT mode, depth 256, width 32
+- `u_b_fifo`: async, standard mode, depth 32, width 1
+- `u_axil_rsp_fifo`: async, standard mode, depth 32, width 32
+
+## AXI-Full Behavior
+
+### Writes
+
+- AW supports INCR bursts, 32-bit beats, `AWLEN <= 31` (max 32 beats / 128 bytes).
+- W channel pushes directly into `u_wr_fifo` on `WVALID && WREADY`.
+- Write command is issued to `u_cmd_fifo` at final accepted beat.
+- If `u_cmd_fifo` is full at final beat, command issue is deferred until space is available.
+- B response is returned after HyperBus write completion token (`u_b_fifo`).
+
+### Reads
+
+- AR supports INCR bursts, 32-bit beats, `ARLEN <= 31`.
+- Read data is collected in HyperBus domain and pushed to `u_rd_fifo`.
+- AXI side consumes via FWFT FIFO with a one-cycle refill wait guard to avoid duplicate beat sampling.
+- RLAST is generated from remaining beat count.
+
+### Read/Write Priority
+
+- If AXI-full read and write commands arrive in the same cycle, write is prioritized first.
+
+## AXI-Lite Behavior
+
+- Single-beat command model for register accesses.
+- HyperBus register space includes:
+  - `0x0000` ID0
+  - `0x0002` ID1
+  - `0x0800` CR0
+  - `0x0802` CR1
+- AXI-lite is backpressured while AXI-full command issue is active to avoid command FIFO collisions.
+
+## HyperBus Transaction Notes
+
+- Latency mode (1x/2x) is decided after the second CA clock based on RWDS.
+- For AXI-full writes, post-CA RWDS wait is applied before data phase.
+- HyperBus read termination waits for required RWDS transitions and then performs CS#/CK termination hold sequencing.
+- CK is gated off when idle.
+
+## Testbench
+
+Primary testbench:
+
+- `tb/hyperbus_controller_tb.sv`
+
+Contains self-checking cases for:
+
+- AXI-lite ID/CR defaults and CR0 write/readback
+- AXI-full single-beat write/read
+- AXI-full WSTRB masked write/read
+- AXI-full 2-beat write/read burst
+- AXI-full 32-beat write/read burst
+
+## Flow Diagram
+
+A multi-beat AXI write flow diagram is available at:
+
+- `doc/multibeat_axi_write_flow.jpg`
