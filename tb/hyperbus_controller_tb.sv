@@ -376,6 +376,8 @@ module hyperbus_controller_tb;
     endtask
 
     int k;
+    int beats;
+    logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
 
     initial begin
@@ -436,26 +438,20 @@ module hyperbus_controller_tb;
         end
         $display("TEST PASS: WSTRB masked write/read 0x11553300");
 
-        axi_full_write_burst(32'h0000_0100, 2, 32'h5A5A_1100, 4'hF);
-        axi_full_read_burst (32'h0000_0100, 2, rd_data);
-        if (rd_data[0] !== 32'h5A5A_1100) begin
-            $fatal(1, "2-beat readback failed at beat 0: got 0x%08x exp 0x5A5A1100", rd_data[0]);
-        end
-        if (rd_data[1] !== 32'h5A5A_1101) begin
-            $fatal(1, "2-beat readback failed at beat 1: got 0x%08x exp 0x5A5A1101", rd_data[1]);
-        end
-        $display("TEST PASS: 2-beat full burst write/read");
+        // AXI-full multi-beat burst sweep (self-checking): 2..32 beats.
+        for (beats = 2; beats <= 32; beats++) begin
+            burst_base = 32'hA5A5_0000 + (beats << 8);
+            axi_full_write_burst(32'h0000_0100, beats, burst_base, 4'hF);
+            axi_full_read_burst (32'h0000_0100, beats, rd_data);
 
-        // Full 128-byte burst write + readback check.
-        axi_full_write_burst(32'h0000_0100, 32, 32'hA5A5_0000, 4'hF);
-        axi_full_read_burst (32'h0000_0100, 32, rd_data);
-
-        for (k = 0; k < 32; k++) begin
-            if (rd_data[k] !== (32'hA5A5_0000 + k)) begin
-                $fatal(1, "Data mismatch at beat %0d: got 0x%08x exp 0x%08x", k, rd_data[k], (32'hA5A5_0000 + k));
+            for (k = 0; k < beats; k++) begin
+                if (rd_data[k] !== (burst_base + k)) begin
+                    $fatal(1, "Multi-beat readback failed beats=%0d beat=%0d: got 0x%08x exp 0x%08x",
+                           beats, k, rd_data[k], (burst_base + k));
+                end
             end
+            $display("TEST PASS: %0d-beat full burst write/read", beats);
         end
-        $display("TEST PASS: 32-beat full burst write/read");
 
 
         $display("TB PASS");
