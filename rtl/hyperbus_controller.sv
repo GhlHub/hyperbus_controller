@@ -492,8 +492,10 @@ module hyperbus_controller #(
     logic [31:0] rd_pack;
 
     logic [15:0] hb_word16;
+    logic [15:0] hb_word16_le;
 
     assign hb_word16 = {dq_q1, dq_q2};
+    assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
 
     // default config shadows (used for latency control)
     always_ff @(posedge i_hb_clk_200 or negedge i_hb_rstn) begin
@@ -796,10 +798,10 @@ module hyperbus_controller #(
                     if (wrbuf_valid) begin
                         dq_t <= 8'h00;
                         rwds_t <= 1'b0;
-                        dq_o_d1 <= wrbuf[15:8];
-                        dq_o_d2 <= wrbuf[7:0];
-                        rwds_o_d1 <= ~wrbuf_strb[1];
-                        rwds_o_d2 <= ~wrbuf_strb[0];
+                        dq_o_d1 <= wrbuf[7:0];
+                        dq_o_d2 <= wrbuf[15:8];
+                        rwds_o_d1 <= ~wrbuf_strb[0];
+                        rwds_o_d2 <= ~wrbuf_strb[1];
                         wrbuf_high_half <= 1'b1;
                         words_done <= words_done + 9'd1;
                         hb_state <= HB_WRITE;
@@ -848,16 +850,16 @@ module hyperbus_controller #(
                             did_emit = 1'b1;
                             words_done_next = words_done + 9'd1;
                             if (!wrbuf_high_half_n) begin
-                                dq_o_d1 <= wrbuf_n[15:8];
-                                dq_o_d2 <= wrbuf_n[7:0];
-                                rwds_o_d1 <= ~wrbuf_strb_n[1];
-                                rwds_o_d2 <= ~wrbuf_strb_n[0];
+                                dq_o_d1 <= wrbuf_n[7:0];
+                                dq_o_d2 <= wrbuf_n[15:8];
+                                rwds_o_d1 <= ~wrbuf_strb_n[0];
+                                rwds_o_d2 <= ~wrbuf_strb_n[1];
                                 wrbuf_high_half_n = 1'b1;
                             end else begin
-                                dq_o_d1 <= wrbuf_n[31:24];
-                                dq_o_d2 <= wrbuf_n[23:16];
-                                rwds_o_d1 <= ~wrbuf_strb_n[3];
-                                rwds_o_d2 <= ~wrbuf_strb_n[2];
+                                dq_o_d1 <= wrbuf_n[23:16];
+                                dq_o_d2 <= wrbuf_n[31:24];
+                                rwds_o_d1 <= ~wrbuf_strb_n[2];
+                                rwds_o_d2 <= ~wrbuf_strb_n[3];
                                 wrbuf_high_half_n = 1'b0;
                                 if (wrnext_valid_n) begin
                                     wrbuf_n = wrnext_n;
@@ -914,15 +916,15 @@ module hyperbus_controller #(
                     rwds_t <= 1'b1;
 
                     if (rwds_data_valid && !rd_half) begin
-                        rd_pack[15:0] <= hb_word16;
+                        rd_pack[15:0] <= hb_word16_le;
                         rd_half <= 1'b1;
                         words_done_next = words_done + 9'd1;
                         took_word = 1'b1;
                         rwds_edges_seen_next = rwds_edges_seen + 11'd2;
                     end else if (rwds_data_valid) begin
-                        rd_pack[31:16] <= hb_word16;
+                        rd_pack[31:16] <= hb_word16_le;
                         if (!rd_fifo_full) begin
-                            rd_fifo_din <= {hb_word16, rd_pack[15:0]};
+                            rd_fifo_din <= {hb_word16_le, rd_pack[15:0]};
                             rd_fifo_wr_en <= 1'b1;
                             rd_half <= 1'b0;
                             words_done_next = words_done + 9'd1;
