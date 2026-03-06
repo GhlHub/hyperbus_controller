@@ -162,6 +162,10 @@ module hyperbus_controller #(
 
     logic b_pop_pending;
     logic axil_rsp_pop_pending;
+    logic wr_proto_err;
+    logic [1:0] bresp_q_mem [0:31];
+    logic [4:0] bresp_q_wr_ptr, bresp_q_rd_ptr;
+    logic [5:0] bresp_q_count;
     assign aw_can_accept = (!aw_pending) && (!cmd_fifo_full) &&
                            (s_axi_awsize == 3'd2) &&
                            (s_axi_awburst == 2'b01) &&
@@ -193,10 +197,21 @@ module hyperbus_controller #(
             cmd_fifo_wr_en_full <= 1'b0;
             cmd_fifo_din_full <= '0;
             b_pop_pending <= 1'b0;
+            wr_proto_err <= 1'b0;
+            bresp_q_wr_ptr <= 5'd0;
+            bresp_q_rd_ptr <= 5'd0;
+            bresp_q_count <= 6'd0;
             rdata_hold <= '0;
             rdata_hold_valid <= 1'b0;
             rd_refill_wait <= 1'b0;
         end else begin
+            logic bresp_push, bresp_pop;
+            logic [1:0] bresp_push_data;
+
+            bresp_push = 1'b0;
+            bresp_pop = 1'b0;
+            bresp_push_data = 2'b00;
+
             cmd_fifo_wr_en_full <= 1'b0;
             rd_fifo_rd_en <= 1'b0;
             b_fifo_rd_en <= 1'b0;
@@ -208,16 +223,28 @@ module hyperbus_controller #(
                 aw_addr_q <= s_axi_awaddr;
                 aw_len_q <= s_axi_awlen;
                 w_beats_rcvd <= 8'd0;
+                wr_proto_err <= 1'b0;
             end
 
             // Accept exactly AWLEN+1 beats; block extra cycles from duplicating writes.
             s_axi_wready <= aw_pending && !wr_fifo_full && (w_beats_rcvd <= aw_len_q);
             if (s_axi_wready && s_axi_wvalid && (w_beats_rcvd <= aw_len_q)) begin
+                // AXI write protocol check:
+                // WLAST must be high only on the final accepted beat.
+                if (((w_beats_rcvd == aw_len_q) && !s_axi_wlast) ||
+                    ((w_beats_rcvd != aw_len_q) &&  s_axi_wlast)) begin
+                    wr_proto_err <= 1'b1;
+                end
                 w_beats_rcvd <= w_beats_rcvd + 8'd1;
                 // Push write command at final beat when cmd_fifo has space.
                 if ((w_beats_rcvd == aw_len_q) && !cmd_fifo_full) begin
                     cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
                     cmd_fifo_wr_en_full <= 1'b1;
+                    bresp_push = 1'b1;
+                    bresp_push_data =
+                        (wr_proto_err ||
+                         (((w_beats_rcvd == aw_len_q) && !s_axi_wlast) ||
+                          ((w_beats_rcvd != aw_len_q) &&  s_axi_wlast))) ? 2'b10 : 2'b00;
                     aw_pending <= 1'b0;
                 end
             end
@@ -226,6 +253,8 @@ module hyperbus_controller #(
             if (aw_pending && (w_beats_rcvd > aw_len_q) && !cmd_fifo_full) begin
                 cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
                 cmd_fifo_wr_en_full <= 1'b1;
+                bresp_push = 1'b1;
+                bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
                 aw_pending <= 1'b0;
             end
 
@@ -235,12 +264,32 @@ module hyperbus_controller #(
             end
             if (b_pop_pending && b_fifo_dout_valid) begin
                 s_axi_bvalid <= 1'b1;
-                s_axi_bresp <= 2'b00;
+                bresp_pop = 1'b1;
+                if (bresp_q_count != 0) begin
+                    s_axi_bresp <= bresp_q_mem[bresp_q_rd_ptr];
+                end else begin
+                    // Safety fallback: completion token without matching queued response.
+                    s_axi_bresp <= 2'b10;
+                end
                 b_pop_pending <= 1'b0;
             end
             if (s_axi_bvalid && s_axi_bready) begin
                 s_axi_bvalid <= 1'b0;
             end
+
+            // Write-response code queue tracking (preserves ordering across bursts).
+            if (bresp_push) begin
+                bresp_q_mem[bresp_q_wr_ptr] <= bresp_push_data;
+                bresp_q_wr_ptr <= bresp_q_wr_ptr + 5'd1;
+            end
+            if (bresp_pop && (bresp_q_count != 0)) begin
+                bresp_q_rd_ptr <= bresp_q_rd_ptr + 5'd1;
+            end
+            case ({bresp_push, bresp_pop && (bresp_q_count != 0)})
+                2'b10: bresp_q_count <= bresp_q_count + 6'd1;
+                2'b01: bresp_q_count <= bresp_q_count - 6'd1;
+                default: bresp_q_count <= bresp_q_count;
+            endcase
 
             // AR
             // Write-priority arbitration:

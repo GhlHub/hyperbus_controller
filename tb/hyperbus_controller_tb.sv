@@ -280,6 +280,58 @@ module hyperbus_controller_tb;
         end
     endtask
 
+    // bad_mode:
+    // 0 -> assert WLAST one beat early (and deassert on final beat)
+    // 1 -> never assert WLAST
+    task automatic axi_full_write_burst_bad_wlast(
+        input  logic [31:0] addr,
+        input  int          beats,
+        input  logic [31:0] base_data,
+        input  logic [3:0]  strb,
+        input  int          bad_mode,
+        output logic [1:0]  bresp
+    );
+        int i;
+        logic bad_last;
+        begin
+            @(posedge axi_aclk);
+            s_axi_awaddr  <= addr;
+            s_axi_awlen   <= beats-1;
+            s_axi_awsize  <= 3'd2;
+            s_axi_awburst <= 2'b01;
+            s_axi_awvalid <= 1'b1;
+            $display("[%0t][TB][AXI-WR-BAD] AW addr=0x%08x beats=%0d mode=%0d", $time, addr, beats, bad_mode);
+            `WAIT_AXI_COND(s_axi_awready, "s_axi_awready (bad wlast)")
+            @(posedge axi_aclk);
+            s_axi_awvalid <= 1'b0;
+
+            for (i = 0; i < beats; i++) begin
+                @(negedge axi_aclk);
+                s_axi_wdata  <= base_data + i;
+                s_axi_wstrb  <= strb;
+                case (bad_mode)
+                    0: bad_last = (i == (beats - 2)); // early
+                    1: bad_last = 1'b0;               // missing on final
+                    default: bad_last = (i == beats-1);
+                endcase
+                s_axi_wlast  <= bad_last;
+                s_axi_wvalid <= 1'b1;
+                while (!(s_axi_wready && s_axi_wvalid)) begin
+                    @(posedge axi_aclk);
+                end
+                @(negedge axi_aclk);
+                s_axi_wvalid <= 1'b0;
+            end
+            s_axi_wlast <= 1'b0;
+
+            s_axi_bready <= 1'b1;
+            `WAIT_AXI_COND(s_axi_bvalid, "s_axi_bvalid (bad wlast)")
+            bresp = s_axi_bresp;
+            @(posedge axi_aclk);
+            s_axi_bready <= 1'b0;
+        end
+    endtask
+
     task automatic axil_write(
         input logic [15:0] addr,
         input logic [31:0] data
@@ -618,6 +670,7 @@ module hyperbus_controller_tb;
     int k;
     int beats;
     int axil_cmd_push_count;
+    logic [1:0] bresp_chk;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
 
@@ -689,6 +742,19 @@ module hyperbus_controller_tb;
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x11553300", rd_data[0]);
         end
         $display("TEST PASS: WSTRB masked write/read 0x11553300");
+
+        // AXI-full malformed WLAST checks should return SLVERR.
+        axi_full_write_burst_bad_wlast(32'h0000_01C0, 4, 32'hD00D_0000, 4'hF, 0, bresp_chk);
+        if (bresp_chk !== 2'b10) begin
+            $fatal(1, "Bad WLAST (early) expected SLVERR, got BRESP=0x%0h", bresp_chk);
+        end
+        $display("TEST PASS: bad WLAST early -> SLVERR");
+
+        axi_full_write_burst_bad_wlast(32'h0000_01D0, 4, 32'hD00D_1000, 4'hF, 1, bresp_chk);
+        if (bresp_chk !== 2'b10) begin
+            $fatal(1, "Bad WLAST (missing final) expected SLVERR, got BRESP=0x%0h", bresp_chk);
+        end
+        $display("TEST PASS: bad WLAST missing-final -> SLVERR");
 
         // Simultaneous AW+AR request test: write must be serviced first.
         axi_full_write_burst(32'h0000_01A0, 1, 32'hCAFEBABE, 4'hF);
