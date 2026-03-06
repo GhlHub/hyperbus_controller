@@ -307,6 +307,12 @@ module hyperbus_controller #(
     logic axil_aw_can_accept;
     logic axil_w_can_accept;
     logic axil_ar_can_accept;
+    assign axil_aw_can_accept = (axil_state == AXIL_IDLE) && !axil_aw_seen &&
+                                !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+    assign axil_w_can_accept  = (axil_state == AXIL_IDLE) && axil_aw_seen &&
+                                !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+    assign axil_ar_can_accept = (axil_state == AXIL_IDLE) && !cmd_fifo_full &&
+                                !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
 
     function automatic [31:0] axil_to_hb_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
@@ -343,12 +349,6 @@ module hyperbus_controller #(
 
             // Backpressure AXI-Lite command issuance when AXI-Full is actively
             // driving command-issue paths to prevent command FIFO write collisions.
-            axil_aw_can_accept = (axil_state == AXIL_IDLE) && !axil_aw_seen &&
-                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
-            axil_w_can_accept  = (axil_state == AXIL_IDLE) && axil_aw_seen &&
-                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
-            axil_ar_can_accept = (axil_state == AXIL_IDLE) && !cmd_fifo_full &&
-                                 !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
             s_axil_awready <= axil_aw_can_accept;
             s_axil_wready  <= axil_w_can_accept;
             s_axil_arready <= axil_ar_can_accept;
