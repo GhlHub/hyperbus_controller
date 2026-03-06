@@ -209,11 +209,19 @@ module hyperbus_controller #(
             s_axi_wready <= aw_pending && !wr_fifo_full && (w_beats_rcvd <= aw_len_q);
             if (s_axi_wready && s_axi_wvalid && (w_beats_rcvd <= aw_len_q)) begin
                 w_beats_rcvd <= w_beats_rcvd + 8'd1;
-                if (w_beats_rcvd == aw_len_q) begin
+                // Push write command at final beat when cmd_fifo has space.
+                if ((w_beats_rcvd == aw_len_q) && !cmd_fifo_full) begin
                     cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
                     cmd_fifo_wr_en_full <= 1'b1;
                     aw_pending <= 1'b0;
                 end
+            end
+            // If all W beats are already accepted but cmd_fifo was full at final beat,
+            // issue the command as soon as space becomes available.
+            if (aw_pending && (w_beats_rcvd > aw_len_q) && !cmd_fifo_full) begin
+                cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                cmd_fifo_wr_en_full <= 1'b1;
+                aw_pending <= 1'b0;
             end
 
             if (!s_axi_bvalid && !b_fifo_empty && !b_pop_pending) begin
@@ -318,9 +326,14 @@ module hyperbus_controller #(
             axil_rsp_fifo_rd_en <= 1'b0;
             cmd_fifo_wr_en_axil <= 1'b0;
 
-            s_axil_awready <= (axil_state == AXIL_IDLE) && !axil_aw_seen;
-            s_axil_wready  <= (axil_state == AXIL_IDLE) && axil_aw_seen;
-            s_axil_arready <= (axil_state == AXIL_IDLE) && !cmd_fifo_full;
+            // Backpressure AXI-Lite command issuance when AXI-Full is actively
+            // driving command-issue paths to prevent command FIFO write collisions.
+            s_axil_awready <= (axil_state == AXIL_IDLE) && !axil_aw_seen &&
+                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            s_axil_wready  <= (axil_state == AXIL_IDLE) && axil_aw_seen &&
+                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
+            s_axil_arready <= (axil_state == AXIL_IDLE) && !cmd_fifo_full &&
+                              !aw_pending && !s_axi_arvalid && !s_axi_awvalid;
 
             if (s_axil_awready && s_axil_awvalid) begin
                 axil_awaddr_q <= s_axil_awaddr;
