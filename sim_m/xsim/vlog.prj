@@ -1,0 +1,13 @@
+verilog xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
+"../../infinion/infineon-s70kl1282-hyperram-verilog-model-simulationmodels-en/s70kl1282.v" \
+
+sv xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
+"../../rtl/hyperbus_fifo_bank_xilinx.sv" \
+"../../rtl/hyperbus_phy_xilinx.sv" \
+"../../rtl/hyperbus_controller.sv" \
+"../../tb/hyperbus_controller_tb.sv" \
+
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

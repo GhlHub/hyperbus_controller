@@ -1,0 +1,13 @@
+build/
+*.jou
+*.log
+*.str
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.ip_user_files/
+*.Xil/
+.xilinx_simlibs/
+.Xil/
+xsim.dir/
