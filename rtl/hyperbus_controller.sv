@@ -151,6 +151,7 @@ module hyperbus_controller #(
     logic [31:0] aw_addr_q;
     logic [7:0]  aw_len_q;
     logic [7:0]  w_beats_rcvd;
+    logic aw_can_accept;
 
     logic rd_active;
     logic [7:0] rd_beats_left;
@@ -161,6 +162,10 @@ module hyperbus_controller #(
 
     logic b_pop_pending;
     logic axil_rsp_pop_pending;
+    assign aw_can_accept = (!aw_pending) && (!cmd_fifo_full) &&
+                           (s_axi_awsize == 3'd2) &&
+                           (s_axi_awburst == 2'b01) &&
+                           (s_axi_awlen <= 8'd31);
     // Drive write FIFO directly from AXI W-channel handshake to avoid
     // one-cycle skew between data and enqueue.
     assign wr_fifo_wr_en  = s_axi_wready && s_axi_wvalid && (w_beats_rcvd <= aw_len_q);
@@ -197,8 +202,8 @@ module hyperbus_controller #(
             b_fifo_rd_en <= 1'b0;
 
             // AW: only INCR, 32-bit beats, up to 32 beats
-            s_axi_awready <= (!aw_pending) && (!cmd_fifo_full) && (s_axi_awsize == 3'd2) && (s_axi_awburst == 2'b01) && (s_axi_awlen <= 8'd31);
-            if (s_axi_awready && s_axi_awvalid) begin
+            s_axi_awready <= aw_can_accept;
+            if (aw_can_accept && s_axi_awvalid) begin
                 aw_pending <= 1'b1;
                 aw_addr_q <= s_axi_awaddr;
                 aw_len_q <= s_axi_awlen;
