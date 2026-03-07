@@ -173,7 +173,7 @@ module hyperbus_controller_tb;
     );
 
     // HyperRAM model (Infineon)
-    s70kl1282 u_hyperram (
+    s27kl0642 u_hyperram (
         .DQ7(hb_dq[7]),
         .DQ6(hb_dq[6]),
         .DQ5(hb_dq[5]),

@@ -1,4 +1,4 @@
-s70kl1282.v,verilog,xil_defaultlib,../../../../../raid/work/hyperbus_ai3/infinion/infineon-s70kl1282-hyperram-verilog-model-simulationmodels-en/s70kl1282.v,incdir="../../../../../tools/Xilinx/2025.2/data/rsb/busdef"
+s27kl0642.v,verilog,xil_defaultlib,../../../../../raid/work/hyperbus_ai3/infinion/002-26518_0B/s27kl0642.v,incdir="../../../../../tools/Xilinx/2025.2/data/rsb/busdef"
 hyperbus_controller.sv,systemverilog,xil_defaultlib,../../../../../raid/work/hyperbus_ai3/rtl/hyperbus_controller.sv,incdir="../../../../../tools/Xilinx/2025.2/data/rsb/busdef"
 hyperbus_controller_tb.sv,systemverilog,xil_defaultlib,../../../../../raid/work/hyperbus_ai3/tb/hyperbus_controller_tb.sv,incdir="../../../../../tools/Xilinx/2025.2/data/rsb/busdef"
 glbl.v,Verilog,xil_defaultlib,glbl.v
