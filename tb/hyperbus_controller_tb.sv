@@ -4,6 +4,7 @@ module hyperbus_controller_tb;
 
     localparam int AXI_ADDR_WIDTH  = 32;
     localparam int AXI_DATA_WIDTH  = 32;
+    localparam int AXI_ID_WIDTH    = 4;
     localparam int AXIL_ADDR_WIDTH = 16;
     localparam int MAX_WAIT_AXI_CYCLES = 20000;
 
@@ -23,12 +24,15 @@ module hyperbus_controller_tb;
     // Clocks and reset
     logic axi_aclk;
     logic hb_clk_200;
+    logic ref_clk300;
+    logic idelayctrl_rst;
     logic hb_clk_200_samp_90;
     logic axi_aresetn;
     logic hb_rstn;
 
     // AXI4 full
     logic [AXI_ADDR_WIDTH-1:0] s_axi_awaddr;
+    logic [AXI_ID_WIDTH-1:0]   s_axi_awid;
     logic [7:0]                s_axi_awlen;
     logic [2:0]                s_axi_awsize;
     logic [1:0]                s_axi_awburst;
@@ -42,10 +46,12 @@ module hyperbus_controller_tb;
     wire                       s_axi_wready;
 
     wire [1:0]                 s_axi_bresp;
+    wire [AXI_ID_WIDTH-1:0]    s_axi_bid;
     wire                       s_axi_bvalid;
     logic                      s_axi_bready;
 
     logic [AXI_ADDR_WIDTH-1:0] s_axi_araddr;
+    logic [AXI_ID_WIDTH-1:0]   s_axi_arid;
     logic [7:0]                s_axi_arlen;
     logic [2:0]                s_axi_arsize;
     logic [1:0]                s_axi_arburst;
@@ -53,6 +59,7 @@ module hyperbus_controller_tb;
     wire                       s_axi_arready;
 
     wire [AXI_DATA_WIDTH-1:0]  s_axi_rdata;
+    wire [AXI_ID_WIDTH-1:0]    s_axi_rid;
     wire [1:0]                 s_axi_rresp;
     wire                       s_axi_rlast;
     wire                       s_axi_rvalid;
@@ -90,16 +97,20 @@ module hyperbus_controller_tb;
     hyperbus_controller #(
         .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
         .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+        .AXI_ID_WIDTH(AXI_ID_WIDTH),
         .AXIL_ADDR_WIDTH(AXIL_ADDR_WIDTH),
         .HB_LATENCY_DEFAULT(7)
     ) dut (
         .i_axi_aclk(axi_aclk),
         .i_axi_aresetn(axi_aresetn),
         .i_hb_clk_200(hb_clk_200),
+        .i_ref_clk300(ref_clk300),
+        .i_idelayctrl_rst(idelayctrl_rst),
         .i_hb_clk_200_samp_90(hb_clk_200_samp_90),
         .i_hb_rstn(hb_rstn),
 
         .s_axi_awaddr(s_axi_awaddr),
+        .s_axi_awid(s_axi_awid),
         .s_axi_awlen(s_axi_awlen),
         .s_axi_awsize(s_axi_awsize),
         .s_axi_awburst(s_axi_awburst),
@@ -113,10 +124,12 @@ module hyperbus_controller_tb;
         .s_axi_wready(s_axi_wready),
 
         .s_axi_bresp(s_axi_bresp),
+        .s_axi_bid(s_axi_bid),
         .s_axi_bvalid(s_axi_bvalid),
         .s_axi_bready(s_axi_bready),
 
         .s_axi_araddr(s_axi_araddr),
+        .s_axi_arid(s_axi_arid),
         .s_axi_arlen(s_axi_arlen),
         .s_axi_arsize(s_axi_arsize),
         .s_axi_arburst(s_axi_arburst),
@@ -124,6 +137,7 @@ module hyperbus_controller_tb;
         .s_axi_arready(s_axi_arready),
 
         .s_axi_rdata(s_axi_rdata),
+        .s_axi_rid(s_axi_rid),
         .s_axi_rresp(s_axi_rresp),
         .s_axi_rlast(s_axi_rlast),
         .s_axi_rvalid(s_axi_rvalid),
@@ -184,6 +198,11 @@ module hyperbus_controller_tb;
         forever #2.5 hb_clk_200 = ~hb_clk_200; // 200 MHz
     end
 
+    initial begin
+        ref_clk300 = 1'b0;
+        forever #1.6666666667 ref_clk300 = ~ref_clk300; // 300 MHz
+    end
+
     // 200 MHz sampling clock, 90-degree shifted from hb_clk_200.
     initial begin
         hb_clk_200_samp_90 = 1'b0;
@@ -221,6 +240,7 @@ module hyperbus_controller_tb;
     initial begin
         // Defaults
         s_axi_awaddr  = '0;
+        s_axi_awid    = '0;
         s_axi_awlen   = '0;
         s_axi_awsize  = '0;
         s_axi_awburst = '0;
@@ -231,6 +251,7 @@ module hyperbus_controller_tb;
         s_axi_wvalid  = 1'b0;
         s_axi_bready  = 1'b0;
         s_axi_araddr  = '0;
+        s_axi_arid    = '0;
         s_axi_arlen   = '0;
         s_axi_arsize  = '0;
         s_axi_arburst = '0;
@@ -249,10 +270,12 @@ module hyperbus_controller_tb;
 
         axi_aresetn = 1'b0;
         hb_rstn     = 1'b0;
+        idelayctrl_rst = 1'b1;
 
         repeat (20) @(posedge axi_aclk);
         hb_rstn     = 1'b1;
         axi_aresetn = 1'b1;
+        idelayctrl_rst = 1'b0;
 
         // Let HyperRAM model finish POR interval.
         #160_000;

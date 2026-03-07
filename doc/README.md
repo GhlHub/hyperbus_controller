@@ -127,6 +127,23 @@ Simulation compile note:
 
 - `sim_m/xsim/vlog.prj` includes `-i "../../tb"` so xvlog can resolve TB `include` files.
 
+## Vivado IP Packaging
+
+Use the batch Tcl flow to package the RTL as a local Vivado IP:
+
+```bash
+vivado -mode batch -source scripts/package_hyperbus_ip.tcl
+```
+
+Output location:
+
+- `ip_repo/hyperbus_controller/component.xml`
+
+Notes:
+
+- Target part is `xcsu35p-2sbvb625e`.
+- The packager imports RTL from `rtl/` only (no testbench files).
+
 ## Flow Diagrams
 
 Multi-beat AXI flow diagrams are available at:
