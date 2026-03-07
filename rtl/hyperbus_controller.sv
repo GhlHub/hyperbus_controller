@@ -105,6 +105,8 @@ module hyperbus_controller #(
 
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
+    logic odly_en_vtc, odly_ce, odly_inc, odly_load, odly_rst;
+    logic [8:0] odly_cntvaluein, odly_cntvalueout;
 
     hyperbus_fifo_bank_xilinx #(
         .CMD_W(CMD_W)
@@ -224,9 +226,16 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_dout(axil_rsp_fifo_dout),
         .i_axil_rsp_fifo_empty(axil_rsp_fifo_empty),
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
+        .i_odly_cntvalueout(odly_cntvalueout),
         .o_axil_rsp_fifo_rd_en(axil_rsp_fifo_rd_en),
         .o_cmd_fifo_din_axil(cmd_fifo_din_axil),
         .o_cmd_fifo_wr_en_axil(cmd_fifo_wr_en_axil),
+        .o_odly_en_vtc(odly_en_vtc),
+        .o_odly_ce(odly_ce),
+        .o_odly_inc(odly_inc),
+        .o_odly_load(odly_load),
+        .o_odly_rst(odly_rst),
+        .o_odly_cntvaluein(odly_cntvaluein),
         .s_axil_awaddr(s_axil_awaddr),
         .s_axil_awvalid(s_axil_awvalid),
         .s_axil_awready(s_axil_awready),
@@ -261,6 +270,8 @@ module hyperbus_controller #(
     assign o_hb_reset_n = i_hb_rstn;
 
     hyperbus_phy_xilinx u_hyperbus_phy (
+        .i_axi_aclk(i_axi_aclk),
+        .i_axi_aresetn(i_axi_aresetn),
         .i_hb_clk_200(i_hb_clk_200),
         .i_ref_clk300(i_ref_clk300),
         .i_idelayctrl_rst(i_idelayctrl_rst),
@@ -281,7 +292,14 @@ module hyperbus_controller #(
         .i_rwds_o_d1(rwds_o_d1),
         .i_rwds_o_d2(rwds_o_d2),
         .o_rwds_q1(rwds_q1),
-        .o_rwds_q2(rwds_q2)
+        .o_rwds_q2(rwds_q2),
+        .i_odly_en_vtc(odly_en_vtc),
+        .i_odly_ce(odly_ce),
+        .i_odly_inc(odly_inc),
+        .i_odly_load(odly_load),
+        .i_odly_rst(odly_rst),
+        .i_odly_cntvaluein(odly_cntvaluein),
+        .o_odly_cntvalueout(odly_cntvalueout)
     );
 
     // -------------------------

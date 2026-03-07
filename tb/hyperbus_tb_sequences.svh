@@ -152,6 +152,9 @@
     endtask
 
     task automatic run_axil_self_checks;
+        logic [31:0] rd32;
+        int push_base;
+        int poll_i;
         begin
             axil_expect_read16(16'h0000, 16'h0C81, "ID0 default @0x0000");
             axil_expect_read16(16'h0002, 16'h0001, "ID1 default @0x0002");
@@ -162,5 +165,68 @@
             axil_expect_read16(16'h0800, 16'h8F27, "CR0 write/readback 0x8F27");
             axil_write(16'h0800, 32'h0000_8F2F);
             axil_expect_read16(16'h0800, 16'h8F2F, "CR0 write/readback 0x8F2F");
+
+            // AXI-Lite local CK_P ODELAYE3 register interface checks @0x0100.
+            push_base = axil_cmd_push_count;
+            axil_read(16'h0100, rd32);
+            check_eq32(rd32, 32'h0000_0001, "CK_P_ODELAY_CTRL default @0x0100");
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "ODELAY local read @0x0100 unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+
+            push_base = axil_cmd_push_count;
+            axil_write(16'h0104, 32'h0000_002A);
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "ODELAY local write @0x0104 unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_read(16'h0104, rd32);
+            check_eq32(rd32, 32'h0000_002A, "CK_P_ODELAY_CNTVALUEIN write/readback @0x0104");
+
+            // ODELAYE3 model requires EN_VTC=0 for VAR_LOAD update and
+            // CNTVALUEOUT observability in simulation.
+            push_base = axil_cmd_push_count;
+            axil_write(16'h0100, 32'h0000_0000); // EN_VTC=0, INC=0
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "ODELAY local write @0x0100 unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_read(16'h0100, rd32);
+            check_eq32(rd32, 32'h0000_0000, "CK_P_ODELAY_CTRL EN_VTC disabled @0x0100");
+
+            // LOAD pulse with EN_VTC=0, INC=0.
+            push_base = axil_cmd_push_count;
+            axil_write(16'h0100, 32'h0000_0008);
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "ODELAY local write @0x0100 unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_read(16'h0100, rd32);
+            check_eq32(rd32, 32'h0000_0000, "CK_P_ODELAY_CTRL sticky bits after LOAD pulse @0x0100");
+
+            // Read STATUS and allow several cycles for CNTVALUEOUT to reflect LOAD.
+            for (poll_i = 0; poll_i < 32; poll_i++) begin
+                axil_read(16'h0108, rd32);
+                if (rd32[8:0] == 9'h02A) begin
+                    break;
+                end
+                @(posedge axi_aclk);
+            end
+            if (rd32[8:0] !== 9'h02A) begin
+                $fatal(1, "CK_P_ODELAY_STATUS @0x0108 mismatch after LOAD: got=0x%03x exp=0x02a", rd32[8:0]);
+            end
+
+            // Return control register to default EN_VTC=1.
+            push_base = axil_cmd_push_count;
+            axil_write(16'h0100, 32'h0000_0001);
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "ODELAY local write @0x0100 unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_read(16'h0100, rd32);
+            check_eq32(rd32, 32'h0000_0001, "CK_P_ODELAY_CTRL EN_VTC re-enabled @0x0100");
+
+            $display("[%0t][TB] TEST PASS: AXI-Lite CK_P ODELAY local register access @0x0100", $time);
         end
     endtask
