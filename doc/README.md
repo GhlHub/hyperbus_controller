@@ -155,3 +155,8 @@ Diagram generator scripts:
 
 - `doc/multibeat_axi_write_flow.py`
 - `doc/multibeat_axi_read_flow.py`
+
+## PHY Reuse Notes
+
+- `doc/hyperbus_phy_design_notes.md` captures the current HyperBus PHY architecture,
+  reset/clock assumptions, and a checklist for future PHY changes.
