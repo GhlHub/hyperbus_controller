@@ -10,7 +10,8 @@ This note captures the current implementation constraints and integration rules 
 - TX clock forwarding:
   - `BUFGCE` gates `i_hb_clk_200` with `i_hb_clk_ce`.
   - `ODDRE1` (`D1=1`, `D2=0`) generates forwarded CK waveform.
-  - `OBUFDS` drives `o_hb_ck_p/o_hb_ck_n`.
+  - `OBUF` drives `o_hb_ck_p` (single-ended mode).
+  - `o_hb_ck_n` is tied low for single-ended HyperRAM clocking.
 - DQ TX/RX:
   - Per-bit `ODDRE1` drives TX DDR data from `i_dq_o_d1/d2`.
   - Per-bit `IOBUF` controls tri-state with `i_dq_t`.
@@ -62,6 +63,7 @@ Required consequence in HB engine:
 4. Keep CK gating semantics:
    - No extra CK pulses when idle/terminating.
    - Preserve CS#/CK ordering constraints enforced in HB engine.
+   - Preserve single-ended clock convention (`o_hb_ck_p` driven, `o_hb_ck_n` tied low).
 5. Preserve byte ordering/mask mapping:
    - DQ serialization and RWDS mask polarity must remain aligned with AXI WSTRB.
 
@@ -72,3 +74,8 @@ Required consequence in HB engine:
   - `ip_repo/hyperbus_controller/component.xml`
   - `ip_repo/hyperbus_controller/src/*`
 
+## Constraints Note (Single-Ended CK Mode)
+
+This repo does not currently include an XDC file. In the integrating project, constrain
+`o_hb_ck_p` as a single-ended output and do not constrain `o_hb_ck_n` as a differential
+complement output.

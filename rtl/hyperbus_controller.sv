@@ -76,7 +76,7 @@ module hyperbus_controller #(
     output logic                        s_axil_rvalid,
     input  wire                         s_axil_rready,
 
-    // HyperBus physical interface (1.8V differential CK)
+    // HyperBus physical interface (single-ended CK mode: CK# held low)
     output wire                         o_hb_cs_n,
     output wire                         o_hb_ck_p,
     output wire                         o_hb_ck_n,

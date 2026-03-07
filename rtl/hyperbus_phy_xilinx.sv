@@ -58,12 +58,13 @@ module hyperbus_phy_xilinx (
         .D2(1'b0),
         .SR(~i_hb_rstn)
     );
-
-    OBUFDS u_obufds_ck (
-        .I(hb_ck_fwd),
-        .O(o_hb_ck_p),
-        .OB(o_hb_ck_n)
-    );
+    
+   OBUF u_obuf_ck_p(
+      .O(o_hb_ck_p),
+      .I(hb_ck_fwd)
+   );
+    
+   assign o_hb_ck_n = 0;
 
     genvar gi;
     generate

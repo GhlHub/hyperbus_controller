@@ -34,7 +34,8 @@ Main RTL:
 - `hyperbus_hb_engine.sv`
   - HyperBus transaction FSM (CA/latency/read/write/termination control)
 - `hyperbus_phy_xilinx.sv`
-  - Non-FIFO Xilinx primitive PHY (`BUFGCE`, `ODDRE1`, `OBUFDS`, `IOBUF`, `IDDRE1`)
+  - Non-FIFO Xilinx primitive PHY (`BUFGCE`, `ODDRE1`, `OBUF`, `IOBUF`, `IDDRE1`, `IDELAYCTRL`)
+  - Configured for single-ended CK mode (`o_hb_ck_p` driven, `o_hb_ck_n` held low)
 - `hyperbus_fifo_bank_xilinx.sv`
   - All XPM async FIFOs (`xpm_fifo_async`)
 
@@ -143,6 +144,12 @@ Notes:
 
 - Target part is `xcsu35p-2sbvb625e`.
 - The packager imports RTL from `rtl/` only (no testbench files).
+
+Clock constraint note:
+
+- This repo does not include an `.xdc`.
+- In the consuming Vivado project, apply single-ended clock constraints to HyperBus `CK`
+  on `o_hb_ck_p` and do not model `o_hb_ck_n` as a differential complement output.
 
 ## Flow Diagrams
 
