@@ -17,16 +17,22 @@ Target assumptions include:
 Main RTL:
 
 - `rtl/hyperbus_controller.sv`
+- `rtl/hyperbus_axi_full_frontend.sv`
+- `rtl/hyperbus_axi_lite_frontend.sv`
+- `rtl/hyperbus_hb_engine.sv`
 - `rtl/hyperbus_phy_xilinx.sv`
 - `rtl/hyperbus_fifo_bank_xilinx.sv`
 
 ## Block Partitioning
 
 - `hyperbus_controller.sv`
-  - AXI-full front-end/state handling
-  - AXI-lite front-end/state handling
-  - HyperBus transaction FSM
-  - Command/address/data formatting and control logic
+  - Top-level integration only (AXI front-ends, HB engine, FIFO bank, PHY)
+- `hyperbus_axi_full_frontend.sv`
+  - AXI-full slave handling (AW/W/B and AR/R control, command and data enqueue/dequeue)
+- `hyperbus_axi_lite_frontend.sv`
+  - AXI-lite single-beat command/response handling
+- `hyperbus_hb_engine.sv`
+  - HyperBus transaction FSM (CA/latency/read/write/termination control)
 - `hyperbus_phy_xilinx.sv`
   - Non-FIFO Xilinx primitive PHY (`BUFGCE`, `ODDRE1`, `OBUFDS`, `IOBUF`, `IDDRE1`)
 - `hyperbus_fifo_bank_xilinx.sv`
@@ -91,6 +97,20 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
 Primary testbench:
 
 - `tb/hyperbus_controller_tb.sv`
+- `tb/hyperbus_tb_axi_tasks.svh`
+- `tb/hyperbus_tb_checks.svh`
+- `tb/hyperbus_tb_sequences.svh`
+
+Testbench partitioning:
+
+- `hyperbus_controller_tb.sv`
+  - DUT/model hookup, clock/reset generation, shared state, test run order
+- `hyperbus_tb_axi_tasks.svh`
+  - AXI-full/AXI-lite transaction driver tasks
+- `hyperbus_tb_checks.svh`
+  - Common check/helper tasks and functions
+- `hyperbus_tb_sequences.svh`
+  - Higher-level scenario tasks composed from drivers/checks
 
 Contains self-checking cases for:
 
@@ -102,6 +122,10 @@ Contains self-checking cases for:
 - AXI-full malformed `WLAST` checks (early and missing-final) expecting `SLVERR`
 - AXI-full same-cycle read+write request arbitration/data-integrity check
 - AXI-full burst sweep from 2 to 32 beats (write/read, self-checking)
+
+Simulation compile note:
+
+- `sim_m/xsim/vlog.prj` includes `-i "../../tb"` so xvlog can resolve TB `include` files.
 
 ## Flow Diagrams
 
