@@ -24,8 +24,11 @@ module hyperbus_phy_xilinx (
     output wire       o_rwds_q2
 );
 
+    localparam int HB_CK_P_ODELAY_PS = 810;
+
     logic hb_ck_gated;
     logic hb_ck_fwd;
+    logic hb_ck_fwd_delayed;
     logic [7:0] dq_i;
     logic [7:0] dq_out_ddr;
     logic [7:0] dq_q1_raw;
@@ -59,9 +62,35 @@ module hyperbus_phy_xilinx (
         .SR(~i_hb_rstn)
     );
     
+    ODELAYE3 #(
+        .CASCADE("NONE"),
+        .DELAY_FORMAT("TIME"),
+        .DELAY_TYPE("FIXED"),
+        .DELAY_VALUE(HB_CK_P_ODELAY_PS),
+        .IS_CLK_INVERTED(1'b0),
+        .IS_RST_INVERTED(1'b0),
+        .REFCLK_FREQUENCY(300.0),
+        .SIM_DEVICE("ULTRASCALE_PLUS"),
+        .UPDATE_MODE("ASYNC")
+    ) u_odelay_hb_ck_p (
+        .CASC_OUT(),
+        .CNTVALUEOUT(),
+        .DATAOUT(hb_ck_fwd_delayed),
+        .CASC_IN(1'b0),
+        .CASC_RETURN(1'b0),
+        .CE(1'b0),
+        .CLK(i_hb_clk_200),
+        .CNTVALUEIN(9'd0),
+        .EN_VTC(1'b1),
+        .INC(1'b0),
+        .LOAD(1'b0),
+        .ODATAIN(hb_ck_fwd),
+        .RST(1'b0)
+    );
+
    OBUF u_obuf_ck_p(
       .O(o_hb_ck_p),
-      .I(hb_ck_fwd)
+      .I(hb_ck_fwd_delayed)
    );
     
    assign o_hb_ck_n = 0;
