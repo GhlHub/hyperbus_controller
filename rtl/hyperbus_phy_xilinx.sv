@@ -15,8 +15,8 @@ module hyperbus_phy_xilinx (
     input  wire [7:0] i_dq_t,
     input  wire [7:0] i_dq_o_d1,
     input  wire [7:0] i_dq_o_d2,
-    output wire [7:0] o_dq_q1,
-    output wire [7:0] o_dq_q2,
+    output logic [7:0] o_dq_q1,
+    output logic [7:0] o_dq_q2,
     input  wire       i_rwds_t,
     input  wire       i_rwds_o_d1,
     input  wire       i_rwds_o_d2,
@@ -28,6 +28,8 @@ module hyperbus_phy_xilinx (
     logic hb_ck_fwd;
     logic [7:0] dq_i;
     logic [7:0] dq_out_ddr;
+    logic [7:0] dq_q1_raw;
+    logic [7:0] dq_q2_raw;
     logic rwds_i;
     logic rwds_out_ddr;
     logic idelayctrl_rdy;
@@ -91,8 +93,8 @@ module hyperbus_phy_xilinx (
                 .IS_C_INVERTED(1'b0),
                 .IS_CB_INVERTED(1'b1)
             ) u_iddr_dq (
-                .Q1(o_dq_q1[gi]),
-                .Q2(o_dq_q2[gi]),
+                .Q1(dq_q1_raw[gi]),
+                .Q2(dq_q2_raw[gi]),
                 .C(i_hb_clk_200_samp_90),
                 .CB(i_hb_clk_200_samp_90),
                 .D(dq_i[gi]),
@@ -100,6 +102,17 @@ module hyperbus_phy_xilinx (
             );
         end
     endgenerate
+
+    // One i_hb_clk_200 cycle pipeline on DQ sampler outputs.
+    always_ff @(posedge i_hb_clk_200) begin
+        if (!i_hb_rstn) begin
+            o_dq_q1 <= 8'h00;
+            o_dq_q2 <= 8'h00;
+        end else begin
+            o_dq_q1 <= dq_q1_raw;
+            o_dq_q2 <= dq_q2_raw;
+        end
+    end
 
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),

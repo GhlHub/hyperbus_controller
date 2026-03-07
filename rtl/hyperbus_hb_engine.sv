@@ -99,6 +99,8 @@ module hyperbus_hb_engine #(
 
     logic [15:0] hb_word16;
     logic [15:0] hb_word16_le;
+    logic rwds_q1_dly;
+    logic rwds_q2_dly;
 
     assign hb_word16    = {i_dq_q1, i_dq_q2};
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
@@ -145,7 +147,13 @@ module hyperbus_hb_engine #(
             o_b_fifo_din <= 1'b0;
             o_axil_rsp_fifo_wr_en <= 1'b0;
             o_axil_rsp_fifo_din <= 32'h0;
+            rwds_q1_dly <= 1'b0;
+            rwds_q2_dly <= 1'b0;
         end else begin
+            // Align RWDS transition qualifier with DQ data path that is pipelined
+            // by one i_hb_clk_200 cycle in the PHY.
+            rwds_q1_dly <= i_rwds_q1;
+            rwds_q2_dly <= i_rwds_q2;
             o_cmd_fifo_rd_en <= 1'b0;
             o_wr_fifo_rd_en <= 1'b0;
             o_rd_fifo_wr_en <= 1'b0;
@@ -503,7 +511,7 @@ module hyperbus_hb_engine #(
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
                     // RWDS transition-aligned data: treat RWDS edge activity as data valid qualifier.
-                    rwds_data_valid = (i_rwds_q1 ^ i_rwds_q2);
+                    rwds_data_valid = (rwds_q1_dly ^ rwds_q2_dly);
 
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -546,7 +554,7 @@ module hyperbus_hb_engine #(
                     words_done_next = words_done;
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
-                    rwds_data_valid = (i_rwds_q1 ^ i_rwds_q2);
+                    rwds_data_valid = (rwds_q1_dly ^ rwds_q2_dly);
 
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
