@@ -5,6 +5,7 @@ module hyperbus_phy_xilinx (
     input  wire       i_ref_clk300,
     input  wire       i_idelayctrl_rst,
     input  wire       i_hb_clk_200_samp_90,
+    input  wire       i_iddre1_rst,
     input  wire       i_hb_rstn,
     input  wire       i_hb_clk_ce,
     output wire       o_hb_ck_p,
@@ -95,7 +96,7 @@ module hyperbus_phy_xilinx (
                 .C(i_hb_clk_200_samp_90),
                 .CB(i_hb_clk_200_samp_90),
                 .D(dq_i[gi]),
-                .R(~i_hb_rstn)
+                .R(i_iddre1_rst)
             );
         end
     endgenerate
@@ -130,7 +131,7 @@ module hyperbus_phy_xilinx (
         .C(i_hb_clk_200_samp_90),
         .CB(i_hb_clk_200_samp_90),
         .D(rwds_i),
-        .R(~i_hb_rstn)
+        .R(i_iddre1_rst)
     );
 
 endmodule

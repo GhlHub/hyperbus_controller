@@ -26,6 +26,7 @@ module hyperbus_controller_tb;
     logic hb_clk_200;
     logic ref_clk300;
     logic idelayctrl_rst;
+    logic iddre1_rst;
     logic hb_clk_200_samp_90;
     logic axi_aresetn;
     logic hb_rstn;
@@ -107,6 +108,7 @@ module hyperbus_controller_tb;
         .i_ref_clk300(ref_clk300),
         .i_idelayctrl_rst(idelayctrl_rst),
         .i_hb_clk_200_samp_90(hb_clk_200_samp_90),
+        .i_iddre1_rst(iddre1_rst),
         .i_hb_rstn(hb_rstn),
 
         .s_axi_awaddr(s_axi_awaddr),
@@ -271,11 +273,15 @@ module hyperbus_controller_tb;
         axi_aresetn = 1'b0;
         hb_rstn     = 1'b0;
         idelayctrl_rst = 1'b1;
+        iddre1_rst = 1'b1;
 
         repeat (20) @(posedge axi_aclk);
         hb_rstn     = 1'b1;
         axi_aresetn = 1'b1;
         idelayctrl_rst = 1'b0;
+        // IDDRE1 reset is synchronous to i_hb_clk_200_samp_90.
+        repeat (2) @(posedge hb_clk_200_samp_90);
+        iddre1_rst = 1'b0;
 
         // Let HyperRAM model finish POR interval.
         #160_000;

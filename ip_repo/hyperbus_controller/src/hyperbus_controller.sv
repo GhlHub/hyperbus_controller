@@ -18,6 +18,7 @@ module hyperbus_controller #(
     input  wire                         i_ref_clk300,    // externally sourced 300 MHz IDELAYCTRL refclk
     input  wire                         i_idelayctrl_rst, // externally sourced IDELAYCTRL reset (active high)
     input  wire                         i_hb_clk_200_samp_90, // externally sourced 200 MHz, +90 deg
+    input  wire                         i_iddre1_rst,    // externally sourced IDDRE1 reset (active high)
     input  wire                         i_hb_rstn,
 
     // AXI4 Full slave (32-bit)
@@ -264,6 +265,7 @@ module hyperbus_controller #(
         .i_ref_clk300(i_ref_clk300),
         .i_idelayctrl_rst(i_idelayctrl_rst),
         .i_hb_clk_200_samp_90(i_hb_clk_200_samp_90),
+        .i_iddre1_rst(i_iddre1_rst),
         .i_hb_rstn(i_hb_rstn),
         .i_hb_clk_ce(hb_clk_ce),
         .o_hb_ck_p(o_hb_ck_p),
