@@ -49,7 +49,8 @@ module hyperbus_fifo_bank_xilinx #(
     output wire             o_axil_rsp_fifo_dout_valid
 );
 
-    wire fifo_rst = ~(i_axi_aresetn & i_hb_rstn);
+    wire fifo_rst_axi_wr = ~i_axi_aresetn;
+    wire fifo_rst_hb_wr  = ~i_hb_rstn;
 
     xpm_fifo_async #(
         .DOUT_RESET_VALUE("0"),
@@ -68,7 +69,7 @@ module hyperbus_fifo_bank_xilinx #(
         .WRITE_DATA_WIDTH(CMD_W),
         .WR_DATA_COUNT_WIDTH(6)
     ) u_cmd_fifo (
-        .rst(fifo_rst),
+        .rst(fifo_rst_axi_wr),
         .wr_clk(i_axi_aclk),
         .rd_clk(i_hb_clk_200),
         .din(i_cmd_fifo_din),
@@ -113,7 +114,7 @@ module hyperbus_fifo_bank_xilinx #(
         .WRITE_DATA_WIDTH(36),
         .WR_DATA_COUNT_WIDTH(9)
     ) u_wr_fifo (
-        .rst(fifo_rst),
+        .rst(fifo_rst_axi_wr),
         .wr_clk(i_axi_aclk),
         .rd_clk(i_hb_clk_200),
         .din(i_wr_fifo_din),
@@ -158,7 +159,7 @@ module hyperbus_fifo_bank_xilinx #(
         .WRITE_DATA_WIDTH(32),
         .WR_DATA_COUNT_WIDTH(9)
     ) u_rd_fifo (
-        .rst(fifo_rst),
+        .rst(fifo_rst_hb_wr),
         .wr_clk(i_hb_clk_200),
         .rd_clk(i_axi_aclk),
         .din(i_rd_fifo_din),
@@ -203,7 +204,7 @@ module hyperbus_fifo_bank_xilinx #(
         .WRITE_DATA_WIDTH(1),
         .WR_DATA_COUNT_WIDTH(6)
     ) u_b_fifo (
-        .rst(fifo_rst),
+        .rst(fifo_rst_hb_wr),
         .wr_clk(i_hb_clk_200),
         .rd_clk(i_axi_aclk),
         .din(i_b_fifo_din),
@@ -248,7 +249,7 @@ module hyperbus_fifo_bank_xilinx #(
         .WRITE_DATA_WIDTH(32),
         .WR_DATA_COUNT_WIDTH(6)
     ) u_axil_rsp_fifo (
-        .rst(fifo_rst),
+        .rst(fifo_rst_hb_wr),
         .wr_clk(i_hb_clk_200),
         .rd_clk(i_axi_aclk),
         .din(i_axil_rsp_fifo_din),
