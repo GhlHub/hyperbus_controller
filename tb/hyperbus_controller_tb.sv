@@ -224,6 +224,8 @@ module hyperbus_controller_tb;
     logic [1:0] bresp_chk;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
+    logic odly_dbg_en;
+    logic [8:0] odly_cnt_prev;
 
     `include "hyperbus_tb_axi_tasks.svh"
     `include "hyperbus_tb_checks.svh"
@@ -236,6 +238,29 @@ module hyperbus_controller_tb;
             axil_cmd_push_count <= 0;
         end else if (dut.cmd_fifo_wr_en_axil) begin
             axil_cmd_push_count <= axil_cmd_push_count + 1;
+        end
+    end
+
+    // Focused ODELAYE3 monitor for INC/CE debug windows.
+    always @(posedge axi_aclk or negedge axi_aresetn) begin
+        if (!axi_aresetn) begin
+            odly_cnt_prev <= 9'h000;
+        end else begin
+            if (odly_dbg_en) begin
+                $display("[%0t][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST=%0b CNTVALUEOUT=0x%03x",
+                         $time,
+                         dut.odly_en_vtc,
+                         dut.odly_load,
+                         dut.odly_ce,
+                         dut.odly_inc,
+                         dut.odly_rst,
+                         dut.odly_cntvalueout);
+                if (dut.odly_cntvalueout !== odly_cnt_prev) begin
+                    $display("[%0t][ TB] [ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
+                             $time, odly_cnt_prev, dut.odly_cntvalueout);
+                end
+            end
+            odly_cnt_prev <= dut.odly_cntvalueout;
         end
     end
 
@@ -269,6 +294,7 @@ module hyperbus_controller_tb;
         s_axil_araddr  = '0;
         s_axil_arvalid = 1'b0;
         s_axil_rready  = 1'b0;
+        odly_dbg_en    = 1'b0;
 
         axi_aresetn = 1'b0;
         hb_rstn     = 1'b0;
@@ -289,6 +315,7 @@ module hyperbus_controller_tb;
         // AXI-Lite register path self-checks (fatal on first mismatch).
         run_axil_self_checks();
         run_axil_hold_valid_stress();
+        run_timeout_recovery_checks();
 
         // Partial-byte write check using WSTRB -> RWDS byte masks.
         axi_full_write_burst(32'h0000_0180, 1, 32'h1122_3344, 4'hF);
@@ -296,7 +323,7 @@ module hyperbus_controller_tb;
         if (rd_data[0] !== 32'h1122_3344) begin
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x1122_3344", rd_data[0]);
         end
-        $display("TEST PASS: single-beat full write/read 0x11223344");
+        $display("[%0t][ TB] TEST PASS: single-beat full write/read 0x11223344", $time);
         
         axi_full_write_burst(32'h0000_0180, 1, 32'hAA55_FF00, 4'b0101); // update byte0 + byte2 only (expect 0x11553300)
         axi_full_read_burst (32'h0000_0180, 1, rd_data);
@@ -304,20 +331,20 @@ module hyperbus_controller_tb;
         if (rd_data[0] !== 32'h1155_3300) begin
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x11553300", rd_data[0]);
         end
-        $display("TEST PASS: WSTRB masked write/read 0x11553300");
+        $display("[%0t][ TB] TEST PASS: WSTRB masked write/read 0x11553300", $time);
 
         // AXI-full malformed WLAST checks should return SLVERR.
         axi_full_write_burst_bad_wlast(32'h0000_01C0, 4, 32'hD00D_0000, 4'hF, 0, bresp_chk);
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (early) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("TEST PASS: bad WLAST early -> SLVERR");
+        $display("[%0t][ TB] TEST PASS: bad WLAST early -> SLVERR", $time);
 
         axi_full_write_burst_bad_wlast(32'h0000_01D0, 4, 32'hD00D_1000, 4'hF, 1, bresp_chk);
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (missing final) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("TEST PASS: bad WLAST missing-final -> SLVERR");
+        $display("[%0t][ TB] TEST PASS: bad WLAST missing-final -> SLVERR", $time);
 
         // Simultaneous AW+AR request test: write must be serviced first.
         axi_full_write_burst(32'h0000_01A0, 1, 32'hCAFEBABE, 4'hF);
@@ -340,7 +367,7 @@ module hyperbus_controller_tb;
                            beats, k, rd_data[k], (burst_base + k));
                 end
             end
-            $display("TEST PASS: %0d-beat full burst write/read", beats);
+            $display("[%0t][ TB] TEST PASS: %0d-beat full burst write/read", $time, beats);
         end
 
 
