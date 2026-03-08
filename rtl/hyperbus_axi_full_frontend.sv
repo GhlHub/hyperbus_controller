@@ -68,8 +68,10 @@ module hyperbus_axi_full_frontend #(
 
     logic rd_active;
     logic [7:0] rd_beats_left;
-    logic [31:0] rdata_hold;
-    logic        rdata_hold_valid;
+    logic [31:0] rd_stage_mem [0:1];
+    logic        rd_stage_wr_ptr, rd_stage_rd_ptr;
+    logic [1:0]  rd_stage_count;
+    logic        rd_pop_cooldown;
 
     logic b_pop_pending;
     logic wr_proto_err;
@@ -124,19 +126,27 @@ module hyperbus_axi_full_frontend #(
             bresp_q_count <= 6'd0;
             aw_id_q <= '0;
             ar_id_q <= '0;
-            rdata_hold <= '0;
-            rdata_hold_valid <= 1'b0;
+            rd_stage_wr_ptr <= 1'b0;
+            rd_stage_rd_ptr <= 1'b0;
+            rd_stage_count <= 2'd0;
+            rd_pop_cooldown <= 1'b0;
         end else begin
             logic bresp_push, bresp_pop;
             logic [1:0] bresp_push_data;
+            logic rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
+            logic [1:0] rd_stage_count_n;
 
             bresp_push = 1'b0;
             bresp_pop = 1'b0;
             bresp_push_data = 2'b00;
+            rd_stage_wr_ptr_n = rd_stage_wr_ptr;
+            rd_stage_rd_ptr_n = rd_stage_rd_ptr;
+            rd_stage_count_n = rd_stage_count;
 
             o_cmd_fifo_wr_en_full <= 1'b0;
             o_rd_fifo_rd_en <= 1'b0;
             o_b_fifo_rd_en <= 1'b0;
+            if (rd_pop_cooldown) rd_pop_cooldown <= 1'b0;
 
             // AW: only INCR, 32-bit beats, up to 32 beats
             s_axi_awready <= aw_can_accept;
@@ -232,28 +242,39 @@ module hyperbus_axi_full_frontend #(
                 rd_active <= 1'b1;
                 ar_id_q <= s_axi_arid;
                 rd_beats_left <= s_axi_arlen + 8'd1;
-                rdata_hold_valid <= 1'b0;
+                rd_stage_wr_ptr_n = 1'b0;
+                rd_stage_rd_ptr_n = 1'b0;
+                rd_stage_count_n = 2'd0;
+                s_axi_rvalid <= 1'b0;
             end
 
-            // FWFT read-return path:
-            // capture previewed FIFO dout when local hold is empty.
-            if (!rdata_hold_valid && rd_active && !i_rd_fifo_empty) begin
-                rdata_hold <= i_rd_fifo_dout;
-                rdata_hold_valid <= 1'b1;
-            end
-
-            if (!s_axi_rvalid && rdata_hold_valid) begin
+            // Drive AXI R channel from local staging FIFO.
+            if (!s_axi_rvalid && rd_active && (rd_stage_count_n != 2'd0)) begin
                 s_axi_rvalid <= 1'b1;
-                s_axi_rdata <= rdata_hold;
+                s_axi_rdata <= rd_stage_mem[rd_stage_rd_ptr_n];
                 s_axi_rid <= ar_id_q;
                 s_axi_rresp <= 2'b00;
                 s_axi_rlast <= (rd_beats_left == 8'd1);
-                // Pop once when launching this AXI read beat.
-                o_rd_fifo_rd_en <= 1'b1;
+                rd_stage_rd_ptr_n = ~rd_stage_rd_ptr_n;
+                rd_stage_count_n = rd_stage_count_n - 2'd1;
             end
+
+            // Prefetch from FWFT RD FIFO into local 4-entry FF staging FIFO.
+            if (rd_active && !rd_pop_cooldown && !i_rd_fifo_empty && (rd_stage_count_n < 2'd2) &&
+                ((rd_stage_count_n + (s_axi_rvalid ? 2'd1 : 2'd0)) < rd_beats_left)) begin
+                rd_stage_mem[rd_stage_wr_ptr_n] <= i_rd_fifo_dout;
+                rd_stage_wr_ptr_n = ~rd_stage_wr_ptr_n;
+                rd_stage_count_n = rd_stage_count_n + 2'd1;
+                o_rd_fifo_rd_en <= 1'b1;
+                rd_pop_cooldown <= 1'b1;
+            end
+
+            rd_stage_wr_ptr <= rd_stage_wr_ptr_n;
+            rd_stage_rd_ptr <= rd_stage_rd_ptr_n;
+            rd_stage_count <= rd_stage_count_n;
+
             if (s_axi_rvalid && s_axi_rready) begin
                 s_axi_rvalid <= 1'b0;
-                rdata_hold_valid <= 1'b0;
                 if (rd_beats_left != 0) rd_beats_left <= rd_beats_left - 8'd1;
                 if (rd_beats_left == 8'd1) begin
                     rd_active <= 1'b0;
