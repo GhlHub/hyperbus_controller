@@ -8,6 +8,7 @@ module hyperbus_axi_full_frontend #(
 ) (
     input  wire                         i_axi_aclk,
     input  wire                         i_axi_aresetn,
+    input  wire                         i_req_block,
 
     input  wire                         i_cmd_fifo_full,
     output logic [CMD_W-1:0]            o_cmd_fifo_din_full,
@@ -81,7 +82,7 @@ module hyperbus_axi_full_frontend #(
     logic [AXI_ID_WIDTH-1:0] aw_id_q;
     logic [AXI_ID_WIDTH-1:0] ar_id_q;
 
-    assign aw_can_accept = (!o_aw_pending) && (!i_cmd_fifo_full) &&
+    assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
                            (s_axi_awsize == 3'd2) &&
                            (s_axi_awburst == 2'b01) &&
                            (s_axi_awlen <= 8'd31);
@@ -218,10 +219,10 @@ module hyperbus_axi_full_frontend #(
             // AR
             // Write-priority arbitration:
             // if AWVALID and ARVALID arrive together, service write first.
-            s_axi_arready <= (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
+            s_axi_arready <= (!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
                              (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
                              (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31);
-            if ((!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
+            if ((!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
                 (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
                 (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31) &&
                 s_axi_arvalid) begin

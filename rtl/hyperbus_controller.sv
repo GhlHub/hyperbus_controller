@@ -5,7 +5,7 @@ module hyperbus_controller #(
     parameter int AXI_DATA_WIDTH = 32,
     parameter int AXI_ID_WIDTH = 1,
     parameter int AXIL_ADDR_WIDTH = 16,
-    parameter int HB_LATENCY_DEFAULT = 6,
+    parameter int HB_LATENCY_DEFAULT = 7,
     // Compensation window (in i_hb_clk_200 cycles) for ODDRE1 forwarded outputs.
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     // Read termination requirement: keep CS# asserted this many HB cycles
@@ -87,6 +87,7 @@ module hyperbus_controller #(
 
     localparam int CMD_W = 75;
     localparam int AXI_MAX_BEATS = 32; // 128B on 32-bit interface
+    localparam int HB_TIMEOUT_RESET_CYCLES = 44; // 220ns @ 200MHz
 
     // cmd packing: [74] src_axil, [73] is_write, [72] is_reg, [71:40] addr, [39:32] beats, [31:0] wdata
     logic [CMD_W-1:0] cmd_fifo_din, cmd_fifo_dout;
@@ -107,6 +108,10 @@ module hyperbus_controller #(
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
     logic odly_en_vtc, odly_ce, odly_inc, odly_load, odly_rst;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
+    logic hb_timeout_pulse_hb;
+    logic hb_timeout_holdoff_hb;
+    logic hb_timeout_block_axi_meta, hb_timeout_block_axi;
+    logic [7:0] hb_reset_pulse_cnt;
 
     hyperbus_fifo_bank_xilinx #(
         .CMD_W(CMD_W)
@@ -166,6 +171,7 @@ module hyperbus_controller #(
     ) u_axi_full_frontend (
         .i_axi_aclk(i_axi_aclk),
         .i_axi_aresetn(i_axi_aresetn),
+        .i_req_block(hb_timeout_block_axi),
         .i_cmd_fifo_full(cmd_fifo_full),
         .o_cmd_fifo_din_full(cmd_fifo_din_full),
         .o_cmd_fifo_wr_en_full(cmd_fifo_wr_en_full),
@@ -219,6 +225,8 @@ module hyperbus_controller #(
     ) u_axi_lite_frontend (
         .i_axi_aclk(i_axi_aclk),
         .i_axi_aresetn(i_axi_aresetn),
+        .i_req_block(hb_timeout_block_axi),
+        .i_timeout_holdoff_active(hb_timeout_block_axi),
         .i_aw_pending(aw_pending),
         .i_s_axi_arvalid(s_axi_arvalid),
         .i_s_axi_awvalid(s_axi_awvalid),
@@ -267,7 +275,7 @@ module hyperbus_controller #(
     logic rwds_q1, rwds_q2;
 
     assign o_hb_cs_n = hb_cs_n_q;
-    assign o_hb_reset_n = i_hb_rstn;
+    assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk(i_axi_aclk),
@@ -333,6 +341,8 @@ module hyperbus_controller #(
         .i_rwds_q1(rwds_q1),
         .i_rwds_q2(rwds_q2),
         .o_hb_clk_ce(hb_clk_ce),
+        .o_timeout_pulse_hb(hb_timeout_pulse_hb),
+        .o_timeout_holdoff_active(hb_timeout_holdoff_hb),
         .o_hb_cs_n_q(hb_cs_n_q),
         .o_dq_t(dq_t),
         .o_dq_o_d1(dq_o_d1),
@@ -341,6 +351,28 @@ module hyperbus_controller #(
         .o_rwds_o_d1(rwds_o_d1),
         .o_rwds_o_d2(rwds_o_d2)
     );
+
+    // Synchronize HB-domain timeout holdoff into AXI clock domain for backpressure.
+    always_ff @(posedge i_axi_aclk) begin
+        if (!i_axi_aresetn) begin
+            hb_timeout_block_axi_meta <= 1'b0;
+            hb_timeout_block_axi <= 1'b0;
+        end else begin
+            hb_timeout_block_axi_meta <= hb_timeout_holdoff_hb;
+            hb_timeout_block_axi <= hb_timeout_block_axi_meta;
+        end
+    end
+
+    // Assert HyperRAM reset_n low for 220ns after timeout.
+    always_ff @(posedge i_hb_clk_200) begin
+        if (!i_hb_rstn) begin
+            hb_reset_pulse_cnt <= 8'd0;
+        end else if (hb_timeout_pulse_hb) begin
+            hb_reset_pulse_cnt <= HB_TIMEOUT_RESET_CYCLES;
+        end else if (hb_reset_pulse_cnt != 0) begin
+            hb_reset_pulse_cnt <= hb_reset_pulse_cnt - 8'd1;
+        end
+    end
 
 `ifndef SYNTHESIS
 `ifndef NO_FIFO_TRACE
@@ -354,13 +386,13 @@ module hyperbus_controller #(
                 $display("[%0t][AXI] CMD_FIFO PUSH(axil) data=0x%0h", $time, cmd_fifo_din_axil);
             end
             if (wr_fifo_wr_en) begin
-                $display("[%0t][AXI] WR_FIFO PUSH data=0x%0h", $time, wr_fifo_din);
+                $display("[%0t][AXI] [WR_FIFO] PUSH data=0x%0h", $time, wr_fifo_din);
             end
             if (rd_fifo_rd_en) begin
-                $display("[%0t][AXI] RD_FIFO POP_REQ", $time);
+                $display("[%0t][AXI] [RD_FIFO] POP_REQ", $time);
             end
             if (s_axi_rvalid && s_axi_rready) begin
-                $display("[%0t][AXI] RD_FIFO POP_DATA data=0x%08h", $time, s_axi_rdata);
+                $display("[%0t][AXI] [RD_FIFO] POP_DATA data=0x%08h", $time, s_axi_rdata);
             end
             if (b_fifo_rd_en) begin
                 $display("[%0t][AXI] B_FIFO POP_REQ", $time);
@@ -380,23 +412,23 @@ module hyperbus_controller #(
     always @(posedge i_hb_clk_200) begin
         if (i_hb_rstn) begin
             if (cmd_fifo_rd_en) begin
-                $display("[%0t][HB ] CMD_FIFO POP_REQ", $time);
+                $display("[%0t][ HB] CMD_FIFO POP_REQ", $time);
             end
             if (cmd_fifo_dout_valid) begin
-                $display("[%0t][HB ] CMD_FIFO POP_DATA data=0x%0h", $time, cmd_fifo_dout);
+                $display("[%0t][ HB] CMD_FIFO POP_DATA data=0x%0h", $time, cmd_fifo_dout);
             end
             if (wr_fifo_rd_en) begin
-                $display("[%0t][HB ] WR_FIFO POP_REQ", $time);
-                $display("[%0t][HB ] WR_FIFO POP_DATA data=0x%0h", $time, wr_fifo_dout);
+                $display("[%0t][ HB] [WR_FIFO] POP_REQ", $time);
+                $display("[%0t][ HB] [WR_FIFO] POP_DATA data=0x%0h", $time, wr_fifo_dout);
             end
             if (rd_fifo_wr_en) begin
-                $display("[%0t][HB ] RD_FIFO PUSH data=0x%08h", $time, rd_fifo_din);
+                $display("[%0t][ HB] [RD_FIFO] PUSH data=0x%08h", $time, rd_fifo_din);
             end
             if (b_fifo_wr_en) begin
-                $display("[%0t][HB ] B_FIFO PUSH data=0x%0h", $time, b_fifo_din);
+                $display("[%0t][ HB] B_FIFO PUSH data=0x%0h", $time, b_fifo_din);
             end
             if (axil_rsp_fifo_wr_en) begin
-                $display("[%0t][HB ] AXIL_RSP_FIFO PUSH data=0x%08h", $time, axil_rsp_fifo_din);
+                $display("[%0t][ HB] AXIL_RSP_FIFO PUSH data=0x%08h", $time, axil_rsp_fifo_din);
             end
         end
     end
