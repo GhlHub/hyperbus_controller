@@ -2,6 +2,8 @@
 
 module hyperbus_phy_xilinx (
     input  wire       i_hb_clk_200,
+    input  wire       i_axi_aclk,
+    input  wire       i_axi_aresetn,
     input  wire       i_ref_clk300,
     input  wire       i_idelayctrl_rst,
     input  wire       i_hb_clk_200_samp_90,
@@ -21,11 +23,19 @@ module hyperbus_phy_xilinx (
     input  wire       i_rwds_o_d1,
     input  wire       i_rwds_o_d2,
     output wire       o_rwds_q1,
-    output wire       o_rwds_q2
+    output wire       o_rwds_q2,
+    input  wire       i_odly_en_vtc,
+    input  wire       i_odly_ce,
+    input  wire       i_odly_inc,
+    input  wire       i_odly_load,
+    input  wire       i_odly_rst,
+    input  wire [8:0] i_odly_cntvaluein,
+    output wire [8:0] o_odly_cntvalueout
 );
 
     logic hb_ck_gated;
     logic hb_ck_fwd;
+    logic hb_ck_fwd_delayed;
     logic [7:0] dq_i;
     logic [7:0] dq_out_ddr;
     logic [7:0] dq_q1_raw;
@@ -34,7 +44,8 @@ module hyperbus_phy_xilinx (
     logic rwds_out_ddr;
     logic idelayctrl_rdy;
 
-    IDELAYCTRL u_idelayctrl (
+    IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
+    u_idelayctrl (
         .RDY(idelayctrl_rdy),
         .REFCLK(i_ref_clk300),
         .RST(i_idelayctrl_rst)
@@ -58,12 +69,39 @@ module hyperbus_phy_xilinx (
         .D2(1'b0),
         .SR(~i_hb_rstn)
     );
-
-    OBUFDS u_obufds_ck (
-        .I(hb_ck_fwd),
-        .O(o_hb_ck_p),
-        .OB(o_hb_ck_n)
+    
+    ODELAYE3 #(
+        .CASCADE("NONE"),
+        .DELAY_FORMAT("COUNT"),
+        .DELAY_TYPE("VAR_LOAD"),
+        .DELAY_VALUE(0),
+        .IS_CLK_INVERTED(1'b0),
+        .IS_RST_INVERTED(1'b0),
+        .REFCLK_FREQUENCY(300.0),
+        .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+        .UPDATE_MODE("ASYNC")
+    ) u_odelay_hb_ck_p (
+        .CASC_OUT(),
+        .CNTVALUEOUT(o_odly_cntvalueout),
+        .DATAOUT(hb_ck_fwd_delayed),
+        .CASC_IN(1'b0),
+        .CASC_RETURN(1'b0),
+        .CE(i_odly_ce),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(i_odly_cntvaluein),
+        .EN_VTC(i_odly_en_vtc),
+        .INC(i_odly_inc),
+        .LOAD(i_odly_load),
+        .ODATAIN(hb_ck_fwd),
+        .RST(~i_axi_aresetn)
     );
+
+   OBUF u_obuf_ck_p(
+      .O(o_hb_ck_p),
+      .I(hb_ck_fwd_delayed)
+   );
+    
+   assign o_hb_ck_n = 0;
 
     genvar gi;
     generate

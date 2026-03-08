@@ -15,7 +15,15 @@ module hyperbus_axi_lite_frontend #(
     input  wire [31:0]                  i_axil_rsp_fifo_dout,
     input  wire                         i_axil_rsp_fifo_empty,
     input  wire                         i_axil_rsp_fifo_dout_valid,
+    input  wire [8:0]                   i_odly_cntvalueout,
     output logic                        o_axil_rsp_fifo_rd_en,
+
+    output logic                        o_odly_en_vtc,
+    output logic                        o_odly_ce,
+    output logic                        o_odly_inc,
+    output logic                        o_odly_load,
+    output logic                        o_odly_rst,
+    output logic [8:0]                  o_odly_cntvaluein,
 
     output logic [CMD_W-1:0]            o_cmd_fifo_din_axil,
     output logic                        o_cmd_fifo_wr_en_axil,
@@ -61,6 +69,36 @@ module hyperbus_axi_lite_frontend #(
     assign axil_ar_can_accept = (axil_state == AXIL_IDLE) && !i_cmd_fifo_full &&
                                 !i_aw_pending && !i_s_axi_arvalid && !i_s_axi_awvalid;
 
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_CTRL_ADDR   = 16'h0100;
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_CNTIN_ADDR  = 16'h0104;
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_STATUS_ADDR = 16'h0108;
+
+    logic        odly_en_vtc_q;
+    logic        odly_inc_q;
+    logic [8:0]  odly_cntvaluein_q;
+
+    function automatic logic axil_is_local_odelay_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
+        begin
+            axil_is_local_odelay_addr = (a == AXIL_CK_P_ODELAY_CTRL_ADDR) ||
+                                        (a == AXIL_CK_P_ODELAY_CNTIN_ADDR) ||
+                                        (a == AXIL_CK_P_ODELAY_STATUS_ADDR);
+        end
+    endfunction
+
+    function automatic [31:0] apply_wstrb32(
+        input logic [31:0] prior,
+        input logic [31:0] wdata,
+        input logic [3:0]  wstrb
+    );
+        begin
+            apply_wstrb32 = prior;
+            if (wstrb[0]) apply_wstrb32[7:0]   = wdata[7:0];
+            if (wstrb[1]) apply_wstrb32[15:8]  = wdata[15:8];
+            if (wstrb[2]) apply_wstrb32[23:16] = wdata[23:16];
+            if (wstrb[3]) apply_wstrb32[31:24] = wdata[31:24];
+        end
+    endfunction
+
     function automatic [31:0] axil_to_hb_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
             case (a)
@@ -90,9 +128,18 @@ module hyperbus_axi_lite_frontend #(
             axil_rsp_pop_pending <= 1'b0;
             o_cmd_fifo_wr_en_axil <= 1'b0;
             o_cmd_fifo_din_axil <= '0;
+            odly_en_vtc_q <= 1'b1;
+            odly_inc_q <= 1'b0;
+            odly_cntvaluein_q <= 9'd0;
+            o_odly_ce <= 1'b0;
+            o_odly_load <= 1'b0;
+            o_odly_rst <= 1'b0;
         end else begin
             o_axil_rsp_fifo_rd_en <= 1'b0;
             o_cmd_fifo_wr_en_axil <= 1'b0;
+            o_odly_ce <= 1'b0;
+            o_odly_load <= 1'b0;
+            o_odly_rst <= 1'b0;
 
             // Backpressure AXI-Lite command issuance when AXI-Full is actively
             // driving command-issue paths to prevent command FIFO write collisions.
@@ -105,18 +152,50 @@ module hyperbus_axi_lite_frontend #(
                 axil_aw_seen <= 1'b1;
             end
 
-            if ((axil_state == AXIL_IDLE) && axil_aw_seen && axil_w_can_accept && s_axil_wvalid && !i_cmd_fifo_full) begin
-                o_cmd_fifo_din_axil <= {1'b1, 1'b1, 1'b1, axil_to_hb_addr(axil_awaddr_q), 8'd1, s_axil_wdata};
-                o_cmd_fifo_wr_en_axil <= 1'b1;
-                axil_aw_seen <= 1'b0;
-                axil_state <= AXIL_WR_WAIT_B;
+            if ((axil_state == AXIL_IDLE) && axil_aw_seen && axil_w_can_accept && s_axil_wvalid) begin
+                if (axil_is_local_odelay_addr(axil_awaddr_q)) begin
+                    logic [31:0] wr32;
+                    if (axil_awaddr_q == AXIL_CK_P_ODELAY_CTRL_ADDR) begin
+                        wr32 = apply_wstrb32({30'h0, odly_inc_q, odly_en_vtc_q}, s_axil_wdata, s_axil_wstrb);
+                        odly_en_vtc_q <= wr32[0];
+                        odly_inc_q <= wr32[1];
+                        if (wr32[2]) o_odly_ce <= 1'b1;
+                        if (wr32[3]) o_odly_load <= 1'b1;
+                        if (wr32[4]) o_odly_rst <= 1'b1;
+                    end else if (axil_awaddr_q == AXIL_CK_P_ODELAY_CNTIN_ADDR) begin
+                        wr32 = apply_wstrb32({23'h0, odly_cntvaluein_q}, s_axil_wdata, s_axil_wstrb);
+                        odly_cntvaluein_q <= wr32[8:0];
+                    end
+                    axil_aw_seen <= 1'b0;
+                    s_axil_bresp <= 2'b00;
+                    s_axil_bvalid <= 1'b1;
+                    axil_state <= AXIL_WR_WAIT_B;
+                end else if (!i_cmd_fifo_full) begin
+                    o_cmd_fifo_din_axil <= {1'b1, 1'b1, 1'b1, axil_to_hb_addr(axil_awaddr_q), 8'd1, s_axil_wdata};
+                    o_cmd_fifo_wr_en_axil <= 1'b1;
+                    axil_aw_seen <= 1'b0;
+                    axil_state <= AXIL_WR_WAIT_B;
+                end
             end
 
             if (axil_ar_can_accept && s_axil_arvalid) begin
-                // For AXI-Lite reads, carry ARADDR[1] in wdata[0] to select return halfword lane.
-                o_cmd_fifo_din_axil <= {1'b1, 1'b0, 1'b1, axil_to_hb_addr(s_axil_araddr), 8'd1, {31'h0, s_axil_araddr[1]}};
-                o_cmd_fifo_wr_en_axil <= 1'b1;
-                axil_state <= AXIL_RD_WAIT_DATA;
+                if (axil_is_local_odelay_addr(s_axil_araddr)) begin
+                    if (s_axil_araddr == AXIL_CK_P_ODELAY_CTRL_ADDR) begin
+                        s_axil_rdata <= {27'h0, 1'b0, 1'b0, 1'b0, odly_inc_q, odly_en_vtc_q};
+                    end else if (s_axil_araddr == AXIL_CK_P_ODELAY_CNTIN_ADDR) begin
+                        s_axil_rdata <= {23'h0, odly_cntvaluein_q};
+                    end else begin
+                        s_axil_rdata <= {23'h0, i_odly_cntvalueout};
+                    end
+                    s_axil_rresp <= 2'b00;
+                    s_axil_rvalid <= 1'b1;
+                    axil_state <= AXIL_RD_RESP;
+                end else begin
+                    // For AXI-Lite reads, carry ARADDR[1] in wdata[0] to select return halfword lane.
+                    o_cmd_fifo_din_axil <= {1'b1, 1'b0, 1'b1, axil_to_hb_addr(s_axil_araddr), 8'd1, {31'h0, s_axil_araddr[1]}};
+                    o_cmd_fifo_wr_en_axil <= 1'b1;
+                    axil_state <= AXIL_RD_WAIT_DATA;
+                end
             end
 
             if (axil_state == AXIL_WR_WAIT_B) begin
@@ -155,5 +234,9 @@ module hyperbus_axi_lite_frontend #(
             end
         end
     end
+
+    assign o_odly_en_vtc = odly_en_vtc_q;
+    assign o_odly_inc = odly_inc_q;
+    assign o_odly_cntvaluein = odly_cntvaluein_q;
 
 endmodule
