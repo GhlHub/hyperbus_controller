@@ -79,10 +79,14 @@ module hyperbus_axi_full_frontend #(
     logic [AXI_ID_WIDTH-1:0] bid_q_mem [0:31];
     logic [4:0] bresp_q_wr_ptr, bresp_q_rd_ptr;
     logic [5:0] bresp_q_count;
+    logic bresp_q_full;
     logic [AXI_ID_WIDTH-1:0] aw_id_q;
     logic [AXI_ID_WIDTH-1:0] ar_id_q;
 
+    assign bresp_q_full = (bresp_q_count == 6'd32);
+
     assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
+                           (!bresp_q_full) &&
                            (s_axi_awsize == 3'd2) &&
                            (s_axi_awburst == 2'b01) &&
                            (s_axi_awlen <= 8'd31);
@@ -149,7 +153,7 @@ module hyperbus_axi_full_frontend #(
             end
 
             // Accept exactly AWLEN+1 beats; block extra cycles from duplicating writes.
-            s_axi_wready <= o_aw_pending && !i_wr_fifo_full && (w_beats_rcvd <= aw_len_q);
+            s_axi_wready <= o_aw_pending && (w_beats_rcvd <= aw_len_q);
             if (s_axi_wready && s_axi_wvalid && (w_beats_rcvd <= aw_len_q)) begin
                 // AXI write protocol check:
                 // WLAST must be high only on the final accepted beat.
@@ -159,7 +163,7 @@ module hyperbus_axi_full_frontend #(
                 end
                 w_beats_rcvd <= w_beats_rcvd + 8'd1;
                 // Push write command at final beat when cmd_fifo has space.
-                if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full) begin
+                if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                     o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
                     o_cmd_fifo_wr_en_full <= 1'b1;
                     bresp_push = 1'b1;
@@ -172,7 +176,7 @@ module hyperbus_axi_full_frontend #(
             end
             // If all W beats are already accepted but cmd_fifo was full at final beat,
             // issue the command as soon as space becomes available.
-            if (o_aw_pending && (w_beats_rcvd > aw_len_q) && !i_cmd_fifo_full) begin
+            if (o_aw_pending && (w_beats_rcvd > aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                 o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
                 o_cmd_fifo_wr_en_full <= 1'b1;
                 bresp_push = 1'b1;

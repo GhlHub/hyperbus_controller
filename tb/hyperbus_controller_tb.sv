@@ -224,6 +224,7 @@ module hyperbus_controller_tb;
     logic [1:0] bresp_chk;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
+    logic [31:0] axil_rd32;
     logic odly_dbg_en;
     logic [8:0] odly_cnt_prev;
 
@@ -324,6 +325,14 @@ module hyperbus_controller_tb;
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x1122_3344", rd_data[0]);
         end
         $display("[%0t][ TB] TEST PASS: single-beat full write/read 0x11223344", $time);
+
+        // Verify AXI-Lite local register @0x0020 tracks the last 32-bit HyperBus read word.
+        axil_read(16'h0020, axil_rd32);
+        if (axil_rd32 !== rd_data[0]) begin
+            $fatal(1, "AXI-Lite last-read register mismatch @0x0020: got 0x%08x exp 0x%08x",
+                   axil_rd32, rd_data[0]);
+        end
+        $display("[%0t][ TB] TEST PASS: AXI-Lite last-read register @0x0020", $time);
         
         axi_full_write_burst(32'h0000_0180, 1, 32'hAA55_FF00, 4'b0101); // update byte0 + byte2 only (expect 0x11553300)
         axi_full_read_burst (32'h0000_0180, 1, rd_data);

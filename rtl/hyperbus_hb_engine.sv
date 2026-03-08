@@ -30,6 +30,7 @@ module hyperbus_hb_engine #(
     input  wire                 i_axil_rsp_fifo_full,
     output logic [31:0]         o_axil_rsp_fifo_din,
     output logic                o_axil_rsp_fifo_wr_en,
+    output logic [31:0]         o_last_read_word32,
 
     input  wire [7:0]           i_dq_q1,
     input  wire [7:0]           i_dq_q2,
@@ -102,6 +103,8 @@ module hyperbus_hb_engine #(
 
     logic rd_half;
     logic [31:0] rd_pack;
+    logic [31:0] last_read_pack;
+    logic        last_read_half;
 
     logic [15:0] hb_word16;
     logic [15:0] hb_word16_le;
@@ -160,8 +163,11 @@ module hyperbus_hb_engine #(
             o_b_fifo_din <= 1'b0;
             o_axil_rsp_fifo_wr_en <= 1'b0;
             o_axil_rsp_fifo_din <= 32'h0;
+            o_last_read_word32 <= 32'h0;
             rwds_q1_dly <= 1'b0;
             rwds_q2_dly <= 1'b0;
+            last_read_pack <= 32'h0;
+            last_read_half <= 1'b0;
             rwds_timeout_cnt <= 6'd0;
             rd_beats_pushed <= 8'd0;
             timeout_full_beats_left <= 8'd0;
@@ -237,6 +243,7 @@ module hyperbus_hb_engine #(
                         wrnext_strb <= 4'h0;
                         wr_words_reqd <= 8'd0;
                         rd_half <= 1'b0;
+                        last_read_half <= 1'b0;
                         rwds_timeout_cnt <= 6'd0;
                         rd_beats_pushed <= 8'd0;
                         timeout_full_beats_left <= 8'd0;
@@ -548,20 +555,37 @@ module hyperbus_hb_engine #(
                     if (rwds_data_valid && !rd_half) begin
                         rd_pack[15:0] <= hb_word16_le;
                         rd_half <= 1'b1;
+                        if (!last_read_half) begin
+                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_half <= 1'b1;
+                        end else begin
+                            last_read_pack[31:16] <= hb_word16_le;
+                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_half <= 1'b0;
+                        end
                         words_done_next = words_done + 9'd1;
                         took_word = 1'b1;
                         rwds_edges_seen_next = rwds_edges_seen + 11'd2;
                     end else if (rwds_data_valid) begin
                         rd_pack[31:16] <= hb_word16_le;
-                        if (!i_rd_fifo_full) begin
-                            o_rd_fifo_din <= {hb_word16_le, rd_pack[15:0]};
-                            o_rd_fifo_wr_en <= 1'b1;
-                            rd_half <= 1'b0;
-                            words_done_next = words_done + 9'd1;
-                            took_word = 1'b1;
-                            rwds_edges_seen_next = rwds_edges_seen + 11'd2;
-                            rd_beats_pushed_next = rd_beats_pushed + 8'd1;
+                        if (!last_read_half) begin
+                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_half <= 1'b1;
+                        end else begin
+                            last_read_pack[31:16] <= hb_word16_le;
+                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_half <= 1'b0;
                         end
+                        // rd_fifo_full guard intentionally omitted:
+                        // rd_fifo depth (256) >> max AXI-full read burst (32 beats), and
+                        // only one AXI-full read is outstanding at a time.
+                        o_rd_fifo_din <= {hb_word16_le, rd_pack[15:0]};
+                        o_rd_fifo_wr_en <= 1'b1;
+                        rd_half <= 1'b0;
+                        words_done_next = words_done + 9'd1;
+                        took_word = 1'b1;
+                        rwds_edges_seen_next = rwds_edges_seen + 11'd2;
+                        rd_beats_pushed_next = rd_beats_pushed + 8'd1;
                     end
 
                     words_done <= words_done_next;
@@ -611,6 +635,16 @@ module hyperbus_hb_engine #(
                     end else begin
                         o_axil_rsp_fifo_din <= {16'h0, hb_word16};
                     end
+                    if (rwds_data_valid) begin
+                        if (!last_read_half) begin
+                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_half <= 1'b1;
+                        end else begin
+                            last_read_pack[31:16] <= hb_word16_le;
+                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_half <= 1'b0;
+                        end
+                    end
                     if (rwds_data_valid && !i_axil_rsp_fifo_full) begin
                         o_axil_rsp_fifo_wr_en <= 1'b1;
                         words_done_next = words_done + 9'd1;
@@ -643,11 +677,9 @@ module hyperbus_hb_engine #(
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
                     if (timeout_full_beats_left != 0) begin
-                        if (!i_rd_fifo_full) begin
-                            o_rd_fifo_din <= 32'hFFFF_FFFF;
-                            o_rd_fifo_wr_en <= 1'b1;
-                            timeout_full_beats_left <= timeout_full_beats_left - 8'd1;
-                        end
+                        o_rd_fifo_din <= 32'hFFFF_FFFF;
+                        o_rd_fifo_wr_en <= 1'b1;
+                        timeout_full_beats_left <= timeout_full_beats_left - 8'd1;
                     end else begin
                         term_hold_cnt <= HB_READ_CS_DEASSERT_DELAY[2:0];
                         hb_state <= HB_TERM_HOLD;

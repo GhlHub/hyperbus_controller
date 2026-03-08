@@ -106,6 +106,7 @@ module hyperbus_controller #(
 
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
+    logic [31:0] last_hb_read_word32;
     logic odly_en_vtc, odly_ce, odly_inc, odly_load, odly_rst;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
     logic hb_timeout_pulse_hb;
@@ -234,6 +235,7 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_dout(axil_rsp_fifo_dout),
         .i_axil_rsp_fifo_empty(axil_rsp_fifo_empty),
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
+        .i_last_hb_read_word32(last_hb_read_word32),
         .i_odly_cntvalueout(odly_cntvalueout),
         .o_axil_rsp_fifo_rd_en(axil_rsp_fifo_rd_en),
         .o_cmd_fifo_din_axil(cmd_fifo_din_axil),
@@ -336,6 +338,7 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_full(axil_rsp_fifo_full),
         .o_axil_rsp_fifo_din(axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en(axil_rsp_fifo_wr_en),
+        .o_last_read_word32(last_hb_read_word32),
         .i_dq_q1(dq_q1),
         .i_dq_q2(dq_q2),
         .i_rwds_q1(rwds_q1),

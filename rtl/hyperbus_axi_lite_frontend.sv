@@ -17,6 +17,7 @@ module hyperbus_axi_lite_frontend #(
     input  wire [31:0]                  i_axil_rsp_fifo_dout,
     input  wire                         i_axil_rsp_fifo_empty,
     input  wire                         i_axil_rsp_fifo_dout_valid,
+    input  wire [31:0]                  i_last_hb_read_word32,
     input  wire [8:0]                   i_odly_cntvalueout,
     output logic                        o_axil_rsp_fifo_rd_en,
 
@@ -75,6 +76,7 @@ module hyperbus_axi_lite_frontend #(
                                 !i_aw_pending && !i_s_axi_arvalid && !i_s_axi_awvalid;
 
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_ERR_STATUS_ADDR         = 16'h0080;
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_LAST_HB_READ32_ADDR     = 16'h0020;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_CTRL_ADDR   = 16'h0100;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_TIME_ADDR   = 16'h0104;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_STATUS_ADDR = 16'h0108;
@@ -88,6 +90,7 @@ module hyperbus_axi_lite_frontend #(
     function automatic logic axil_is_local_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
             axil_is_local_addr = (a == AXIL_ERR_STATUS_ADDR) ||
+                                 (a == AXIL_LAST_HB_READ32_ADDR) ||
                                  (a == AXIL_CK_P_ODELAY_CTRL_ADDR) ||
                                  (a == AXIL_CK_P_ODELAY_TIME_ADDR) ||
                                  (a == AXIL_CK_P_ODELAY_STATUS_ADDR);
@@ -223,6 +226,8 @@ module hyperbus_axi_lite_frontend #(
                 if (axil_is_local_addr(s_axil_araddr)) begin
                     if (s_axil_araddr == AXIL_ERR_STATUS_ADDR) begin
                         s_axil_rdata <= {31'h0, timeout_status_q};
+                    end else if (s_axil_araddr == AXIL_LAST_HB_READ32_ADDR) begin
+                        s_axil_rdata <= i_last_hb_read_word32;
                     end else if (s_axil_araddr == AXIL_CK_P_ODELAY_CTRL_ADDR) begin
                         s_axil_rdata <= {27'h0, 1'b0, 1'b0, 1'b0, odly_inc_q, odly_en_vtc_q};
                     end else if (s_axil_araddr == AXIL_CK_P_ODELAY_TIME_ADDR) begin
