@@ -113,13 +113,16 @@ module hyperbus_axi_lite_frontend #(
 
     function automatic [31:0] axil_to_hb_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
+            // Map HyperBus 16-bit registers into a 32-bit AXI-Lite address view.
+            // This simplifies debug, since common debuggers can use 32-bit accesses
+            // without forcing explicit 16-bit transactions.
             case (a)
                 16'h0000: axil_to_hb_addr = 32'h0000_0000; // ID0
                 16'h0004: axil_to_hb_addr = 32'h0000_0002; // ID1 (word-aligned alias)
-                16'h0002: axil_to_hb_addr = 32'h0000_0002; // ID1
+                16'h0002: axil_to_hb_addr = 32'h0000_0000; // reserved: alias removed
                 16'h0800: axil_to_hb_addr = 32'h0000_0800; // CR0
-                16'h0804: axil_to_hb_addr = 32'h0000_0802; // CR1 (word-aligned alias)
-                16'h0802: axil_to_hb_addr = 32'h0000_0802; // CR1
+                16'h0804: axil_to_hb_addr = 32'h0000_0802; // CR1
+                16'h0802: axil_to_hb_addr = 32'h0000_0800; // reserved: alias removed
                 default:  axil_to_hb_addr = {30'h0, (a[2] | a[1]), 1'b0};
             endcase
         end
@@ -242,8 +245,8 @@ module hyperbus_axi_lite_frontend #(
                     logic read_dup16;
                     // For AXI-Lite reads, carry:
                     // wdata[0] = lane select (legacy behavior)
-                    // wdata[1] = duplicate 16-bit result to full 32-bit data for offsets 0x0/0x4.
-                    read_dup16 = (s_axil_araddr == 16'h0000) || (s_axil_araddr == 16'h0004);
+                    // wdata[1] = duplicate control (disabled: return 16-bit data with upper bits zero).
+                    read_dup16 = 1'b0;
                     o_cmd_fifo_din_axil <= {1'b1, 1'b0, 1'b1, axil_to_hb_addr(s_axil_araddr), 8'd1,
                                             {30'h0, read_dup16, s_axil_araddr[1]}};
                     o_cmd_fifo_wr_en_axil <= 1'b1;

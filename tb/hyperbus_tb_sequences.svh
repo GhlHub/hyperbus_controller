@@ -36,7 +36,7 @@
                 $fatal(1, "AXI-Lite ARVALID-hold expected exactly 1 cmd push, got %0d",
                        (axil_cmd_push_count - push_base));
             end
-            check_eq32(rd32, 32'h0C81_0C81, "AXI-Lite ARVALID-hold read @0x0000");
+            check_eq32(rd32, 32'h0000_0C81, "AXI-Lite ARVALID-hold read @0x0000");
             axil_wait_no_rvalid(80, "AXI-Lite ARVALID-hold duplicate-R check");
             if ((axil_cmd_push_count - push_base) != 1) begin
                 $fatal(1, "AXI-Lite ARVALID-hold saw delayed duplicate cmd push (delta=%0d)",
@@ -159,11 +159,11 @@
         int poll_i;
         begin
             axil_read(16'h0000, rd32);
-            check_eq32(rd32, 32'h0C81_0C81, "ID0 32-bit read duplicate @0x0000");
+            check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");
             axil_read(16'h0004, rd32);
-            check_eq32(rd32, 32'h0001_0001, "ID1 32-bit read duplicate @0x0004");
+            check_eq32(rd32, 32'h0000_0001, "ID1 32-bit read zero-extended @0x0004");
             axil_expect_read16(16'h0800, 16'h8F2F, "CR0 default @0x0800");
-            axil_expect_read16(16'h0802, 16'hFFC1, "CR1 default @0x0802");
+            axil_expect_read16(16'h0804, 16'hFFC1, "CR1 default @0x0804");
 
             axil_write(16'h0800, 32'h0000_8F27);
             axil_expect_read16(16'h0800, 16'h8F27, "CR0 write/readback 0x8F27");
