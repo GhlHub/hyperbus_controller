@@ -68,10 +68,8 @@ module hyperbus_axi_full_frontend #(
 
     logic rd_active;
     logic [7:0] rd_beats_left;
-
     logic [31:0] rdata_hold;
-    logic rdata_hold_valid;
-    logic rd_refill_wait;
+    logic        rdata_hold_valid;
 
     logic b_pop_pending;
     logic wr_proto_err;
@@ -128,7 +126,6 @@ module hyperbus_axi_full_frontend #(
             ar_id_q <= '0;
             rdata_hold <= '0;
             rdata_hold_valid <= 1'b0;
-            rd_refill_wait <= 1'b0;
         end else begin
             logic bresp_push, bresp_pop;
             logic [1:0] bresp_push_data;
@@ -236,14 +233,11 @@ module hyperbus_axi_full_frontend #(
                 ar_id_q <= s_axi_arid;
                 rd_beats_left <= s_axi_arlen + 8'd1;
                 rdata_hold_valid <= 1'b0;
-                rd_refill_wait <= 1'b0;
             end
 
-            // FWFT RD FIFO consumes with a 1-cycle refill wait after pop so we don't
-            // re-sample the same dout word on the pop edge.
-            if (rd_refill_wait) begin
-                rd_refill_wait <= 1'b0;
-            end else if (!rdata_hold_valid && rd_active && !i_rd_fifo_empty) begin
+            // FWFT read-return path:
+            // capture previewed FIFO dout when local hold is empty.
+            if (!rdata_hold_valid && rd_active && !i_rd_fifo_empty) begin
                 rdata_hold <= i_rd_fifo_dout;
                 rdata_hold_valid <= 1'b1;
             end
@@ -254,18 +248,16 @@ module hyperbus_axi_full_frontend #(
                 s_axi_rid <= ar_id_q;
                 s_axi_rresp <= 2'b00;
                 s_axi_rlast <= (rd_beats_left == 8'd1);
+                // Pop once when launching this AXI read beat.
+                o_rd_fifo_rd_en <= 1'b1;
             end
             if (s_axi_rvalid && s_axi_rready) begin
-                // Pop consumed FWFT word; next word appears after a short update delay.
-                o_rd_fifo_rd_en <= 1'b1;
                 s_axi_rvalid <= 1'b0;
                 rdata_hold_valid <= 1'b0;
-                rd_refill_wait <= 1'b1;
                 if (rd_beats_left != 0) rd_beats_left <= rd_beats_left - 8'd1;
                 if (rd_beats_left == 8'd1) begin
                     rd_active <= 1'b0;
                     s_axi_rlast <= 1'b0;
-                    rd_refill_wait <= 1'b0;
                 end
             end
         end
