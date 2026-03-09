@@ -19,6 +19,7 @@ module hyperbus_axi_lite_frontend #(
     input  wire                         i_axil_rsp_fifo_dout_valid,
     input  wire [31:0]                  i_last_hb_read_word32,
     input  wire [8:0]                   i_odly_cntvalueout,
+    input  wire                         i_idelayctrl_rdy_sync,
     output logic                        o_axil_rsp_fifo_rd_en,
 
     output logic                        o_odly_en_vtc,
@@ -27,6 +28,8 @@ module hyperbus_axi_lite_frontend #(
     output logic                        o_odly_load,
     output logic                        o_odly_rst,
     output logic [8:0]                  o_odly_cntvaluein,
+    output logic                        o_idelayctrl_rst_req,
+    output logic                        o_odelay_rst_req,
 
     output logic [CMD_W-1:0]            o_cmd_fifo_din_axil,
     output logic                        o_cmd_fifo_wr_en_axil,
@@ -80,10 +83,13 @@ module hyperbus_axi_lite_frontend #(
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_CTRL_ADDR   = 16'h0100;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_TIME_ADDR   = 16'h0104;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_CK_P_ODELAY_STATUS_ADDR = 16'h0108;
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_DELAY_RST_CTRL_ADDR      = 16'h0200;
+    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_IDELAYCTRL_STATUS_ADDR   = 16'h0204;
 
     logic        odly_en_vtc_q;
     logic        odly_inc_q;
     logic [8:0]  odly_time_value_q;
+    logic [1:0]  delay_rst_ctrl_q;
     logic        timeout_status_q;
     logic        timeout_holdoff_d;
 
@@ -93,7 +99,9 @@ module hyperbus_axi_lite_frontend #(
                                  (a == AXIL_LAST_HB_READ32_ADDR) ||
                                  (a == AXIL_CK_P_ODELAY_CTRL_ADDR) ||
                                  (a == AXIL_CK_P_ODELAY_TIME_ADDR) ||
-                                 (a == AXIL_CK_P_ODELAY_STATUS_ADDR);
+                                 (a == AXIL_CK_P_ODELAY_STATUS_ADDR) ||
+                                 (a == AXIL_DELAY_RST_CTRL_ADDR) ||
+                                 (a == AXIL_IDELAYCTRL_STATUS_ADDR);
         end
     endfunction
 
@@ -162,9 +170,12 @@ module hyperbus_axi_lite_frontend #(
             axil_rsp_pop_pending <= 1'b0;
             o_cmd_fifo_wr_en_axil <= 1'b0;
             o_cmd_fifo_din_axil <= '0;
-            odly_en_vtc_q <= 1'b1;
+            odly_en_vtc_q <= 1'b0;
             odly_inc_q <= 1'b0;
             odly_time_value_q <= 9'd0;
+            // Default asserted: keep IDELAYCTRL and ODELAY in reset until
+            // software explicitly sequences release.
+            delay_rst_ctrl_q <= 2'b11;
             timeout_status_q <= 1'b0;
             timeout_holdoff_d <= 1'b0;
             o_odly_ce <= 1'b0;
@@ -211,6 +222,9 @@ module hyperbus_axi_lite_frontend #(
                     end else if (axil_awaddr_q == AXIL_CK_P_ODELAY_TIME_ADDR) begin
                         wr32 = apply_wstrb32({23'h0, odly_time_value_q}, s_axil_wdata, s_axil_wstrb);
                         odly_time_value_q <= wr32[8:0];
+                    end else if (axil_awaddr_q == AXIL_DELAY_RST_CTRL_ADDR) begin
+                        wr32 = apply_wstrb32({30'h0, delay_rst_ctrl_q}, s_axil_wdata, s_axil_wstrb);
+                        delay_rst_ctrl_q <= wr32[1:0];
                     end
                     axil_aw_seen <= 1'b0;
                     s_axil_bresp <= 2'b00;
@@ -235,6 +249,10 @@ module hyperbus_axi_lite_frontend #(
                         s_axil_rdata <= {27'h0, 1'b0, 1'b0, 1'b0, odly_inc_q, odly_en_vtc_q};
                     end else if (s_axil_araddr == AXIL_CK_P_ODELAY_TIME_ADDR) begin
                         s_axil_rdata <= {23'h0, odly_time_value_q};
+                    end else if (s_axil_araddr == AXIL_DELAY_RST_CTRL_ADDR) begin
+                        s_axil_rdata <= {30'h0, delay_rst_ctrl_q};
+                    end else if (s_axil_araddr == AXIL_IDELAYCTRL_STATUS_ADDR) begin
+                        s_axil_rdata <= {31'h0, i_idelayctrl_rdy_sync};
                     end else begin
                         s_axil_rdata <= {23'h0, i_odly_cntvalueout};
                     end
@@ -294,5 +312,7 @@ module hyperbus_axi_lite_frontend #(
     assign o_odly_en_vtc = odly_en_vtc_q;
     assign o_odly_inc = odly_inc_q;
     assign o_odly_cntvaluein = odly_time_value_q;
+    assign o_idelayctrl_rst_req = delay_rst_ctrl_q[0];
+    assign o_odelay_rst_req = delay_rst_ctrl_q[1];
 
 endmodule

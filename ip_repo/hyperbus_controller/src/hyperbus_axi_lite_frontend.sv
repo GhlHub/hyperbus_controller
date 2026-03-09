@@ -170,10 +170,12 @@ module hyperbus_axi_lite_frontend #(
             axil_rsp_pop_pending <= 1'b0;
             o_cmd_fifo_wr_en_axil <= 1'b0;
             o_cmd_fifo_din_axil <= '0;
-            odly_en_vtc_q <= 1'b1;
+            odly_en_vtc_q <= 1'b0;
             odly_inc_q <= 1'b0;
             odly_time_value_q <= 9'd0;
-            delay_rst_ctrl_q <= 2'b00;
+            // Default asserted: keep IDELAYCTRL and ODELAY in reset until
+            // software explicitly sequences release.
+            delay_rst_ctrl_q <= 2'b11;
             timeout_status_q <= 1'b0;
             timeout_holdoff_d <= 1'b0;
             o_odly_ce <= 1'b0;

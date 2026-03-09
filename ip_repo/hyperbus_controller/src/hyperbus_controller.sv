@@ -15,6 +15,7 @@ module hyperbus_controller #(
     input  wire                         i_axi_aclk,      // 50 MHz
     input  wire                         i_axi_aresetn,
     input  wire                         i_hb_clk_200,    // 200 MHz
+    input  wire                         i_hb_clk_200_gated, // externally gated 200 MHz for HB CK forwarding
     input  wire                         i_ref_clk300,    // externally sourced 300 MHz IDELAYCTRL refclk
     input  wire                         i_idelayctrl_rst, // externally sourced IDELAYCTRL reset (active high)
     input  wire                         i_hb_clk_200_samp_90, // externally sourced 200 MHz, +90 deg
@@ -78,6 +79,7 @@ module hyperbus_controller #(
 
     // HyperBus physical interface (single-ended CK mode: CK# held low)
     output wire                         o_hb_cs_n,
+    output wire                         o_hb_clk_ce,
     output wire                         o_hb_ck_p,
     output wire                         o_hb_ck_n,
     inout  wire                         io_hb_rwds,
@@ -282,18 +284,19 @@ module hyperbus_controller #(
     logic rwds_q1, rwds_q2;
 
     assign o_hb_cs_n = hb_cs_n_q;
+    assign o_hb_clk_ce = hb_clk_ce;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk(i_axi_aclk),
         .i_hb_clk_200(i_hb_clk_200),
+        .i_hb_clk_200_gated(i_hb_clk_200_gated),
         .i_ref_clk300(i_ref_clk300),
         .i_idelayctrl_rst_req(i_idelayctrl_rst | idelayctrl_rst_req),
         .i_odelay_rst_req(odelay_rst_req),
         .i_hb_clk_200_samp_90(i_hb_clk_200_samp_90),
         .i_iddre1_rst(i_iddre1_rst),
         .i_hb_rstn(i_hb_rstn),
-        .i_hb_clk_ce(hb_clk_ce),
         .o_hb_ck_p(o_hb_ck_p),
         .o_hb_ck_n(o_hb_ck_n),
         .io_hb_rwds(io_hb_rwds),

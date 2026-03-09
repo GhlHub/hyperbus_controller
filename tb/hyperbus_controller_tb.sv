@@ -24,6 +24,8 @@ module hyperbus_controller_tb;
     // Clocks and reset
     logic axi_aclk;
     logic hb_clk_200;
+    wire  hb_clk_200_gated;
+    wire  hb_clk_ce;
     logic ref_clk300;
     logic idelayctrl_rst;
     logic iddre1_rst;
@@ -105,6 +107,7 @@ module hyperbus_controller_tb;
         .i_axi_aclk(axi_aclk),
         .i_axi_aresetn(axi_aresetn),
         .i_hb_clk_200(hb_clk_200),
+        .i_hb_clk_200_gated(hb_clk_200_gated),
         .i_ref_clk300(ref_clk300),
         .i_idelayctrl_rst(idelayctrl_rst),
         .i_hb_clk_200_samp_90(hb_clk_200_samp_90),
@@ -165,11 +168,19 @@ module hyperbus_controller_tb;
         .s_axil_rready(s_axil_rready),
 
         .o_hb_cs_n(hb_cs_n),
+        .o_hb_clk_ce(hb_clk_ce),
         .o_hb_ck_p(hb_ck_p),
         .o_hb_ck_n(hb_ck_n),
         .io_hb_rwds(hb_rwds),
         .io_hb_dq(hb_dq),
         .o_hb_reset_n(hb_reset_n)
+    );
+
+    // Source the HyperBus forwarded-clock gate externally.
+    BUFGCE u_tb_hb_ck_gating (
+        .I(hb_clk_200),
+        .CE(hb_clk_ce),
+        .O(hb_clk_200_gated)
     );
 
     // HyperRAM model (Infineon)
@@ -227,6 +238,7 @@ module hyperbus_controller_tb;
     logic [31:0] axil_rd32;
     logic odly_dbg_en;
     logic [8:0] odly_cnt_prev;
+    logic odly_envtc_x_prev;
 
     `include "hyperbus_tb_axi_tasks.svh"
     `include "hyperbus_tb_checks.svh"
@@ -246,7 +258,36 @@ module hyperbus_controller_tb;
     always @(posedge axi_aclk or negedge axi_aresetn) begin
         if (!axi_aresetn) begin
             odly_cnt_prev <= 9'h000;
+            odly_envtc_x_prev <= 1'b0;
         end else begin
+            logic odly_ctrl_has_x;
+            logic odly_cntin_has_x;
+            logic odly_cntout_has_x;
+            logic odly_envtc_forced_x;
+
+            odly_ctrl_has_x   = $isunknown({dut.odly_en_vtc, dut.odly_load, dut.odly_ce, dut.odly_inc, dut.odly_rst});
+            odly_cntin_has_x  = $isunknown(dut.odly_cntvaluein);
+            odly_cntout_has_x = $isunknown(dut.odly_cntvalueout);
+            // Unisim ODELAYE3 forces CNTVALUEOUT to X when EN_VTC=1 in TIME mode.
+            odly_envtc_forced_x = (dut.odly_en_vtc === 1'b1) && odly_cntout_has_x;
+
+            if (odly_ctrl_has_x || odly_cntin_has_x || (odly_cntout_has_x && !odly_envtc_forced_x)) begin
+                $display("[%0t][ TB] [ODELAY-MON] UNKNOWN detected: EN_VTC=%b LOAD=%b CE=%b INC=%b RST=%b CNTVALUEIN=0x%03x CNTVALUEOUT=0x%03x",
+                         $time,
+                         dut.odly_en_vtc,
+                         dut.odly_load,
+                         dut.odly_ce,
+                         dut.odly_inc,
+                         dut.odly_rst,
+                         dut.odly_cntvaluein,
+                         dut.odly_cntvalueout);
+            end
+
+            if (odly_envtc_forced_x && !odly_envtc_x_prev) begin
+                $display("[%0t][ TB] [ODELAY-MON] CNTVALUEOUT is X while EN_VTC=1 (expected Unisim ODELAYE3 TIME-mode behavior)",
+                         $time);
+            end
+
             if (odly_dbg_en) begin
                 $display("[%0t][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST=%0b CNTVALUEOUT=0x%03x",
                          $time,
@@ -262,6 +303,7 @@ module hyperbus_controller_tb;
                 end
             end
             odly_cnt_prev <= dut.odly_cntvalueout;
+            odly_envtc_x_prev <= odly_envtc_forced_x;
         end
     end
 
@@ -312,6 +354,9 @@ module hyperbus_controller_tb;
 
         // Let HyperRAM model finish POR interval.
         #160_000;
+
+        // First testcase: AXI-Lite delay-reset control path.
+        run_delay_reset_self_checks();
 
         // AXI-Lite register path self-checks (fatal on first mismatch).
         run_axil_self_checks();

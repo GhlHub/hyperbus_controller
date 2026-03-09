@@ -2,14 +2,14 @@
 
 module hyperbus_phy_xilinx (
     input  wire       i_hb_clk_200,
+    input  wire       i_hb_clk_200_gated,
     input  wire       i_axi_aclk,
-    input  wire       i_axi_aresetn,
     input  wire       i_ref_clk300,
-    input  wire       i_idelayctrl_rst,
+    input  wire       i_idelayctrl_rst_req,
+    input  wire       i_odelay_rst_req,
     input  wire       i_hb_clk_200_samp_90,
     input  wire       i_iddre1_rst,
     input  wire       i_hb_rstn,
-    input  wire       i_hb_clk_ce,
     output wire       o_hb_ck_p,
     output wire       o_hb_ck_n,
     inout  wire       io_hb_rwds,
@@ -30,10 +30,16 @@ module hyperbus_phy_xilinx (
     input  wire       i_odly_load,
     input  wire       i_odly_rst,
     input  wire [8:0] i_odly_cntvaluein,
-    output wire [8:0] o_odly_cntvalueout
+    output wire [8:0] o_odly_cntvalueout,
+    output wire       o_odly_en_vtc_dbg,
+    output wire       o_odly_ce_dbg,
+    output wire       o_odly_inc_dbg,
+    output wire       o_odly_load_dbg,
+    output wire       o_odly_rst_dbg,
+    output wire [8:0] o_odly_cntvaluein_dbg,
+    output wire       o_idelayctrl_rdy_axi
 );
 
-    logic hb_ck_gated;
     logic hb_ck_fwd;
     logic hb_ck_fwd_delayed;
     logic [7:0] dq_i;
@@ -43,109 +49,33 @@ module hyperbus_phy_xilinx (
     logic rwds_i;
     logic rwds_out_ddr;
     logic idelayctrl_rdy;
-    logic idelayctrl_rst_sm;
-    logic idelay_ready_ref;
-    logic idelay_ready_axi_meta;
-    logic idelay_ready_axi;
-    logic idelayctrl_rst_axi_meta;
-    logic idelayctrl_rst_axi;
-    logic odelay_rst_seq_axi;
-    logic [1:0] odelay_axi_wait_cnt;
-    logic [5:0] idelay_hold_cnt;
-
-    localparam int IDELAY_HOLD_80NS_CYCLES = 24; // 80ns at 300MHz.
-
-    typedef enum logic [1:0] {
-        IDELAY_RST_ASSERT = 2'd0,
-        IDELAY_RST_HOLD80 = 2'd1,
-        IDELAY_WAIT_RDY   = 2'd2,
-        IDELAY_READY      = 2'd3
-    } idelay_rst_state_t;
-    idelay_rst_state_t idelay_rst_state;
+    logic idelayctrl_rst_ref_meta;
+    logic idelayctrl_rst_ref_sync;
+    logic idelayctrl_rdy_axi_meta;
+    logic idelayctrl_rdy_axi_sync;
+    logic odly_en_vtc_to_odelay;
+    logic odly_ce_to_odelay;
+    logic odly_inc_to_odelay;
+    logic odly_load_to_odelay;
+    logic odly_rst_to_odelay;
+    logic [8:0] odly_cntvaluein_to_odelay;
 
     always_ff @(posedge i_ref_clk300) begin
-        if (i_idelayctrl_rst) begin
-            idelay_rst_state <= IDELAY_RST_ASSERT;
-            idelay_hold_cnt <= 6'd0;
-            idelayctrl_rst_sm <= 1'b1;
-            idelay_ready_ref <= 1'b0;
-        end else begin
-            case (idelay_rst_state)
-                IDELAY_RST_ASSERT: begin
-                    idelay_rst_state <= IDELAY_RST_HOLD80;
-                    idelay_hold_cnt <= 6'd0;
-                    idelayctrl_rst_sm <= 1'b1;
-                    idelay_ready_ref <= 1'b0;
-                end
-                IDELAY_RST_HOLD80: begin
-                    idelayctrl_rst_sm <= 1'b1;
-                    idelay_ready_ref <= 1'b0;
-                    if (idelay_hold_cnt == (IDELAY_HOLD_80NS_CYCLES - 1)) begin
-                        idelay_rst_state <= IDELAY_WAIT_RDY;
-                    end else begin
-                        idelay_hold_cnt <= idelay_hold_cnt + 6'd1;
-                    end
-                end
-                IDELAY_WAIT_RDY: begin
-                    idelayctrl_rst_sm <= 1'b0;
-                    idelay_ready_ref <= 1'b0;
-                    if (idelayctrl_rdy) begin
-                        idelay_rst_state <= IDELAY_READY;
-                    end
-                end
-                IDELAY_READY: begin
-                    idelayctrl_rst_sm <= 1'b0;
-                    idelay_ready_ref <= 1'b1;
-                end
-                default: begin
-                    idelay_rst_state <= IDELAY_RST_ASSERT;
-                    idelay_hold_cnt <= 6'd0;
-                    idelayctrl_rst_sm <= 1'b1;
-                    idelay_ready_ref <= 1'b0;
-                end
-            endcase
-        end
+        idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
+        idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
     end
 
+    // Synchronize IDELAYCTRL RDY into AXI clock domain for AXI-Lite status reads.
     always_ff @(posedge i_axi_aclk) begin
-        if (!i_axi_aresetn) begin
-            idelay_ready_axi_meta <= 1'b0;
-            idelay_ready_axi <= 1'b0;
-            idelayctrl_rst_axi_meta <= 1'b1;
-            idelayctrl_rst_axi <= 1'b1;
-            odelay_rst_seq_axi <= 1'b1;
-            odelay_axi_wait_cnt <= 2'd0;
-        end else begin
-            idelay_ready_axi_meta <= idelay_ready_ref;
-            idelay_ready_axi <= idelay_ready_axi_meta;
-            idelayctrl_rst_axi_meta <= i_idelayctrl_rst;
-            idelayctrl_rst_axi <= idelayctrl_rst_axi_meta;
-            if (idelayctrl_rst_axi) begin
-                odelay_rst_seq_axi <= 1'b1;
-                odelay_axi_wait_cnt <= 2'd0;
-            end else if (!idelay_ready_axi) begin
-                odelay_rst_seq_axi <= 1'b1;
-                odelay_axi_wait_cnt <= 2'd0;
-            end else if (odelay_axi_wait_cnt < 2'd3) begin
-                odelay_rst_seq_axi <= 1'b1;
-                odelay_axi_wait_cnt <= odelay_axi_wait_cnt + 2'd1;
-            end else begin
-                odelay_rst_seq_axi <= 1'b0;
-            end
-        end
+        idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
+        idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
     end
 
     IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
     u_idelayctrl (
         .RDY(idelayctrl_rdy),
         .REFCLK(i_ref_clk300),
-        .RST(idelayctrl_rst_sm)
-    );
-
-    BUFGCE u_bufgce_hb_ck (
-        .I(i_hb_clk_200),
-        .CE(i_hb_clk_ce),
-        .O(hb_ck_gated)
+        .RST(idelayctrl_rst_ref_sync)
     );
 
     ODDRE1 #(
@@ -155,7 +85,7 @@ module hyperbus_phy_xilinx (
         .SRVAL(1'b0)
     ) u_oddr_ck (
         .Q(hb_ck_fwd),
-        .C(hb_ck_gated),
+        .C(i_hb_clk_200_gated),
         .D1(1'b1),
         .D2(1'b0),
         .SR(~i_hb_rstn)
@@ -177,14 +107,14 @@ module hyperbus_phy_xilinx (
         .DATAOUT(hb_ck_fwd_delayed),
         .CASC_IN(1'b0),
         .CASC_RETURN(1'b0),
-        .CE(i_odly_ce),
+        .CE(odly_ce_to_odelay),
         .CLK(i_axi_aclk),
-        .CNTVALUEIN(i_odly_cntvaluein),
-        .EN_VTC(i_odly_en_vtc),
-        .INC(i_odly_inc),
-        .LOAD(i_odly_load),
+        .CNTVALUEIN(odly_cntvaluein_to_odelay),
+        .EN_VTC(odly_en_vtc_to_odelay),
+        .INC(odly_inc_to_odelay),
+        .LOAD(odly_load_to_odelay),
         .ODATAIN(hb_ck_fwd),
-        .RST((~i_axi_aresetn) | i_idelayctrl_rst | odelay_rst_seq_axi | i_odly_rst)
+        .RST(odly_rst_to_odelay)
     );
 
    OBUF u_obuf_ck_p(
@@ -275,5 +205,20 @@ module hyperbus_phy_xilinx (
         .D(rwds_i),
         .R(i_iddre1_rst)
     );
+
+    assign odly_en_vtc_to_odelay = i_odly_en_vtc;
+    assign odly_ce_to_odelay = i_odly_ce;
+    assign odly_inc_to_odelay = i_odly_inc;
+    assign odly_load_to_odelay = i_odly_load;
+    assign odly_rst_to_odelay = i_odelay_rst_req | i_odly_rst;
+    assign odly_cntvaluein_to_odelay = i_odly_cntvaluein;
+
+    assign o_odly_en_vtc_dbg = odly_en_vtc_to_odelay;
+    assign o_odly_ce_dbg = odly_ce_to_odelay;
+    assign o_odly_inc_dbg = odly_inc_to_odelay;
+    assign o_odly_load_dbg = odly_load_to_odelay;
+    assign o_odly_rst_dbg = odly_rst_to_odelay;
+    assign o_odly_cntvaluein_dbg = odly_cntvaluein_to_odelay;
+    assign o_idelayctrl_rdy_axi = idelayctrl_rdy_axi_sync;
 
 endmodule

@@ -2,6 +2,7 @@
 
 module hyperbus_phy_xilinx (
     input  wire       i_hb_clk_200,
+    input  wire       i_hb_clk_200_gated,
     input  wire       i_axi_aclk,
     input  wire       i_ref_clk300,
     input  wire       i_idelayctrl_rst_req,
@@ -9,7 +10,6 @@ module hyperbus_phy_xilinx (
     input  wire       i_hb_clk_200_samp_90,
     input  wire       i_iddre1_rst,
     input  wire       i_hb_rstn,
-    input  wire       i_hb_clk_ce,
     output wire       o_hb_ck_p,
     output wire       o_hb_ck_n,
     inout  wire       io_hb_rwds,
@@ -40,7 +40,6 @@ module hyperbus_phy_xilinx (
     output wire       o_idelayctrl_rdy_axi
 );
 
-    logic hb_ck_gated;
     logic hb_ck_fwd;
     logic hb_ck_fwd_delayed;
     logic [7:0] dq_i;
@@ -79,12 +78,6 @@ module hyperbus_phy_xilinx (
         .RST(idelayctrl_rst_ref_sync)
     );
 
-    BUFGCE u_bufgce_hb_ck (
-        .I(i_hb_clk_200),
-        .CE(i_hb_clk_ce),
-        .O(hb_ck_gated)
-    );
-
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
         .IS_D1_INVERTED(1'b0),
@@ -92,7 +85,7 @@ module hyperbus_phy_xilinx (
         .SRVAL(1'b0)
     ) u_oddr_ck (
         .Q(hb_ck_fwd),
-        .C(hb_ck_gated),
+        .C(i_hb_clk_200_gated),
         .D1(1'b1),
         .D2(1'b0),
         .SR(~i_hb_rstn)
