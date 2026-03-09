@@ -79,11 +79,20 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
 ## AXI-Lite Behavior
 
 - Single-beat command model for register accesses.
-- HyperBus register space includes:
-  - `0x0000` ID0
-  - `0x0002` ID1
-  - `0x0800` CR0
-  - `0x0802` CR1
+- AXI-Lite register map:
+  - HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
+    - `0x0000` -> HyperBus `0x0000` (ID0)
+    - `0x0004` -> HyperBus `0x0002` (ID1)
+    - `0x0800` -> HyperBus `0x0800` (CR0)
+    - `0x0804` -> HyperBus `0x0802` (CR1)
+  - Local controller registers:
+    - `0x0020` LAST_HB_READ32 (read-only)
+    - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
+    - `0x0100` CK_P_ODELAY_CTRL
+    - `0x0104` CK_P_ODELAY_TIME
+    - `0x0108` CK_P_ODELAY_STATUS
+    - `0x0200` DELAY_RST_CTRL (bit0 IDELAYCTRL reset request, bit1 ODELAY reset request)
+    - `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
 - AXI-lite is backpressured while AXI-full command issue is active to avoid command FIFO collisions.
 
 ## HyperBus Transaction Notes
@@ -144,6 +153,8 @@ Notes:
 
 - Target part is `xcsu35p-2sbvb625e`.
 - The packager imports RTL from `rtl/` only (no testbench files).
+- Top-level ODELAY debug outputs (`o_ck_p_odly_*`) were removed from the controller interface;
+  ODELAY control is now software-driven through AXI-Lite registers.
 
 Clock constraint note:
 
@@ -167,3 +178,20 @@ Diagram generator scripts:
 
 - `doc/hyperbus_phy_design_notes.md` captures the current HyperBus PHY architecture,
   reset/clock assumptions, and a checklist for future PHY changes.
+
+## Software Delay Control API
+
+The software helper library is in:
+
+- `software/hyperbus_odly.h`
+- `software/hyperbus_odly.c`
+
+Current public APIs:
+
+- `hb_odly_read()`
+- `hb_odly_set()`
+- `hb_odly_inc()`
+- `hb_odly_dec()`
+- `hb_idelayctrl_reset_wait_ready()`
+- `hb_odly_reset_pulse()`
+- `hb_dly_init()` (IDELAYCTRL reset/wait + ODELAY reset pulse)

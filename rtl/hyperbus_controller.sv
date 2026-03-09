@@ -109,6 +109,8 @@ module hyperbus_controller #(
     logic [31:0] last_hb_read_word32;
     logic odly_en_vtc, odly_ce, odly_inc, odly_load, odly_rst;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
+    logic idelayctrl_rst_req, odelay_rst_req;
+    logic idelayctrl_rdy_axi;
     logic hb_timeout_pulse_hb;
     logic hb_timeout_holdoff_hb;
     logic hb_timeout_block_axi_meta, hb_timeout_block_axi;
@@ -237,6 +239,7 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
         .i_last_hb_read_word32(last_hb_read_word32),
         .i_odly_cntvalueout(odly_cntvalueout),
+        .i_idelayctrl_rdy_sync(idelayctrl_rdy_axi),
         .o_axil_rsp_fifo_rd_en(axil_rsp_fifo_rd_en),
         .o_cmd_fifo_din_axil(cmd_fifo_din_axil),
         .o_cmd_fifo_wr_en_axil(cmd_fifo_wr_en_axil),
@@ -246,6 +249,8 @@ module hyperbus_controller #(
         .o_odly_load(odly_load),
         .o_odly_rst(odly_rst),
         .o_odly_cntvaluein(odly_cntvaluein),
+        .o_idelayctrl_rst_req(idelayctrl_rst_req),
+        .o_odelay_rst_req(odelay_rst_req),
         .s_axil_awaddr(s_axil_awaddr),
         .s_axil_awvalid(s_axil_awvalid),
         .s_axil_awready(s_axil_awready),
@@ -281,10 +286,10 @@ module hyperbus_controller #(
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk(i_axi_aclk),
-        .i_axi_aresetn(i_axi_aresetn),
         .i_hb_clk_200(i_hb_clk_200),
         .i_ref_clk300(i_ref_clk300),
-        .i_idelayctrl_rst(i_idelayctrl_rst),
+        .i_idelayctrl_rst_req(i_idelayctrl_rst | idelayctrl_rst_req),
+        .i_odelay_rst_req(odelay_rst_req),
         .i_hb_clk_200_samp_90(i_hb_clk_200_samp_90),
         .i_iddre1_rst(i_iddre1_rst),
         .i_hb_rstn(i_hb_rstn),
@@ -309,7 +314,8 @@ module hyperbus_controller #(
         .i_odly_load(odly_load),
         .i_odly_rst(odly_rst),
         .i_odly_cntvaluein(odly_cntvaluein),
-        .o_odly_cntvalueout(odly_cntvalueout)
+        .o_odly_cntvalueout(odly_cntvalueout),
+        .o_idelayctrl_rdy_axi(idelayctrl_rdy_axi)
     );
 
     // -------------------------

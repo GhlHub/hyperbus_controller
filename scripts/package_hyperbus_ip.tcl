@@ -65,6 +65,11 @@ if {[llength $rst_if] > 0} {
     set_bus_param_value $rst_if POLARITY {ACTIVE_LOW}
 }
 
+set ck_p_odly_rst_if [ipx::get_bus_interfaces o_ck_p_odly_rst -of_objects $core]
+if {[llength $ck_p_odly_rst_if] > 0} {
+    set_bus_param_value $ck_p_odly_rst_if POLARITY {ACTIVE_HIGH}
+}
+
 set s_axi_if [ipx::get_bus_interfaces s_axi -of_objects $core]
 if {[llength $s_axi_if] > 0} {
     set_bus_param_value $s_axi_if PROTOCOL {AXI4}
