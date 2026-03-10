@@ -265,20 +265,20 @@ module hyperbus_controller_tb;
             logic odly_cntout_has_x;
             logic odly_envtc_forced_x;
 
-            odly_ctrl_has_x   = $isunknown({dut.odly_en_vtc, dut.odly_load, dut.odly_ce, dut.odly_inc, dut.odly_rst});
+            odly_ctrl_has_x   = $isunknown({dut.odly_en_vtc, dut.odly_load, dut.odly_ce, dut.odly_inc, dut.odelay_rst_req});
             odly_cntin_has_x  = $isunknown(dut.odly_cntvaluein);
             odly_cntout_has_x = $isunknown(dut.odly_cntvalueout);
             // Unisim ODELAYE3 forces CNTVALUEOUT to X when EN_VTC=1 in TIME mode.
             odly_envtc_forced_x = (dut.odly_en_vtc === 1'b1) && odly_cntout_has_x;
 
             if (odly_ctrl_has_x || odly_cntin_has_x || (odly_cntout_has_x && !odly_envtc_forced_x)) begin
-                $display("[%0t][ TB] [ODELAY-MON] UNKNOWN detected: EN_VTC=%b LOAD=%b CE=%b INC=%b RST=%b CNTVALUEIN=0x%03x CNTVALUEOUT=0x%03x",
+                $display("[%0t][ TB] [ODELAY-MON] UNKNOWN detected: EN_VTC=%b LOAD=%b CE=%b INC=%b RST_REQ=%b CNTVALUEIN=0x%03x CNTVALUEOUT=0x%03x",
                          $time,
                          dut.odly_en_vtc,
                          dut.odly_load,
                          dut.odly_ce,
                          dut.odly_inc,
-                         dut.odly_rst,
+                         dut.odelay_rst_req,
                          dut.odly_cntvaluein,
                          dut.odly_cntvalueout);
             end
@@ -289,13 +289,13 @@ module hyperbus_controller_tb;
             end
 
             if (odly_dbg_en) begin
-                $display("[%0t][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST=%0b CNTVALUEOUT=0x%03x",
+                $display("[%0t][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST_REQ=%0b CNTVALUEOUT=0x%03x",
                          $time,
                          dut.odly_en_vtc,
                          dut.odly_load,
                          dut.odly_ce,
                          dut.odly_inc,
-                         dut.odly_rst,
+                         dut.odelay_rst_req,
                          dut.odly_cntvalueout);
                 if (dut.odly_cntvalueout !== odly_cnt_prev) begin
                     $display("[%0t][ TB] [ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
