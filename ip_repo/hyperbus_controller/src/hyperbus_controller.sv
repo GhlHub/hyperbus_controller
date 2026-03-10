@@ -91,6 +91,12 @@ module hyperbus_controller #(
     localparam int AXI_MAX_BEATS = 32; // 128B on 32-bit interface
     localparam int HB_TIMEOUT_RESET_CYCLES = 44; // 220ns @ 200MHz
 
+    function automatic int unsigned ns_time;
+        begin
+            ns_time = int'($rtoi(($realtime / 1ns) + 0.5));
+        end
+    endfunction
+
     // cmd packing: [74] src_axil, [73] is_write, [72] is_reg, [71:40] addr, [39:32] beats, [31:0] wdata
     logic [CMD_W-1:0] cmd_fifo_din, cmd_fifo_dout;
     logic cmd_fifo_wr_en, cmd_fifo_rd_en, cmd_fifo_full, cmd_fifo_empty, cmd_fifo_dout_valid;
@@ -109,7 +115,9 @@ module hyperbus_controller #(
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
     logic [31:0] last_hb_read_word32;
-    logic odly_en_vtc, odly_ce, odly_inc, odly_load, odly_rst;
+    logic [5:0] axif_rwds_cntr;
+    logic [5:0] axil_rwds_cntr;
+    logic odly_en_vtc, odly_ce, odly_inc, odly_load;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
     logic idelayctrl_rst_req, odelay_rst_req;
     logic idelayctrl_rdy_axi;
@@ -240,6 +248,8 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_empty(axil_rsp_fifo_empty),
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
         .i_last_hb_read_word32(last_hb_read_word32),
+        .i_axif_rwds_cntr(axif_rwds_cntr),
+        .i_axil_rwds_cntr(axil_rwds_cntr),
         .i_odly_cntvalueout(odly_cntvalueout),
         .i_idelayctrl_rdy_sync(idelayctrl_rdy_axi),
         .o_axil_rsp_fifo_rd_en(axil_rsp_fifo_rd_en),
@@ -249,7 +259,6 @@ module hyperbus_controller #(
         .o_odly_ce(odly_ce),
         .o_odly_inc(odly_inc),
         .o_odly_load(odly_load),
-        .o_odly_rst(odly_rst),
         .o_odly_cntvaluein(odly_cntvaluein),
         .o_idelayctrl_rst_req(idelayctrl_rst_req),
         .o_odelay_rst_req(odelay_rst_req),
@@ -289,9 +298,11 @@ module hyperbus_controller #(
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk(i_axi_aclk),
+        .i_axi_aresetn(i_axi_aresetn),
         .i_hb_clk_200(i_hb_clk_200),
         .i_hb_clk_200_gated(i_hb_clk_200_gated),
         .i_ref_clk300(i_ref_clk300),
+        .i_idelayctrl_rst(i_idelayctrl_rst),
         .i_idelayctrl_rst_req(i_idelayctrl_rst | idelayctrl_rst_req),
         .i_odelay_rst_req(odelay_rst_req),
         .i_hb_clk_200_samp_90(i_hb_clk_200_samp_90),
@@ -315,7 +326,6 @@ module hyperbus_controller #(
         .i_odly_ce(odly_ce),
         .i_odly_inc(odly_inc),
         .i_odly_load(odly_load),
-        .i_odly_rst(odly_rst),
         .i_odly_cntvaluein(odly_cntvaluein),
         .o_odly_cntvalueout(odly_cntvalueout),
         .o_idelayctrl_rdy_axi(idelayctrl_rdy_axi)
@@ -348,6 +358,8 @@ module hyperbus_controller #(
         .o_axil_rsp_fifo_din(axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en(axil_rsp_fifo_wr_en),
         .o_last_read_word32(last_hb_read_word32),
+        .o_axif_rwds_cntr(axif_rwds_cntr),
+        .o_axil_rwds_cntr(axil_rwds_cntr),
         .i_dq_q1(dq_q1),
         .i_dq_q2(dq_q2),
         .i_rwds_q1(rwds_q1),
@@ -392,31 +404,31 @@ module hyperbus_controller #(
     always @(posedge i_axi_aclk) begin
         if (i_axi_aresetn) begin
             if (cmd_fifo_wr_en_full) begin
-                $display("[%0t][AXI] CMD_FIFO PUSH(full) data=0x%0h", $time, cmd_fifo_din_full);
+                $display("[%0d][AXI] [CMD_FIFO] PUSH(full) data=0x%0h", ns_time(), cmd_fifo_din_full);
             end
             if (cmd_fifo_wr_en_axil) begin
-                $display("[%0t][AXI] CMD_FIFO PUSH(axil) data=0x%0h", $time, cmd_fifo_din_axil);
+                $display("[%0d][AXI] [CMD_FIFO] PUSH(axil) data=0x%0h", ns_time(), cmd_fifo_din_axil);
             end
             if (wr_fifo_wr_en) begin
-                $display("[%0t][AXI] [WR_FIFO] PUSH data=0x%0h", $time, wr_fifo_din);
+                $display("[%0d][AXI] [ WR_FIFO] PUSH data=0x%0h", ns_time(), wr_fifo_din);
             end
             if (rd_fifo_rd_en) begin
-                $display("[%0t][AXI] [RD_FIFO] POP_REQ", $time);
+                $display("[%0d][AXI] [ RD_FIFO] POP_REQ", ns_time());
             end
             if (s_axi_rvalid && s_axi_rready) begin
-                $display("[%0t][AXI] [RD_FIFO] POP_DATA data=0x%08h", $time, s_axi_rdata);
+                $display("[%0d][AXI] [ RD_FIFO] POP_DATA data=0x%08h", ns_time(), s_axi_rdata);
             end
             if (b_fifo_rd_en) begin
-                $display("[%0t][AXI] B_FIFO POP_REQ", $time);
+                $display("[%0d][AXI] [  B_FIFO] POP_REQ", ns_time());
             end
             if (b_fifo_dout_valid) begin
-                $display("[%0t][AXI] B_FIFO POP_DATA data=0x%0h", $time, b_fifo_dout);
+                $display("[%0d][AXI] [  B_FIFO] POP_DATA data=0x%0h", ns_time(), b_fifo_dout);
             end
             if (axil_rsp_fifo_rd_en) begin
-                $display("[%0t][AXI] AXIL_RSP_FIFO POP_REQ", $time);
+                $display("[%0d][AXI] AXIL_RSP_FIFO POP_REQ", ns_time());
             end
             if (axil_rsp_fifo_dout_valid) begin
-                $display("[%0t][AXI] AXIL_RSP_FIFO POP_DATA data=0x%08h", $time, axil_rsp_fifo_dout);
+                $display("[%0d][AXI] AXIL_RSP_FIFO POP_DATA data=0x%08h", ns_time(), axil_rsp_fifo_dout);
             end
         end
     end
@@ -424,23 +436,23 @@ module hyperbus_controller #(
     always @(posedge i_hb_clk_200) begin
         if (i_hb_rstn) begin
             if (cmd_fifo_rd_en) begin
-                $display("[%0t][ HB] CMD_FIFO POP_REQ", $time);
+                $display("[%0d][ HB] [CMD_FIFO] POP_REQ", ns_time());
             end
             if (cmd_fifo_dout_valid) begin
-                $display("[%0t][ HB] CMD_FIFO POP_DATA data=0x%0h", $time, cmd_fifo_dout);
+                $display("[%0d][ HB] [CMD_FIFO] POP_DATA data=0x%0h", ns_time(), cmd_fifo_dout);
             end
             if (wr_fifo_rd_en) begin
-                $display("[%0t][ HB] [WR_FIFO] POP_REQ", $time);
-                $display("[%0t][ HB] [WR_FIFO] POP_DATA data=0x%0h", $time, wr_fifo_dout);
+                $display("[%0d][ HB] [ WR_FIFO] POP_REQ", ns_time());
+                $display("[%0d][ HB] [ WR_FIFO] POP_DATA data=0x%0h", ns_time(), wr_fifo_dout);
             end
             if (rd_fifo_wr_en) begin
-                $display("[%0t][ HB] [RD_FIFO] PUSH data=0x%08h", $time, rd_fifo_din);
+                $display("[%0d][ HB] [ RD_FIFO] PUSH data=0x%08h", ns_time(), rd_fifo_din);
             end
             if (b_fifo_wr_en) begin
-                $display("[%0t][ HB] B_FIFO PUSH data=0x%0h", $time, b_fifo_din);
+                $display("[%0d][ HB] [  B_FIFO] PUSH data=0x%0h", ns_time(), b_fifo_din);
             end
             if (axil_rsp_fifo_wr_en) begin
-                $display("[%0t][ HB] AXIL_RSP_FIFO PUSH data=0x%08h", $time, axil_rsp_fifo_din);
+                $display("[%0d][ HB] AXIL_RSP_FIFO PUSH data=0x%08h", ns_time(), axil_rsp_fifo_din);
             end
         end
     end

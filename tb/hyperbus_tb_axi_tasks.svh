@@ -13,7 +13,7 @@
             s_axi_awsize  <= 3'd2;
             s_axi_awburst <= 2'b01;
             s_axi_awvalid <= 1'b1;
-            $display("[%0t][ TB] [AXI-WR] AW addr=0x%08x beats=%0d awlen=%0d", $time, addr, beats, beats-1);
+            $display("[%0d][ TB] [  AXI_WR] AW addr=0x%08x beats=%0d awlen=%0d", ns_time(), addr, beats, beats-1);
             `WAIT_AXI_COND(s_axi_awready, "s_axi_awready")
             @(posedge axi_aclk);
             s_axi_awvalid <= 1'b0;
@@ -24,8 +24,8 @@
                 s_axi_wstrb  <= strb;
                 s_axi_wlast  <= (i == beats-1);
                 s_axi_wvalid <= 1'b1;
-                $display("[%0t][ TB] [AXI-WR] W  addr=0x%08x beat=%0d data=0x%08x strb=0x%1x last=%0d",
-                         $time, (addr + (i*4)), i, (base_data + i), strb, (i == beats-1));
+                $display("[%0d][ TB] [  AXI_WR] W  addr=0x%08x beat=%0d data=0x%08x strb=0x%1x last=%0d",
+                         ns_time(), (addr + (i*4)), i, (base_data + i), strb, (i == beats-1));
                 while (!(s_axi_wready && s_axi_wvalid)) begin
                     @(posedge axi_aclk);
                 end
@@ -54,7 +54,7 @@
             s_axi_arsize  <= 3'd2;
             s_axi_arburst <= 2'b01;
             s_axi_arvalid <= 1'b1;
-            $display("[%0t][ TB] [AXI-RD] AR addr=0x%08x beats=%0d arlen=%0d", $time, addr, beats, beats-1);
+            $display("[%0d][ TB] [  AXI_RD] AR addr=0x%08x beats=%0d arlen=%0d", ns_time(), addr, beats, beats-1);
             `WAIT_AXI_COND(s_axi_arready, "s_axi_arready")
             @(posedge axi_aclk);
             s_axi_arvalid <= 1'b0;
@@ -64,8 +64,8 @@
             while (i < beats) begin
                 `WAIT_AXI_COND(s_axi_rvalid, "s_axi_rvalid")
                 rd_buf[i] = s_axi_rdata;
-                $display("[%0t][ TB] [AXI-RD] R  addr=0x%08x beat=%0d data=0x%08x last=%0d",
-                         $time, (addr + (i*4)), i, s_axi_rdata, s_axi_rlast);
+                $display("[%0d][ TB] [  AXI_RD] R  addr=0x%08x beat=%0d data=0x%08x last=%0d",
+                         ns_time(), (addr + (i*4)), i, s_axi_rdata, s_axi_rlast);
                 if ((i == beats-1) && !s_axi_rlast) begin
                     $fatal(1, "Missing RLAST on final beat");
                 end
@@ -96,7 +96,7 @@
             s_axi_awsize  <= 3'd2;
             s_axi_awburst <= 2'b01;
             s_axi_awvalid <= 1'b1;
-            $display("[%0t][ TB] [AXI-WR-BAD] AW addr=0x%08x beats=%0d mode=%0d", $time, addr, beats, bad_mode);
+            $display("[%0d][ TB] [ AXI_WR_BAD] AW addr=0x%08x beats=%0d mode=%0d", ns_time(), addr, beats, bad_mode);
             `WAIT_AXI_COND(s_axi_awready, "s_axi_awready (bad wlast)")
             @(posedge axi_aclk);
             s_axi_awvalid <= 1'b0;

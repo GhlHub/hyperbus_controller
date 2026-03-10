@@ -21,6 +21,12 @@ module hyperbus_controller_tb;
         end \
     end
 
+    function automatic int unsigned ns_time;
+        begin
+            ns_time = int'($rtoi(($realtime / 1ns) + 0.5));
+        end
+    endfunction
+
     // Clocks and reset
     logic axi_aclk;
     logic hb_clk_200;
@@ -236,6 +242,11 @@ module hyperbus_controller_tb;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
     logic [31:0] axil_rd32;
+    logic [31:0] axif_rwds_before;
+    logic [31:0] axif_rwds_after;
+    logic [31:0] axil_rwds_before;
+    logic [31:0] axil_rwds_after;
+    logic [5:0]  exp_axif_rwds_after;
     logic odly_dbg_en;
     logic [8:0] odly_cnt_prev;
     logic odly_envtc_x_prev;
@@ -272,8 +283,8 @@ module hyperbus_controller_tb;
             odly_envtc_forced_x = (dut.odly_en_vtc === 1'b1) && odly_cntout_has_x;
 
             if (odly_ctrl_has_x || odly_cntin_has_x || (odly_cntout_has_x && !odly_envtc_forced_x)) begin
-                $display("[%0t][ TB] [ODELAY-MON] UNKNOWN detected: EN_VTC=%b LOAD=%b CE=%b INC=%b RST_REQ=%b CNTVALUEIN=0x%03x CNTVALUEOUT=0x%03x",
-                         $time,
+                $display("[%0d][ TB] [ODELAY-MON] UNKNOWN detected: EN_VTC=%b LOAD=%b CE=%b INC=%b RST_REQ=%b CNTVALUEIN=0x%03x CNTVALUEOUT=0x%03x",
+                         ns_time(),
                          dut.odly_en_vtc,
                          dut.odly_load,
                          dut.odly_ce,
@@ -284,13 +295,13 @@ module hyperbus_controller_tb;
             end
 
             if (odly_envtc_forced_x && !odly_envtc_x_prev) begin
-                $display("[%0t][ TB] [ODELAY-MON] CNTVALUEOUT is X while EN_VTC=1 (expected Unisim ODELAYE3 TIME-mode behavior)",
-                         $time);
+                $display("[%0d][ TB] [ODELAY-MON] CNTVALUEOUT is X while EN_VTC=1 (expected Unisim ODELAYE3 TIME-mode behavior)",
+                         ns_time());
             end
 
             if (odly_dbg_en) begin
-                $display("[%0t][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST_REQ=%0b CNTVALUEOUT=0x%03x",
-                         $time,
+                $display("[%0d][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST_REQ=%0b CNTVALUEOUT=0x%03x",
+                         ns_time(),
                          dut.odly_en_vtc,
                          dut.odly_load,
                          dut.odly_ce,
@@ -298,8 +309,8 @@ module hyperbus_controller_tb;
                          dut.odelay_rst_req,
                          dut.odly_cntvalueout);
                 if (dut.odly_cntvalueout !== odly_cnt_prev) begin
-                    $display("[%0t][ TB] [ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
-                             $time, odly_cnt_prev, dut.odly_cntvalueout);
+                    $display("[%0d][ TB] [ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
+                             ns_time(), odly_cnt_prev, dut.odly_cntvalueout);
                 end
             end
             odly_cnt_prev <= dut.odly_cntvalueout;
@@ -364,12 +375,27 @@ module hyperbus_controller_tb;
         run_timeout_recovery_checks();
 
         // Partial-byte write check using WSTRB -> RWDS byte masks.
+        axil_read(16'h0084, axif_rwds_before);
+        axil_read(16'h0088, axil_rwds_before);
         axi_full_write_burst(32'h0000_0180, 1, 32'h1122_3344, 4'hF);
         axi_full_read_burst (32'h0000_0180, 1, rd_data);
+        axil_read(16'h0084, axif_rwds_after);
+        axil_read(16'h0088, axil_rwds_after);
+        exp_axif_rwds_after = axif_rwds_before[5:0] + 6'd2; // 1 beat read -> 2 RWDS-qualified halfwords
+        if (axif_rwds_after[5:0] !== exp_axif_rwds_after) begin
+            $fatal(1, "AXI-FULL RWDS counter mismatch (single-beat read): got=0x%02x exp=0x%02x",
+                   axif_rwds_after[5:0], exp_axif_rwds_after);
+        end
+        if (axil_rwds_after[5:0] !== axil_rwds_before[5:0]) begin
+            $fatal(1, "AXI-LITE RWDS counter changed during AXI-full read: before=0x%02x after=0x%02x",
+                   axil_rwds_before[5:0], axil_rwds_after[5:0]);
+        end
+        $display("[%0d][ TB] TEST PASS: RWDS counters after single-beat AXI-full read axif=0x%02x axil=0x%02x",
+                 ns_time(), axif_rwds_after[5:0], axil_rwds_after[5:0]);
         if (rd_data[0] !== 32'h1122_3344) begin
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x1122_3344", rd_data[0]);
         end
-        $display("[%0t][ TB] TEST PASS: single-beat full write/read 0x11223344", $time);
+        $display("[%0d][ TB] TEST PASS: single-beat full write/read 0x11223344", ns_time());
 
         // Verify AXI-Lite local register @0x0020 tracks the last 32-bit HyperBus read word.
         axil_read(16'h0020, axil_rd32);
@@ -377,28 +403,43 @@ module hyperbus_controller_tb;
             $fatal(1, "AXI-Lite last-read register mismatch @0x0020: got 0x%08x exp 0x%08x",
                    axil_rd32, rd_data[0]);
         end
-        $display("[%0t][ TB] TEST PASS: AXI-Lite last-read register @0x0020", $time);
+        $display("[%0d][ TB] TEST PASS: AXI-Lite last-read register @0x0020", ns_time());
         
+        axil_read(16'h0084, axif_rwds_before);
+        axil_read(16'h0088, axil_rwds_before);
         axi_full_write_burst(32'h0000_0180, 1, 32'hAA55_FF00, 4'b0101); // update byte0 + byte2 only (expect 0x11553300)
         axi_full_read_burst (32'h0000_0180, 1, rd_data);
+        axil_read(16'h0084, axif_rwds_after);
+        axil_read(16'h0088, axil_rwds_after);
+        exp_axif_rwds_after = axif_rwds_before[5:0] + 6'd2; // 1 beat read -> 2 RWDS-qualified halfwords
+        if (axif_rwds_after[5:0] !== exp_axif_rwds_after) begin
+            $fatal(1, "AXI-FULL RWDS counter mismatch (WSTRB readback): got=0x%02x exp=0x%02x",
+                   axif_rwds_after[5:0], exp_axif_rwds_after);
+        end
+        if (axil_rwds_after[5:0] !== axil_rwds_before[5:0]) begin
+            $fatal(1, "AXI-LITE RWDS counter changed during AXI-full readback: before=0x%02x after=0x%02x",
+                   axil_rwds_before[5:0], axil_rwds_after[5:0]);
+        end
+        $display("[%0d][ TB] TEST PASS: RWDS counters after WSTRB AXI-full read axif=0x%02x axil=0x%02x",
+                 ns_time(), axif_rwds_after[5:0], axil_rwds_after[5:0]);
 
         if (rd_data[0] !== 32'h1155_3300) begin
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x11553300", rd_data[0]);
         end
-        $display("[%0t][ TB] TEST PASS: WSTRB masked write/read 0x11553300", $time);
+        $display("[%0d][ TB] TEST PASS: WSTRB masked write/read 0x11553300", ns_time());
 
         // AXI-full malformed WLAST checks should return SLVERR.
         axi_full_write_burst_bad_wlast(32'h0000_01C0, 4, 32'hD00D_0000, 4'hF, 0, bresp_chk);
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (early) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("[%0t][ TB] TEST PASS: bad WLAST early -> SLVERR", $time);
+        $display("[%0d][ TB] TEST PASS: bad WLAST early -> SLVERR", ns_time());
 
         axi_full_write_burst_bad_wlast(32'h0000_01D0, 4, 32'hD00D_1000, 4'hF, 1, bresp_chk);
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (missing final) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("[%0t][ TB] TEST PASS: bad WLAST missing-final -> SLVERR", $time);
+        $display("[%0d][ TB] TEST PASS: bad WLAST missing-final -> SLVERR", ns_time());
 
         // Simultaneous AW+AR request test: write must be serviced first.
         axi_full_write_burst(32'h0000_01A0, 1, 32'hCAFEBABE, 4'hF);
@@ -412,8 +453,23 @@ module hyperbus_controller_tb;
         // AXI-full multi-beat burst sweep (self-checking): 2..32 beats.
         for (beats = 2; beats <= 32; beats++) begin
             burst_base = 32'hA5A5_0000 + (beats << 8);
+            axil_read(16'h0084, axif_rwds_before);
+            axil_read(16'h0088, axil_rwds_before);
             axi_full_write_burst(32'h0000_0100, beats, burst_base, 4'hF);
             axi_full_read_burst (32'h0000_0100, beats, rd_data);
+            axil_read(16'h0084, axif_rwds_after);
+            axil_read(16'h0088, axil_rwds_after);
+            exp_axif_rwds_after = axif_rwds_before[5:0] + (beats * 2); // beats * 2 halfwords (mod 64)
+            if (axif_rwds_after[5:0] !== exp_axif_rwds_after) begin
+                $fatal(1, "AXI-FULL RWDS counter mismatch beats=%0d: got=0x%02x exp=0x%02x",
+                       beats, axif_rwds_after[5:0], exp_axif_rwds_after);
+            end
+            if (axil_rwds_after[5:0] !== axil_rwds_before[5:0]) begin
+                $fatal(1, "AXI-LITE RWDS counter changed during AXI-full burst read beats=%0d: before=0x%02x after=0x%02x",
+                       beats, axil_rwds_before[5:0], axil_rwds_after[5:0]);
+            end
+            $display("[%0d][ TB] TEST PASS: RWDS counters after %0d-beat AXI-full read axif=0x%02x axil=0x%02x",
+                     ns_time(), beats, axif_rwds_after[5:0], axil_rwds_after[5:0]);
 
             for (k = 0; k < beats; k++) begin
                 if (rd_data[k] !== (burst_base + k)) begin
@@ -421,7 +477,7 @@ module hyperbus_controller_tb;
                            beats, k, rd_data[k], (burst_base + k));
                 end
             end
-            $display("[%0t][ TB] TEST PASS: %0d-beat full burst write/read", $time, beats);
+            $display("[%0d][ TB] TEST PASS: %0d-beat full burst write/read", ns_time(), beats);
         end
 
 

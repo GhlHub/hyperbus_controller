@@ -15,7 +15,7 @@
             if (got !== exp) begin
                 $fatal(1, "CHECK FAILED (%s): got=0x%08x exp=0x%08x", label, got, exp);
             end else begin
-                $display("[%0t][ TB] TEST PASS: %s got=0x%08x", $time, label, got);
+                $display("[%0d][ TB] TEST PASS: %s got=0x%08x", ns_time(), label, got);
             end
         end
     endtask

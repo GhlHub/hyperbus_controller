@@ -19,6 +19,10 @@ extern "C" {
  */
 #define HB_DELAY_RST_CTRL_OFFSET        0x0200u
 #define HB_IDELAYCTRL_STATUS_OFFSET     0x0204u
+#define HB_ID0_OFFSET                   0x0000u
+#define HB_ERR_STATUS_OFFSET            0x0080u
+#define HB_AXIF_RWDS_CNTR_OFFSET        0x0084u
+#define HB_AXIL_RWDS_CNTR_OFFSET        0x0088u
 
 /*
  * HB_ODLY_CTRL bit definitions.
@@ -26,13 +30,11 @@ extern "C" {
  * bit1 INC    (sticky)
  * bit2 CE     (pulse)
  * bit3 LOAD   (pulse)
- * bit4 RST    (pulse)
  */
 #define HB_ODLY_CTRL_EN_VTC    (1u << 0)
 #define HB_ODLY_CTRL_INC       (1u << 1)
 #define HB_ODLY_CTRL_CE        (1u << 2)
 #define HB_ODLY_CTRL_LOAD      (1u << 3)
-#define HB_ODLY_CTRL_RST       (1u << 4)
 
 /*
  * HB_DELAY_RST_CTRL bit definitions.
@@ -46,7 +48,7 @@ extern "C" {
  * Read current ODELAY CNTVALUEOUT[8:0] from STATUS register.
  * Returns 0 on success, negative on error.
  */
-int hb_odly_read(uintptr_t base_addr, uint16_t *cntvalue);
+int hb_odly_get(uintptr_t base_addr, uint16_t *cntvalue);
 
 /*
  * Program ODELAY TIME/CNTVALUEIN[8:0] then pulse LOAD.
@@ -83,6 +85,18 @@ int hb_odly_reset_pulse(uintptr_t base_addr);
  * Returns 0 on success, negative on error.
  */
 int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
+
+/*
+ * Sweep ODELAY by repeatedly incrementing one step at a time.
+ * Loop behavior:
+ * 1) Read CNTVALUEOUT and print it in hex. If CNTVALUEOUT > 500, return.
+ * 2) Read ID0, ERR_STATUS, AXIF_RWDS_CNTR, AXIL_RWDS_CNTR and print on one line.
+ *    If ERR_STATUS.bit0 is set, clear it by writing 1 to bit0.
+ * 3) Increment delay by one step.
+ * 4) Repeat from step 1.
+ * Returns 0 on normal completion, negative on error from lower-level helpers.
+ */
+int hb_odly_sweep(uintptr_t base_addr);
 
 #ifdef __cplusplus
 }

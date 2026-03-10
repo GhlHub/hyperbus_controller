@@ -4,7 +4,9 @@ module hyperbus_phy_xilinx (
     input  wire       i_hb_clk_200,
     input  wire       i_hb_clk_200_gated,
     input  wire       i_axi_aclk,
+    input  wire       i_axi_aresetn,
     input  wire       i_ref_clk300,
+    input  wire       i_idelayctrl_rst,
     input  wire       i_idelayctrl_rst_req,
     input  wire       i_odelay_rst_req,
     input  wire       i_hb_clk_200_samp_90,
@@ -28,15 +30,8 @@ module hyperbus_phy_xilinx (
     input  wire       i_odly_ce,
     input  wire       i_odly_inc,
     input  wire       i_odly_load,
-    input  wire       i_odly_rst,
     input  wire [8:0] i_odly_cntvaluein,
     output wire [8:0] o_odly_cntvalueout,
-    output wire       o_odly_en_vtc_dbg,
-    output wire       o_odly_ce_dbg,
-    output wire       o_odly_inc_dbg,
-    output wire       o_odly_load_dbg,
-    output wire       o_odly_rst_dbg,
-    output wire [8:0] o_odly_cntvaluein_dbg,
     output wire       o_idelayctrl_rdy_axi
 );
 
@@ -61,14 +56,25 @@ module hyperbus_phy_xilinx (
     logic [8:0] odly_cntvaluein_to_odelay;
 
     always_ff @(posedge i_ref_clk300) begin
-        idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
-        idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
+        if (i_idelayctrl_rst) begin
+            // Default asserted so IDELAYCTRL stays in reset at startup.
+            idelayctrl_rst_ref_meta <= 1'b1;
+            idelayctrl_rst_ref_sync <= 1'b1;
+        end else begin
+            idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
+            idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
+        end
     end
 
     // Synchronize IDELAYCTRL RDY into AXI clock domain for AXI-Lite status reads.
     always_ff @(posedge i_axi_aclk) begin
-        idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
-        idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
+        if (!i_axi_aresetn) begin
+            idelayctrl_rdy_axi_meta <= 1'b0;
+            idelayctrl_rdy_axi_sync <= 1'b0;
+        end else begin
+            idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
+            idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
+        end
     end
 
     IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
@@ -94,8 +100,12 @@ module hyperbus_phy_xilinx (
     ODELAYE3 #(
         .CASCADE("NONE"),
         .DELAY_FORMAT("TIME"),
+`ifndef SYNTHESIS
         .DELAY_TYPE("VAR_LOAD"),
-        .DELAY_VALUE(0),
+`else
+        .DELAY_TYPE("VARIABLE"),
+`endif
+        .DELAY_VALUE(100),
         .IS_CLK_INVERTED(1'b0),
         .IS_RST_INVERTED(1'b0),
         .REFCLK_FREQUENCY(300.0),
@@ -112,7 +122,11 @@ module hyperbus_phy_xilinx (
         .CNTVALUEIN(odly_cntvaluein_to_odelay),
         .EN_VTC(odly_en_vtc_to_odelay),
         .INC(odly_inc_to_odelay),
+`ifndef SYNTHESIS
         .LOAD(odly_load_to_odelay),
+`else
+        .LOAD(1'b0),
+`endif
         .ODATAIN(hb_ck_fwd),
         .RST(odly_rst_to_odelay)
     );
@@ -210,15 +224,9 @@ module hyperbus_phy_xilinx (
     assign odly_ce_to_odelay = i_odly_ce;
     assign odly_inc_to_odelay = i_odly_inc;
     assign odly_load_to_odelay = i_odly_load;
-    assign odly_rst_to_odelay = i_odelay_rst_req | i_odly_rst;
+    assign odly_rst_to_odelay = i_odelay_rst_req;
     assign odly_cntvaluein_to_odelay = i_odly_cntvaluein;
 
-    assign o_odly_en_vtc_dbg = odly_en_vtc_to_odelay;
-    assign o_odly_ce_dbg = odly_ce_to_odelay;
-    assign o_odly_inc_dbg = odly_inc_to_odelay;
-    assign o_odly_load_dbg = odly_load_to_odelay;
-    assign o_odly_rst_dbg = odly_rst_to_odelay;
-    assign o_odly_cntvaluein_dbg = odly_cntvaluein_to_odelay;
     assign o_idelayctrl_rdy_axi = idelayctrl_rdy_axi_sync;
 
 endmodule
