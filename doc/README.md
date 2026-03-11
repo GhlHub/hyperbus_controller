@@ -188,10 +188,39 @@ The software helper library is in:
 
 Current public APIs:
 
-- `hb_odly_read()`
+- `hb_odly_get()`
 - `hb_odly_set()`
 - `hb_odly_inc()`
 - `hb_odly_dec()`
 - `hb_idelayctrl_reset_wait_ready()`
 - `hb_odly_reset_pulse()`
 - `hb_dly_init()` (IDELAYCTRL reset/wait + ODELAY reset pulse)
+
+## Post-Impl Simulation Flow
+
+Post-implementation simulation assets are under:
+
+- `hyperbus_test_proj/post_impl/export_post_impl_netlist.tcl`
+- `hyperbus_test_proj/post_impl/design_1_wrapper_post_impl_tb.sv`
+- `hyperbus_test_proj/post_impl/run_post_impl_xsim.sh`
+
+Flow summary:
+
+1. Export routed netlist + SDF from `impl_1`:
+   - Generates `hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl_timesim.v`
+   - Generates `hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl.sdf`
+2. Compile/elaborate with the post-impl TB and `s27kl0642` HyperRAM model.
+3. Run xsim with SDF plusarg:
+   - `--testplusarg SDF_FILE=<.../design_1_wrapper_impl.sdf>`
+
+Included post-impl testcase:
+
+- Direct HyperBus register-space read of ID0 (`address 0x0000`) in
+  `design_1_wrapper_post_impl_tb.sv`
+- Self-checks returned value against `0x0C81` and fails simulation on mismatch
+
+Convenience command:
+
+```bash
+./hyperbus_test_proj/post_impl/run_post_impl_xsim.sh
+```
