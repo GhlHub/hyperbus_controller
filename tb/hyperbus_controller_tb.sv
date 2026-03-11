@@ -366,7 +366,10 @@ module hyperbus_controller_tb;
         // Let HyperRAM model finish POR interval.
         #160_000;
 
-        // First testcase: AXI-Lite delay-reset control path.
+        // First testcase: clear HB clock-force register bit.
+        run_hb_clk_ce_force_clear_check();
+
+        // AXI-Lite delay-reset control path.
         run_delay_reset_self_checks();
 
         // AXI-Lite register path self-checks (fatal on first mismatch).

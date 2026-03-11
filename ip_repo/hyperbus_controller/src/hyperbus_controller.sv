@@ -120,6 +120,7 @@ module hyperbus_controller #(
     logic odly_en_vtc, odly_ce, odly_inc, odly_load;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
     logic idelayctrl_rst_req, odelay_rst_req;
+    logic hb_clk_ce_force;
     logic idelayctrl_rdy_axi;
     logic hb_timeout_pulse_hb;
     logic hb_timeout_holdoff_hb;
@@ -262,6 +263,7 @@ module hyperbus_controller #(
         .o_odly_cntvaluein(odly_cntvaluein),
         .o_idelayctrl_rst_req(idelayctrl_rst_req),
         .o_odelay_rst_req(odelay_rst_req),
+        .o_hb_clk_ce_force(hb_clk_ce_force),
         .s_axil_awaddr(s_axil_awaddr),
         .s_axil_awvalid(s_axil_awvalid),
         .s_axil_awready(s_axil_awready),
@@ -293,7 +295,7 @@ module hyperbus_controller #(
     logic rwds_q1, rwds_q2;
 
     assign o_hb_cs_n = hb_cs_n_q;
-    assign o_hb_clk_ce = hb_clk_ce;
+    assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
 
     hyperbus_phy_xilinx u_hyperbus_phy (

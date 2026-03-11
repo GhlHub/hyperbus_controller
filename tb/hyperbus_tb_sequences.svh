@@ -226,13 +226,30 @@
         end
     endtask
 
+    task automatic run_hb_clk_ce_force_clear_check;
+        logic [31:0] rd32;
+        int push_base;
+        begin
+            // First testcase requirement: clear HB_CLK_CE_FORCE.bit0.
+            // This is a local AXI-Lite register access and must not enqueue HB commands.
+            push_base = axil_cmd_push_count;
+            axil_write(16'h008C, 32'h0000_0000);
+            if ((axil_cmd_push_count - push_base) != 0) begin
+                $fatal(1, "HB_CLK_CE_FORCE local write @0x008C unexpectedly pushed cmd fifo (delta=%0d)",
+                       (axil_cmd_push_count - push_base));
+            end
+            axil_read(16'h008C, rd32);
+            check_eq32(rd32, 32'h0000_0000, "HB_CLK_CE_FORCE cleared @0x008C");
+        end
+    endtask
+
     task automatic run_axil_self_checks;
         logic [31:0] rd32;
         int push_base;
         int poll_i;
         begin
-            axil_read(16'h0010, rd32);
-            check_eq32(rd32, 32'hFEED_FACE, "VERSION read @0x0010");
+            axil_read(16'h0024, rd32);
+            check_eq32(rd32, 32'h0100_0001, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");
