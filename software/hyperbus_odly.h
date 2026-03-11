@@ -8,21 +8,37 @@ extern "C" {
 #endif
 
 /*
- * AXI-Lite register offsets for CK_P ODELAY control.
+ * AXI-Lite local register offsets (decoded/handled by AXI-Lite slave).
  */
-#define HB_ODLY_CTRL_OFFSET    0x0100u
-#define HB_ODLY_TIME_OFFSET    0x0104u
-#define HB_ODLY_STATUS_OFFSET  0x0108u
-
-/*
- * AXI-Lite register offsets for delay-reset/status control.
- */
-#define HB_DELAY_RST_CTRL_OFFSET        0x0200u
-#define HB_IDELAYCTRL_STATUS_OFFSET     0x0204u
-#define HB_ID0_OFFSET                   0x0000u
+#define HB_LAST_HB_READ32_OFFSET        0x0020u
+#define HB_VERSION_OFFSET               0x0024u
 #define HB_ERR_STATUS_OFFSET            0x0080u
 #define HB_AXIF_RWDS_CNTR_OFFSET        0x0084u
 #define HB_AXIL_RWDS_CNTR_OFFSET        0x0088u
+#define HB_HB_CLK_CE_FORCE_OFFSET       0x008Cu
+#define HB_ODLY_CTRL_OFFSET             0x0100u
+#define HB_ODLY_TIME_OFFSET             0x0104u
+#define HB_ODLY_STATUS_OFFSET           0x0108u
+#define HB_DELAY_RST_CTRL_OFFSET        0x0200u
+#define HB_IDELAYCTRL_STATUS_OFFSET     0x0204u
+
+/*
+ * AXI-Lite addresses forwarded to HyperBus register-space transactions.
+ */
+#define HB_ID0_OFFSET                   0x0000u
+#define HB_ID1_OFFSET                   0x0004u
+#define HB_ID1_OFFSET_ALIAS_16          0x0002u
+#define HB_CR0_OFFSET                   0x0800u
+#define HB_CR1_OFFSET                   0x0804u
+#define HB_CR1_OFFSET_ALIAS_16          0x0802u
+
+/*
+ * Constant values and common masks.
+ */
+#define HB_VERSION_VALUE                0x01000001u
+#define HB_ODLY_MASK_9BIT               0x01FFu
+#define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
+#define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
 
 /*
  * HB_ODLY_CTRL bit definitions.
@@ -37,12 +53,27 @@ extern "C" {
 #define HB_ODLY_CTRL_LOAD      (1u << 3)
 
 /*
+ * HB_HB_CLK_CE_FORCE bit definitions.
+ */
+#define HB_HB_CLK_CE_FORCE_EN  (1u << 0)
+
+/*
+ * HB_ERR_STATUS bit definitions.
+ */
+#define HB_ERR_STATUS_TIMEOUT   (1u << 0)
+
+/*
  * HB_DELAY_RST_CTRL bit definitions.
  * bit0 IDELAYCTRL reset request
  * bit1 ODELAY reset request
  */
 #define HB_DELAY_RST_IDELAYCTRL (1u << 0)
 #define HB_DELAY_RST_ODELAY     (1u << 1)
+
+/*
+ * HB_IDELAYCTRL_STATUS bit definitions.
+ */
+#define HB_IDELAYCTRL_STATUS_RDY (1u << 0)
 
 /*
  * Read current ODELAY CNTVALUEOUT[8:0] from STATUS register.
@@ -110,6 +141,25 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
  *  < 0  = propagated error from hb_odly_get() or hb_odly_inc()
  */
 int hb_odly_sweep(uintptr_t base_addr);
+
+/*
+ * Read ERR_STATUS, print the value, and clear timeout status when set.
+ * Behavior:
+ * 1) Read HB_ERR_STATUS_OFFSET and print it in hex.
+ * 2) If bit0 is set, write bit0=1 back to clear (W1C behavior).
+ * 3) Optionally return the read value through err_status_out.
+ * Return codes:
+ *   0  = success
+ */
+int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out);
+
+/*
+ * Read LAST_HB_READ32 register (AXI-Lite offset 0x0020).
+ * Return codes:
+ *   0  = success
+ *  -1  = invalid argument (last_read_out is NULL)
+ */
+int hb_last_hb_read32_get(uintptr_t base_addr, uint32_t *last_read_out);
 
 #ifdef __cplusplus
 }

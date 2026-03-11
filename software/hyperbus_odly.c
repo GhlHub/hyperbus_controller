@@ -1,10 +1,7 @@
 #include "hyperbus_odly.h"
+#include <stdint.h>
 #include <stdio.h>
 #include "xil_printf.h"
-
-#define HB_ODLY_MASK_9BIT 0x01FFu
-#define HB_IDELAYCTRL_RDY_MASK 0x1u
-#define HB_ERR_STATUS_TIMEOUT_MASK 0x1u
 
 static inline volatile uint32_t *hb_reg_ptr(uintptr_t base, uint32_t offset)
 {
@@ -83,6 +80,7 @@ static int hb_odly_step(uintptr_t base_addr, int inc, int reenable_en_vtc)
     uint32_t ctrl;
     uint32_t ctrl_sticky;
 
+    hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
     ctrl = hb_reg_read(base_addr, HB_ODLY_CTRL_OFFSET);
     ctrl_sticky = ctrl & (HB_ODLY_CTRL_EN_VTC | HB_ODLY_CTRL_INC);
 
@@ -105,7 +103,7 @@ static int hb_odly_step(uintptr_t base_addr, int inc, int reenable_en_vtc)
         hb_delay_cycles(64);
         hb_reg_write(base_addr, HB_ODLY_CTRL_OFFSET, ctrl_sticky | HB_ODLY_CTRL_EN_VTC);
     }
-
+    hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
     return 0;
 }
 
@@ -130,7 +128,8 @@ int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
     if (timeout_polls == 0U) {
         return -1;
     }
-
+    // Make sure gated clock is running, or IDELAYCTRL reset won't work
+    hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
     ctrl = hb_reg_read(base_addr, HB_DELAY_RST_CTRL_OFFSET);
 
     /*
@@ -151,7 +150,9 @@ int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
     hb_reg_write(base_addr, HB_DELAY_RST_CTRL_OFFSET, ctrl);
 
     for (polls = 0; polls < timeout_polls; ++polls) {
-        if ((hb_reg_read(base_addr, HB_IDELAYCTRL_STATUS_OFFSET) & HB_IDELAYCTRL_RDY_MASK) != 0U) {
+        if ((hb_reg_read(base_addr, HB_IDELAYCTRL_STATUS_OFFSET) & HB_IDELAYCTRL_STATUS_RDY) != 0U) {
+            // Turn off gated clocks
+            hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
             return 0;
         }
     }
@@ -197,14 +198,16 @@ int hb_odly_sweep(uintptr_t base_addr)
     uint32_t err_status;
     uint32_t axif_rwds_cntr;
     uint32_t axil_rwds_cntr;
+    uint32_t last_read32;
 
     for (;;) {
+        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
         rc = hb_odly_get(base_addr, &cntvalue);
+        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
         if (rc != 0) {
             return rc;
         }
 
-        xil_printf("CNTVALUEOUT=0x%03x\n", (unsigned)(cntvalue & HB_ODLY_MASK_9BIT));
         if (cntvalue > 500U) {
             return 0;
         }
@@ -213,12 +216,15 @@ int hb_odly_sweep(uintptr_t base_addr)
         err_status = hb_reg_read(base_addr, HB_ERR_STATUS_OFFSET);
         axif_rwds_cntr = hb_reg_read(base_addr, HB_AXIF_RWDS_CNTR_OFFSET);
         axil_rwds_cntr = hb_reg_read(base_addr, HB_AXIL_RWDS_CNTR_OFFSET);
+        last_read32    = hb_reg_read(base_addr, HB_LAST_HB_READ32_OFFSET);
 
-        xil_printf("ID0=0x%08x ERR_STATUS=0x%08x AXIF_RWDS_CNTR=0x%08x AXIL_RWDS_CNTR=0x%08x\n",
-                   (unsigned)id0, (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr);
+        xil_printf("CNTVALUEOUT=0x%03x ID0=0x%08x r32=0x%08x ERR_STATUS=0x%08x AXIF_RWDS_CNTR=0x%08x AXIL_RWDS_CNTR=0x%08x%s\r\n",
+                   (unsigned)(cntvalue & HB_ODLY_MASK_9BIT), (unsigned)id0, (unsigned)last_read32,
+                   (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr,
+                   (id0 == 0x0000810Cu) ? " MATCH" : "");
 
-        if ((err_status & HB_ERR_STATUS_TIMEOUT_MASK) != 0U) {
-            hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT_MASK);
+        if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
+            hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
         }
 
         rc = hb_odly_inc(base_addr, 1);
@@ -226,4 +232,34 @@ int hb_odly_sweep(uintptr_t base_addr)
             return rc;
         }
     }
+}
+
+int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out)
+{
+    /* Return codes: 0=success. */
+    uint32_t err_status;
+
+    err_status = hb_reg_read(base_addr, HB_ERR_STATUS_OFFSET);
+    xil_printf("ERR_STATUS=0x%08x\n", (unsigned)err_status);
+
+    if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
+        hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
+    }
+
+    if (err_status_out != 0) {
+        *err_status_out = err_status;
+    }
+
+    return 0;
+}
+
+int hb_last_hb_read32_get(uintptr_t base_addr, uint32_t *last_read_out)
+{
+    /* Return codes: 0=success, -1=invalid argument (last_read_out==NULL). */
+    if (last_read_out == 0) {
+        return -1;
+    }
+
+    *last_read_out = hb_reg_read(base_addr, HB_LAST_HB_READ32_OFFSET);
+    return 0;
 }

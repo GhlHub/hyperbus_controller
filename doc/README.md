@@ -195,6 +195,10 @@ Current public APIs:
 - `hb_idelayctrl_reset_wait_ready()`
 - `hb_odly_reset_pulse()`
 - `hb_dly_init()` (IDELAYCTRL reset/wait + ODELAY reset pulse)
+- `hb_odly_sweep()` (prints one-line training status per step:
+  `CNTVALUEOUT`, `ID0`, `LAST_HB_READ32`, `ERR_STATUS`, AXI RWDS counters)
+- `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
+- `hb_last_hb_read32_get()` (reads AXI-Lite `LAST_HB_READ32` register @ `0x0020`)
 
 ## Post-Impl Simulation Flow
 
