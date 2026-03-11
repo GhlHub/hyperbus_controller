@@ -1,5 +1,7 @@
 # HB_DQ vs HB_CK_P Relative Output Timing (Implemented Design)
 
+Last updated: 2026-03-11
+
 Note: `hyperram_test_proj` is not present in this workspace; implemented timing was taken from:
 - `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/`
 

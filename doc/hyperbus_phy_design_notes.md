@@ -1,5 +1,7 @@
 # HyperBus PHY Design Notes
 
+Last updated: 2026-03-11
+
 ## Scope
 
 This note captures the current implementation constraints and integration rules for
@@ -8,9 +10,10 @@ This note captures the current implementation constraints and integration rules 
 ## Primitive Architecture
 
 - TX clock forwarding:
-  - `BUFGCE` gates `i_hb_clk_200` with `i_hb_clk_ce`.
-  - `ODDRE1` (`D1=1`, `D2=0`) generates forwarded CK waveform.
-  - `OBUF` drives `o_hb_ck_p` (single-ended mode).
+  - External logic supplies the gated TX clock on `i_hb_clk_200_gated`.
+  - `ODDRE1` (`D1=1`, `D2=0`) generates forwarded CK waveform (`hb_ck_fwd`).
+  - `ODELAYE3` delays forwarded CK before output.
+  - `OBUF` drives delayed CK on `o_hb_ck_p` (single-ended mode).
   - `o_hb_ck_n` is tied low for single-ended HyperRAM clocking.
 - DQ TX/RX:
   - Per-bit `ODDRE1` drives TX DDR data from `i_dq_o_d1/d2`.
@@ -22,10 +25,16 @@ This note captures the current implementation constraints and integration rules 
 - Delay calibration:
   - `IDELAYCTRL` is instantiated.
   - `REFCLK` must be external 300 MHz (`i_ref_clk300`).
+  - `IDELAYCTRL.RST` is driven from AXI-Lite `DELAY_RST_CTRL[0]` through a
+    synchronizer into `i_ref_clk300` domain.
+  - `IDELAYCTRL.RDY` is synchronized into AXI clock domain and exposed through
+    AXI-Lite `IDELAYCTRL_STATUS[0]`.
+  - `ODELAYE3` runtime control signals are driven from AXI-Lite registers.
 
 ## External Clock/Reset Inputs
 
 - `i_hb_clk_200`: HyperBus fabric/PHY TX clock.
+- `i_hb_clk_200_gated`: externally gated TX clock used by CK forward `ODDRE1`.
 - `i_hb_clk_200_samp_90`: external +90-degree sample clock for `IDDRE1`.
 - `i_ref_clk300`: external `IDELAYCTRL` reference clock.
 - `i_hb_rstn`: HyperBus-domain reset for TX path primitives/registers.
@@ -57,6 +66,7 @@ Required consequence in HB engine:
    - Re-check AXI-full and AXI-lite read paths for off-by-one behavior.
 2. If sample clock source changes:
    - Re-validate `IDDRE1` edge/phase assumptions and CA/latency detect timing.
+   - Re-validate source/enable behavior for external `i_hb_clk_200_gated`.
 3. If resets are modified:
    - Keep `i_idelayctrl_rst` independent.
    - Keep `i_iddre1_rst` independent and synchronous to sample clock domain.

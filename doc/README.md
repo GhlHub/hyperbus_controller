@@ -1,5 +1,7 @@
 # HyperBus Controller Documentation
 
+Last updated: 2026-03-11
+
 ## Overview
 
 This project implements a HyperBus/HyperRAM controller with:
@@ -34,7 +36,8 @@ Main RTL:
 - `hyperbus_hb_engine.sv`
   - HyperBus transaction FSM (CA/latency/read/write/termination control)
 - `hyperbus_phy_xilinx.sv`
-  - Non-FIFO Xilinx primitive PHY (`BUFGCE`, `ODDRE1`, `OBUF`, `IOBUF`, `IDDRE1`, `IDELAYCTRL`)
+  - Non-FIFO Xilinx primitive PHY (`ODDRE1`, `ODELAYE3`, `OBUF`, `IOBUF`, `IDDRE1`, `IDELAYCTRL`)
+  - Uses externally gated HyperBus clock input (`i_hb_clk_200_gated`)
   - Configured for single-ended CK mode (`o_hb_ck_p` driven, `o_hb_ck_n` held low)
 - `hyperbus_fifo_bank_xilinx.sv`
   - All XPM async FIFOs (`xpm_fifo_async`)
@@ -82,17 +85,32 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
 - AXI-Lite register map:
   - HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
     - `0x0000` -> HyperBus `0x0000` (ID0)
+    - `0x0002` -> HyperBus `0x0000` (ID1 16-bit alias)
     - `0x0004` -> HyperBus `0x0002` (ID1)
     - `0x0800` -> HyperBus `0x0800` (CR0)
+    - `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
     - `0x0804` -> HyperBus `0x0802` (CR1)
   - Local controller registers:
     - `0x0020` LAST_HB_READ32 (read-only)
+    - `0x0024` VERSION (read-only, `0x01000001`)
     - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
+    - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
+    - `0x0088` AXIL_RWDS_CNTR (read-only, 6-bit counter)
+    - `0x008C` HB_CLK_CE_FORCE (bit0 ORed with `o_hb_clk_ce`, reset default `1`)
     - `0x0100` CK_P_ODELAY_CTRL
     - `0x0104` CK_P_ODELAY_TIME
     - `0x0108` CK_P_ODELAY_STATUS
     - `0x0200` DELAY_RST_CTRL (bit0 IDELAYCTRL reset request, bit1 ODELAY reset request)
     - `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
+- AXI-Lite AR accept condition (`ARREADY`) requires:
+  - `axil_state == AXIL_IDLE`
+  - `!i_cmd_fifo_full`
+  - `!i_req_block`
+  - `!i_aw_pending`
+  - `!i_s_axi_arvalid && !i_s_axi_awvalid` (AXI-full command issue backpressure guard)
+- Unmapped AXI-Lite addresses are handled locally:
+  - reads return `0x00000000` with `OKAY`
+  - writes complete with `OKAY` and no side effects
 - AXI-lite is backpressured while AXI-full command issue is active to avoid command FIFO collisions.
 
 ## HyperBus Transaction Notes

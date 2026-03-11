@@ -1,5 +1,7 @@
 # HB_DQ Input Timing vs o_hb_ck_p_0 (Implemented Design)
 
+Last updated: 2026-03-11
+
 Source reports (implemented design):
 - `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/hb_dq_input_min.rpt`
 - `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/hb_dq_input_max.rpt`

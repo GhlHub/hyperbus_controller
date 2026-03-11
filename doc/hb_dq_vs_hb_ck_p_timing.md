@@ -1,5 +1,7 @@
 # HB_DQ vs HB_CK_P Timing (Implemented Design)
 
+Last updated: 2026-03-11
+
 Source checkpoint:
 - `/raid/work/hyperbus_ai3/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/design_1_wrapper_routed.dcp`
 

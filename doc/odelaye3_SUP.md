@@ -1,6 +1,14 @@
 Spartan UltraScale+ ODELAYE3 — Corrected Tables and VARIABLE/TIME Cycle-by-Cycle Sequence
 
+Last updated: 2026-03-11
+
 Source basis: AMD UG861 family-specific behavior for Spartan UltraScale+.
+
+Project usage in this repository (current RTL):
+- `DELAY_FORMAT = TIME`
+- `DELAY_TYPE = VAR_LOAD` for simulation (`ifndef SYNTHESIS`)
+- `DELAY_TYPE = VARIABLE` for synthesis (`else`)
+- Runtime control is software-driven over AXI-Lite (`0x0100/0x0104/0x0108`)
 
 Core rules
 - DELAY_TYPE: FIXED, VARIABLE, VAR_LOAD
