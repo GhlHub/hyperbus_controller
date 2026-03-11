@@ -46,21 +46,25 @@ extern "C" {
 
 /*
  * Read current ODELAY CNTVALUEOUT[8:0] from STATUS register.
- * Returns 0 on success, negative on error.
+ * Return codes:
+ *   0  = success
+ *  -1  = invalid argument (cntvalue is NULL)
  */
 int hb_odly_get(uintptr_t base_addr, uint16_t *cntvalue);
 
 /*
  * Program ODELAY TIME/CNTVALUEIN[8:0] then pulse LOAD.
  * The sequence disables EN_VTC before update and optionally re-enables it.
- * Returns 0 on success, negative on error.
+ * Return codes:
+ *   0  = success
  */
 int hb_odly_set(uintptr_t base_addr, uint16_t cntvalue, int reenable_en_vtc);
 
 /*
  * Increment/decrement ODELAY by one tap using INC + CE pulse sequence.
  * EN_VTC is forced low during the step and optionally re-enabled after.
- * Returns 0 on success, negative on error.
+ * Return codes:
+ *   0  = success
  */
 int hb_odly_inc(uintptr_t base_addr, int reenable_en_vtc);
 int hb_odly_dec(uintptr_t base_addr, int reenable_en_vtc);
@@ -68,13 +72,17 @@ int hb_odly_dec(uintptr_t base_addr, int reenable_en_vtc);
 /*
  * Pulse IDELAYCTRL reset high for >=50ns, then poll IDELAYCTRL RDY until high.
  * timeout_polls is the maximum number of status reads before returning timeout.
- * Returns 0 on success, -1 on invalid args, -2 on timeout.
+ * Return codes:
+ *   0  = success
+ *  -1  = invalid argument (timeout_polls == 0)
+ *  -2  = timeout waiting for IDELAYCTRL RDY
  */
 int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls);
 
 /*
  * Pulse ODELAYE3 reset request high then low via HB_DELAY_RST_CTRL bit1.
- * Returns 0 on success.
+ * Return codes:
+ *   0  = success
  */
 int hb_odly_reset_pulse(uintptr_t base_addr);
 
@@ -82,7 +90,10 @@ int hb_odly_reset_pulse(uintptr_t base_addr);
  * Initialize delay control blocks:
  * 1) reset IDELAYCTRL and wait RDY
  * 2) pulse ODELAY reset
- * Returns 0 on success, negative on error.
+ * Return codes:
+ *   0   = success
+ *  < 0  = propagated error from hb_idelayctrl_reset_wait_ready() or
+ *         hb_odly_reset_pulse()
  */
 int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
 
@@ -94,7 +105,9 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
  *    If ERR_STATUS.bit0 is set, clear it by writing 1 to bit0.
  * 3) Increment delay by one step.
  * 4) Repeat from step 1.
- * Returns 0 on normal completion, negative on error from lower-level helpers.
+ * Return codes:
+ *   0   = normal completion (sweep stop condition reached)
+ *  < 0  = propagated error from hb_odly_get() or hb_odly_inc()
  */
 int hb_odly_sweep(uintptr_t base_addr);
 

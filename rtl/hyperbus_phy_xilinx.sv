@@ -79,22 +79,25 @@ module hyperbus_phy_xilinx (
 
     IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
     u_idelayctrl (
-        .RDY(idelayctrl_rdy),
-        .REFCLK(i_ref_clk300),
-        .RST(idelayctrl_rst_ref_sync)
+        .RDY    (            idelayctrl_rdy),
+        .REFCLK (             i_ref_clk300),
+        .RST    (idelayctrl_rst_ref_sync)
     );
 
+    // CAUTION: make sure this gated clock is running when reset is asserted
+    // or the IDELAYCTRL.RDY will never go high. Check the AXI-Lite slave for
+    // the register that can force the clock on.
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
         .IS_D1_INVERTED(1'b0),
         .IS_D2_INVERTED(1'b0),
         .SRVAL(1'b0)
     ) u_oddr_ck (
-        .Q(hb_ck_fwd),
-        .C(i_hb_clk_200_gated),
-        .D1(1'b1),
-        .D2(1'b0),
-        .SR(~i_hb_rstn)
+        .Q  (          hb_ck_fwd),
+        .C  ( i_hb_clk_200_gated),
+        .D1 (               1'b1),
+        .D2 (               1'b0),
+        .SR (          ~i_hb_rstn)
     );
     
     ODELAYE3 #(
@@ -112,31 +115,31 @@ module hyperbus_phy_xilinx (
         .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
         .UPDATE_MODE("ASYNC")
     ) u_odelay_hb_ck_p (
-        .CASC_OUT(),
-        .CNTVALUEOUT(o_odly_cntvalueout),
-        .DATAOUT(hb_ck_fwd_delayed),
-        .CASC_IN(1'b0),
-        .CASC_RETURN(1'b0),
-        .CE(odly_ce_to_odelay),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(odly_cntvaluein_to_odelay),
-        .EN_VTC(odly_en_vtc_to_odelay),
-        .INC(odly_inc_to_odelay),
+        .CASC_OUT    (                     ),
+        .CNTVALUEOUT (    o_odly_cntvalueout),
+        .DATAOUT     (    hb_ck_fwd_delayed),
+        .CASC_IN     (                 1'b0),
+        .CASC_RETURN (                 1'b0),
+        .CE          (     odly_ce_to_odelay),
+        .CLK         (            i_axi_aclk),
+        .CNTVALUEIN  (odly_cntvaluein_to_odelay),
+        .EN_VTC      ( odly_en_vtc_to_odelay),
+        .INC         (     odly_inc_to_odelay),
 `ifndef SYNTHESIS
-        .LOAD(odly_load_to_odelay),
+        .LOAD        (    odly_load_to_odelay),
 `else
-        .LOAD(1'b0),
+        .LOAD        (                 1'b0),
 `endif
-        .ODATAIN(hb_ck_fwd),
-        .RST(odly_rst_to_odelay)
+        .ODATAIN     (            hb_ck_fwd),
+        .RST         (    odly_rst_to_odelay)
     );
 
-   OBUF u_obuf_ck_p(
-      .O(o_hb_ck_p),
-      .I(hb_ck_fwd_delayed)
-   );
-    
-   assign o_hb_ck_n = 0;
+    OBUF u_obuf_ck_p (
+        .O (        o_hb_ck_p),
+        .I (hb_ck_fwd_delayed)
+    );
+
+    assign o_hb_ck_n = 0;
 
     genvar gi;
     generate
@@ -147,18 +150,18 @@ module hyperbus_phy_xilinx (
                 .IS_D2_INVERTED(1'b0),
                 .SRVAL(1'b0)
             ) u_oddr_dq (
-                .Q(dq_out_ddr[gi]),
-                .C(i_hb_clk_200),
-                .D1(i_dq_o_d1[gi]),
-                .D2(i_dq_o_d2[gi]),
-                .SR(~i_hb_rstn)
+                .Q  (dq_out_ddr[gi]),
+                .C  (  i_hb_clk_200),
+                .D1 ( i_dq_o_d1[gi]),
+                .D2 ( i_dq_o_d2[gi]),
+                .SR (      ~i_hb_rstn)
             );
 
             IOBUF u_iobuf_dq (
-                .I(dq_out_ddr[gi]),
-                .O(dq_i[gi]),
-                .T(i_dq_t[gi]),
-                .IO(io_hb_dq[gi])
+                .I  (dq_out_ddr[gi]),
+                .O  (       dq_i[gi]),
+                .T  (      i_dq_t[gi]),
+                .IO (    io_hb_dq[gi])
             );
 
             IDDRE1 #(
@@ -166,12 +169,12 @@ module hyperbus_phy_xilinx (
                 .IS_C_INVERTED(1'b0),
                 .IS_CB_INVERTED(1'b1)
             ) u_iddr_dq (
-                .Q1(dq_q1_raw[gi]),
-                .Q2(dq_q2_raw[gi]),
-                .C(i_hb_clk_200_samp_90),
-                .CB(i_hb_clk_200_samp_90),
-                .D(dq_i[gi]),
-                .R(i_iddre1_rst)
+                .Q1 (       dq_q1_raw[gi]),
+                .Q2 (       dq_q2_raw[gi]),
+                .C  (i_hb_clk_200_samp_90),
+                .CB (i_hb_clk_200_samp_90),
+                .D  (           dq_i[gi]),
+                .R  (        i_iddre1_rst)
             );
         end
     endgenerate
@@ -193,18 +196,18 @@ module hyperbus_phy_xilinx (
         .IS_D2_INVERTED(1'b0),
         .SRVAL(1'b0)
     ) u_oddr_rwds (
-        .Q(rwds_out_ddr),
-        .C(i_hb_clk_200),
-        .D1(i_rwds_o_d1),
-        .D2(i_rwds_o_d2),
-        .SR(~i_hb_rstn)
+        .Q  ( rwds_out_ddr),
+        .C  ( i_hb_clk_200),
+        .D1 (  i_rwds_o_d1),
+        .D2 (  i_rwds_o_d2),
+        .SR (    ~i_hb_rstn)
     );
 
     IOBUF u_iobuf_rwds (
-        .I(rwds_out_ddr),
-        .O(rwds_i),
-        .T(i_rwds_t),
-        .IO(io_hb_rwds)
+        .I  (rwds_out_ddr),
+        .O  (      rwds_i),
+        .T  (    i_rwds_t),
+        .IO (   io_hb_rwds)
     );
 
     IDDRE1 #(
@@ -212,12 +215,12 @@ module hyperbus_phy_xilinx (
         .IS_C_INVERTED(1'b0),
         .IS_CB_INVERTED(1'b1)
     ) u_iddr_rwds (
-        .Q1(o_rwds_q1),
-        .Q2(o_rwds_q2),
-        .C(i_hb_clk_200_samp_90),
-        .CB(i_hb_clk_200_samp_90),
-        .D(rwds_i),
-        .R(i_iddre1_rst)
+        .Q1 (         o_rwds_q1),
+        .Q2 (         o_rwds_q2),
+        .C  (i_hb_clk_200_samp_90),
+        .CB (i_hb_clk_200_samp_90),
+        .D  (            rwds_i),
+        .R  (        i_iddre1_rst)
     );
 
     assign odly_en_vtc_to_odelay = i_odly_en_vtc;

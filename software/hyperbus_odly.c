@@ -31,6 +31,7 @@ static void hb_delay_cycles(unsigned count)
 
 int hb_odly_get(uintptr_t base_addr, uint16_t *cntvalue)
 {
+    /* Return codes: 0=success, -1=invalid argument (cntvalue==NULL). */
     uint32_t status;
 
     if (cntvalue == 0U) {
@@ -44,6 +45,7 @@ int hb_odly_get(uintptr_t base_addr, uint16_t *cntvalue)
 
 int hb_odly_set(uintptr_t base_addr, uint16_t cntvalue, int reenable_en_vtc)
 {
+    /* Return codes: 0=success. */
     uint32_t ctrl;
     uint32_t ctrl_sticky;
     uint32_t target;
@@ -77,6 +79,7 @@ int hb_odly_set(uintptr_t base_addr, uint16_t cntvalue, int reenable_en_vtc)
 
 static int hb_odly_step(uintptr_t base_addr, int inc, int reenable_en_vtc)
 {
+    /* Return codes: 0=success. */
     uint32_t ctrl;
     uint32_t ctrl_sticky;
 
@@ -108,16 +111,19 @@ static int hb_odly_step(uintptr_t base_addr, int inc, int reenable_en_vtc)
 
 int hb_odly_inc(uintptr_t base_addr, int reenable_en_vtc)
 {
+    /* Return codes: 0=success. */
     return hb_odly_step(base_addr, 1, reenable_en_vtc);
 }
 
 int hb_odly_dec(uintptr_t base_addr, int reenable_en_vtc)
 {
+    /* Return codes: 0=success. */
     return hb_odly_step(base_addr, 0, reenable_en_vtc);
 }
 
 int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
 {
+    /* Return codes: 0=success, -1=invalid timeout_polls, -2=RDY timeout. */
     uint32_t ctrl;
     uint32_t polls;
 
@@ -155,6 +161,7 @@ int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
 
 int hb_odly_reset_pulse(uintptr_t base_addr)
 {
+    /* Return codes: 0=success. */
     uint32_t ctrl;
 
     ctrl = hb_reg_read(base_addr, HB_DELAY_RST_CTRL_OFFSET);
@@ -170,6 +177,7 @@ int hb_odly_reset_pulse(uintptr_t base_addr)
 
 int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls)
 {
+    /* Return codes: 0=success, <0=propagated helper error. */
     int rc;
 
     rc = hb_idelayctrl_reset_wait_ready(base_addr, timeout_polls);
@@ -182,6 +190,7 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls)
 
 int hb_odly_sweep(uintptr_t base_addr)
 {
+    /* Return codes: 0=normal sweep completion, <0=propagated helper error. */
     int rc;
     uint16_t cntvalue;
     uint32_t id0;
