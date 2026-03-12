@@ -5,15 +5,28 @@
         input logic [31:0] base_data,
         input logic [3:0]  strb
     );
+        begin
+            axi_full_write_burst_mode(addr, beats, 2'b01, base_data, strb);
+        end
+    endtask
+
+    task automatic axi_full_write_burst_mode(
+        input logic [31:0] addr,
+        input int          beats,
+        input logic [1:0]  burst_mode,
+        input logic [31:0] base_data,
+        input logic [3:0]  strb
+    );
         int i;
         begin
             @(posedge axi_aclk);
             s_axi_awaddr  <= addr;
             s_axi_awlen   <= beats-1;
             s_axi_awsize  <= 3'd2;
-            s_axi_awburst <= 2'b01;
+            s_axi_awburst <= burst_mode;
             s_axi_awvalid <= 1'b1;
-            $display("[%0d][ TB] [  AXI_WR] AW addr=0x%08x beats=%0d awlen=%0d", ns_time(), addr, beats, beats-1);
+            $display("[%0d][ TB] [  AXI_WR] AW addr=0x%08x beats=%0d awlen=%0d awburst=0x%0x",
+                     ns_time(), addr, beats, beats-1, burst_mode);
             `WAIT_AXI_COND(s_axi_awready, "s_axi_awready")
             @(posedge axi_aclk);
             s_axi_awvalid <= 1'b0;
@@ -46,15 +59,27 @@
         input  int          beats,
         output logic [31:0] rd_buf [0:31]
     );
+        begin
+            axi_full_read_burst_mode(addr, beats, 2'b01, rd_buf);
+        end
+    endtask
+
+    task automatic axi_full_read_burst_mode(
+        input  logic [31:0] addr,
+        input  int          beats,
+        input  logic [1:0]  burst_mode,
+        output logic [31:0] rd_buf [0:31]
+    );
         int i;
         begin
             @(posedge axi_aclk);
             s_axi_araddr  <= addr;
             s_axi_arlen   <= beats-1;
             s_axi_arsize  <= 3'd2;
-            s_axi_arburst <= 2'b01;
+            s_axi_arburst <= burst_mode;
             s_axi_arvalid <= 1'b1;
-            $display("[%0d][ TB] [  AXI_RD] AR addr=0x%08x beats=%0d arlen=%0d", ns_time(), addr, beats, beats-1);
+            $display("[%0d][ TB] [  AXI_RD] AR addr=0x%08x beats=%0d arlen=%0d arburst=0x%0x",
+                     ns_time(), addr, beats, beats-1, burst_mode);
             `WAIT_AXI_COND(s_axi_arready, "s_axi_arready")
             @(posedge axi_aclk);
             s_axi_arvalid <= 1'b0;

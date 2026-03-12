@@ -180,6 +180,24 @@ Clock constraint note:
 - In the consuming Vivado project, apply single-ended clock constraints to HyperBus `CK`
   on `o_hb_ck_p` and do not model `o_hb_ck_n` as a differential complement output.
 
+### OOC Synthesis Troubleshooting (`hyperbus_controller_0`)
+
+If block design OOC synthesis fails with:
+
+- `module 'xpm_fifo_async' not found`
+
+follow these Vivado Tcl steps:
+
+```tcl
+set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY XPM_FIFO} [current_project]
+update_ip_catalog
+generate_target all [get_files *.bd]
+reset_run design_1_hyperbus_controller_0_0_synth_1
+launch_runs design_1_hyperbus_controller_0_0_synth_1
+```
+
+This ensures the FIFO XPM library is available during the `hyperbus_controller_0` out-of-context synthesis run.
+
 ## Flow Diagrams
 
 Multi-beat AXI flow diagrams are available at:

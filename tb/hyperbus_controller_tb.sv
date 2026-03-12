@@ -453,6 +453,47 @@ module hyperbus_controller_tb;
             32'hCAFEBABE
         );
 
+        // AXI-full WRAP write/read checks:
+        // WRAP commands are expected to be converted into two linear HyperBus commands.
+        // 4-beat WRAP write starting at the last word in a 16-byte group.
+        axi_full_write_burst_mode(32'h0000_020C, 4, 2'b10, 32'hBEEF_1000, 4'hF);
+        axi_full_read_burst(32'h0000_0200, 1, rd_data);
+        check_eq32(rd_data[0], 32'hBEEF_1001, "AXI WRAP write mapped @0x0200");
+        // HyperBus model uses 16-bit word addressing, so model index = (AXI byte address >> 1).
+        // This WRAP write updates around 0x0100..0x0107, dump 8 entries before/after.
+        $display("[%0d][ TB] HyperRAM Mem dump around WRAP write @0x020C (AXI>>1 entries 0x%0h..0x%0h)",
+                 ns_time(), 25'h000F8, 25'h0010F);
+        for (k = 25'h000F8; k <= 25'h0010F; k++) begin
+            $display("[%0d][ TB]   u_hyperram.Mem[0x%0h] = 0x%04h",
+                     ns_time(), k[24:0], u_hyperram.Mem[k][15:0]);
+        end
+        axi_full_read_burst(32'h0000_0204, 1, rd_data);
+        check_eq32(rd_data[0], 32'hBEEF_1002, "AXI WRAP write mapped @0x0204");
+        axi_full_read_burst(32'h0000_0208, 1, rd_data);
+        check_eq32(rd_data[0], 32'hBEEF_1003, "AXI WRAP write mapped @0x0208");
+        axi_full_read_burst(32'h0000_020C, 1, rd_data);
+        check_eq32(rd_data[0], 32'hBEEF_1000, "AXI WRAP write mapped @0x020C");
+        $display("[%0d][ TB] TEST PASS: AXI-full 4-beat WRAP write split into linear HyperBus writes", ns_time());
+
+        // 4-beat WRAP read should return wrapped AXI order from the same 16-byte group.
+        axi_full_read_burst_mode(32'h0000_020C, 4, 2'b10, rd_data);
+        check_eq32(rd_data[0], 32'hBEEF_1000, "AXI WRAP read beat0 @0x020C");
+        check_eq32(rd_data[1], 32'hBEEF_1001, "AXI WRAP read beat1 @0x0200");
+        check_eq32(rd_data[2], 32'hBEEF_1002, "AXI WRAP read beat2 @0x0204");
+        check_eq32(rd_data[3], 32'hBEEF_1003, "AXI WRAP read beat3 @0x0208");
+        $display("[%0d][ TB] TEST PASS: AXI-full 4-beat WRAP read split into linear HyperBus reads", ns_time());
+
+        // 2-beat WRAP write/read over an 8-byte boundary.
+        axi_full_write_burst_mode(32'h0000_0224, 2, 2'b10, 32'hCAFE_2000, 4'hF);
+        axi_full_read_burst(32'h0000_0220, 1, rd_data);
+        check_eq32(rd_data[0], 32'hCAFE_2001, "AXI WRAP write mapped @0x0220");
+        axi_full_read_burst(32'h0000_0224, 1, rd_data);
+        check_eq32(rd_data[0], 32'hCAFE_2000, "AXI WRAP write mapped @0x0224");
+        axi_full_read_burst_mode(32'h0000_0224, 2, 2'b10, rd_data);
+        check_eq32(rd_data[0], 32'hCAFE_2000, "AXI WRAP read beat0 @0x0224");
+        check_eq32(rd_data[1], 32'hCAFE_2001, "AXI WRAP read beat1 @0x0220");
+        $display("[%0d][ TB] TEST PASS: AXI-full 2-beat WRAP write/read split into linear HyperBus commands", ns_time());
+
         // AXI-full multi-beat burst sweep (self-checking): 2..32 beats.
         for (beats = 2; beats <= 32; beats++) begin
             burst_base = 32'hA5A5_0000 + (beats << 8);
