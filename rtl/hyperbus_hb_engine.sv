@@ -216,11 +216,19 @@ module hyperbus_hb_engine #(
                         cur_wdata <= i_cmd_fifo_dout[31:0];
 
                         // Build CA (linear burst, memory/register selection)
-                        // HyperBus word address is byte_addr >> 1
+                        // AXI-full memory space uses HyperBus word addressing (byte_addr >> 1).
+                        // AXI-lite/register space keeps the existing unshifted mapping.
                         ca_shift[47]   <= ~i_cmd_fifo_dout[73]; // RW#: 1=read
                         ca_shift[46]   <= i_cmd_fifo_dout[72];  // AS
                         ca_shift[45]   <= 1'b1;                 // linear burst
-                        ca_shift[44:16] <= i_cmd_fifo_dout[71:43];
+                        if (i_cmd_fifo_dout[74]) begin
+                            // AXI-lite: keep unshifted register-space addressing.
+                            ca_shift[44:16] <= i_cmd_fifo_dout[71:43];
+                        end else begin
+                            // AXI-full: word-address upper bits from (byte_addr >> 1)[31:3].
+                            // i_cmd_fifo_dout[71:40] is byte address [31:0].
+                            ca_shift[44:16] <= {1'b0, i_cmd_fifo_dout[71:44]};
+                        end
                         ca_shift[15:3] <= 13'h0;
                         ca_shift[2:0]  <= i_cmd_fifo_dout[43:41];
 
@@ -273,6 +281,16 @@ module hyperbus_hb_engine #(
 
                 HB_CA_PRIME: begin
                     // Prime CA while CK is gated, then enable CK so first CA appears on first active edge.
+                    $display("[%0d][ HB] CA bytes=%02x %02x %02x %02x %02x %02x | RW=%s AS=%s BURST=LINEAR AXI_ADDR=0x%08x HB_WORD_ADDR=0x%08x SRC=%s BEATS=%0d",
+                             int'($rtoi(($realtime / 1ns) + 0.5)),
+                             ca_shift[47:40], ca_shift[39:32], ca_shift[31:24],
+                             ca_shift[23:16], ca_shift[15:8],  ca_shift[7:0],
+                             cur_is_write ? "WRITE" : "READ",
+                             cur_is_reg ? "REG" : "MEM",
+                             cur_addr,
+                             {ca_shift[44:16], ca_shift[2:0]},
+                             cur_src_axil ? "AXIL" : "AXIF",
+                             cur_axi_beats);
                     o_hb_cs_n_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'h00;

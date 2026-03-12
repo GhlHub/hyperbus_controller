@@ -63,8 +63,13 @@ module hyperbus_axi_full_frontend #(
 );
     logic [31:0] aw_addr_q;
     logic [7:0]  aw_len_q;
+    logic [1:0]  aw_burst_q;
     logic [7:0]  w_beats_rcvd;
     logic aw_can_accept;
+    logic [7:0] aw_split_beats1_q;
+    logic [7:0] aw_split_beats2_q;
+    logic [31:0] aw_wrap_base_q;
+    logic aw_cmd2_pending_q;
 
     logic rd_active;
     logic [7:0] rd_beats_left;
@@ -82,13 +87,24 @@ module hyperbus_axi_full_frontend #(
     logic bresp_q_full;
     logic [AXI_ID_WIDTH-1:0] aw_id_q;
     logic [AXI_ID_WIDTH-1:0] ar_id_q;
+    logic [31:0] rd_cmd2_addr_q;
+    logic [7:0]  rd_cmd2_beats_q;
+    logic        rd_cmd2_pending_q;
+
+    function automatic logic f_is_wrap_len_legal(input logic [7:0] len);
+        begin
+            f_is_wrap_len_legal = (len == 8'd1) || (len == 8'd3) ||
+                                  (len == 8'd7) || (len == 8'd15);
+        end
+    endfunction
 
     assign bresp_q_full = (bresp_q_count == 6'd32);
 
     assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
                            (!bresp_q_full) &&
                            (s_axi_awsize == 3'd2) &&
-                           (s_axi_awburst == 2'b01) &&
+                           ((s_axi_awburst == 2'b01) ||
+                            ((s_axi_awburst == 2'b10) && f_is_wrap_len_legal(s_axi_awlen))) &&
                            (s_axi_awlen <= 8'd31);
 
     // Drive write FIFO directly from AXI W-channel handshake to avoid
@@ -112,7 +128,12 @@ module hyperbus_axi_full_frontend #(
             o_aw_pending <= 1'b0;
             aw_addr_q <= '0;
             aw_len_q  <= '0;
+            aw_burst_q <= 2'b01;
             w_beats_rcvd <= '0;
+            aw_split_beats1_q <= 8'd0;
+            aw_split_beats2_q <= 8'd0;
+            aw_wrap_base_q <= 32'd0;
+            aw_cmd2_pending_q <= 1'b0;
             rd_active <= 1'b0;
             rd_beats_left <= '0;
             o_rd_fifo_rd_en <= 1'b0;
@@ -126,6 +147,9 @@ module hyperbus_axi_full_frontend #(
             bresp_q_count <= 6'd0;
             aw_id_q <= '0;
             ar_id_q <= '0;
+            rd_cmd2_addr_q <= 32'd0;
+            rd_cmd2_beats_q <= 8'd0;
+            rd_cmd2_pending_q <= 1'b0;
             rd_stage_wr_ptr <= 1'b0;
             rd_stage_rd_ptr <= 1'b0;
             rd_stage_count <= 2'd0;
@@ -135,6 +159,18 @@ module hyperbus_axi_full_frontend #(
             logic [1:0] bresp_push_data;
             logic rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
             logic [1:0] rd_stage_count_n;
+            logic [8:0] aw_total_beats;
+            logic [31:0] aw_wrap_bytes;
+            logic [31:0] aw_wrap_mask;
+            logic [31:0] aw_wrap_base;
+            logic [31:0] aw_bytes_to_boundary;
+            logic [7:0] aw_beats1_calc, aw_beats2_calc;
+            logic [8:0] ar_total_beats;
+            logic [31:0] ar_wrap_bytes;
+            logic [31:0] ar_wrap_mask;
+            logic [31:0] ar_wrap_base;
+            logic [31:0] ar_bytes_to_boundary;
+            logic [7:0] ar_beats1_calc, ar_beats2_calc;
 
             bresp_push = 1'b0;
             bresp_pop = 1'b0;
@@ -155,8 +191,27 @@ module hyperbus_axi_full_frontend #(
                 aw_addr_q <= s_axi_awaddr;
                 aw_id_q <= s_axi_awid;
                 aw_len_q <= s_axi_awlen;
+                aw_burst_q <= s_axi_awburst;
                 w_beats_rcvd <= 8'd0;
                 wr_proto_err <= 1'b0;
+                aw_cmd2_pending_q <= 1'b0;
+                aw_split_beats2_q <= 8'd0;
+                aw_total_beats = {1'b0, s_axi_awlen} + 9'd1;
+                if (s_axi_awburst == 2'b10) begin
+                    aw_wrap_bytes = {23'd0, aw_total_beats, 2'b00};
+                    aw_wrap_mask = ~(aw_wrap_bytes - 32'd1);
+                    aw_wrap_base = s_axi_awaddr & aw_wrap_mask;
+                    aw_bytes_to_boundary = (aw_wrap_base + aw_wrap_bytes - s_axi_awaddr);
+                    aw_beats1_calc = aw_bytes_to_boundary[9:2];
+                    aw_beats2_calc = aw_total_beats[7:0] - aw_beats1_calc;
+                    aw_split_beats1_q <= aw_beats1_calc;
+                    aw_split_beats2_q <= aw_beats2_calc;
+                    aw_wrap_base_q <= aw_wrap_base;
+                end else begin
+                    aw_split_beats1_q <= s_axi_awlen + 8'd1;
+                    aw_split_beats2_q <= 8'd0;
+                    aw_wrap_base_q <= 32'd0;
+                end
             end
 
             // Accept exactly AWLEN+1 beats; block extra cycles from duplicating writes.
@@ -171,24 +226,40 @@ module hyperbus_axi_full_frontend #(
                 w_beats_rcvd <= w_beats_rcvd + 8'd1;
                 // Push write command at final beat when cmd_fifo has space.
                 if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                    if ((aw_burst_q == 2'b10) && (aw_split_beats2_q != 8'd0)) begin
+                        // First linear segment of WRAP burst; bit31 marks non-final segment.
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, aw_split_beats1_q, 32'h8000_0000};
+                        aw_cmd2_pending_q <= 1'b1;
+                    end else begin
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                        bresp_push = 1'b1;
+                        bresp_push_data =
+                            (wr_proto_err ||
+                             (((w_beats_rcvd == aw_len_q) && !s_axi_wlast) ||
+                              ((w_beats_rcvd != aw_len_q) &&  s_axi_wlast))) ? 2'b10 : 2'b00;
+                        o_aw_pending <= 1'b0;
+                    end
                     o_cmd_fifo_wr_en_full <= 1'b1;
-                    bresp_push = 1'b1;
-                    bresp_push_data =
-                        (wr_proto_err ||
-                         (((w_beats_rcvd == aw_len_q) && !s_axi_wlast) ||
-                          ((w_beats_rcvd != aw_len_q) &&  s_axi_wlast))) ? 2'b10 : 2'b00;
-                    o_aw_pending <= 1'b0;
                 end
             end
             // If all W beats are already accepted but cmd_fifo was full at final beat,
             // issue the command as soon as space becomes available.
             if (o_aw_pending && (w_beats_rcvd > aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
-                o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
-                o_cmd_fifo_wr_en_full <= 1'b1;
-                bresp_push = 1'b1;
-                bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
-                o_aw_pending <= 1'b0;
+                if (aw_cmd2_pending_q) begin
+                    // Second/final linear segment.
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_wrap_base_q, aw_split_beats2_q, 32'h0};
+                    o_cmd_fifo_wr_en_full <= 1'b1;
+                    aw_cmd2_pending_q <= 1'b0;
+                    bresp_push = 1'b1;
+                    bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
+                    o_aw_pending <= 1'b0;
+                end else begin
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                    o_cmd_fifo_wr_en_full <= 1'b1;
+                    bresp_push = 1'b1;
+                    bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
+                    o_aw_pending <= 1'b0;
+                end
             end
 
             if (!s_axi_bvalid && !i_b_fifo_empty && !b_pop_pending) begin
@@ -232,12 +303,36 @@ module hyperbus_axi_full_frontend #(
             // if AWVALID and ARVALID arrive together, service write first.
             s_axi_arready <= (!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
                              (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
-                             (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31);
+                             ((s_axi_arburst == 2'b01) ||
+                              ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
+                             (s_axi_arlen <= 8'd31);
             if ((!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
                 (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
-                (s_axi_arburst == 2'b01) && (s_axi_arlen <= 8'd31) &&
+                ((s_axi_arburst == 2'b01) ||
+                 ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
+                (s_axi_arlen <= 8'd31) &&
                 s_axi_arvalid) begin
-                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
+                ar_total_beats = {1'b0, s_axi_arlen} + 9'd1;
+                if (s_axi_arburst == 2'b10) begin
+                    ar_wrap_bytes = {23'd0, ar_total_beats, 2'b00};
+                    ar_wrap_mask = ~(ar_wrap_bytes - 32'd1);
+                    ar_wrap_base = s_axi_araddr & ar_wrap_mask;
+                    ar_bytes_to_boundary = (ar_wrap_base + ar_wrap_bytes - s_axi_araddr);
+                    ar_beats1_calc = ar_bytes_to_boundary[9:2];
+                    ar_beats2_calc = ar_total_beats[7:0] - ar_beats1_calc;
+                    if (ar_beats2_calc != 8'd0) begin
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, ar_beats1_calc, 32'h8000_0000};
+                        rd_cmd2_addr_q <= ar_wrap_base;
+                        rd_cmd2_beats_q <= ar_beats2_calc;
+                        rd_cmd2_pending_q <= 1'b1;
+                    end else begin
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
+                        rd_cmd2_pending_q <= 1'b0;
+                    end
+                end else begin
+                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
+                    rd_cmd2_pending_q <= 1'b0;
+                end
                 o_cmd_fifo_wr_en_full <= 1'b1;
                 rd_active <= 1'b1;
                 ar_id_q <= s_axi_arid;
@@ -246,6 +341,11 @@ module hyperbus_axi_full_frontend #(
                 rd_stage_rd_ptr_n = 1'b0;
                 rd_stage_count_n = 2'd0;
                 s_axi_rvalid <= 1'b0;
+            end
+            if (rd_active && rd_cmd2_pending_q && !i_cmd_fifo_full) begin
+                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, rd_cmd2_addr_q, rd_cmd2_beats_q, 32'h0};
+                o_cmd_fifo_wr_en_full <= 1'b1;
+                rd_cmd2_pending_q <= 1'b0;
             end
 
             // Drive AXI R channel from local staging FIFO.
