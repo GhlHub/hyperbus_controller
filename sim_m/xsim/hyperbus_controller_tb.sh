@@ -33,6 +33,10 @@ export GCC_VER_XSIM=9.3.0
 # catch pipeline exit status
 set -Eeuo pipefail
 
+# script location helpers
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "$script_dir/../.." && pwd)"
+
 # resolve compiled library path in xsim.ini
 export RDI_DATADIR="/tools/Xilinx/${SIM_VER_XSIM}/data"
 
@@ -119,6 +123,17 @@ setup()
   # add any setup/initialization commands here:-
 
   # <user specific commands>
+  # Prefer precompiled XSIM libraries if available and no explicit
+  # -lib_map_path is provided. Priority:
+  #   1) repo-local simlibs/ (checked into workspace)
+  #   2) ~/.xilinx_simlibs (user cache)
+  if [[ ($lib_map_path == "") && (-d "$repo_root/simlibs") ]]; then
+    lib_map_path="$repo_root/simlibs"
+    echo -e "INFO: Using precompiled simulation libraries at: $lib_map_path\n"
+  elif [[ ($lib_map_path == "") && (-d "$HOME/.xilinx_simlibs") ]]; then
+    lib_map_path="$HOME/.xilinx_simlibs"
+    echo -e "INFO: Using precompiled simulation libraries at: $lib_map_path\n"
+  fi
 
 }
 
@@ -147,20 +162,61 @@ init_lib()
 copy_setup_file()
 {
   file="xsim.ini"
+  local default_map_path
 
-  if [[ ($lib_map_path == "") ]]; then
-    lib_map_path="/tools/Xilinx/${SIM_VER_XSIM}/data/xsim"
-  fi
+  default_map_path="/tools/Xilinx/${SIM_VER_XSIM}/data/xsim"
 
   if [[ ($lib_map_path != "") ]]; then
     src_file="$lib_map_path/$file"
     if [[ -e $src_file ]]; then
+      # Precompiled library directory already provides xsim.ini.
       cp $src_file .
+    elif [[ -e "$default_map_path/$file" ]]; then
+      # Use Vivado template xsim.ini, then remap known libs to precompiled path.
+      cp "$default_map_path/$file" .
+      apply_precompiled_mappings "$lib_map_path"
+    fi
+  elif [[ -e "$default_map_path/$file" ]]; then
+    cp "$default_map_path/$file" .
+  fi
+
+  # map local design libraries to xsim.ini
+  map_local_libs
+}
+
+# remap xsim.ini libraries to precompiled library directories when available
+apply_precompiled_mappings()
+{
+  local precomp_dir="$1"
+  local file="xsim.ini"
+  local file_tmp="xsim.ini.precomp.tmp"
+
+  if [[ ! -d "$precomp_dir" ]] || [[ ! -e "$file" ]]; then
+    return
+  fi
+
+  rm -f "$file_tmp"
+  while read -r line
+  do
+    IN=$line
+
+    # Keep comments/empty lines unchanged.
+    if [[ -z "$IN" ]] || [[ "$IN" == \#* ]]; then
+      echo "$IN" >> "$file_tmp"
+      continue
     fi
 
-    # map local design libraries to xsim.ini
-    map_local_libs
-  fi
+    # split mapping entry with '=' delimiter to fetch library name and mapping
+    read lib_name mapping <<<$(IFS="="; echo $IN)
+
+    if [[ -d "$precomp_dir/$lib_name" ]]; then
+      echo "$lib_name=$precomp_dir/$lib_name" >> "$file_tmp"
+    else
+      echo "$IN" >> "$file_tmp"
+    fi
+  done < "$file"
+
+  mv "$file_tmp" "$file"
 }
 
 # map local design libraries
