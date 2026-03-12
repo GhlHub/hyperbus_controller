@@ -114,12 +114,11 @@ module hyperbus_controller #(
 
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
-    logic [31:0] last_hb_read_word32;
     logic [5:0] axif_rwds_cntr;
     logic [5:0] axil_rwds_cntr;
     logic odly_en_vtc, odly_ce, odly_inc, odly_load;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
-    logic idelayctrl_rst_req, odelay_rst_req;
+    logic idelayctrl_rst_req, odelay_rst_req, rwds_idelay_rst_req;
     logic hb_clk_ce_force;
     logic idelayctrl_rdy_axi;
     logic hb_timeout_pulse_hb;
@@ -248,7 +247,7 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_dout     (     axil_rsp_fifo_dout),
         .i_axil_rsp_fifo_empty    (    axil_rsp_fifo_empty),
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
-        .i_last_hb_read_word32    (    last_hb_read_word32),
+        .i_dq                     (                 dq),
         .i_axif_rwds_cntr         (         axif_rwds_cntr),
         .i_axil_rwds_cntr         (         axil_rwds_cntr),
         .i_odly_cntvalueout       (       odly_cntvalueout),
@@ -263,6 +262,7 @@ module hyperbus_controller #(
         .o_odly_cntvaluein        (        odly_cntvaluein),
         .o_idelayctrl_rst_req     (     idelayctrl_rst_req),
         .o_odelay_rst_req         (         odelay_rst_req),
+        .o_rwds_idelay_rst_req    (    rwds_idelay_rst_req),
         .o_hb_clk_ce_force        (        hb_clk_ce_force),
         .s_axil_awaddr            (           s_axil_awaddr),
         .s_axil_awvalid           (          s_axil_awvalid),
@@ -290,6 +290,7 @@ module hyperbus_controller #(
     logic hb_cs_n_q;
     logic [7:0] dq_t;
     logic [7:0] dq_o_d1, dq_o_d2;
+    logic [15:0] dq;
     logic rwds_t, rwds_o_d1, rwds_o_d2;
     logic [7:0] dq_q1, dq_q2;
     logic rwds_q1, rwds_q2;
@@ -307,6 +308,7 @@ module hyperbus_controller #(
         .i_idelayctrl_rst       (       i_idelayctrl_rst),
         .i_idelayctrl_rst_req      (i_idelayctrl_rst | idelayctrl_rst_req),
         .i_odelay_rst_req       (         odelay_rst_req),
+        .i_rwds_idelay_rst_req     (    rwds_idelay_rst_req),
         .i_hb_clk_200_samp_90      (   i_hb_clk_200_samp_90),
         .i_iddre1_rst           (          i_iddre1_rst),
         .i_hb_rstn              (             i_hb_rstn),
@@ -317,6 +319,7 @@ module hyperbus_controller #(
         .i_dq_t                 (                 dq_t),
         .i_dq_o_d1              (              dq_o_d1),
         .i_dq_o_d2              (              dq_o_d2),
+        .o_dq                   (                  dq),
         .o_dq_q1                (                dq_q1),
         .o_dq_q2                (                dq_q2),
         .i_rwds_t               (               rwds_t),
@@ -359,7 +362,7 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_full   (     axil_rsp_fifo_full),
         .o_axil_rsp_fifo_din    (      axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en  (    axil_rsp_fifo_wr_en),
-        .o_last_read_word32     (    last_hb_read_word32),
+        .o_last_read_word32     (                   ),
         .o_axif_rwds_cntr       (         axif_rwds_cntr),
         .o_axil_rwds_cntr       (         axil_rwds_cntr),
         .i_dq_q1               (                dq_q1),

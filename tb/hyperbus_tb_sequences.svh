@@ -161,39 +161,40 @@
         begin
             // Delay-control reset path checks:
             // 0x0200[0] -> IDELAYCTRL reset request
-            // 0x0200[1] -> ODELAYE3 reset request
+            // 0x0200[1] -> CK_P ODELAYE3 reset request
+            // 0x0200[2] -> RWDS IDELAYE3 reset request
             // 0x0204[0] -> IDELAYCTRL RDY status
             push_base = axil_cmd_push_count;
             axil_read(16'h0200, rd32);
-            check_eq32(rd32, 32'h0000_0003, "DELAY_RST_CTRL default asserted @0x0200");
+            check_eq32(rd32, 32'h0000_0007, "DELAY_RST_CTRL default asserted @0x0200");
             if ((axil_cmd_push_count - push_base) != 0) begin
                 $fatal(1, "Delay local read @0x0200 unexpectedly pushed cmd fifo (delta=%0d)",
                        (axil_cmd_push_count - push_base));
             end
 
-            // Assert IDELAYCTRL+ODELAY resets together first (bit[1:0]=2'b11).
+            // Assert IDELAYCTRL + CK_P ODELAY + RWDS IDELAY resets together first.
             push_base = axil_cmd_push_count;
-            axil_write(16'h0200, 32'h0000_0003);
+            axil_write(16'h0200, 32'h0000_0007);
             if ((axil_cmd_push_count - push_base) != 0) begin
                 $fatal(1, "Delay local write @0x0200 unexpectedly pushed cmd fifo (delta=%0d)",
                        (axil_cmd_push_count - push_base));
             end
             axil_read(16'h0200, rd32);
-            check_eq32(rd32, 32'h0000_0003, "DELAY_RST_CTRL IDELAYCTRL+ODELAY reset asserted @0x0200");
+            check_eq32(rd32, 32'h0000_0007, "DELAY_RST_CTRL all reset controls asserted @0x0200");
 
             // Keep IDELAYCTRL reset asserted for >= 80ns before deassert.
             // AXI clock is 50MHz, so 4 cycles = 80ns.
             repeat (4) @(posedge axi_aclk);
 
-            // Deassert IDELAYCTRL reset, keep ODELAY reset asserted.
+            // Deassert IDELAYCTRL reset, keep CK_P ODELAY and RWDS IDELAY resets asserted.
             push_base = axil_cmd_push_count;
-            axil_write(16'h0200, 32'h0000_0002);
+            axil_write(16'h0200, 32'h0000_0006);
             if ((axil_cmd_push_count - push_base) != 0) begin
                 $fatal(1, "Delay local write @0x0200 unexpectedly pushed cmd fifo (delta=%0d)",
                        (axil_cmd_push_count - push_base));
             end
             axil_read(16'h0200, rd32);
-            check_eq32(rd32, 32'h0000_0002, "DELAY_RST_CTRL IDELAYCTRL deasserted, ODELAY held reset @0x0200");
+            check_eq32(rd32, 32'h0000_0006, "DELAY_RST_CTRL IDELAYCTRL deasserted, CK_P/RWDS delays held reset @0x0200");
 
             // Poll IDELAYCTRL RDY status @0x0204 until high.
             rd32 = 32'h0;
@@ -212,7 +213,7 @@
             end
             $display("[%0d][ TB] TEST PASS: IDELAYCTRL RDY poll via AXI-Lite @0x0204", ns_time());
 
-            // After IDELAYCTRL RDY is high, deassert ODELAY reset.
+            // After IDELAYCTRL RDY is high, deassert CK_P ODELAY and RWDS IDELAY resets.
             push_base = axil_cmd_push_count;
             axil_write(16'h0200, 32'h0000_0000);
             if ((axil_cmd_push_count - push_base) != 0) begin
@@ -220,7 +221,7 @@
                        (axil_cmd_push_count - push_base));
             end
             axil_read(16'h0200, rd32);
-            check_eq32(rd32, 32'h0000_0000, "DELAY_RST_CTRL ODELAY reset deasserted after IDELAYCTRL RDY @0x0200");
+            check_eq32(rd32, 32'h0000_0000, "DELAY_RST_CTRL CK_P/RWDS delay resets deasserted after IDELAYCTRL RDY @0x0200");
 
             $display("[%0d][ TB] TEST PASS: AXI-Lite delay reset control @0x0200/0x0204", ns_time());
         end
@@ -249,7 +250,7 @@
         int poll_i;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0001, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0002, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");

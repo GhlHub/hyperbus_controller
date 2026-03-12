@@ -91,8 +91,8 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
     - `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
     - `0x0804` -> HyperBus `0x0802` (CR1)
   - Local controller registers:
-    - `0x0020` LAST_HB_READ32 (read-only)
-    - `0x0024` VERSION (read-only, `0x01000001`)
+    - `0x0024` VERSION (read-only, `0x01000002`)
+    - `0x0028` DQ (read-only, sampled DQ debug view)
     - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
     - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
     - `0x0088` AXIL_RWDS_CNTR (read-only, 6-bit counter)
@@ -100,7 +100,13 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
     - `0x0100` CK_P_ODELAY_CTRL
     - `0x0104` CK_P_ODELAY_TIME
     - `0x0108` CK_P_ODELAY_STATUS
-    - `0x0200` DELAY_RST_CTRL (bit0 IDELAYCTRL reset request, bit1 ODELAY reset request)
+    - `0x01C0` RWDS_IDELAY_CTRL
+    - `0x01C4` RWDS_IDELAY_TIME
+    - `0x01C8` RWDS_IDELAY_STATUS
+    - `0x0200` DELAY_RST_CTRL
+      - bit0 IDELAYCTRL reset request
+      - bit1 CK_P ODELAY reset request
+      - bit2 RWDS IDELAY reset request
     - `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
 - AXI-Lite AR accept condition (`ARREADY`) requires:
   - `axil_state == AXIL_IDLE`
@@ -232,9 +238,8 @@ Current public APIs:
 - `hb_odly_reset_pulse()`
 - `hb_dly_init()` (IDELAYCTRL reset/wait + ODELAY reset pulse)
 - `hb_odly_sweep()` (prints one-line training status per step:
-  `CNTVALUEOUT`, `ID0`, `LAST_HB_READ32`, `ERR_STATUS`, AXI RWDS counters)
+  `CNTVALUEOUT`, `ID0`, `ERR_STATUS`, AXI RWDS counters)
 - `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
-- `hb_last_hb_read32_get()` (reads AXI-Lite `LAST_HB_READ32` register @ `0x0020`)
 
 ## Post-Impl Simulation Flow
 

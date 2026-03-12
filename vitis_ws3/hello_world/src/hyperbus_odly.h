@@ -10,7 +10,6 @@ extern "C" {
 /*
  * AXI-Lite local register offsets (decoded/handled by AXI-Lite slave).
  */
-#define HB_LAST_HB_READ32_OFFSET        0x0020u
 #define HB_VERSION_OFFSET               0x0024u
 #define HB_ERR_STATUS_OFFSET            0x0080u
 #define HB_AXIF_RWDS_CNTR_OFFSET        0x0084u
@@ -35,7 +34,7 @@ extern "C" {
 /*
  * Constant values and common masks.
  */
-#define HB_VERSION_VALUE                0x01000001u
+#define HB_VERSION_VALUE                0x01000002u
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
@@ -68,7 +67,8 @@ extern "C" {
  * bit1 ODELAY reset request
  */
 #define HB_DELAY_RST_IDELAYCTRL (1u << 0)
-#define HB_DELAY_RST_ODELAY     (1u << 1)
+#define HB_DELAY_RST_CKP_ODELAY (1u << 1)
+#define HB_DELAY_RST_RWDS_IDELAY (1u << 2)
 
 /*
  * HB_IDELAYCTRL_STATUS bit definitions.
@@ -161,14 +161,6 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
  *   0  = success
  */
 int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out);
-
-/*
- * Read LAST_HB_READ32 register (AXI-Lite offset 0x0020).
- * Return codes:
- *   0  = success
- *  -1  = invalid argument (last_read_out is NULL)
- */
-int hb_last_hb_read32_get(uintptr_t base_addr, uint32_t *last_read_out);
 
 /*
  * Run a full 32-bit memory test across HyperRAM range [0x80000000, 0x807F0000).

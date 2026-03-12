@@ -400,14 +400,6 @@ module hyperbus_controller_tb;
         end
         $display("[%0d][ TB] TEST PASS: single-beat full write/read 0x11223344", ns_time());
 
-        // Verify AXI-Lite local register @0x0020 tracks the last 32-bit HyperBus read word.
-        axil_read(16'h0020, axil_rd32);
-        if (axil_rd32 !== rd_data[0]) begin
-            $fatal(1, "AXI-Lite last-read register mismatch @0x0020: got 0x%08x exp 0x%08x",
-                   axil_rd32, rd_data[0]);
-        end
-        $display("[%0d][ TB] TEST PASS: AXI-Lite last-read register @0x0020", ns_time());
-        
         axil_read(16'h0084, axif_rwds_before);
         axil_read(16'h0088, axil_rwds_before);
         axi_full_write_burst(32'h0000_0180, 1, 32'hAA55_FF00, 4'b0101); // update byte0 + byte2 only (expect 0x11553300)

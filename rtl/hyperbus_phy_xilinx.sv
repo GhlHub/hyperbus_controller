@@ -9,6 +9,7 @@ module hyperbus_phy_xilinx (
     input  wire       i_idelayctrl_rst,
     input  wire       i_idelayctrl_rst_req,
     input  wire       i_odelay_rst_req,
+    input  wire       i_rwds_idelay_rst_req,
     input  wire       i_hb_clk_200_samp_90,
     input  wire       i_iddre1_rst,
     input  wire       i_hb_rstn,
@@ -31,8 +32,15 @@ module hyperbus_phy_xilinx (
     input  wire       i_odly_inc,
     input  wire       i_odly_load,
     input  wire [8:0] i_odly_cntvaluein,
+    input  wire       i_rwds_idly_en_vtc,
+    input  wire       i_rwds_idly_ce,
+    input  wire       i_rwds_idly_inc,
+    input  wire       i_rwds_idly_load,
+    input  wire [8:0] i_rwds_idly_cntvaluein,
+    output wire [8:0] o_rwds_idly_cntvalueout,
     output wire [8:0] o_odly_cntvalueout,
-    output wire       o_idelayctrl_rdy_axi
+    output wire       o_idelayctrl_rdy_axi,
+    output logic [15:0] o_dq
 );
 
     logic hb_ck_fwd;
@@ -42,6 +50,7 @@ module hyperbus_phy_xilinx (
     logic [7:0] dq_q1_raw;
     logic [7:0] dq_q2_raw;
     logic rwds_i;
+    logic rwds_i_delayed;
     logic rwds_out_ddr;
     logic idelayctrl_rdy;
     logic idelayctrl_rst_ref_meta;
@@ -189,6 +198,10 @@ module hyperbus_phy_xilinx (
             o_dq_q2 <= dq_q2_raw;
         end
     end
+    
+    always_comb begin
+        o_dq = {o_dq_q2, o_dq_q1};
+    end
 
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
@@ -210,6 +223,42 @@ module hyperbus_phy_xilinx (
         .IO (   io_hb_rwds)
     );
 
+    IDELAYE3 #(
+        .CASCADE("NONE"),
+        .DELAY_FORMAT("TIME"),
+        .DELAY_SRC("IDATAIN"),
+`ifndef SYNTHESIS
+        .DELAY_TYPE("VAR_LOAD"),
+`else
+        .DELAY_TYPE("VARIABLE"),
+`endif
+        .DELAY_VALUE(0),
+        .IS_CLK_INVERTED(1'b0),
+        .IS_RST_INVERTED(1'b0),
+        .REFCLK_FREQUENCY(300.0),
+        .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+        .UPDATE_MODE("ASYNC")
+    ) u_idelay_rwds (
+        .CASC_OUT    (              ),
+        .CNTVALUEOUT (o_rwds_idly_cntvalueout),
+        .DATAOUT     (rwds_i_delayed),
+        .CASC_IN     (          1'b0),
+        .CASC_RETURN (          1'b0),
+        .CE          ( i_rwds_idly_ce),
+        .CLK         (     i_axi_aclk),
+        .CNTVALUEIN  (i_rwds_idly_cntvaluein),
+        .DATAIN      (          1'b0),
+        .EN_VTC      (i_rwds_idly_en_vtc),
+        .IDATAIN     (        rwds_i),
+        .INC         (i_rwds_idly_inc),
+`ifndef SYNTHESIS
+        .LOAD        (i_rwds_idly_load),
+`else
+        .LOAD        (          1'b0),
+`endif
+        .RST         (i_rwds_idelay_rst_req)
+    );
+
     IDDRE1 #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
         .IS_C_INVERTED(1'b0),
@@ -219,7 +268,7 @@ module hyperbus_phy_xilinx (
         .Q2 (         o_rwds_q2),
         .C  (i_hb_clk_200_samp_90),
         .CB (i_hb_clk_200_samp_90),
-        .D  (            rwds_i),
+        .D  (    rwds_i_delayed),
         .R  (        i_iddre1_rst)
     );
 
