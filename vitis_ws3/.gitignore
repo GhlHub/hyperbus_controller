@@ -19,3 +19,16 @@
 
 _ide/logs
 _ide/.wsdata
+
+# Workspace/generated metadata under vitis_ws3
+/.rigel_lopper/
+/_ide/
+/hello_world/_ide/
+/hello_world/compile_commands.json
+/hello_world/src/.clangd
+/hello_world/src/compile_commands.json
+/hello_world/vitis-comp.json
+/platform/vitis-comp.json
+/platform/hw/sdt/
+/platform/microblaze_riscv_0/
+/platform/.gitignore
