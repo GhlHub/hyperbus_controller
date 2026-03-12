@@ -193,6 +193,7 @@ int hb_odly_sweep(uintptr_t base_addr)
 {
     /* Return codes: 0=normal sweep completion, <0=propagated helper error. */
     int rc;
+    uint32_t match_count = 0U;
     uint16_t cntvalue;
     uint32_t id0;
     uint32_t err_status;
@@ -222,6 +223,12 @@ int hb_odly_sweep(uintptr_t base_addr)
                    (unsigned)(cntvalue & HB_ODLY_MASK_9BIT), (unsigned)id0, (unsigned)last_read32,
                    (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr,
                    (id0 == 0x0000810Cu) ? " MATCH" : "");
+        if (id0 == 0x0000810Cu) {
+            match_count++;
+            if (match_count >= 4U) {
+                return 0;
+            }
+        }
 
         if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
             hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
