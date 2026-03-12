@@ -191,7 +191,7 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls)
     return hb_odly_reset_pulse(base_addr);
 }
 
-int hb_odly_sweep(uintptr_t base_addr)
+int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches)
 {
     /* Return codes: 0=normal sweep completion, <0=propagated helper error. */
     int rc;
@@ -211,7 +211,7 @@ int hb_odly_sweep(uintptr_t base_addr)
             return rc;
         }
 
-        if (cntvalue > 500U) {
+        if ((required_matches == 0U) && (cntvalue > 500U)) {
             return 0;
         }
 
@@ -227,7 +227,7 @@ int hb_odly_sweep(uintptr_t base_addr)
                    (id0 == 0x0000810Cu) ? " MATCH" : "");
         if (id0 == 0x0000810Cu) {
             match_count++;
-            if (match_count >= 4U) {
+            if ((required_matches != 0U) && (match_count >= required_matches)) {
                 return 0;
             }
         }
@@ -270,5 +270,42 @@ int hb_last_hb_read32_get(uintptr_t base_addr, uint32_t *last_read_out)
     }
 
     *last_read_out = hb_reg_read(base_addr, HB_LAST_HB_READ32_OFFSET);
+    return 0;
+}
+
+int hb_memtest_hyperram_range(void)
+{
+    const uintptr_t start = (uintptr_t)HB_MEMTEST_START_ADDR;
+    const uintptr_t end = (uintptr_t)HB_MEMTEST_END_ADDR;
+    const uint32_t words = (uint32_t)((end - start) >> 2);
+    volatile uint32_t *p = (volatile uint32_t *)start;
+    uint32_t i;
+    uint32_t mismatches = 0U;
+
+    xil_printf("HB_MEMTEST start=0x%08x end=0x%08x words=%u\r\n",
+               (unsigned)start, (unsigned)end, (unsigned)words);
+
+    for (i = 0U; i < words; ++i) {
+        p[i] = (0xA5A50000u ^ (i * 0x1F1Fu) ^ (uint32_t)(start + ((uintptr_t)i << 2)));
+    }
+
+    for (i = 0U; i < words; ++i) {
+        uint32_t exp = (0xA5A50000u ^ (i * 0x1F1Fu) ^ (uint32_t)(start + ((uintptr_t)i << 2)));
+        uint32_t got = p[i];
+        if (got != exp) {
+            if (mismatches < 8U) {
+                xil_printf("HB_MEMTEST mismatch addr=0x%08x exp=0x%08x got=0x%08x\r\n",
+                           (unsigned)(start + ((uintptr_t)i << 2)), (unsigned)exp, (unsigned)got);
+            }
+            mismatches++;
+        }
+    }
+
+    if (mismatches != 0U) {
+        xil_printf("HB_MEMTEST FAIL mismatches=%u\r\n", (unsigned)mismatches);
+        return -1;
+    }
+
+    xil_printf("HB_MEMTEST PASS\r\n");
     return 0;
 }

@@ -76,6 +76,12 @@ extern "C" {
 #define HB_IDELAYCTRL_STATUS_RDY (1u << 0)
 
 /*
+ * HyperRAM memory-test default range [start, end).
+ */
+#define HB_MEMTEST_START_ADDR          0x80000000u
+#define HB_MEMTEST_END_ADDR            0x807F0000u
+
+/*
  * Read current ODELAY CNTVALUEOUT[8:0] from STATUS register.
  * Return codes:
  *   0  = success
@@ -131,16 +137,19 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
 /*
  * Sweep ODELAY by repeatedly incrementing one step at a time.
  * Loop behavior:
- * 1) Read CNTVALUEOUT and print it in hex. If CNTVALUEOUT > 500, return.
+ * 1) Read CNTVALUEOUT and print it in hex.
  * 2) Read ID0, ERR_STATUS, AXIF_RWDS_CNTR, AXIL_RWDS_CNTR and print on one line.
  *    If ERR_STATUS.bit0 is set, clear it by writing 1 to bit0.
  * 3) Increment delay by one step.
  * 4) Repeat from step 1.
+ * Stop condition:
+ * - if required_matches == 0: stop when CNTVALUEOUT > 500
+ * - if required_matches > 0: stop after required_matches ID0 "MATCH" events
  * Return codes:
  *   0   = normal completion (sweep stop condition reached)
  *  < 0  = propagated error from hb_odly_get() or hb_odly_inc()
  */
-int hb_odly_sweep(uintptr_t base_addr);
+int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
 
 /*
  * Read ERR_STATUS, print the value, and clear timeout status when set.
@@ -160,6 +169,17 @@ int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out
  *  -1  = invalid argument (last_read_out is NULL)
  */
 int hb_last_hb_read32_get(uintptr_t base_addr, uint32_t *last_read_out);
+
+/*
+ * Run a full 32-bit memory test across HyperRAM range [0x80000000, 0x807F0000).
+ * Test flow:
+ * 1) Write deterministic data pattern to each 32-bit word in range.
+ * 2) Read back each word and compare against expected pattern.
+ * Return codes:
+ *   0  = success
+ *  -1  = at least one readback mismatch
+ */
+int hb_memtest_hyperram_range(void);
 
 #ifdef __cplusplus
 }

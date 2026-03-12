@@ -30,8 +30,9 @@ int main()
     print("Hello World\n\r");
 
     hb_idelayctrl_reset_wait_ready(DLY_ADDR, 0x8000);
-    hb_odly_sweep(DLY_ADDR);
-    
+    hb_odly_sweep(DLY_ADDR, 10U);
+    hb_memtest_hyperram_range();
+
     print("Successfully ran Hello World application");
     cleanup_platform();
     return 0;
