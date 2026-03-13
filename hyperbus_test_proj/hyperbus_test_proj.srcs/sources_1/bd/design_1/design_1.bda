@@ -306,7 +306,7 @@
             "V9": {
                 "VT": "AC",
                 "BA": "0x80000000",
-                "HA": "0xFFFFFFFF",
+                "HA": "0x807FFFFF",
                 "BP": "C_BASEADDR",
                 "HP": "C_HIGHADDR",
                 "MA": "Data",
@@ -324,7 +324,7 @@
             "V10": {
                 "VT": "AC",
                 "BA": "0x80000000",
-                "HA": "0xFFFFFFFF",
+                "HA": "0x807FFFFF",
                 "BP": "C_BASEADDR",
                 "HP": "C_HIGHADDR",
                 "MA": "Instruction",

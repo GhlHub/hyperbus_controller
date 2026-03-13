@@ -232,7 +232,7 @@ module hyperbus_phy_xilinx (
 `else
         .DELAY_TYPE("VARIABLE"),
 `endif
-        .DELAY_VALUE(250),
+        .DELAY_VALUE(1000),
         .IS_CLK_INVERTED(1'b0),
         .IS_RST_INVERTED(1'b0),
         .REFCLK_FREQUENCY(300.0),

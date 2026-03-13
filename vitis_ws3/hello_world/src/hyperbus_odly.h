@@ -18,6 +18,9 @@ extern "C" {
 #define HB_ODLY_CTRL_OFFSET             0x0100u
 #define HB_ODLY_TIME_OFFSET             0x0104u
 #define HB_ODLY_STATUS_OFFSET           0x0108u
+#define HB_RWDS_IDLY_CTRL_OFFSET        0x01C0u
+#define HB_RWDS_IDLY_TIME_OFFSET        0x01C4u
+#define HB_RWDS_IDLY_STATUS_OFFSET      0x01C8u
 #define HB_DELAY_RST_CTRL_OFFSET        0x0200u
 #define HB_IDELAYCTRL_STATUS_OFFSET     0x0204u
 
@@ -50,6 +53,18 @@ extern "C" {
 #define HB_ODLY_CTRL_INC       (1u << 1)
 #define HB_ODLY_CTRL_CE        (1u << 2)
 #define HB_ODLY_CTRL_LOAD      (1u << 3)
+
+/*
+ * HB_RWDS_IDLY_CTRL bit definitions.
+ * bit0 EN_VTC (sticky)
+ * bit1 INC    (sticky)
+ * bit2 CE     (pulse)
+ * bit3 LOAD   (pulse)
+ */
+#define HB_RWDS_IDLY_CTRL_EN_VTC (1u << 0)
+#define HB_RWDS_IDLY_CTRL_INC    (1u << 1)
+#define HB_RWDS_IDLY_CTRL_CE     (1u << 2)
+#define HB_RWDS_IDLY_CTRL_LOAD   (1u << 3)
 
 /*
  * HB_HB_CLK_CE_FORCE bit definitions.
@@ -161,6 +176,26 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
  *   0  = success
  */
 int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out);
+
+/*
+ * Increment RWDS IDELAY CNTVALUEOUT until it reaches target_cntvalue.
+ * Uses RWDS_IDELAY_CTRL INC+CE stepping and polls RWDS_IDELAY_STATUS.
+ * Return codes:
+ *   0  = success (target reached)
+ *  -1  = invalid argument (target_cntvalue > 9-bit range)
+ *  -2  = current status already above target (function only increments)
+ *  -3  = target not reached within guard iteration window
+ */
+int hb_rwds_idly_inc_until(uintptr_t base_addr, uint16_t target_cntvalue);
+
+/*
+ * Decrement RWDS IDELAY CNTVALUEOUT until it becomes less than 16.
+ * Uses RWDS_IDELAY_CTRL INC=0 + CE stepping and polls RWDS_IDELAY_STATUS.
+ * Return codes:
+ *   0  = success (status is now < 16)
+ *  -3  = target not reached within guard iteration window
+ */
+int hb_rwds_idly_dec_below_16(uintptr_t base_addr);
 
 /*
  * Run a full 32-bit memory test across HyperRAM range [0x80000000, 0x807F0000).

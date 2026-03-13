@@ -32,6 +32,12 @@ module hyperbus_phy_xilinx (
     input  wire       i_odly_inc,
     input  wire       i_odly_load,
     input  wire [8:0] i_odly_cntvaluein,
+    input  wire       i_rwds_idly_en_vtc,
+    input  wire       i_rwds_idly_ce,
+    input  wire       i_rwds_idly_inc,
+    input  wire       i_rwds_idly_load,
+    input  wire [8:0] i_rwds_idly_cntvaluein,
+    output wire [8:0] o_rwds_idly_cntvalueout,
     output wire [8:0] o_odly_cntvalueout,
     output wire       o_idelayctrl_rdy_axi,
     output logic [15:0] o_dq
@@ -192,7 +198,7 @@ module hyperbus_phy_xilinx (
             o_dq_q2 <= dq_q2_raw;
         end
     end
-
+    
     always_comb begin
         o_dq = {o_dq_q2, o_dq_q1};
     end
@@ -226,7 +232,7 @@ module hyperbus_phy_xilinx (
 `else
         .DELAY_TYPE("VARIABLE"),
 `endif
-        .DELAY_VALUE(0),
+        .DELAY_VALUE(1000),
         .IS_CLK_INVERTED(1'b0),
         .IS_RST_INVERTED(1'b0),
         .REFCLK_FREQUENCY(300.0),
@@ -234,18 +240,22 @@ module hyperbus_phy_xilinx (
         .UPDATE_MODE("ASYNC")
     ) u_idelay_rwds (
         .CASC_OUT    (              ),
-        .CNTVALUEOUT (              ),
+        .CNTVALUEOUT (o_rwds_idly_cntvalueout),
         .DATAOUT     (rwds_i_delayed),
         .CASC_IN     (          1'b0),
         .CASC_RETURN (          1'b0),
-        .CE          (          1'b0),
+        .CE          ( i_rwds_idly_ce),
         .CLK         (     i_axi_aclk),
-        .CNTVALUEIN  (          9'd0),
+        .CNTVALUEIN  (i_rwds_idly_cntvaluein),
         .DATAIN      (          1'b0),
-        .EN_VTC      (          1'b1),
+        .EN_VTC      (i_rwds_idly_en_vtc),
         .IDATAIN     (        rwds_i),
-        .INC         (          1'b0),
+        .INC         (i_rwds_idly_inc),
+`ifndef SYNTHESIS
+        .LOAD        (i_rwds_idly_load),
+`else
         .LOAD        (          1'b0),
+`endif
         .RST         (i_rwds_idelay_rst_req)
     );
 

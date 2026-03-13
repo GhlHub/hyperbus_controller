@@ -224,7 +224,11 @@ module hyperbus_axi_lite_frontend #(
 `endif
             odly_inc_q        <= 1'b0;
             odly_time_value_q <= 9'd0;
+`ifndef SYNTHESIS
             rwds_idly_en_vtc_q <= 1'b0;
+`else
+            rwds_idly_en_vtc_q <= 1'b1;
+`endif
             rwds_idly_inc_q <= 1'b0;
             rwds_idly_time_value_q <= 9'd0;
             // Default asserted: keep IDELAYCTRL and ODELAY in reset until

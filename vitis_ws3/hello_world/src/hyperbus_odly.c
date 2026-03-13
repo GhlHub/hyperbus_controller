@@ -122,6 +122,8 @@ int hb_odly_dec(uintptr_t base_addr, int reenable_en_vtc)
 int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
 {
     /* Return codes: 0=success, -1=invalid timeout_polls, -2=RDY timeout. */
+    uint32_t odly_ctrl;
+    uint32_t rwds_idly_ctrl;
     uint32_t ctrl;
     uint32_t polls;
 
@@ -130,6 +132,13 @@ int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
     }
     // Make sure gated clock is running, or IDELAYCTRL reset won't work
     hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
+
+    // Force all EN_VTC controls high before delay-reset sequencing.
+    odly_ctrl = hb_reg_read(base_addr, HB_ODLY_CTRL_OFFSET);
+    hb_reg_write(base_addr, HB_ODLY_CTRL_OFFSET, odly_ctrl | HB_ODLY_CTRL_EN_VTC);
+    rwds_idly_ctrl = hb_reg_read(base_addr, HB_RWDS_IDLY_CTRL_OFFSET);
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, rwds_idly_ctrl | HB_RWDS_IDLY_CTRL_EN_VTC);
+
     ctrl = hb_reg_read(base_addr, HB_DELAY_RST_CTRL_OFFSET);
 
     /*
@@ -149,10 +158,12 @@ int hb_idelayctrl_reset_wait_ready(uintptr_t base_addr, uint32_t timeout_polls)
     ctrl &= ~HB_DELAY_RST_IDELAYCTRL;
     hb_reg_write(base_addr, HB_DELAY_RST_CTRL_OFFSET, ctrl);
 
+    hb_delay_cycles(64);
+    ctrl &= ~(HB_DELAY_RST_CKP_ODELAY | HB_DELAY_RST_RWDS_IDELAY);
+    hb_reg_write(base_addr, HB_DELAY_RST_CTRL_OFFSET, ctrl);
+    
     for (polls = 0; polls < timeout_polls; ++polls) {
         if ((hb_reg_read(base_addr, HB_IDELAYCTRL_STATUS_OFFSET) & HB_IDELAYCTRL_STATUS_RDY) != 0U) {
-            ctrl &= ~(HB_DELAY_RST_CKP_ODELAY | HB_DELAY_RST_RWDS_IDELAY);
-            hb_reg_write(base_addr, HB_DELAY_RST_CTRL_OFFSET, ctrl);
             // Turn off gated clocks            
             hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
             return 0;
@@ -257,6 +268,77 @@ int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out
     }
 
     return 0;
+}
+
+int hb_rwds_idly_inc_until(uintptr_t base_addr, uint16_t target_cntvalue)
+{
+    /* Return codes: 0=success, -1=invalid argument, -2=target below current, -3=guard timeout. */
+    uint32_t target;
+    uint32_t cur;
+    uint32_t guard;
+
+    if (((uint32_t)target_cntvalue & ~HB_ODLY_MASK_9BIT) != 0U) {
+        return -1;
+    }
+
+    target = (uint32_t)target_cntvalue & HB_ODLY_MASK_9BIT;
+    cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+    if (cur == target) {
+        return 0;
+    }
+    if (cur > target) {
+        return -2;
+    }
+
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_INC);
+
+    for (guard = 0U; guard < 2048U; ++guard) {
+        /* Pulse CE to request one increment step. */
+        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_INC | HB_RWDS_IDLY_CTRL_CE);
+        hb_delay_cycles(64);
+
+        cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+        if (cur >= target) {
+            hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_EN_VTC);
+            return 0;
+        }
+    }
+
+    /* Restore original sticky control bits before returning failure. */
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_EN_VTC);
+    return -3;
+}
+
+int hb_rwds_idly_dec_below_16(uintptr_t base_addr)
+{
+    /* Return codes: 0=success, -3=guard timeout. */
+    uint32_t cur;
+    uint32_t guard;
+
+    cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+    if (cur < 16U) {
+        return 0;
+    }
+    
+
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, 0);
+    hb_delay_cycles(64);
+    
+    for (guard = 0U; guard < 2048U; ++guard) {
+        /* Pulse CE to request one decrement step. */
+        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_CE);
+        hb_delay_cycles(64);
+        
+        cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+        if (cur < 16U) {
+            hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_EN_VTC);
+            return 0;
+        }
+    }
+
+    /* Restore original sticky control bits before returning failure. */
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, HB_RWDS_IDLY_CTRL_EN_VTC);
+    return -3;
 }
 
 int hb_memtest_hyperram_range(void)

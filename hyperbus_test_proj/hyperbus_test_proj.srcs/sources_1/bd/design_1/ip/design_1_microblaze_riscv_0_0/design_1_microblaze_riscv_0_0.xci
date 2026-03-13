@@ -244,7 +244,7 @@
         "C_M15_AXIS_DATA_WIDTH": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_S15_AXIS_DATA_WIDTH": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ICACHE_BASEADDR": [ { "value": "0x0000000080000000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
-        "C_ICACHE_HIGHADDR": [ { "value": "0x00000000FFFFFFFF", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "C_ICACHE_HIGHADDR": [ { "value": "0x00000000807FFFFF", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_USE_ICACHE": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ICACHE_BYTE_SIZE": [ { "value": "4096", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ICACHE_LINE_LEN": [ { "value": "4", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -261,7 +261,7 @@
         "C_M_AXI_IC_BUSER_WIDTH": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_M_AXI_IC_USER_VALUE": [ { "value": "31", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_BASEADDR": [ { "value": "0x0000000080000000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
-        "C_DCACHE_HIGHADDR": [ { "value": "0x00000000FFFFFFFF", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "C_DCACHE_HIGHADDR": [ { "value": "0x00000000807FFFFF", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_USE_DCACHE": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_BYTE_SIZE": [ { "value": "4096", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_LINE_LEN": [ { "value": "4", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -502,7 +502,7 @@
         "C_M15_AXIS_DATA_WIDTH": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_S15_AXIS_DATA_WIDTH": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_ICACHE_BASEADDR": [ { "value": "0x0000000080000000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
-        "C_ICACHE_HIGHADDR": [ { "value": "0x00000000ffffffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "C_ICACHE_HIGHADDR": [ { "value": "0x00000000807fffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_USE_ICACHE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_ICACHE_BYTE_SIZE": [ { "value": "4096", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_ICACHE_LINE_LEN": [ { "value": "4", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -520,7 +520,7 @@
         "C_M_AXI_IC_RUSER_WIDTH": [ { "value": "1", "format": "long", "usage": "all" } ],
         "C_M_AXI_IC_BUSER_WIDTH": [ { "value": "1", "format": "long", "usage": "all" } ],
         "C_DCACHE_BASEADDR": [ { "value": "0x0000000080000000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
-        "C_DCACHE_HIGHADDR": [ { "value": "0x00000000ffffffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "C_DCACHE_HIGHADDR": [ { "value": "0x00000000807fffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_USE_DCACHE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_BYTE_SIZE": [ { "value": "4096", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_LINE_LEN": [ { "value": "4", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -1083,5 +1083,5 @@
       }
     }
   },
-  "checksum": "63d30aa1"
+  "checksum": "e70ee6b6"
 }

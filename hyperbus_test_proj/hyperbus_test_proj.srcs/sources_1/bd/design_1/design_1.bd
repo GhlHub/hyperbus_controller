@@ -26,8 +26,7 @@
       "proc_sys_reset_3": "",
       "axi_timer_0": "",
       "ilconcat_0": "",
-      "hyperbus_controller_0": "",
-      "ila_0": ""
+      "hyperbus_controller_0": ""
     },
     "interface_ports": {
       "CLK_IN1_D_0": {
@@ -299,6 +298,9 @@
         "inst_hier_path": "clk_wiz_0",
         "has_run_ip_tcl": "true",
         "parameters": {
+          "AXI_DRP": {
+            "value": "false"
+          },
           "CLKOUT1_JITTER": {
             "value": "102.086"
           },
@@ -398,8 +400,34 @@
           "NUM_OUT_CLKS": {
             "value": "5"
           },
+          "OPTIMIZE_CLOCKING_STRUCTURE_EN": {
+            "value": "false"
+          },
+          "PHASE_DUTY_CONFIG": {
+            "value": "false"
+          },
           "PRIM_SOURCE": {
             "value": "Differential_clock_capable_pin"
+          },
+          "USE_DYN_PHASE_SHIFT": {
+            "value": "false"
+          },
+          "USE_DYN_RECONFIG": {
+            "value": "false"
+          }
+        },
+        "addressing": {
+          "memory_maps": {
+            "s_axi_lite": {
+              "address_blocks": {
+                "Reg": {
+                  "base_address": "0",
+                  "range": "64K",
+                  "width": "16",
+                  "usage": "register"
+                }
+              }
+            }
           }
         }
       },
@@ -437,10 +465,6 @@
         "interface_ports": {
           "S00_AXI": {
             "bd_attributes": {
-              "BRIDGES": {
-                "value": "M00_AXI:M01_AXI:M02_AXI:M03_AXI",
-                "value_src": "auto"
-              },
               "TYPE": {
                 "value": "interior",
                 "value_src": "default"
@@ -679,14 +703,6 @@
             "memory_map_ref": "s_axil"
           }
         }
-      },
-      "ila_0": {
-        "vlnv": "xilinx.com:ip:ila:6.2",
-        "ip_revision": "19",
-        "xci_name": "design_1_ila_0_0",
-        "xci_path": "ip/design_1_ila_0_0/design_1_ila_0_0.xci",
-        "inst_hier_path": "ila_0",
-        "has_run_ip_tcl": "true"
       }
     },
     "interface_nets": {
@@ -723,8 +739,7 @@
       "axi_crossbar_1_M00_AXI": {
         "interface_ports": [
           "axi_crossbar_1/M00_AXI",
-          "hyperbus_controller_0/s_axi",
-          "ila_0/SLOT_0_AXI"
+          "hyperbus_controller_0/s_axi"
         ]
       },
       "axi_intc_0_interrupt": {
@@ -839,7 +854,6 @@
           "axi_uartlite_0/s_axi_aclk",
           "axi_intc_0/s_axi_aclk",
           "axi_timer_0/s_axi_aclk",
-          "ila_0/clk",
           "hyperbus_controller_0/i_axi_aclk"
         ]
       },
@@ -979,7 +993,7 @@
               "SEG_hyperbus_controller_0_reg0": {
                 "address_block": "/hyperbus_controller_0/s_axi/reg0",
                 "offset": "0x80000000",
-                "range": "2G"
+                "range": "8M"
               },
               "SEG_hyperbus_controller_0_reg0_1": {
                 "address_block": "/hyperbus_controller_0/s_axil/reg0",
@@ -999,7 +1013,7 @@
               "SEG_hyperbus_controller_0_reg0": {
                 "address_block": "/hyperbus_controller_0/s_axi/reg0",
                 "offset": "0x80000000",
-                "range": "2G"
+                "range": "8M"
               },
               "SEG_lmb_bram_if_cntlr_0_Mem": {
                 "address_block": "/lmb_bram_if_cntlr_0/SLMB1/Mem",

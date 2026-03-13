@@ -14,7 +14,7 @@
         "USER_CLK_FREQ2": [ { "value": "100.0", "resolve_type": "user", "format": "float", "usage": "all" } ],
         "USER_CLK_FREQ3": [ { "value": "100.0", "resolve_type": "user", "format": "float", "usage": "all" } ],
         "ENABLE_CLOCK_MONITOR": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
-        "OPTIMIZE_CLOCKING_STRUCTURE_EN": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
+        "OPTIMIZE_CLOCKING_STRUCTURE_EN": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "ENABLE_USER_CLOCK0": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "ENABLE_USER_CLOCK1": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "ENABLE_USER_CLOCK2": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
@@ -30,8 +30,8 @@
         "USE_SPREAD_SPECTRUM": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "USE_PHASE_ALIGNMENT": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "USE_MIN_POWER": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
-        "USE_DYN_PHASE_SHIFT": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
-        "USE_DYN_RECONFIG": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
+        "USE_DYN_PHASE_SHIFT": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
+        "USE_DYN_RECONFIG": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "JITTER_SEL": [ { "value": "No_Jitter", "resolve_type": "user", "usage": "all" } ],
         "PRIM_IN_FREQ": [ { "value": "100.000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "float", "usage": "all" } ],
         "PRIM_IN_TIMEPERIOD": [ { "value": "10.000", "resolve_type": "user", "format": "float", "usage": "all" } ],
@@ -262,8 +262,8 @@
         "CLKOUT7_PHASE_ERROR": [ { "value": "0.0", "resolve_type": "user", "format": "float", "usage": "all" } ],
         "INPUT_MODE": [ { "value": "frequency", "resolve_type": "user", "usage": "all" } ],
         "INTERFACE_SELECTION": [ { "value": "Enable_AXI", "resolve_type": "user", "usage": "all" } ],
-        "AXI_DRP": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
-        "PHASE_DUTY_CONFIG": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ]
+        "AXI_DRP": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
+        "PHASE_DUTY_CONFIG": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ]
       },
       "model_parameters": {
         "C_CLKOUT2_USED": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -752,5 +752,5 @@
       }
     }
   },
-  "checksum": "8ede0afe"
+  "checksum": "d4b70637"
 }

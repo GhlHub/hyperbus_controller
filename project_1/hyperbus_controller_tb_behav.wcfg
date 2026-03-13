@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="160.918857 us"></ZoomStartTime>
-      <ZoomEndTime time="166.658872 us"></ZoomEndTime>
-      <Cursor1Time time="260.670000 us"></Cursor1Time>
+      <ZoomStartTime time="240,384.644 ns"></ZoomStartTime>
+      <ZoomEndTime time="240,451.089 ns"></ZoomEndTime>
+      <Cursor1Time time="240,398.811 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="262"></NameColumnWidth>
+      <NameColumnWidth column_width="254"></NameColumnWidth>
       <ValueColumnWidth column_width="60"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="79" />
+   <WVObjectSize size="86" />
    <wvobject type="logic" fp_name="/hyperbus_controller_tb/axi_aclk">
       <obj_property name="ElementShortName">axi_aclk</obj_property>
       <obj_property name="ObjectShortName">axi_aclk</obj_property>
@@ -47,10 +47,6 @@
    <wvobject type="logic" fp_name="/hyperbus_controller_tb/iddre1_rst">
       <obj_property name="ElementShortName">iddre1_rst</obj_property>
       <obj_property name="ObjectShortName">iddre1_rst</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/hyperbus_controller_tb/hb_clk_200_samp_90">
-      <obj_property name="ElementShortName">hb_clk_200_samp_90</obj_property>
-      <obj_property name="ObjectShortName">hb_clk_200_samp_90</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/hyperbus_controller_tb/axi_aresetn">
       <obj_property name="ElementShortName">axi_aresetn</obj_property>
@@ -328,6 +324,14 @@
       <obj_property name="ElementShortName">odly_envtc_x_prev</obj_property>
       <obj_property name="ObjectShortName">odly_envtc_x_prev</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/hb_clk_200_samp_90">
+      <obj_property name="ElementShortName">hb_clk_200_samp_90</obj_property>
+      <obj_property name="ObjectShortName">hb_clk_200_samp_90</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/io_hb_dq">
+      <obj_property name="ElementShortName">io_hb_dq[7:0]</obj_property>
+      <obj_property name="ObjectShortName">io_hb_dq[7:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/dq_q1_raw">
       <obj_property name="ElementShortName">dq_q1_raw[7:0]</obj_property>
       <obj_property name="ObjectShortName">dq_q1_raw[7:0]</obj_property>
@@ -335,5 +339,29 @@
    <wvobject type="array" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/dq_q2_raw">
       <obj_property name="ElementShortName">dq_q2_raw[7:0]</obj_property>
       <obj_property name="ObjectShortName">dq_q2_raw[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/rwds_i">
+      <obj_property name="ElementShortName">rwds_i</obj_property>
+      <obj_property name="ObjectShortName">rwds_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/rwds_i_delayed">
+      <obj_property name="ElementShortName">rwds_i_delayed</obj_property>
+      <obj_property name="ObjectShortName">rwds_i_delayed</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/i_rwds_o_d1">
+      <obj_property name="ElementShortName">i_rwds_o_d1</obj_property>
+      <obj_property name="ObjectShortName">i_rwds_o_d1</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/i_rwds_o_d2">
+      <obj_property name="ElementShortName">i_rwds_o_d2</obj_property>
+      <obj_property name="ObjectShortName">i_rwds_o_d2</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/o_rwds_q1">
+      <obj_property name="ElementShortName">o_rwds_q1</obj_property>
+      <obj_property name="ObjectShortName">o_rwds_q1</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/hyperbus_controller_tb/dut/u_hyperbus_phy/o_rwds_q2">
+      <obj_property name="ElementShortName">o_rwds_q2</obj_property>
+      <obj_property name="ObjectShortName">o_rwds_q2</obj_property>
    </wvobject>
 </wave_config>

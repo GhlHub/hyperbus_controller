@@ -118,6 +118,8 @@ module hyperbus_controller #(
     logic [5:0] axil_rwds_cntr;
     logic odly_en_vtc, odly_ce, odly_inc, odly_load;
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
+    logic rwds_idly_en_vtc, rwds_idly_ce, rwds_idly_inc, rwds_idly_load;
+    logic [8:0] rwds_idly_cntvaluein, rwds_idly_cntvalueout;
     logic idelayctrl_rst_req, odelay_rst_req, rwds_idelay_rst_req;
     logic hb_clk_ce_force;
     logic idelayctrl_rdy_axi;
@@ -251,6 +253,7 @@ module hyperbus_controller #(
         .i_axif_rwds_cntr         (         axif_rwds_cntr),
         .i_axil_rwds_cntr         (         axil_rwds_cntr),
         .i_odly_cntvalueout       (       odly_cntvalueout),
+        .i_rwds_idly_cntvalueout  (  rwds_idly_cntvalueout),
         .i_idelayctrl_rdy_sync    (       idelayctrl_rdy_axi),
         .o_axil_rsp_fifo_rd_en    (    axil_rsp_fifo_rd_en),
         .o_cmd_fifo_din_axil      (      cmd_fifo_din_axil),
@@ -260,6 +263,11 @@ module hyperbus_controller #(
         .o_odly_inc               (               odly_inc),
         .o_odly_load              (              odly_load),
         .o_odly_cntvaluein        (        odly_cntvaluein),
+        .o_rwds_idly_en_vtc       (       rwds_idly_en_vtc),
+        .o_rwds_idly_ce           (           rwds_idly_ce),
+        .o_rwds_idly_inc          (          rwds_idly_inc),
+        .o_rwds_idly_load         (         rwds_idly_load),
+        .o_rwds_idly_cntvaluein   (   rwds_idly_cntvaluein),
         .o_idelayctrl_rst_req     (     idelayctrl_rst_req),
         .o_odelay_rst_req         (         odelay_rst_req),
         .o_rwds_idelay_rst_req    (    rwds_idelay_rst_req),
@@ -333,6 +341,12 @@ module hyperbus_controller #(
         .i_odly_load            (            odly_load),
         .i_odly_cntvaluein      (      odly_cntvaluein),
         .o_odly_cntvalueout     (     odly_cntvalueout),
+        .i_rwds_idly_en_vtc     (     rwds_idly_en_vtc),
+        .i_rwds_idly_ce         (         rwds_idly_ce),
+        .i_rwds_idly_inc        (        rwds_idly_inc),
+        .i_rwds_idly_load       (       rwds_idly_load),
+        .i_rwds_idly_cntvaluein ( rwds_idly_cntvaluein),
+        .o_rwds_idly_cntvalueout(rwds_idly_cntvalueout),
         .o_idelayctrl_rdy_axi   (   idelayctrl_rdy_axi)
     );
 
