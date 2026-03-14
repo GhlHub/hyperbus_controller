@@ -127,6 +127,14 @@ module hyperbus_controller #(
     logic hb_timeout_holdoff_hb;
     logic hb_timeout_block_axi_meta, hb_timeout_block_axi;
     logic [7:0] hb_reset_pulse_cnt;
+    logic hb_clk_ce;
+    logic hb_cs_n_q;
+    logic [7:0] dq_t;
+    logic [7:0] dq_o_d1, dq_o_d2;
+    logic [15:0] dq;
+    logic rwds_t, rwds_o_d1, rwds_o_d2;
+    logic [7:0] dq_q1, dq_q2;
+    logic rwds_q1, rwds_q2;
 
     hyperbus_fifo_bank_xilinx #(
         .CMD_W(CMD_W)
@@ -294,15 +302,6 @@ module hyperbus_controller #(
     // -------------------------
     // HyperBus PHY controls and sampled inputs
     // -------------------------
-    logic hb_clk_ce;
-    logic hb_cs_n_q;
-    logic [7:0] dq_t;
-    logic [7:0] dq_o_d1, dq_o_d2;
-    logic [15:0] dq;
-    logic rwds_t, rwds_o_d1, rwds_o_d2;
-    logic [7:0] dq_q1, dq_q2;
-    logic rwds_q1, rwds_q2;
-
     assign o_hb_cs_n = hb_cs_n_q;
     assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
