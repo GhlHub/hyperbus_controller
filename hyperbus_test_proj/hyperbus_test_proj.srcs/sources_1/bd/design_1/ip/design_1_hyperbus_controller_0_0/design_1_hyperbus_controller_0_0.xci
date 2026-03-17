@@ -113,7 +113,17 @@
         "o_hb_ck_n": [ { "direction": "out" } ],
         "io_hb_rwds": [ { "direction": "inout" } ],
         "io_hb_dq": [ { "direction": "inout", "size_left": "7", "size_right": "0" } ],
-        "o_hb_reset_n": [ { "direction": "out" } ]
+        "o_hb_reset_n": [ { "direction": "out" } ],
+        "o_dbg_dq_q1_dly": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
+        "o_dbg_dq_q2_dly": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
+        "o_dbg_rwds_q1_dly": [ { "direction": "out" } ],
+        "o_dbg_rwds_q2_dly": [ { "direction": "out" } ],
+        "o_dbg_dq_o_d1": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
+        "o_dbg_dq_o_d2": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
+        "o_dbg_rwds_o_d1": [ { "direction": "out" } ],
+        "o_dbg_rwds_o_d2": [ { "direction": "out" } ],
+        "o_dbg_i_dq_t": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
+        "o_dbg_i_rwds_t": [ { "direction": "out" } ]
       },
       "interfaces": {
         "s_axi": {
@@ -337,5 +347,5 @@
       }
     }
   },
-  "checksum": "84f0c36d"
+  "checksum": "106a0a01"
 }

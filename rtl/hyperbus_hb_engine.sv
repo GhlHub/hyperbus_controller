@@ -33,6 +33,10 @@ module hyperbus_hb_engine #(
     output logic [31:0]         o_last_read_word32,
     output logic [5:0]          o_axif_rwds_cntr,
     output logic [5:0]          o_axil_rwds_cntr,
+    output logic [7:0]          o_dq_q1_dly_dbg,
+    output logic [7:0]          o_dq_q2_dly_dbg,
+    output logic                o_rwds_q1_dly_dbg,
+    output logic                o_rwds_q2_dly_dbg,
 
     input  wire [7:0]           i_dq_q1,
     input  wire [7:0]           i_dq_q2,
@@ -110,6 +114,8 @@ module hyperbus_hb_engine #(
 
     logic [15:0] hb_word16;
     logic [15:0] hb_word16_le;
+    logic [7:0] dq_q1_dly;
+    logic [7:0] dq_q2_dly;
     logic rwds_q1_dly;
     logic rwds_q2_dly;
     logic [5:0] rwds_timeout_cnt;
@@ -118,8 +124,12 @@ module hyperbus_hb_engine #(
     logic timeout_tripped_cur;
     logic [7:0] timeout_holdoff_cnt;
 
-    assign hb_word16    = {i_dq_q1, i_dq_q2};
+    assign hb_word16    = {dq_q1_dly, dq_q2_dly};
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
+    assign o_dq_q1_dly_dbg = dq_q1_dly;
+    assign o_dq_q2_dly_dbg = dq_q2_dly;
+    assign o_rwds_q1_dly_dbg = rwds_q1_dly;
+    assign o_rwds_q2_dly_dbg = rwds_q2_dly;
 
     always_ff @(posedge i_hb_clk_200) begin
         if (!i_hb_rstn) begin
@@ -168,6 +178,8 @@ module hyperbus_hb_engine #(
             o_last_read_word32 <= 32'h0;
             o_axif_rwds_cntr <= 6'd0;
             o_axil_rwds_cntr <= 6'd0;
+            dq_q1_dly <= 8'h00;
+            dq_q2_dly <= 8'h00;
             rwds_q1_dly <= 1'b0;
             rwds_q2_dly <= 1'b0;
             last_read_pack <= 32'h0;
@@ -178,8 +190,9 @@ module hyperbus_hb_engine #(
             timeout_tripped_cur <= 1'b0;
             timeout_holdoff_cnt <= 8'd0;
         end else begin
-            // Align RWDS transition qualifier with DQ data path that is pipelined
-            // by one i_hb_clk_200 cycle in the PHY.
+            // Keep DQ and RWDS qualifiers phase-aligned in this domain.
+            dq_q1_dly <= i_dq_q1;
+            dq_q2_dly <= i_dq_q2;
             rwds_q1_dly <= i_rwds_q1;
             rwds_q2_dly <= i_rwds_q2;
             o_cmd_fifo_rd_en <= 1'b0;

@@ -52,6 +52,8 @@ module hyperbus_phy_xilinx (
     logic rwds_i;
     logic rwds_i_delayed;
     logic rwds_out_ddr;
+    logic rwds_q1_raw;
+    logic rwds_q2_raw;
     logic idelayctrl_rdy;
     logic idelayctrl_rst_ref_meta;
     logic idelayctrl_rst_ref_sync;
@@ -188,20 +190,10 @@ module hyperbus_phy_xilinx (
         end
     endgenerate
 
-    // One i_hb_clk_200 cycle pipeline on DQ sampler outputs.
-    always_ff @(posedge i_hb_clk_200) begin
-        if (!i_hb_rstn) begin
-            o_dq_q1 <= 8'h00;
-            o_dq_q2 <= 8'h00;
-        end else begin
-            o_dq_q1 <= dq_q1_raw;
-            o_dq_q2 <= dq_q2_raw;
-        end
-    end
-    
-    always_comb begin
-        o_dq = {o_dq_q2, o_dq_q1};
-    end
+    // Export raw IDDRE1 samples; post-IDDRE1 pipeline is in HB engine.
+    assign o_dq_q1 = dq_q1_raw;
+    assign o_dq_q2 = dq_q2_raw;
+    assign o_dq = {dq_q2_raw, dq_q1_raw};
 
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
@@ -232,7 +224,7 @@ module hyperbus_phy_xilinx (
 `else
         .DELAY_TYPE("VARIABLE"),
 `endif
-        .DELAY_VALUE(1000),
+        .DELAY_VALUE(10),
         .IS_CLK_INVERTED(1'b0),
         .IS_RST_INVERTED(1'b0),
         .REFCLK_FREQUENCY(300.0),
@@ -261,16 +253,24 @@ module hyperbus_phy_xilinx (
 
     IDDRE1 #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+`ifndef SYNTHESIS        
         .IS_C_INVERTED(1'b0),
         .IS_CB_INVERTED(1'b1)
+`else
+        .IS_C_INVERTED(1'b1),
+        .IS_CB_INVERTED(1'b0)
+`endif
     ) u_iddr_rwds (
-        .Q1 (         o_rwds_q1),
-        .Q2 (         o_rwds_q2),
+        .Q1 (       rwds_q1_raw),
+        .Q2 (       rwds_q2_raw),
         .C  (i_hb_clk_200_samp_90),
         .CB (i_hb_clk_200_samp_90),
         .D  (    rwds_i_delayed),
         .R  (        i_iddre1_rst)
     );
+
+    assign o_rwds_q1 = rwds_q1_raw;
+    assign o_rwds_q2 = rwds_q2_raw;
 
     assign odly_en_vtc_to_odelay = i_odly_en_vtc;
     assign odly_ce_to_odelay = i_odly_ce;

@@ -84,7 +84,17 @@ module hyperbus_controller #(
     output wire                         o_hb_ck_n,
     inout  wire                         io_hb_rwds,
     inout  wire [7:0]                   io_hb_dq,
-    output wire                         o_hb_reset_n
+    output wire                         o_hb_reset_n,
+    output wire [7:0]                   o_dbg_dq_q1_dly,
+    output wire [7:0]                   o_dbg_dq_q2_dly,
+    output wire                         o_dbg_rwds_q1_dly,
+    output wire                         o_dbg_rwds_q2_dly,
+    output wire [7:0]                   o_dbg_dq_o_d1,
+    output wire [7:0]                   o_dbg_dq_o_d2,
+    output wire                         o_dbg_rwds_o_d1,
+    output wire                         o_dbg_rwds_o_d2,
+    output wire [7:0]                   o_dbg_i_dq_t,
+    output wire                         o_dbg_i_rwds_t
 );
 
     localparam int CMD_W = 75;
@@ -127,6 +137,14 @@ module hyperbus_controller #(
     logic hb_timeout_holdoff_hb;
     logic hb_timeout_block_axi_meta, hb_timeout_block_axi;
     logic [7:0] hb_reset_pulse_cnt;
+    logic hb_clk_ce;
+    logic hb_cs_n_q;
+    logic [7:0] dq_t;
+    logic [7:0] dq_o_d1, dq_o_d2;
+    logic [15:0] dq;
+    logic rwds_t, rwds_o_d1, rwds_o_d2;
+    logic [7:0] dq_q1, dq_q2;
+    logic rwds_q1, rwds_q2;
 
     hyperbus_fifo_bank_xilinx #(
         .CMD_W(CMD_W)
@@ -294,18 +312,15 @@ module hyperbus_controller #(
     // -------------------------
     // HyperBus PHY controls and sampled inputs
     // -------------------------
-    logic hb_clk_ce;
-    logic hb_cs_n_q;
-    logic [7:0] dq_t;
-    logic [7:0] dq_o_d1, dq_o_d2;
-    logic [15:0] dq;
-    logic rwds_t, rwds_o_d1, rwds_o_d2;
-    logic [7:0] dq_q1, dq_q2;
-    logic rwds_q1, rwds_q2;
-
     assign o_hb_cs_n = hb_cs_n_q;
     assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
+    assign o_dbg_dq_o_d1 = dq_o_d1;
+    assign o_dbg_dq_o_d2 = dq_o_d2;
+    assign o_dbg_rwds_o_d1 = rwds_o_d1;
+    assign o_dbg_rwds_o_d2 = rwds_o_d2;
+    assign o_dbg_i_dq_t = dq_t;
+    assign o_dbg_i_rwds_t = rwds_t;
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk             (            i_axi_aclk),
@@ -379,6 +394,10 @@ module hyperbus_controller #(
         .o_last_read_word32     (                   ),
         .o_axif_rwds_cntr       (         axif_rwds_cntr),
         .o_axil_rwds_cntr       (         axil_rwds_cntr),
+        .o_dq_q1_dly_dbg        (      o_dbg_dq_q1_dly),
+        .o_dq_q2_dly_dbg        (      o_dbg_dq_q2_dly),
+        .o_rwds_q1_dly_dbg      (    o_dbg_rwds_q1_dly),
+        .o_rwds_q2_dly_dbg      (    o_dbg_rwds_q2_dly),
         .i_dq_q1               (                dq_q1),
         .i_dq_q2               (                dq_q2),
         .i_rwds_q1             (              rwds_q1),

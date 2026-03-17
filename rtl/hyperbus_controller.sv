@@ -84,7 +84,17 @@ module hyperbus_controller #(
     output wire                         o_hb_ck_n,
     inout  wire                         io_hb_rwds,
     inout  wire [7:0]                   io_hb_dq,
-    output wire                         o_hb_reset_n
+    output wire                         o_hb_reset_n,
+    output wire [7:0]                   o_dbg_dq_q1_dly,
+    output wire [7:0]                   o_dbg_dq_q2_dly,
+    output wire                         o_dbg_rwds_q1_dly,
+    output wire                         o_dbg_rwds_q2_dly,
+    output wire [7:0]                   o_dbg_dq_o_d1,
+    output wire [7:0]                   o_dbg_dq_o_d2,
+    output wire                         o_dbg_rwds_o_d1,
+    output wire                         o_dbg_rwds_o_d2,
+    output wire [7:0]                   o_dbg_i_dq_t,
+    output wire                         o_dbg_i_rwds_t
 );
 
     localparam int CMD_W = 75;
@@ -305,6 +315,12 @@ module hyperbus_controller #(
     assign o_hb_cs_n = hb_cs_n_q;
     assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
+    assign o_dbg_dq_o_d1 = dq_o_d1;
+    assign o_dbg_dq_o_d2 = dq_o_d2;
+    assign o_dbg_rwds_o_d1 = rwds_o_d1;
+    assign o_dbg_rwds_o_d2 = rwds_o_d2;
+    assign o_dbg_i_dq_t = dq_t;
+    assign o_dbg_i_rwds_t = rwds_t;
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk             (            i_axi_aclk),
@@ -378,6 +394,10 @@ module hyperbus_controller #(
         .o_last_read_word32     (                   ),
         .o_axif_rwds_cntr       (         axif_rwds_cntr),
         .o_axil_rwds_cntr       (         axil_rwds_cntr),
+        .o_dq_q1_dly_dbg        (      o_dbg_dq_q1_dly),
+        .o_dq_q2_dly_dbg        (      o_dbg_dq_q2_dly),
+        .o_rwds_q1_dly_dbg      (    o_dbg_rwds_q1_dly),
+        .o_rwds_q2_dly_dbg      (    o_dbg_rwds_q2_dly),
         .i_dq_q1               (                dq_q1),
         .i_dq_q2               (                dq_q2),
         .i_rwds_q1             (              rwds_q1),

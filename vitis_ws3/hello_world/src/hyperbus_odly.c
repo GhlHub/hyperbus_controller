@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "xil_printf.h"
-
+#define ID0_VALUE 0x0c81u
 static inline volatile uint32_t *hb_reg_ptr(uintptr_t base, uint32_t offset)
 {
     return (volatile uint32_t *)(base + (uintptr_t)offset);
@@ -232,8 +232,8 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches)
         xil_printf("CNTVALUEOUT=0x%03x ID0=0x%08x ERR_STATUS=0x%08x AXIF_RWDS_CNTR=0x%08x AXIL_RWDS_CNTR=0x%08x%s\r\n",
                    (unsigned)(cntvalue & HB_ODLY_MASK_9BIT), (unsigned)id0,
                    (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr,
-                   (id0 == 0x0000810Cu) ? " MATCH" : "");
-        if (id0 == 0x0000810Cu) {
+                   (id0 == ID0_VALUE) ? " MATCH" : "");
+        if (id0 == ID0_VALUE) {
             match_count++;
             if ((required_matches != 0U) && (match_count >= required_matches)) {
                 return 0;

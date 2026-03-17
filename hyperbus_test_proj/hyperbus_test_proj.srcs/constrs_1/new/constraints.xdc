@@ -9,15 +9,11 @@
 #create_clock -name i_ref_clk300 -period 3.333  [get_ports i_ref_clk300]
 
 # Example generated clock for forwarded HyperBus clock path:
-create_generated_clock -name hb_ck_p_0_gen -source [get_pins u_oddr_ck/Q] [get_ports o_hb_ck_p_0]
 
 # Example HyperBus output timing constraints (uncomment and tune as needed):
-set_output_delay -clock [get_clocks hb_ck_p_0_gen] -max 1.85 [get_ports {io_hb_dq[*]}]
-set_output_delay -clock [get_clocks hb_ck_p_0_gen] -max 1.65 [get_ports {io_hb_rwds}]
 
 # Example IOB packing hints:
-set_property IOB TRUE [get_ports {o_hb_ck_p_0}]
-set_property IOB TRUE [get_ports {io_hb_dq[*]}]
+set_property IOB TRUE [get_ports o_hb_ck_p_0]
 
 
 
@@ -55,3 +51,12 @@ set_property PACKAGE_PIN C22 [get_ports o_hb_cs_n_0]
 set_property IOSTANDARD LVCMOS33 [get_ports UART_0_rxd]
 set_property IOSTANDARD LVCMOS33 [get_ports UART_0_txd]
 set_property IOSTANDARD LVCMOS33 [get_ports ext_reset_in_0]
+
+set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_dq_phy[*].u_iddr_dq/C}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
+
+set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
+set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk]
