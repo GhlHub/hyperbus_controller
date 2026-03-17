@@ -1,0 +1,46 @@
+digraph hb_tx_path {
+  rankdir=LR;
+  splines=ortho;
+  fontname="Helvetica";
+  fontsize=12;
+  labelloc=t;
+  label="HyperBus TX Datapath: Fabric Registers -> Launch Path -> Pins";
+
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, color="#444444", fillcolor="#F8F8F8"];
+  edge [color="#333333", arrowsize=0.7, penwidth=1.2, fontname="Helvetica", fontsize=9];
+
+  // DQ lane
+  dq_ff   [label="HB Engine always_ff\no_dq_o_d1[7:0], o_dq_o_d2[7:0]\n(fabric regs)", fillcolor="#EAF4FF"];
+  dq_top  [label="Controller/PHY interconnect\ndq_o_d1[7:0], dq_o_d2[7:0]", fillcolor="#EAF4FF"];
+  dq_oddr [label="ODDRE1 u_oddr_dq (per bit)\nD1=i_dq_o_d1[gi]\nD2=i_dq_o_d2[gi]\nC=i_hb_clk_200", fillcolor="#CFE6FF"];
+  dq_iobuf[label="IOBUF u_iobuf_dq (per bit)\nI=dq_out_ddr[gi], T=i_dq_t[gi]", fillcolor="#CFE6FF"];
+  dq_pin  [label="Pin io_hb_dq[gi]", fillcolor="#9DCCFF"];
+
+  // RWDS lane
+  rw_ff   [label="HB Engine always_ff\no_rwds_o_d1, o_rwds_o_d2\n(fabric regs)", fillcolor="#FFF2E8"];
+  rw_top  [label="Controller/PHY interconnect\nrwds_o_d1, rwds_o_d2", fillcolor="#FFF2E8"];
+  rw_oddr [label="ODDRE1 u_oddr_rwds\nD1=i_rwds_o_d1\nD2=i_rwds_o_d2\nC=i_hb_clk_200", fillcolor="#FFD7BF"];
+  rw_iobuf[label="IOBUF u_iobuf_rwds\nI=rwds_out_ddr, T=i_rwds_t", fillcolor="#FFD7BF"];
+  rw_pin  [label="Pin io_hb_rwds", fillcolor="#FFB988"];
+
+  // CS# lane
+  cs_ff    [label="HB Engine always_ff\no_hb_cs_n_q\n(fabric reg)", fillcolor="#EAF9EA"];
+  cs_top   [label="Controller interconnect\nhb_cs_n_q", fillcolor="#EAF9EA"];
+  cs_assign [label="Direct top-level assign\no_hb_cs_n = hb_cs_n_q\n(no ODDRE1 / IOBUF)", fillcolor="#CDEECC"];
+  cs_pin   [label="Pin o_hb_cs_n", fillcolor="#98D89E"];
+
+  dq_ff -> dq_top -> dq_oddr -> dq_iobuf -> dq_pin;
+  rw_ff -> rw_top -> rw_oddr -> rw_iobuf -> rw_pin;
+  cs_ff -> cs_top -> cs_assign -> cs_pin;
+
+  {rank=same; dq_ff; rw_ff; cs_ff}
+  {rank=same; dq_top; rw_top; cs_top}
+  {rank=same; dq_oddr; rw_oddr; cs_assign}
+  {rank=same; dq_iobuf; rw_iobuf}
+  {rank=same; dq_pin; rw_pin; cs_pin}
+
+  note [shape=note, fillcolor="#FFFFDD", label="Direction: left -> right\nDQ and RWDS are launched by ODDRE1\nusing i_hb_clk_200 and then pass through IOBUF to pads.\nCS# stays in fabric logic and drives the top-level pin directly."];
+  dq_pin -> note [style=dashed, arrowhead=none, color="#777777"];
+  rw_pin -> note [style=dashed, arrowhead=none, color="#777777"];
+  cs_pin -> note [style=dashed, arrowhead=none, color="#777777"];
+}

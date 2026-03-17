@@ -560,7 +560,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>30eb9ef7</spirit:value>
+            <spirit:value>9c63fd13</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -576,7 +576,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>30eb9ef7</spirit:value>
+            <spirit:value>9c63fd13</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1727,6 +1727,19 @@
           </spirit:wireTypeDefs>
         </spirit:wire>
       </spirit:port>
+      <spirit:port>
+        <spirit:name>o_dbg_hb_cs_n_q</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>wire</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
     </spirit:ports>
     <spirit:modelParameters>
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="int">
@@ -1804,7 +1817,7 @@
       <spirit:file>
         <spirit:name>src/hyperbus_controller.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_85e927f4</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_3e002837</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -1932,14 +1945,14 @@
       <xilinx:vendorDisplayName>User</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://example.com</xilinx:vendorURL>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2026-03-17T21:19:23Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2026-03-17T23:51:41Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="e5090b1c"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="060eb632"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="32a000f7"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="4dd9107d"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="bbbb87f4"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="4588c5f2"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="3327bb54"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="fe2db4b6"/>
     </xilinx:packagingInfo>

@@ -94,7 +94,8 @@ module hyperbus_controller #(
     output wire                         o_dbg_rwds_o_d1,
     output wire                         o_dbg_rwds_o_d2,
     output wire [7:0]                   o_dbg_i_dq_t,
-    output wire                         o_dbg_i_rwds_t
+    output wire                         o_dbg_i_rwds_t,
+    output wire                         o_dbg_hb_cs_n_q
 );
 
     localparam int CMD_W = 75;
@@ -321,6 +322,7 @@ module hyperbus_controller #(
     assign o_dbg_rwds_o_d2 = rwds_o_d2;
     assign o_dbg_i_dq_t = dq_t;
     assign o_dbg_i_rwds_t = rwds_t;
+    assign o_dbg_hb_cs_n_q = hb_cs_n_q;
 
     hyperbus_phy_xilinx u_hyperbus_phy (
         .i_axi_aclk             (            i_axi_aclk),
