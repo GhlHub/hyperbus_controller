@@ -7,8 +7,7 @@
       "name": "design_1",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2025.2",
-      "validated": "true"
+      "tool_version": "2025.2"
     },
     "design_tree": {
       "microblaze_riscv_0": "",
@@ -26,8 +25,7 @@
       "proc_sys_reset_3": "",
       "axi_timer_0": "",
       "ilconcat_0": "",
-      "hyperbus_controller_0": "",
-      "ila_0": ""
+      "hyperbus_controller_0": ""
     },
     "interface_ports": {
       "CLK_IN1_D_0": {
@@ -106,17 +104,7 @@
       },
       "ext_reset_in_0": {
         "type": "rst",
-        "direction": "I",
-        "parameters": {
-          "INSERT_VIP": {
-            "value": "0",
-            "value_src": "default"
-          },
-          "POLARITY": {
-            "value": "ACTIVE_LOW",
-            "value_src": "default"
-          }
-        }
+        "direction": "I"
       }
     },
     "components": {
@@ -694,37 +682,6 @@
             "memory_map_ref": "s_axil"
           }
         }
-      },
-      "ila_0": {
-        "vlnv": "xilinx.com:ip:ila:6.2",
-        "ip_revision": "19",
-        "xci_name": "design_1_ila_0_0",
-        "xci_path": "ip/design_1_ila_0_0/design_1_ila_0_0.xci",
-        "inst_hier_path": "ila_0",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "C_MONITOR_TYPE": {
-            "value": "Native"
-          },
-          "C_NUM_OF_PROBES": {
-            "value": "10"
-          },
-          "C_PROBE0_WIDTH": {
-            "value": "8"
-          },
-          "C_PROBE1_WIDTH": {
-            "value": "8"
-          },
-          "C_PROBE4_WIDTH": {
-            "value": "8"
-          },
-          "C_PROBE5_WIDTH": {
-            "value": "8"
-          },
-          "C_PROBE8_WIDTH": {
-            "value": "8"
-          }
-        }
       }
     },
     "interface_nets": {
@@ -848,7 +805,6 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "proc_sys_reset_0/slowest_sync_clk",
-          "ila_0/clk",
           "hyperbus_controller_0/i_hb_clk_200"
         ]
       },
@@ -899,66 +855,6 @@
         "ports": [
           "ext_reset_in_0",
           "proc_sys_reset_1/ext_reset_in"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_o_d1": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_o_d1",
-          "ila_0/probe4"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_o_d2": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_o_d2",
-          "ila_0/probe5"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_q1_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_q1_dly",
-          "ila_0/probe0"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_q2_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_q2_dly",
-          "ila_0/probe1"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_i_dq_t": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_i_dq_t",
-          "ila_0/probe8"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_i_rwds_t": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_i_rwds_t",
-          "ila_0/probe9"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_o_d1": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_o_d1",
-          "ila_0/probe6"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_o_d2": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_o_d2",
-          "ila_0/probe7"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_q1_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_q1_dly",
-          "ila_0/probe2"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_q2_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_q2_dly",
-          "ila_0/probe3"
         ]
       },
       "hyperbus_controller_1_o_hb_ck_n": {
