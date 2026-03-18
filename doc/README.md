@@ -236,15 +236,20 @@ This ensures the FIFO XPM library is available during the `hyperbus_controller_0
 
 Multi-beat AXI flow diagrams are available at:
 
-- `doc/multibeat_axi_write_flow.jpg`
-- `doc/multibeat_axi_read_flow.jpg`
-- `doc/hb_tx_datapath_fabric_to_pins.jpg`
+- `doc/jpg/multibeat_axi_write_flow.jpg`
+- `doc/jpg/multibeat_axi_read_flow.jpg`
+- `doc/jpg/hb_tx_datapath_fabric_to_pins.jpg`
 
 Diagram generator scripts:
 
-- `doc/multibeat_axi_write_flow.py`
-- `doc/multibeat_axi_read_flow.py`
-- `doc/hb_tx_datapath_fabric_to_pins.jpg.dot`
+- `doc/py/multibeat_axi_write_flow.py`
+- `doc/py/multibeat_axi_read_flow.py`
+- `doc/dot/hb_tx_datapath_fabric_to_pins.jpg.dot`
+
+Reference PDFs are stored under:
+
+- `doc/pdf/hyperbus_spec.pdf`
+- `doc/pdf/infineon-s27kl0642-s27ks0642-3.0-v-1.8-v-64-mb-8-mb-hyperram-self-refresh-dram-datasheet-en.pdf`
 
 ## PHY Reuse Notes
 

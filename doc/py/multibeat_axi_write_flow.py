@@ -184,6 +184,6 @@ for i, ln in enumerate(notes):
     d.text((95, y), ln, font=(font_hdr if i == 0 else font_txt), fill='#222')
     y += 40
 
-out = '/raid/work/hyperbus_ai3/doc/multibeat_axi_write_flow.jpg'
+out = '/raid/work/hyperbus_ai3/doc/jpg/multibeat_axi_write_flow.jpg'
 img.save(out, 'JPEG', quality=95)
 print(out)
