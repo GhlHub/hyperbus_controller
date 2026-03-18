@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Documentation
 
-Last updated: 2026-03-17
+Last updated: 2026-03-18
 
 ## Overview
 
@@ -210,8 +210,11 @@ Notes:
 
 Clock constraint note:
 
-- This repo does not include an `.xdc`.
-- In the consuming Vivado project, apply single-ended clock constraints to HyperBus `CK`
+- The reusable controller source package does not include a dedicated standalone
+  controller `.xdc`.
+- The checked-in Vivado project does contain project-level constraints, including
+  [`hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc`](/raid/work/hyperbus_ai3/hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc).
+- In an integrating project, apply single-ended clock constraints to HyperBus `CK`
   on `o_hb_ck_p` and do not model `o_hb_ck_n` as a differential complement output.
 
 ### OOC Synthesis Troubleshooting (`hyperbus_controller_0`)
@@ -250,6 +253,27 @@ Reference PDFs are stored under:
 
 - `doc/pdf/hyperbus_spec.pdf`
 - `doc/pdf/infineon-s27kl0642-s27ks0642-3.0-v-1.8-v-64-mb-8-mb-hyperram-self-refresh-dram-datasheet-en.pdf`
+
+## Additional Notes
+
+System-level operating guidance:
+
+- `doc/system_level_operating_guide.md`
+
+PHY / primitive implementation notes:
+
+- `doc/hyperbus_phy_design_notes.md`
+- `doc/odelaye3_SUP.md`
+
+Implemented timing notes:
+
+- `doc/hb_dq_input_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_output_relative_timing.md`
+
+Implemented resource notes:
+
+- `doc/implemented_ff_by_clock_domain.md`
 
 ## PHY Reuse Notes
 

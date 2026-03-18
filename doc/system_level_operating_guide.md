@@ -1,0 +1,250 @@
+<!-- SPDX-FileCopyrightText: 2026 Glen Lowe -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+# HyperBus System-Level Operating Guide
+
+Last updated: 2026-03-18
+
+## Scope
+
+This note describes how the checked-in project is intended to run as a system:
+
+- where each controller clock comes from
+- how HyperBus CK gating works in the implemented design
+- recommended software bring-up order
+- how to tune CK and RWDS delays
+- which debug signals and counters are most useful when the interface misbehaves
+
+This is complementary to:
+
+- `doc/hyperbus_phy_design_notes.md` for primitive-level PHY rules
+- `doc/implemented_ff_by_clock_domain.md` for implemented resource counts
+- the timing notes under `doc/*.md` for extracted pin-level timing windows
+
+## Clocking Overview
+
+In the checked-in block design, `hyperbus_controller_0` uses five `clk_wiz_0`
+outputs:
+
+| Clock wizard output | Controller input / use | Notes |
+| --- | --- | --- |
+| `clk_out1` | `i_hb_clk_200` | Main 200 MHz HyperBus fabric clock |
+| `clk_out2` | `i_hb_clk_200_samp_90` | 200 MHz sample clock shifted by 90 degrees for `IDDRE1` capture |
+| `clk_out3` | `i_axi_aclk` | 50 MHz AXI / software / ILA clock |
+| `clk_out4` | `i_ref_clk300` | 300 MHz `IDELAYCTRL` reference |
+| `clk_out5` | `i_hb_clk_200_gated` | Gated 200 MHz clock used only for HyperBus CK forwarding |
+
+Important implementation detail:
+
+- `i_hb_clk_200_gated` is not a LUT-gated derivative of `i_hb_clk_200`.
+- In the checked-in Vivado design, it is a separate `clk_wiz_0` output.
+- `hyperbus_controller_0/o_hb_clk_ce` drives `clk_wiz_0/clk_out5_ce`.
+
+So the gated HyperBus transmit clock is implemented as a dedicated clock-wizard
+output with CE control, not as ordinary fabric clock gating.
+
+## CK Forwarding Path
+
+The outgoing HyperBus CK path is:
+
+1. `clk_wiz_0/clk_out5`
+2. `hyperbus_controller_0/i_hb_clk_200_gated`
+3. PHY `ODDRE1` clock input `C`
+4. `ODDRE1` generates `1010...` forwarded clock pattern
+5. `ODELAYE3` shifts CK timing
+6. `OBUF` drives `o_hb_ck_p`
+
+`o_hb_clk_ce` therefore controls whether the forwarded CK source clock reaches the
+PHY CK `ODDRE1`. The HB engine asserts this enable during command/data activity and
+deasserts it when the bus is idle or terminating.
+
+The AXI-Lite local register `HB_CLK_CE_FORCE` (`0x008C`, bit0) is ORed with the
+engine-generated enable. Software can use this to force the gated CK path on during
+bring-up, delay calibration, or debug.
+
+## Recommended Bring-Up Sequence
+
+For the checked-in project and software flow, use this order:
+
+1. Ensure `clk_wiz_0` is locked and controller resets are released.
+2. Bring up delay control blocks before depending on read capture:
+   - call `hb_dly_init(base, timeout_polls)`, or
+   - perform the equivalent AXI-Lite sequence manually:
+     - assert delay resets
+     - wait for `IDELAYCTRL_STATUS[0]`
+     - release ODELAY / RWDS IDELAY resets
+3. Read controller `VERSION` and HyperRAM `ID0` / `ID1` through AXI-Lite to confirm
+   basic command and read-path operation.
+4. If `ID0` is unstable or incorrect, tune CK ODELAY first.
+5. If CK timing looks reasonable but read capture still fails, tune RWDS IDELAY.
+6. Run a wider memory test only after register-space reads are stable.
+
+Practical note:
+
+- The software helpers already force `HB_CLK_CE_FORCE` when needed during delay
+  reset and ODELAY stepping, because the gated CK path must be running for that
+  logic to behave predictably.
+
+## Delay-Control Workflow
+
+### CK ODELAY
+
+Relevant registers:
+
+- `0x0100` `CK_P_ODELAY_CTRL`
+- `0x0104` `CK_P_ODELAY_TIME`
+- `0x0108` `CK_P_ODELAY_STATUS`
+
+Useful helper APIs:
+
+- `hb_odly_get()`
+- `hb_odly_set()`
+- `hb_odly_inc()`
+- `hb_odly_dec()`
+- `hb_odly_sweep()`
+
+Recommended workflow:
+
+1. Initialize delay blocks with `hb_dly_init()`.
+2. Sweep CK delay while repeatedly reading HyperRAM `ID0`.
+3. Record regions where `ID0 == 0x0000810C` and `ERR_STATUS` stays clear.
+4. Choose a stable interior point, not an edge of the passing window.
+
+`hb_odly_sweep()` is a useful first-pass tool because it prints:
+
+- `CNTVALUEOUT`
+- `ID0`
+- `ERR_STATUS`
+- `AXIF_RWDS_CNTR`
+- `AXIL_RWDS_CNTR`
+
+### RWDS IDELAY
+
+Relevant registers:
+
+- `0x01C0` `RWDS_IDELAY_CTRL`
+- `0x01C4` `RWDS_IDELAY_TIME`
+- `0x01C8` `RWDS_IDELAY_STATUS`
+
+Useful helper APIs:
+
+- `hb_rwds_idly_inc_until()`
+- `hb_rwds_idly_dec_below_16()`
+
+Recommended workflow:
+
+1. First establish a stable CK ODELAY setting.
+2. Then move RWDS IDELAY to center the read-valid window.
+3. Re-check `ID0`, AXI-Lite register reads, and AXI-full data reads after each
+   meaningful change.
+
+The design intentionally delays DQ and RWDS alignment in the HB engine, not in the
+PHY, so RWDS tuning problems usually show up as read-valid timing failures rather
+than total PHY inactivity.
+
+## Debug Signals and Counters
+
+Most useful top-level debug outputs:
+
+- `o_dbg_dq_q1_dly`
+- `o_dbg_dq_q2_dly`
+- `o_dbg_rwds_q1_dly`
+- `o_dbg_rwds_q2_dly`
+- `o_dbg_hb_cs_n_q`
+- `o_dbg_dq_o_d1`
+- `o_dbg_dq_o_d2`
+- `o_dbg_rwds_o_d1`
+- `o_dbg_rwds_o_d2`
+- `o_dbg_i_dq_t`
+- `o_dbg_i_rwds_t`
+
+Most useful status registers:
+
+- `ERR_STATUS` (`0x0080`)
+- `AXIF_RWDS_CNTR` (`0x0084`)
+- `AXIL_RWDS_CNTR` (`0x0088`)
+- `IDELAYCTRL_STATUS` (`0x0204`)
+- `CK_P_ODELAY_STATUS` (`0x0108`)
+- `RWDS_IDELAY_STATUS` (`0x01C8`)
+
+## Symptom-Oriented Debug Guide
+
+### No HyperBus CK at the pin
+
+Check:
+
+- `o_hb_clk_ce`
+- `HB_CLK_CE_FORCE`
+- block-design connection from `o_hb_clk_ce` to `clk_wiz_0/clk_out5_ce`
+- `o_hb_cs_n`
+- `o_dbg_hb_cs_n_q`
+
+Interpretation:
+
+- If `o_hb_clk_ce` never asserts, the HB engine is not trying to run a transfer.
+- If `o_hb_clk_ce` asserts but CK is still missing, inspect the `clk_out5` path,
+  CK ODDRE1 forwarding path, and CK output delay/reset state.
+
+### CS# toggles but ID reads fail
+
+Check:
+
+- `ERR_STATUS`
+- `AXIL_RWDS_CNTR`
+- CK ODELAY status/value
+- RWDS IDELAY status/value
+
+Interpretation:
+
+- If RWDS counters stay at zero, the memory is likely not responding or the sample
+  point is too far off.
+- If RWDS counters increment but returned data is wrong, capture alignment or DQ
+  timing is more likely than total transaction failure.
+
+### RWDS activity is present but read data is wrong
+
+Check:
+
+- `o_dbg_rwds_q1_dly`
+- `o_dbg_rwds_q2_dly`
+- `o_dbg_dq_q1_dly`
+- `o_dbg_dq_q2_dly`
+
+Interpretation:
+
+- This usually points to capture-window placement, CK/RWDS delay tuning, or
+  read-path phase alignment rather than command sequencing.
+
+### Writes appear to work but later reads fail
+
+Check:
+
+- CK ODELAY sweep result
+- RWDS IDELAY setting
+- `o_dbg_i_dq_t` / `o_dbg_i_rwds_t`
+- `o_dbg_dq_o_d1/d2` and `o_dbg_rwds_o_d1/d2`
+
+Interpretation:
+
+- Successful writes do not prove the read sample point is centered.
+- A marginal interface often shows up first as read instability while write traffic
+  still appears functional.
+
+## Integration Notes
+
+- The reusable controller interface still expects these clocks as explicit inputs.
+- In the checked-in project, `i_hb_clk_200_gated` is sourced internally from
+  `clk_wiz_0/clk_out5`; another integrating project must provide an equivalent
+  gated 200 MHz clock path.
+- If the controller top-level interface changes, regenerate the packaged IP and
+  the consuming block-design / `.xci` artifacts together.
+- The controller/PHY docs assume single-ended HyperBus CK operation:
+  `o_hb_ck_p` is the real forwarded clock and `o_hb_ck_n` is held low.
+
+## Related Notes
+
+- `doc/hyperbus_phy_design_notes.md`
+- `doc/implemented_ff_by_clock_domain.md`
+- `doc/hb_dq_input_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_output_relative_timing.md`
+- `doc/odelaye3_SUP.md`
