@@ -1,0 +1,9 @@
+DQ0   min=0.258 ns                           | max=0.746 ns                                                                           
+DQ1   min=0.260 ns                            | max=0.747 ns                                                                           
+DQ2   min=0.275 ns                             | max=0.783 ns                                                                               
+DQ3   min=0.264 ns                            | max=0.751 ns                                                                            
+DQ4   min=0.258 ns                           | max=0.746 ns                                                                           
+DQ5   min=0.259 ns                           | max=0.747 ns                                                                           
+DQ6   min=0.256 ns                           | max=0.743 ns                                                                           
+DQ7   min=0.257 ns                           | max=0.745 ns                                                                           
+RWDS  min=0.257 ns                           | max=0.745 ns                                                                           

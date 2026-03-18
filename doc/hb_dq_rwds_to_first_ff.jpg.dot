@@ -1,0 +1,36 @@
+digraph hb_paths {
+  rankdir=LR;
+  splines=ortho;
+  fontname="Helvetica";
+  fontsize=12;
+  labelloc=t;
+  label="HyperBus Input Datapath to First Flip-Flop After Primitives (Left-to-Right)";
+
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#F8F8F8", color="#444444"];
+  edge [color="#333333", arrowsize=0.7, penwidth=1.2, fontname="Helvetica", fontsize=10];
+
+  // DQ row
+  dq_pad   [label="hb_dq[i] pad\n(Stage 0)", fillcolor="#EAF4FF"];
+  dq_iobuf [label="IOBUF\nu_iobuf_dq\n(comb primitive)\n(Stage 1)", fillcolor="#EAF4FF"];
+  dq_iddr  [label="IDDRE1\nu_iddr_dq\nFIRST FF\nC/CB=i_hb_clk_200_samp_90\n(Stage 2)", fillcolor="#CDE5FF"];
+
+  // RWDS row
+  rw_pad    [label="hb_rwds pad\n(Stage 0)", fillcolor="#FFF2E8"];
+  rw_iobuf  [label="IOBUF\nu_iobuf_rwds\n(comb primitive)\n(Stage 1)", fillcolor="#FFF2E8"];
+  rw_idelay [label="IDELAYE3\nu_idelay_rwds\nprogrammable delay\n(Stage 2)", fillcolor="#FFE3D1"];
+  rw_iddr   [label="IDDRE1\nu_iddr_rwds\nFIRST FF\nC/CB=i_hb_clk_200_samp_90\n(Stage 3)", fillcolor="#FFD0B3"];
+
+  // Flow edges
+  dq_pad -> dq_iobuf -> dq_iddr;
+  rw_pad -> rw_iobuf -> rw_idelay -> rw_iddr;
+
+  // Alignment helpers
+  {rank=same; dq_pad; rw_pad}
+  {rank=same; dq_iobuf; rw_iobuf}
+  {rank=same; dq_iddr; rw_idelay}
+
+  // Relative note
+  note [shape=note, fillcolor="#FFFFDD", label="Relative pipeline to first FF:\nDQ path: IOBUF -> IDDRE1\nRWDS path: IOBUF -> IDELAYE3 -> IDDRE1\n=> RWDS has one extra primitive stage before first FF."];
+  dq_iddr -> note [style=dashed, arrowhead=none, color="#777777"];
+  rw_iddr -> note [style=dashed, arrowhead=none, color="#777777"];
+}
