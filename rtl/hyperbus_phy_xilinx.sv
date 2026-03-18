@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 
 module hyperbus_phy_xilinx (

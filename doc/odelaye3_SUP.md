@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2026 Glen Lowe -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 Spartan UltraScale+ ODELAYE3 — Corrected Tables and VARIABLE/TIME Cycle-by-Cycle Sequence
 
 Last updated: 2026-03-11

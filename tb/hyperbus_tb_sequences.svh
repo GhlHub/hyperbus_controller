@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
     // Higher-level scenario sequences
     task automatic run_axil_hold_valid_stress;
         logic [31:0] rd32;

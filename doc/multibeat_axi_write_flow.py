@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Glen Lowe
+# SPDX-License-Identifier: Apache-2.0
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 2400, 1850

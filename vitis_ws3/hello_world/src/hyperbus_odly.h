@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
 #ifndef HYPERBUS_ODLY_H
 #define HYPERBUS_ODLY_H
 

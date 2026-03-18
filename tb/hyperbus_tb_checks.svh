@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
     // Common check/util tasks
     function automatic logic [31:0] axil_lane16(input logic [15:0] addr, input logic [15:0] value16);
         begin

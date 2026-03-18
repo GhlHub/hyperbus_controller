@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Glen Lowe
+# SPDX-License-Identifier: Apache-2.0
 set script_dir [file normalize [file dirname [info script]]]
 set repo_root  [file normalize [file join $script_dir ".."]]
 

@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2026 Glen Lowe -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # HB_DQ vs HB_CK_P Relative Output Timing (Implemented Design)
 
 Last updated: 2026-03-11

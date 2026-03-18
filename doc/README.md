@@ -1,3 +1,5 @@
+<!-- SPDX-FileCopyrightText: 2026 Glen Lowe -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Documentation
 
 Last updated: 2026-03-17

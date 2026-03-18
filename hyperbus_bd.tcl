@@ -144,7 +144,6 @@ xilinx.com:ip:axi_intc:4.1\
 xilinx.com:ip:axi_timer:2.0\
 xilinx.com:inline_hdl:ilconcat:1.0\
 user.org:user:hyperbus_controller:1.0\
-xilinx.com:ip:ila:6.2\
 "
 
    set list_ips_missing ""
@@ -244,6 +243,7 @@ proc create_root_design { parentCell } {
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [list \
+    CONFIG.AXI_DRP {false} \
     CONFIG.CLKOUT1_JITTER {102.086} \
     CONFIG.CLKOUT1_MATCHED_ROUTING {true} \
     CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200} \
@@ -277,7 +277,11 @@ proc create_root_design { parentCell } {
     CONFIG.MMCM_CLKOUT3_DIVIDE {4} \
     CONFIG.MMCM_CLKOUT4_DIVIDE {6} \
     CONFIG.NUM_OUT_CLKS {5} \
+    CONFIG.OPTIMIZE_CLOCKING_STRUCTURE_EN {false} \
+    CONFIG.PHASE_DUTY_CONFIG {true} \
     CONFIG.PRIM_SOURCE {Differential_clock_capable_pin} \
+    CONFIG.USE_DYN_PHASE_SHIFT {false} \
+    CONFIG.USE_DYN_RECONFIG {true} \
   ] $clk_wiz_0
 
 
@@ -290,7 +294,7 @@ proc create_root_design { parentCell } {
   # Create instance: axi_crossbar_0, and set properties
   set axi_crossbar_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_crossbar:2.1 axi_crossbar_0 ]
   set_property -dict [list \
-    CONFIG.NUM_MI {4} \
+    CONFIG.NUM_MI {5} \
     CONFIG.NUM_SI {1} \
   ] $axi_crossbar_0
 
@@ -331,17 +335,14 @@ proc create_root_design { parentCell } {
   # Create instance: hyperbus_controller_0, and set properties
   set hyperbus_controller_0 [ create_bd_cell -type ip -vlnv user.org:user:hyperbus_controller:1.0 hyperbus_controller_0 ]
 
-  # Create instance: ila_0, and set properties
-  set ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0 ]
-
   # Create interface connections
   connect_bd_intf_net -intf_net CLK_IN1_D_0_1 [get_bd_intf_ports CLK_IN1_D_0] [get_bd_intf_pins clk_wiz_0/CLK_IN1_D]
   connect_bd_intf_net -intf_net axi_crossbar_0_M00_AXI [get_bd_intf_pins axi_crossbar_0/M00_AXI] [get_bd_intf_pins axi_intc_0/s_axi]
   connect_bd_intf_net -intf_net axi_crossbar_0_M01_AXI [get_bd_intf_pins axi_crossbar_0/M01_AXI] [get_bd_intf_pins hyperbus_controller_0/s_axil]
   connect_bd_intf_net -intf_net axi_crossbar_0_M02_AXI [get_bd_intf_pins axi_crossbar_0/M02_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_0_M03_AXI [get_bd_intf_pins axi_crossbar_0/M03_AXI] [get_bd_intf_pins axi_timer_0/S_AXI]
+  connect_bd_intf_net -intf_net axi_crossbar_0_M04_AXI [get_bd_intf_pins axi_crossbar_0/M04_AXI] [get_bd_intf_pins clk_wiz_0/s_axi_lite]
   connect_bd_intf_net -intf_net axi_crossbar_1_M00_AXI [get_bd_intf_pins axi_crossbar_1/M00_AXI] [get_bd_intf_pins hyperbus_controller_0/s_axi]
-connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_intf_pins axi_crossbar_1/M00_AXI] [get_bd_intf_pins ila_0/SLOT_0_AXI]
   connect_bd_intf_net -intf_net axi_intc_0_interrupt [get_bd_intf_pins axi_intc_0/interrupt] [get_bd_intf_pins microblaze_riscv_0/INTERRUPT]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports UART_0] [get_bd_intf_pins axi_uartlite_0/UART]
   connect_bd_intf_net -intf_net lmb_bram_if_cntlr_0_BRAM_PORT [get_bd_intf_pins lmb_bram_if_cntlr_0/BRAM_PORT] [get_bd_intf_pins blk_mem_gen_0/BRAM_PORTA]
@@ -379,7 +380,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_
   [get_bd_pins axi_uartlite_0/s_axi_aclk] \
   [get_bd_pins axi_intc_0/s_axi_aclk] \
   [get_bd_pins axi_timer_0/s_axi_aclk] \
-  [get_bd_pins ila_0/clk] \
+  [get_bd_pins clk_wiz_0/s_axi_aclk] \
   [get_bd_pins hyperbus_controller_0/i_axi_aclk]
   connect_bd_net -net clk_wiz_0_clk_out5  [get_bd_pins clk_wiz_0/clk_out5] \
   [get_bd_pins hyperbus_controller_0/i_hb_clk_200_gated]
@@ -420,6 +421,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_
   [get_bd_pins proc_sys_reset_0/ext_reset_in] \
   [get_bd_pins proc_sys_reset_3/ext_reset_in] \
   [get_bd_pins proc_sys_reset_2/ext_reset_in] \
+  [get_bd_pins clk_wiz_0/s_axi_aresetn] \
   [get_bd_pins hyperbus_controller_0/i_axi_aresetn]
   connect_bd_net -net proc_sys_reset_2_peripheral_reset  [get_bd_pins proc_sys_reset_2/peripheral_reset] \
   [get_bd_pins hyperbus_controller_0/i_idelayctrl_rst]
@@ -430,16 +432,18 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_
   assign_bd_address -offset 0x41200000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs axi_intc_0/S_AXI/Reg] -force
   assign_bd_address -offset 0x41C00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs axi_timer_0/S_AXI/Reg] -force
   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] -force
-  assign_bd_address -offset 0x80000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs hyperbus_controller_0/s_axi/reg0] -force
+  assign_bd_address -offset 0x44A00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs clk_wiz_0/s_axi_lite/Reg] -force
+  assign_bd_address -offset 0x80000000 -range 0x00800000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs hyperbus_controller_0/s_axi/reg0] -force
   assign_bd_address -offset 0x00010000 -range 0x00010000 -with_name SEG_hyperbus_controller_0_reg0_1 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs hyperbus_controller_0/s_axil/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00008000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Data] [get_bd_addr_segs lmb_bram_if_cntlr_0/SLMB/Mem] -force
-  assign_bd_address -offset 0x80000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Instruction] [get_bd_addr_segs hyperbus_controller_0/s_axi/reg0] -force
+  assign_bd_address -offset 0x80000000 -range 0x00800000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Instruction] [get_bd_addr_segs hyperbus_controller_0/s_axi/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00008000 -target_address_space [get_bd_addr_spaces microblaze_riscv_0/Instruction] [get_bd_addr_segs lmb_bram_if_cntlr_0/SLMB1/Mem] -force
 
 
   # Restore current instance
   current_bd_instance $oldCurInst
 
+  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -451,6 +455,4 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_
 
 create_root_design ""
 
-
-common::send_gid_msg -ssname BD::TCL -id 2053 -severity "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

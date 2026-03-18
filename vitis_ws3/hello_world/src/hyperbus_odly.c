@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
 #include "hyperbus_odly.h"
 #include <stdint.h>
 #include <stdio.h>

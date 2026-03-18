@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Glen Lowe
+# SPDX-License-Identifier: Apache-2.0
 set script_dir [file dirname [file normalize [info script]]]
 set xpr_path [file normalize [file join $script_dir "hyperbus_test_proj.xpr"]]
 
