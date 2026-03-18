@@ -1,6 +1,6 @@
 # HyperBus Controller Documentation
 
-Last updated: 2026-03-11
+Last updated: 2026-03-17
 
 ## Overview
 
@@ -126,6 +126,30 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
 - HyperBus read termination waits for required RWDS transitions and then performs CS#/CK termination hold sequencing.
 - CK is gated off when idle.
 
+## Debug Exports
+
+The controller currently exposes the following top-level debug outputs:
+
+- Read-path alignment/debug:
+  - `o_dbg_dq_q1_dly`
+  - `o_dbg_dq_q2_dly`
+  - `o_dbg_rwds_q1_dly`
+  - `o_dbg_rwds_q2_dly`
+- Write/IO control debug:
+  - `o_dbg_dq_o_d1`
+  - `o_dbg_dq_o_d2`
+  - `o_dbg_rwds_o_d1`
+  - `o_dbg_rwds_o_d2`
+  - `o_dbg_i_dq_t`
+  - `o_dbg_i_rwds_t`
+- HyperBus control debug:
+  - `o_dbg_hb_cs_n_q` (`HB engine` registered CS# state before top-level `assign o_hb_cs_n = hb_cs_n_q`)
+
+Notes:
+
+- `o_dbg_dq_q*_dly` and `o_dbg_rwds_q*_dly` are the HB-engine aligned samples used by the read datapath.
+- `o_dbg_hb_cs_n_q` is useful for distinguishing the engine-controlled CS# state from downstream pin-level effects.
+
 ## Testbench
 
 Primary testbench:
@@ -179,6 +203,8 @@ Notes:
 - The packager imports RTL from `rtl/` only (no testbench files).
 - Top-level ODELAY debug outputs (`o_ck_p_odly_*`) were removed from the controller interface;
   ODELAY control is now software-driven through AXI-Lite registers.
+- If the controller top-level interface changes, also regenerate the consuming block-design/IP-instance artifacts
+  (for example `design_1.bd` and `design_1_hyperbus_controller_0_0.xci`) so the new ports appear in the project.
 
 Clock constraint note:
 
@@ -210,11 +236,13 @@ Multi-beat AXI flow diagrams are available at:
 
 - `doc/multibeat_axi_write_flow.jpg`
 - `doc/multibeat_axi_read_flow.jpg`
+- `doc/hb_tx_datapath_fabric_to_pins.jpg`
 
 Diagram generator scripts:
 
 - `doc/multibeat_axi_write_flow.py`
 - `doc/multibeat_axi_read_flow.py`
+- `doc/hb_tx_datapath_fabric_to_pins.jpg.dot`
 
 ## PHY Reuse Notes
 

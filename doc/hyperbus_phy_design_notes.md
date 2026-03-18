@@ -1,6 +1,6 @@
 # HyperBus PHY Design Notes
 
-Last updated: 2026-03-11
+Last updated: 2026-03-17
 
 ## Scope
 
@@ -19,9 +19,11 @@ This note captures the current implementation constraints and integration rules 
   - Per-bit `ODDRE1` drives TX DDR data from `i_dq_o_d1/d2`.
   - Per-bit `IOBUF` controls tri-state with `i_dq_t`.
   - Per-bit `IDDRE1` samples DQ on `i_hb_clk_200_samp_90`.
+  - PHY exports raw `IDDRE1` DQ samples; post-capture alignment is in the HB engine.
 - RWDS TX/RX:
   - `ODDRE1` + `IOBUF` for TX/IO direction control.
   - `IDDRE1` for RWDS capture on `i_hb_clk_200_samp_90`.
+  - PHY exports raw RWDS `IDDRE1` samples; HB-engine alignment/debug taps are downstream.
 - Delay calibration:
   - `IDELAYCTRL` is instantiated.
   - `REFCLK` must be external 300 MHz (`i_ref_clk300`).
@@ -47,23 +49,26 @@ Assumptions used by the current design/testbench:
 
 ## Latency Alignment Rule
 
-Current PHY intentionally adds one `i_hb_clk_200` cycle of pipeline latency on DQ
-capture outputs:
+Current PHY exports raw `IDDRE1` capture outputs directly:
 
 - `IDDRE1.Q1/Q2 -> dq_q1_raw/dq_q2_raw`
-- `o_dq_q1/o_dq_q2` are registered on `posedge i_hb_clk_200`
+- `o_dq_q1/o_dq_q2` are direct exports of those raw samples
+- `o_rwds_q1/o_rwds_q2` are also direct exports of raw `IDDRE1` samples
 
 Required consequence in HB engine:
-- RWDS data-valid qualification must be delayed by one `i_hb_clk_200` cycle to align
-  with pipelined DQ data.
-- Current implementation does this in `rtl/hyperbus_hb_engine.sv` with
-  `rwds_q1_dly/rwds_q2_dly`.
+- Read-path alignment is performed in `rtl/hyperbus_hb_engine.sv`, not in the PHY.
+- Current implementation delays both DQ and RWDS by one `i_hb_clk_200` cycle using:
+  - `dq_q1_dly/dq_q2_dly`
+  - `rwds_q1_dly/rwds_q2_dly`
+- `hb_word16` is built from delayed DQ samples, and RWDS edge qualification is taken
+  from the delayed RWDS samples so the read datapath stays phase-aligned.
 
 ## Integration Checklist (Do Not Skip)
 
-1. If DQ capture pipeline depth changes:
+1. If DQ/RWDS capture alignment depth changes:
    - Update HB read-valid alignment logic to match.
    - Re-check AXI-full and AXI-lite read paths for off-by-one behavior.
+   - Re-check exported debug taps (`o_dbg_dq_q*_dly`, `o_dbg_rwds_q*_dly`) for consistency.
 2. If sample clock source changes:
    - Re-validate `IDDRE1` edge/phase assumptions and CA/latency detect timing.
    - Re-validate source/enable behavior for external `i_hb_clk_200_gated`.
@@ -83,6 +88,8 @@ Required consequence in HB engine:
 - After PHY interface changes, always regenerate:
   - `ip_repo/hyperbus_controller/component.xml`
   - `ip_repo/hyperbus_controller/src/*`
+- After top-level controller interface changes, also refresh any checked-in consuming
+  block-design artifacts so new ports are propagated into `.bd` / `.xci` instances.
 
 ## Constraints Note (Single-Ended CK Mode)
 
