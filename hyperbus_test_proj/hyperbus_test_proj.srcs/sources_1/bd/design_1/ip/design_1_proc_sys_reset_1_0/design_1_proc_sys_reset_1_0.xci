@@ -2,7 +2,7 @@
   "schema": "xilinx.com:schema:json_instance:1.0",
   "ip_inst": {
     "xci_name": "design_1_proc_sys_reset_1_0",
-    "cell_name": "proc_sys_reset_1",
+    "cell_name": "reset_gen/proc_sys_reset_1",
     "component_reference": "xilinx.com:ip:proc_sys_reset:5.0",
     "ip_revision": "17",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_proc_sys_reset_1_0",
@@ -192,5 +192,5 @@
       }
     }
   },
-  "checksum": "97705adb"
+  "checksum": "48da0fcc"
 }

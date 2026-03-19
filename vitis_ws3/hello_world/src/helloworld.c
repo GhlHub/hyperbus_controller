@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "platform.h"
 #include "xil_printf.h"
+#include "hyperbus_memtest.h"
 #include "hyperbus_odly.h"
 
 #define DLY_ADDR 0x10000
@@ -31,9 +32,9 @@ int main()
 
     hb_idelayctrl_reset_wait_ready(DLY_ADDR, 0x8000);
     hb_rwds_idly_dec_below_16(DLY_ADDR);
-    hb_odly_sweep(DLY_ADDR, 20U);
-    //hb_rwds_idly_inc_until(DLY_ADDR, 500);
-    hb_memtest_hyperram_range();
+
+    hb_odly_sweep_to_midpoint(DLY_ADDR, NULL, NULL, NULL);
+    hb_memtest_hyperram_worst_case_bytes();
 
     print("Successfully ran Hello World application");
     cleanup_platform();

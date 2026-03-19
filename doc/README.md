@@ -93,7 +93,7 @@ All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
     - `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
     - `0x0804` -> HyperBus `0x0802` (CR1)
   - Local controller registers:
-    - `0x0024` VERSION (read-only, `0x01000002`)
+    - `0x0024` VERSION (read-only, `0x01000003`)
     - `0x0028` DQ (read-only, sampled DQ debug view)
     - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
     - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
@@ -286,6 +286,8 @@ The software helper library is in:
 
 - `software/hyperbus_odly.h`
 - `software/hyperbus_odly.c`
+- `software/hyperbus_memtest.h`
+- `software/hyperbus_memtest.c`
 
 Current public APIs:
 
@@ -301,6 +303,8 @@ Current public APIs:
 - `hb_odly_sweep_to_midpoint()` (finds first/last passing CK ODELAY values from
   `ID0`, computes midpoint, then steps back to the midpoint)
 - `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
+- `hb_memtest_hyperram_worst_case_bytes()` (runs byte-oriented worst-case patterns:
+  solid fills, checkerboards, walking 1/0 bytes, and address-derived byte patterns)
 
 ## Post-Impl Simulation Flow
 
