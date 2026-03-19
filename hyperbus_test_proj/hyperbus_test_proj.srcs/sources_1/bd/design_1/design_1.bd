@@ -28,8 +28,7 @@
         "proc_sys_reset_1": "",
         "proc_sys_reset_2": "",
         "proc_sys_reset_3": ""
-      },
-      "ila_0": ""
+      }
     },
     "interface_ports": {
       "CLK_IN1_D_0": {
@@ -861,14 +860,6 @@
             ]
           }
         }
-      },
-      "ila_0": {
-        "vlnv": "xilinx.com:ip:ila:6.2",
-        "ip_revision": "19",
-        "xci_name": "design_1_ila_0_0",
-        "xci_path": "ip/design_1_ila_0_0/design_1_ila_0_0.xci",
-        "inst_hier_path": "ila_0",
-        "has_run_ip_tcl": "true"
       }
     },
     "interface_nets": {
@@ -905,8 +896,7 @@
       "axi_crossbar_1_M00_AXI": {
         "interface_ports": [
           "axi_crossbar_1/M00_AXI",
-          "hyperbus_controller_0/s_axi",
-          "ila_0/SLOT_0_AXI"
+          "hyperbus_controller_0/s_axi"
         ]
       },
       "axi_intc_0_interrupt": {
@@ -1021,7 +1011,6 @@
           "axi_intc_0/s_axi_aclk",
           "axi_timer_0/s_axi_aclk",
           "reset_gen/slowest_sync_clk1",
-          "ila_0/clk",
           "hyperbus_controller_0/i_axi_aclk"
         ]
       },
