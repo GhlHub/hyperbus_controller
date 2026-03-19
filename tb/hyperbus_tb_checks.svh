@@ -8,6 +8,20 @@
         end
     endfunction
 
+    function automatic logic [31:0] apply_wstrb32(
+        input logic [31:0] prior,
+        input logic [31:0] wdata,
+        input logic [3:0]  wstrb
+    );
+        begin
+            apply_wstrb32 = prior;
+            if (wstrb[0]) apply_wstrb32[7:0]   = wdata[7:0];
+            if (wstrb[1]) apply_wstrb32[15:8]  = wdata[15:8];
+            if (wstrb[2]) apply_wstrb32[23:16] = wdata[23:16];
+            if (wstrb[3]) apply_wstrb32[31:24] = wdata[31:24];
+        end
+    endfunction
+
     task automatic check_eq32(
         input logic [31:0] got,
         input logic [31:0] exp,

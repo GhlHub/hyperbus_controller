@@ -252,7 +252,7 @@
         int poll_i;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0002, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0003, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");

@@ -92,6 +92,8 @@ module hyperbus_axi_full_frontend #(
     logic [31:0] rd_cmd2_addr_q;
     logic [7:0]  rd_cmd2_beats_q;
     logic        rd_cmd2_pending_q;
+    logic [31:0] awaddr_aligned;
+    logic [31:0] araddr_aligned;
 
     function automatic logic f_is_wrap_len_legal(input logic [7:0] len);
         begin
@@ -101,6 +103,8 @@ module hyperbus_axi_full_frontend #(
     endfunction
 
     assign bresp_q_full = (bresp_q_count == 6'd32);
+    assign awaddr_aligned = {s_axi_awaddr[31:2], 2'b00};
+    assign araddr_aligned = {s_axi_araddr[31:2], 2'b00};
 
     assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
                            (!bresp_q_full) &&
@@ -190,7 +194,7 @@ module hyperbus_axi_full_frontend #(
             s_axi_awready <= aw_can_accept;
             if (aw_can_accept && s_axi_awvalid) begin
                 o_aw_pending <= 1'b1;
-                aw_addr_q <= s_axi_awaddr;
+                aw_addr_q <= awaddr_aligned;
                 aw_id_q <= s_axi_awid;
                 aw_len_q <= s_axi_awlen;
                 aw_burst_q <= s_axi_awburst;
@@ -202,8 +206,8 @@ module hyperbus_axi_full_frontend #(
                 if (s_axi_awburst == 2'b10) begin
                     aw_wrap_bytes = {23'd0, aw_total_beats, 2'b00};
                     aw_wrap_mask = ~(aw_wrap_bytes - 32'd1);
-                    aw_wrap_base = s_axi_awaddr & aw_wrap_mask;
-                    aw_bytes_to_boundary = (aw_wrap_base + aw_wrap_bytes - s_axi_awaddr);
+                    aw_wrap_base = awaddr_aligned & aw_wrap_mask;
+                    aw_bytes_to_boundary = (aw_wrap_base + aw_wrap_bytes - awaddr_aligned);
                     aw_beats1_calc = aw_bytes_to_boundary[9:2];
                     aw_beats2_calc = aw_total_beats[7:0] - aw_beats1_calc;
                     aw_split_beats1_q <= aw_beats1_calc;
@@ -318,21 +322,21 @@ module hyperbus_axi_full_frontend #(
                 if (s_axi_arburst == 2'b10) begin
                     ar_wrap_bytes = {23'd0, ar_total_beats, 2'b00};
                     ar_wrap_mask = ~(ar_wrap_bytes - 32'd1);
-                    ar_wrap_base = s_axi_araddr & ar_wrap_mask;
-                    ar_bytes_to_boundary = (ar_wrap_base + ar_wrap_bytes - s_axi_araddr);
+                    ar_wrap_base = araddr_aligned & ar_wrap_mask;
+                    ar_bytes_to_boundary = (ar_wrap_base + ar_wrap_bytes - araddr_aligned);
                     ar_beats1_calc = ar_bytes_to_boundary[9:2];
                     ar_beats2_calc = ar_total_beats[7:0] - ar_beats1_calc;
                     if (ar_beats2_calc != 8'd0) begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, ar_beats1_calc, 32'h8000_0000};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, ar_beats1_calc, 32'h8000_0000};
                         rd_cmd2_addr_q <= ar_wrap_base;
                         rd_cmd2_beats_q <= ar_beats2_calc;
                         rd_cmd2_pending_q <= 1'b1;
                     end else begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, (s_axi_arlen + 8'd1), 32'h0};
                         rd_cmd2_pending_q <= 1'b0;
                     end
                 end else begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, s_axi_araddr, (s_axi_arlen + 8'd1), 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, (s_axi_arlen + 8'd1), 32'h0};
                     rd_cmd2_pending_q <= 1'b0;
                 end
                 o_cmd_fifo_wr_en_full <= 1'b1;

@@ -239,6 +239,7 @@ module hyperbus_controller_tb;
 
     int k;
     int beats;
+    int mask_idx;
     int axil_cmd_push_count;
     logic [1:0] bresp_chk;
     logic [31:0] burst_base;
@@ -248,6 +249,10 @@ module hyperbus_controller_tb;
     logic [31:0] axif_rwds_after;
     logic [31:0] axil_rwds_before;
     logic [31:0] axil_rwds_after;
+    logic [31:0] mask_base_word;
+    logic [31:0] mask_write_word;
+    logic [31:0] mask_exp_word;
+    logic [3:0]  mask_wstrb;
     logic [5:0]  exp_axif_rwds_after;
     logic odly_dbg_en;
     logic [8:0] odly_cnt_prev;
@@ -402,28 +407,35 @@ module hyperbus_controller_tb;
         end
         $display("[%0d][ TB] TEST PASS: single-beat full write/read 0x11223344", ns_time());
 
-        axil_read(16'h0084, axif_rwds_before);
-        axil_read(16'h0088, axil_rwds_before);
-        axi_full_write_burst(32'h0000_0180, 1, 32'hAA55_FF00, 4'b0101); // update byte0 + byte2 only (expect 0x11553300)
-        axi_full_read_burst (32'h0000_0180, 1, rd_data);
-        axil_read(16'h0084, axif_rwds_after);
-        axil_read(16'h0088, axil_rwds_after);
-        exp_axif_rwds_after = axif_rwds_before[5:0] + 6'd2; // 1 beat read -> 2 RWDS-qualified halfwords
-        if (axif_rwds_after[5:0] !== exp_axif_rwds_after) begin
-            $fatal(1, "AXI-FULL RWDS counter mismatch (WSTRB readback): got=0x%02x exp=0x%02x",
-                   axif_rwds_after[5:0], exp_axif_rwds_after);
+        // Exhaustive single-beat byte-mask coverage, including 4'h0 no-op writes.
+        mask_base_word = 32'h1122_3344;
+        mask_write_word = 32'hAA55_FF00;
+        for (mask_idx = 0; mask_idx < 16; mask_idx++) begin
+            mask_wstrb = mask_idx[3:0];
+            mask_exp_word = apply_wstrb32(mask_base_word, mask_write_word, mask_wstrb);
+            axi_full_write_burst(32'h0000_0180, 1, mask_base_word, 4'hF);
+            axil_read(16'h0084, axif_rwds_before);
+            axil_read(16'h0088, axil_rwds_before);
+            axi_full_write_burst(32'h0000_0180, 1, mask_write_word, mask_wstrb);
+            axi_full_read_burst (32'h0000_0180, 1, rd_data);
+            axil_read(16'h0084, axif_rwds_after);
+            axil_read(16'h0088, axil_rwds_after);
+            exp_axif_rwds_after = axif_rwds_before[5:0] + 6'd2; // 1 beat read -> 2 RWDS-qualified halfwords
+            if (axif_rwds_after[5:0] !== exp_axif_rwds_after) begin
+                $fatal(1, "AXI-FULL RWDS counter mismatch (WSTRB=0x%1x): got=0x%02x exp=0x%02x",
+                       mask_wstrb, axif_rwds_after[5:0], exp_axif_rwds_after);
+            end
+            if (axil_rwds_after[5:0] !== axil_rwds_before[5:0]) begin
+                $fatal(1, "AXI-LITE RWDS counter changed during AXI-full readback (WSTRB=0x%1x): before=0x%02x after=0x%02x",
+                       mask_wstrb, axil_rwds_before[5:0], axil_rwds_after[5:0]);
+            end
+            if (rd_data[0] !== mask_exp_word) begin
+                $fatal(1, "WSTRB mask test failed (WSTRB=0x%1x): got 0x%08x exp 0x%08x",
+                       mask_wstrb, rd_data[0], mask_exp_word);
+            end
+            $display("[%0d][ TB] TEST PASS: WSTRB masked write/read strb=0x%1x got=0x%08x",
+                     ns_time(), mask_wstrb, rd_data[0]);
         end
-        if (axil_rwds_after[5:0] !== axil_rwds_before[5:0]) begin
-            $fatal(1, "AXI-LITE RWDS counter changed during AXI-full readback: before=0x%02x after=0x%02x",
-                   axil_rwds_before[5:0], axil_rwds_after[5:0]);
-        end
-        $display("[%0d][ TB] TEST PASS: RWDS counters after WSTRB AXI-full read axif=0x%02x axil=0x%02x",
-                 ns_time(), axif_rwds_after[5:0], axil_rwds_after[5:0]);
-
-        if (rd_data[0] !== 32'h1155_3300) begin
-            $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x11553300", rd_data[0]);
-        end
-        $display("[%0d][ TB] TEST PASS: WSTRB masked write/read 0x11553300", ns_time());
 
         // AXI-full malformed WLAST checks should return SLVERR.
         axi_full_write_burst_bad_wlast(32'h0000_01C0, 4, 32'hD00D_0000, 4'hF, 0, bresp_chk);
