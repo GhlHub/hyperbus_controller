@@ -298,6 +298,8 @@ Current public APIs:
 - `hb_dly_init()` (IDELAYCTRL reset/wait + ODELAY reset pulse)
 - `hb_odly_sweep()` (prints one-line training status per step:
   `CNTVALUEOUT`, `ID0`, `ERR_STATUS`, AXI RWDS counters)
+- `hb_odly_sweep_to_midpoint()` (finds first/last passing CK ODELAY values from
+  `ID0`, computes midpoint, then steps back to the midpoint)
 - `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
 
 ## Post-Impl Simulation Flow

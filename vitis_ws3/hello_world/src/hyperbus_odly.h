@@ -169,6 +169,28 @@ int hb_dly_init(uintptr_t base_addr, uint32_t timeout_polls);
 int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
 
 /*
+ * Find a contiguous passing ODELAY window using HyperRAM ID0 readback, then
+ * step back to the midpoint of that window.
+ * Flow:
+ * 1) Increment until ID0 matches the expected value and capture that CNTVALUEOUT
+ *    as cntvalue_min.
+ * 2) Continue incrementing until ID0 no longer matches; the previous CNTVALUEOUT
+ *    is captured as cntvalue_max.
+ * 3) Compute cntvalue_mid = ((cntvalue_max - cntvalue_min) >> 1) + cntvalue_min.
+ * 4) Decrement until CNTVALUEOUT is less than or equal to cntvalue_mid.
+ * 5) Optionally return min/max/mid through the output pointers.
+ * Return codes:
+ *   0   = success
+ *  -3   = no matching window found before the sweep guard limit
+ *  -4   = matching window did not terminate before the sweep guard limit
+ *  < -4 = propagated helper error
+ */
+int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
+                              uint16_t *cntvalue_min_out,
+                              uint16_t *cntvalue_max_out,
+                              uint16_t *cntvalue_mid_out);
+
+/*
  * Read ERR_STATUS, print the value, and clear timeout status when set.
  * Behavior:
  * 1) Read HB_ERR_STATUS_OFFSET and print it in hex.

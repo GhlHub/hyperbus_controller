@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include "xil_printf.h"
 
+#define HB_ODLY_ID0_MATCH_VALUE 0x0000810Cu
+#define HB_ODLY_SWEEP_GUARD_MAX 500U
+
 static inline volatile uint32_t *hb_reg_ptr(uintptr_t base, uint32_t offset)
 {
     return (volatile uint32_t *)(base + (uintptr_t)offset);
@@ -26,6 +29,41 @@ static void hb_delay_cycles(unsigned count)
     for (i = 0; i < count; ++i) {
         __asm__ volatile ("" ::: "memory");
     }
+}
+
+static int hb_odly_sample_status(uintptr_t base_addr,
+                                 uint16_t *cntvalue,
+                                 uint32_t *id0,
+                                 uint32_t *err_status,
+                                 uint32_t *axif_rwds_cntr,
+                                 uint32_t *axil_rwds_cntr)
+{
+    int rc;
+
+    hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
+    rc = hb_odly_get(base_addr, cntvalue);
+    hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
+    if (rc != 0) {
+        return rc;
+    }
+
+    *id0 = hb_reg_read(base_addr, HB_ID0_OFFSET);
+    *err_status = hb_reg_read(base_addr, HB_ERR_STATUS_OFFSET);
+    *axif_rwds_cntr = hb_reg_read(base_addr, HB_AXIF_RWDS_CNTR_OFFSET);
+    *axil_rwds_cntr = hb_reg_read(base_addr, HB_AXIL_RWDS_CNTR_OFFSET);
+    return 0;
+}
+
+static void hb_odly_print_status(uint16_t cntvalue,
+                                 uint32_t id0,
+                                 uint32_t err_status,
+                                 uint32_t axif_rwds_cntr,
+                                 uint32_t axil_rwds_cntr)
+{
+    xil_printf("CNTVALUEOUT=0x%03x ID0=0x%08x ERR_STATUS=0x%08x AXIF_RWDS_CNTR=0x%08x AXIL_RWDS_CNTR=0x%08x%s\r\n",
+               (unsigned)(cntvalue & HB_ODLY_MASK_9BIT), (unsigned)id0,
+               (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr,
+               (id0 == HB_ODLY_ID0_MATCH_VALUE) ? " MATCH" : "");
 }
 
 int hb_odly_get(uintptr_t base_addr, uint16_t *cntvalue)
@@ -216,26 +254,18 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches)
     uint32_t axil_rwds_cntr;
 
     for (;;) {
-        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
-        rc = hb_odly_get(base_addr, &cntvalue);
-        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
+        rc = hb_odly_sample_status(base_addr, &cntvalue, &id0, &err_status,
+                                   &axif_rwds_cntr, &axil_rwds_cntr);
         if (rc != 0) {
             return rc;
         }
 
-        if ((required_matches == 0U) && (cntvalue > 500U)) {
+        if ((required_matches == 0U) && (cntvalue > HB_ODLY_SWEEP_GUARD_MAX)) {
             return 0;
         }
 
-        id0 = hb_reg_read(base_addr, HB_ID0_OFFSET);
-        err_status = hb_reg_read(base_addr, HB_ERR_STATUS_OFFSET);
-        axif_rwds_cntr = hb_reg_read(base_addr, HB_AXIF_RWDS_CNTR_OFFSET);
-        axil_rwds_cntr = hb_reg_read(base_addr, HB_AXIL_RWDS_CNTR_OFFSET);
-        xil_printf("CNTVALUEOUT=0x%03x ID0=0x%08x ERR_STATUS=0x%08x AXIF_RWDS_CNTR=0x%08x AXIL_RWDS_CNTR=0x%08x%s\r\n",
-                   (unsigned)(cntvalue & HB_ODLY_MASK_9BIT), (unsigned)id0,
-                   (unsigned)err_status, (unsigned)axif_rwds_cntr, (unsigned)axil_rwds_cntr,
-                   (id0 == 0x0000810Cu) ? " MATCH" : "");
-        if (id0 == 0x0000810Cu) {
+        hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        if (id0 == HB_ODLY_ID0_MATCH_VALUE) {
             match_count++;
             if ((required_matches != 0U) && (match_count >= required_matches)) {
                 return 0;
@@ -251,6 +281,109 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches)
             return rc;
         }
     }
+}
+
+int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
+                              uint16_t *cntvalue_min_out,
+                              uint16_t *cntvalue_max_out,
+                              uint16_t *cntvalue_mid_out)
+{
+    /* Return codes: 0=success, -3=no match found, -4=window end not found, <0=helper failure. */
+    int rc;
+    uint16_t cntvalue;
+    uint16_t cntvalue_min;
+    uint16_t cntvalue_max;
+    uint16_t cntvalue_mid;
+    uint32_t id0;
+    uint32_t err_status;
+    uint32_t axif_rwds_cntr;
+    uint32_t axil_rwds_cntr;
+
+    for (;;) {
+        rc = hb_odly_sample_status(base_addr, &cntvalue, &id0, &err_status,
+                                   &axif_rwds_cntr, &axil_rwds_cntr);
+        if (rc != 0) {
+            return rc;
+        }
+
+        hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
+            hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
+        }
+
+        if (id0 == HB_ODLY_ID0_MATCH_VALUE) {
+            cntvalue_min = cntvalue;
+            break;
+        }
+
+        if (cntvalue > HB_ODLY_SWEEP_GUARD_MAX) {
+            return -3;
+        }
+
+        rc = hb_odly_inc(base_addr, 1);
+        if (rc != 0) {
+            return rc;
+        }
+    }
+
+    for (;;) {
+        rc = hb_odly_inc(base_addr, 1);
+        if (rc != 0) {
+            return rc;
+        }
+
+        rc = hb_odly_sample_status(base_addr, &cntvalue, &id0, &err_status,
+                                   &axif_rwds_cntr, &axil_rwds_cntr);
+        if (rc != 0) {
+            return rc;
+        }
+
+        hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
+            hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
+        }
+
+        if (id0 != HB_ODLY_ID0_MATCH_VALUE) {
+            cntvalue_max = (uint16_t)((cntvalue - 1U) & HB_ODLY_MASK_9BIT);
+            break;
+        }
+
+        if (cntvalue > HB_ODLY_SWEEP_GUARD_MAX) {
+            return -4;
+        }
+    }
+
+    cntvalue_mid = (uint16_t)((((uint32_t)cntvalue_max - (uint32_t)cntvalue_min) >> 1) +
+                              (uint32_t)cntvalue_min);
+
+    while (cntvalue > cntvalue_mid) {
+        rc = hb_odly_dec(base_addr, 1);
+        if (rc != 0) {
+            return rc;
+        }
+
+        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, HB_HB_CLK_CE_FORCE_EN);
+        rc = hb_odly_get(base_addr, &cntvalue);
+        hb_reg_write(base_addr, HB_HB_CLK_CE_FORCE_OFFSET, 0);
+        if (rc != 0) {
+            return rc;
+        }
+    }
+
+    xil_printf("ODLY_WINDOW cntvalue_min=0x%03x cntvalue_max=0x%03x cntvalue_mid=0x%03x\r\n",
+               (unsigned)cntvalue_min, (unsigned)cntvalue_max, (unsigned)cntvalue_mid);
+
+    if (cntvalue_min_out != 0U) {
+        *cntvalue_min_out = cntvalue_min;
+    }
+    if (cntvalue_max_out != 0U) {
+        *cntvalue_max_out = cntvalue_max;
+    }
+    if (cntvalue_mid_out != 0U) {
+        *cntvalue_mid_out = cntvalue_mid;
+    }
+
+    return 0;
 }
 
 int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out)
