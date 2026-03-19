@@ -328,3 +328,10 @@ Convenience command:
 ```bash
 ./hyperbus_test_proj/post_impl/run_post_impl_xsim.sh
 ```
+
+## Possible Future Improvements
+
+- AXI-slave power management
+- Multi-HyperRAM device support
+- FIFO power management
+- HyperRAM device power management
