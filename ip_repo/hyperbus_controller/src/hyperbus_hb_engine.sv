@@ -239,13 +239,15 @@ module hyperbus_hb_engine #(
                         if (i_cmd_fifo_dout[74]) begin
                             // AXI-lite: keep unshifted register-space addressing.
                             ca_shift[44:16] <= i_cmd_fifo_dout[71:43];
+                            ca_shift[2:0]  <= i_cmd_fifo_dout[43:41];
                         end else begin
-                            // AXI-full: word-address upper bits from (byte_addr >> 1)[31:3].
-                            // i_cmd_fifo_dout[71:40] is byte address [31:0].
+                            // AXI-full: internal frontend alignment guarantees byte_addr[1:0] = 2'b00.
+                            // That makes the lowest HyperBus word-address bit constant zero.
                             ca_shift[44:16] <= {1'b0, i_cmd_fifo_dout[71:44]};
+                            ca_shift[2:1]  <= i_cmd_fifo_dout[43:42];
+                            ca_shift[0]    <= 1'b0;
                         end
                         ca_shift[15:3] <= 13'h0;
-                        ca_shift[2:0]  <= i_cmd_fifo_dout[43:41];
 
                         if (i_cmd_fifo_dout[74]) begin
                             words_total <= 9'd1;

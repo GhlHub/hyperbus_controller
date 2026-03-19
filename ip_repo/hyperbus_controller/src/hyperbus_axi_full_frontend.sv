@@ -63,14 +63,16 @@ module hyperbus_axi_full_frontend #(
     output logic                        s_axi_rvalid,
     input  wire                         s_axi_rready
 );
-    logic [31:0] aw_addr_q;
+    localparam int WORD_ADDR_WIDTH = 30;
+
+    logic [WORD_ADDR_WIDTH-1:0] aw_addr_q;
     logic [7:0]  aw_len_q;
     logic [1:0]  aw_burst_q;
     logic [7:0]  w_beats_rcvd;
     logic aw_can_accept;
     logic [7:0] aw_split_beats1_q;
     logic [7:0] aw_split_beats2_q;
-    logic [31:0] aw_wrap_base_q;
+    logic [WORD_ADDR_WIDTH-1:0] aw_wrap_base_q;
     logic aw_cmd2_pending_q;
 
     logic rd_active;
@@ -89,11 +91,11 @@ module hyperbus_axi_full_frontend #(
     logic bresp_q_full;
     logic [AXI_ID_WIDTH-1:0] aw_id_q;
     logic [AXI_ID_WIDTH-1:0] ar_id_q;
-    logic [31:0] rd_cmd2_addr_q;
+    logic [WORD_ADDR_WIDTH-1:0] rd_cmd2_addr_q;
     logic [7:0]  rd_cmd2_beats_q;
     logic        rd_cmd2_pending_q;
-    logic [31:0] awaddr_aligned;
-    logic [31:0] araddr_aligned;
+    logic [WORD_ADDR_WIDTH-1:0] awaddr_word;
+    logic [WORD_ADDR_WIDTH-1:0] araddr_word;
 
     function automatic logic f_is_wrap_len_legal(input logic [7:0] len);
         begin
@@ -103,8 +105,8 @@ module hyperbus_axi_full_frontend #(
     endfunction
 
     assign bresp_q_full = (bresp_q_count == 6'd32);
-    assign awaddr_aligned = {s_axi_awaddr[31:2], 2'b00};
-    assign araddr_aligned = {s_axi_araddr[31:2], 2'b00};
+    assign awaddr_word = s_axi_awaddr[31:2];
+    assign araddr_word = s_axi_araddr[31:2];
 
     assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
                            (!bresp_q_full) &&
@@ -166,16 +168,16 @@ module hyperbus_axi_full_frontend #(
             logic rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
             logic [1:0] rd_stage_count_n;
             logic [8:0] aw_total_beats;
-            logic [31:0] aw_wrap_bytes;
-            logic [31:0] aw_wrap_mask;
-            logic [31:0] aw_wrap_base;
-            logic [31:0] aw_bytes_to_boundary;
+            logic [WORD_ADDR_WIDTH-1:0] aw_wrap_span_words;
+            logic [WORD_ADDR_WIDTH-1:0] aw_wrap_mask_words;
+            logic [WORD_ADDR_WIDTH-1:0] aw_wrap_base;
+            logic [WORD_ADDR_WIDTH-1:0] aw_words_to_boundary;
             logic [7:0] aw_beats1_calc, aw_beats2_calc;
             logic [8:0] ar_total_beats;
-            logic [31:0] ar_wrap_bytes;
-            logic [31:0] ar_wrap_mask;
-            logic [31:0] ar_wrap_base;
-            logic [31:0] ar_bytes_to_boundary;
+            logic [WORD_ADDR_WIDTH-1:0] ar_wrap_span_words;
+            logic [WORD_ADDR_WIDTH-1:0] ar_wrap_mask_words;
+            logic [WORD_ADDR_WIDTH-1:0] ar_wrap_base;
+            logic [WORD_ADDR_WIDTH-1:0] ar_words_to_boundary;
             logic [7:0] ar_beats1_calc, ar_beats2_calc;
 
             bresp_push = 1'b0;
@@ -194,7 +196,7 @@ module hyperbus_axi_full_frontend #(
             s_axi_awready <= aw_can_accept;
             if (aw_can_accept && s_axi_awvalid) begin
                 o_aw_pending <= 1'b1;
-                aw_addr_q <= awaddr_aligned;
+                aw_addr_q <= awaddr_word;
                 aw_id_q <= s_axi_awid;
                 aw_len_q <= s_axi_awlen;
                 aw_burst_q <= s_axi_awburst;
@@ -204,11 +206,11 @@ module hyperbus_axi_full_frontend #(
                 aw_split_beats2_q <= 8'd0;
                 aw_total_beats = {1'b0, s_axi_awlen} + 9'd1;
                 if (s_axi_awburst == 2'b10) begin
-                    aw_wrap_bytes = {23'd0, aw_total_beats, 2'b00};
-                    aw_wrap_mask = ~(aw_wrap_bytes - 32'd1);
-                    aw_wrap_base = awaddr_aligned & aw_wrap_mask;
-                    aw_bytes_to_boundary = (aw_wrap_base + aw_wrap_bytes - awaddr_aligned);
-                    aw_beats1_calc = aw_bytes_to_boundary[9:2];
+                    aw_wrap_span_words = {{(WORD_ADDR_WIDTH-9){1'b0}}, aw_total_beats};
+                    aw_wrap_mask_words = aw_wrap_span_words - WORD_ADDR_WIDTH'(1);
+                    aw_wrap_base = awaddr_word & ~aw_wrap_mask_words;
+                    aw_words_to_boundary = aw_wrap_span_words - (awaddr_word & aw_wrap_mask_words);
+                    aw_beats1_calc = aw_words_to_boundary[7:0];
                     aw_beats2_calc = aw_total_beats[7:0] - aw_beats1_calc;
                     aw_split_beats1_q <= aw_beats1_calc;
                     aw_split_beats2_q <= aw_beats2_calc;
@@ -216,7 +218,7 @@ module hyperbus_axi_full_frontend #(
                 end else begin
                     aw_split_beats1_q <= s_axi_awlen + 8'd1;
                     aw_split_beats2_q <= 8'd0;
-                    aw_wrap_base_q <= 32'd0;
+                    aw_wrap_base_q <= '0;
                 end
             end
 
@@ -234,10 +236,10 @@ module hyperbus_axi_full_frontend #(
                 if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                     if ((aw_burst_q == 2'b10) && (aw_split_beats2_q != 8'd0)) begin
                         // First linear segment of WRAP burst; bit31 marks non-final segment.
-                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, aw_split_beats1_q, 32'h8000_0000};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, aw_split_beats1_q, 32'h8000_0000};
                         aw_cmd2_pending_q <= 1'b1;
                     end else begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 32'h0};
                         bresp_push = 1'b1;
                         bresp_push_data =
                             (wr_proto_err ||
@@ -253,14 +255,14 @@ module hyperbus_axi_full_frontend #(
             if (o_aw_pending && (w_beats_rcvd > aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                 if (aw_cmd2_pending_q) begin
                     // Second/final linear segment.
-                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_wrap_base_q, aw_split_beats2_q, 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_wrap_base_q, 2'b00}, aw_split_beats2_q, 32'h0};
                     o_cmd_fifo_wr_en_full <= 1'b1;
                     aw_cmd2_pending_q <= 1'b0;
                     bresp_push = 1'b1;
                     bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
                     o_aw_pending <= 1'b0;
                 end else begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, aw_addr_q, (aw_len_q + 8'd1), 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 32'h0};
                     o_cmd_fifo_wr_en_full <= 1'b1;
                     bresp_push = 1'b1;
                     bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
@@ -320,23 +322,23 @@ module hyperbus_axi_full_frontend #(
                 s_axi_arvalid) begin
                 ar_total_beats = {1'b0, s_axi_arlen} + 9'd1;
                 if (s_axi_arburst == 2'b10) begin
-                    ar_wrap_bytes = {23'd0, ar_total_beats, 2'b00};
-                    ar_wrap_mask = ~(ar_wrap_bytes - 32'd1);
-                    ar_wrap_base = araddr_aligned & ar_wrap_mask;
-                    ar_bytes_to_boundary = (ar_wrap_base + ar_wrap_bytes - araddr_aligned);
-                    ar_beats1_calc = ar_bytes_to_boundary[9:2];
+                    ar_wrap_span_words = {{(WORD_ADDR_WIDTH-9){1'b0}}, ar_total_beats};
+                    ar_wrap_mask_words = ar_wrap_span_words - WORD_ADDR_WIDTH'(1);
+                    ar_wrap_base = araddr_word & ~ar_wrap_mask_words;
+                    ar_words_to_boundary = ar_wrap_span_words - (araddr_word & ar_wrap_mask_words);
+                    ar_beats1_calc = ar_words_to_boundary[7:0];
                     ar_beats2_calc = ar_total_beats[7:0] - ar_beats1_calc;
                     if (ar_beats2_calc != 8'd0) begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, ar_beats1_calc, 32'h8000_0000};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, ar_beats1_calc, 32'h8000_0000};
                         rd_cmd2_addr_q <= ar_wrap_base;
                         rd_cmd2_beats_q <= ar_beats2_calc;
                         rd_cmd2_pending_q <= 1'b1;
                     end else begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, (s_axi_arlen + 8'd1), 32'h0};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 32'h0};
                         rd_cmd2_pending_q <= 1'b0;
                     end
                 end else begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, araddr_aligned, (s_axi_arlen + 8'd1), 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 32'h0};
                     rd_cmd2_pending_q <= 1'b0;
                 end
                 o_cmd_fifo_wr_en_full <= 1'b1;
@@ -349,7 +351,7 @@ module hyperbus_axi_full_frontend #(
                 s_axi_rvalid <= 1'b0;
             end
             if (rd_active && rd_cmd2_pending_q && !i_cmd_fifo_full) begin
-                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, rd_cmd2_addr_q, rd_cmd2_beats_q, 32'h0};
+                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {rd_cmd2_addr_q, 2'b00}, rd_cmd2_beats_q, 32'h0};
                 o_cmd_fifo_wr_en_full <= 1'b1;
                 rd_cmd2_pending_q <= 1'b0;
             end
