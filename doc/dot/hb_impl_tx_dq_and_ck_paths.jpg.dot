@@ -1,0 +1,87 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
+digraph hb_impl_tx_dq_and_ck_paths {
+  graph [
+    rankdir=LR,
+    splines=ortho,
+    nodesep=0.45,
+    ranksep=0.85,
+    pad=0.2,
+    bgcolor="white",
+    label="Implemented Design: Representative DQ TX Path and Forwarded CK Path",
+    labelloc=t,
+    fontsize=20,
+    fontname="Helvetica-Bold"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Helvetica",
+    fontsize=12,
+    color="#3A3A3A",
+    penwidth=1.2,
+    margin="0.12,0.08"
+  ];
+
+  edge [
+    color="#4A4A4A",
+    penwidth=1.4,
+    arrowsize=0.8
+  ];
+
+  clk_in [label="CLK_IN1_D_0_clk_p\nboard clock input", fillcolor="#F2F2F2"];
+  in_bufg [label="clkin1_bufg1\nBUFGCE\ncommon clock spine", fillcolor="#D7E8FF"];
+
+  subgraph cluster_dq {
+    label="DQ TX Path (representative bit 0)";
+    color="#6FA8FF";
+    penwidth=1.2;
+    style="rounded";
+
+    mmcm_dq   [label="MMCME4_ADV\nCLKOUT0\n200 MHz source", fillcolor="#DCEBFF"];
+    bufg_dq   [label="clkout1_buf\nBUFGCE_DIV\nclock = clk_out1_design_1_clk_wiz_0_0", fillcolor="#BFD9FF"];
+    ff_dq1    [label="u_hb_engine/o_dq_o_d1_reg[0]\nFDRE\nlaunch FF", fillcolor="#CFE6FF"];
+    ff_dq2    [label="u_hb_engine/o_dq_o_d2_reg[0]\nFDRE\nlaunch FF", fillcolor="#CFE6FF"];
+    dq_oddr   [label="u_hyperbus_phy/g_dq_phy[0].u_oddr_dq\nOSERDESE3\n(implemented form of RTL ODDRE1)", fillcolor="#A9D0FF"];
+    dq_iobuf  [label="u_hyperbus_phy/g_dq_phy[0].u_iobuf_dq\nIOBUF", fillcolor="#8FC0FF"];
+    dq_pin    [label="io_hb_dq_0[0]\nHyperBus DQ pad", fillcolor="#6FA8FF"];
+  }
+
+  subgraph cluster_ck {
+    label="Forwarded CK Path";
+    color="#FFB36B";
+    penwidth=1.2;
+    style="rounded";
+
+    mmcm_ck   [label="MMCME4_ADV\nCLKOUT4\n200 MHz gated-clock source", fillcolor="#FFE2C7"];
+    bufg_ck   [label="clkout5_buf\nBUFGCE_DIV\nclock = clk_out5_design_1_clk_wiz_0_0\nCE-controlled forwarded-clock tree", fillcolor="#FFD0A3"];
+    ck_oddr   [label="u_hyperbus_phy/u_oddr_ck\nOSERDESE3\n(implemented form of RTL ODDRE1)", fillcolor="#FFC487"];
+    ck_odly   [label="u_hyperbus_phy/u_odelay_hb_ck_p\nODELAYE3", fillcolor="#FFB36B"];
+    ck_obuf   [label="u_hyperbus_phy/u_obuf_ck_p\nOBUF", fillcolor="#FFA24A"];
+    ck_pin    [label="o_hb_ck_p_0\nHyperBus CK pad", fillcolor="#FF8E2A"];
+  }
+
+  clk_in  -> in_bufg;
+
+  in_bufg -> mmcm_dq;
+  mmcm_dq -> bufg_dq;
+  bufg_dq -> ff_dq1 [label="clock"];
+  bufg_dq -> ff_dq2 [label="clock"];
+  ff_dq1  -> dq_oddr [label="D1"];
+  ff_dq2  -> dq_oddr [label="D2"];
+  dq_oddr -> dq_iobuf [label="OQ"];
+  dq_iobuf -> dq_pin;
+
+  in_bufg -> mmcm_ck;
+  mmcm_ck -> bufg_ck;
+  bufg_ck -> ck_oddr [label="clock"];
+  ck_oddr -> ck_odly [label="OQ / hb_ck_fwd"];
+  ck_odly -> ck_obuf [label="hb_ck_fwd_delayed"];
+  ck_obuf -> ck_pin;
+
+  note [shape=note, fillcolor="#FFF8CC", label="Derived from the routed checkpoint:\n- DQ path uses clkout1_buf -> FDRE launch FFs -> OSERDESE3 -> IOBUF -> io_hb_dq_0[0]\n- CK path uses clkout5_buf -> OSERDESE3 -> ODELAYE3 -> OBUF -> o_hb_ck_p_0\n- Vivado implements the RTL ODDRE1 cells as OSERDESE3 instances in this design"];
+
+  dq_pin -> note [style=dashed, arrowhead=none];
+  ck_pin -> note [style=dashed, arrowhead=none];
+}
