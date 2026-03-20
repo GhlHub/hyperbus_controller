@@ -156,6 +156,159 @@
         end
     endtask
 
+    task automatic run_posted_write_overlap_axif_checks;
+        logic [31:0] rd_one [0:31];
+        logic overlap_aw;
+        logic overlap_w;
+        logic overlap_ar;
+        begin
+            overlap_aw = 1'b0;
+            overlap_w  = 1'b0;
+            overlap_ar = 1'b0;
+
+            axi_full_write_burst(32'h0000_0300, 32, 32'h5A00_0000, 4'hF);
+            wait_axif_write_in_progress(32'h0000_0300);
+
+            @(posedge axi_aclk);
+            s_axi_awaddr  <= 32'h0000_0380;
+            s_axi_awid    <= 4'h2;
+            s_axi_awlen   <= 8'd0;
+            s_axi_awsize  <= 3'd2;
+            s_axi_awburst <= 2'b01;
+            s_axi_awvalid <= 1'b1;
+            while (!(s_axi_awvalid && s_axi_awready)) begin
+                @(posedge axi_aclk);
+            end
+            overlap_aw = axif_write_in_progress(32'h0000_0300);
+            @(posedge axi_aclk);
+            s_axi_awvalid <= 1'b0;
+
+            @(negedge axi_aclk);
+            s_axi_wdata  <= 32'hC0DE_0380;
+            s_axi_wstrb  <= 4'hF;
+            s_axi_wlast  <= 1'b1;
+            s_axi_wvalid <= 1'b1;
+            while (!(s_axi_wready && s_axi_wvalid)) begin
+                @(posedge axi_aclk);
+            end
+            overlap_w = axif_write_in_progress(32'h0000_0300);
+            @(negedge axi_aclk);
+            s_axi_wvalid <= 1'b0;
+            s_axi_wlast  <= 1'b0;
+
+            @(posedge axi_aclk);
+            s_axi_araddr  <= 32'h0000_0300;
+            s_axi_arid    <= 4'h3;
+            s_axi_arlen   <= 8'd0;
+            s_axi_arsize  <= 3'd2;
+            s_axi_arburst <= 2'b01;
+            s_axi_arvalid <= 1'b1;
+            while (!(s_axi_arvalid && s_axi_arready)) begin
+                @(posedge axi_aclk);
+            end
+            overlap_ar = axif_write_in_progress(32'h0000_0300);
+            @(posedge axi_aclk);
+            s_axi_arvalid <= 1'b0;
+
+            s_axi_bready <= 1'b1;
+            `WAIT_AXI_COND(s_axi_bvalid, "posted-write overlap AXI-full BVALID")
+            @(posedge axi_aclk);
+            s_axi_bready <= 1'b0;
+
+            s_axi_rready <= 1'b1;
+            `WAIT_AXI_COND(s_axi_rvalid, "posted-write overlap AXI-full RVALID")
+            if (s_axi_rdata !== 32'h5A00_0000) begin
+                $fatal(1, "AXI-full overlap readback mismatch: got=0x%08x exp=0x5A000000", s_axi_rdata);
+            end
+            if (!s_axi_rlast) begin
+                $fatal(1, "AXI-full overlap read missing RLAST");
+            end
+            @(posedge axi_aclk);
+            s_axi_rready <= 1'b0;
+
+            if (!(overlap_aw && overlap_w && overlap_ar)) begin
+                $fatal(1, "AXI-full overlap request was not accepted while prior write was still draining: AW=%0d W=%0d AR=%0d",
+                       overlap_aw, overlap_w, overlap_ar);
+            end
+
+            axi_full_read_burst(32'h0000_0380, 1, rd_one);
+            check_eq32(rd_one[0], 32'hC0DE_0380, "AXI-full overlap posted write committed @0x0380");
+
+            $display("[%0d][ TB] TEST PASS: AXI-full read/write accepted while prior write still drained from WR_FIFO", ns_time());
+        end
+    endtask
+
+    task automatic run_posted_write_overlap_axil_checks;
+        logic [31:0] rd32;
+        int push_base;
+        logic overlap_write_push;
+        logic overlap_read_push;
+        begin
+            overlap_write_push = 1'b0;
+            overlap_read_push  = 1'b0;
+
+            axi_full_write_burst(32'h0000_0340, 32, 32'h6B00_0000, 4'hF);
+            wait_axif_write_in_progress(32'h0000_0340);
+
+            push_base = axil_cmd_push_count;
+            @(posedge axi_aclk);
+            s_axil_awaddr  <= 16'h0800;
+            s_axil_awvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_awready, "posted-write overlap AXI-Lite AWREADY")
+            @(posedge axi_aclk);
+            s_axil_awvalid <= 1'b0;
+
+            s_axil_wdata  <= 32'h0000_8F27;
+            s_axil_wstrb  <= 4'hF;
+            s_axil_wvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_wready, "posted-write overlap AXI-Lite WREADY")
+            @(posedge axi_aclk);
+            s_axil_wvalid <= 1'b0;
+
+            while (axil_cmd_push_count == push_base) begin
+                @(posedge axi_aclk);
+            end
+            overlap_write_push = axif_write_in_progress(32'h0000_0340);
+
+            s_axil_bready <= 1'b1;
+            `WAIT_AXI_COND(s_axil_bvalid, "posted-write overlap AXI-Lite BVALID")
+            @(posedge axi_aclk);
+            s_axil_bready <= 1'b0;
+
+            axi_full_write_burst(32'h0000_03C0, 32, 32'h6C00_0000, 4'hF);
+            wait_axif_write_in_progress(32'h0000_03C0);
+
+            push_base = axil_cmd_push_count;
+            @(posedge axi_aclk);
+            s_axil_araddr  <= 16'h0800;
+            s_axil_arvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axil_arready, "posted-write overlap AXI-Lite ARREADY")
+            @(posedge axi_aclk);
+            s_axil_arvalid <= 1'b0;
+
+            while (axil_cmd_push_count == push_base) begin
+                @(posedge axi_aclk);
+            end
+            overlap_read_push = axif_write_in_progress(32'h0000_03C0);
+
+            s_axil_rready <= 1'b1;
+            `WAIT_AXI_COND(s_axil_rvalid, "posted-write overlap AXI-Lite RVALID")
+            rd32 = s_axil_rdata;
+            @(posedge axi_aclk);
+            s_axil_rready <= 1'b0;
+            check_eq32(rd32, 32'h0000_8F27, "AXI-Lite overlap CR0 readback @0x0800");
+
+            if (!(overlap_write_push && overlap_read_push)) begin
+                $fatal(1, "AXI-Lite overlap cmd push did not occur while AXI-full write was still draining: write=%0d read=%0d",
+                       overlap_write_push, overlap_read_push);
+            end
+
+            axil_write(16'h0800, 32'h0000_8F2F);
+
+            $display("[%0d][ TB] TEST PASS: AXI-Lite read/write accepted while AXI-full write still drained from WR_FIFO", ns_time());
+        end
+    endtask
+
     task automatic run_delay_reset_self_checks;
         logic [31:0] rd32;
         int push_base;
@@ -252,7 +405,7 @@
         int poll_i;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0003, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0004, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");

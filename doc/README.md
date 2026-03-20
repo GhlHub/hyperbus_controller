@@ -189,7 +189,7 @@ HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
 
 Local controller registers:
 
-- `0x0024` VERSION (read-only, `0x01000003`)
+- `0x0024` VERSION (read-only, `0x01000004`)
 - `0x0028` DQ (read-only, sampled DQ debug view)
 - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
 - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)

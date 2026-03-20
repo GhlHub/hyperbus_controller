@@ -458,6 +458,8 @@ module hyperbus_controller_tb;
             32'h1234ABCD,
             32'hCAFEBABE
         );
+        run_posted_write_overlap_axif_checks();
+        run_posted_write_overlap_axil_checks();
 
         // AXI-full WRAP write/read checks:
         // WRAP commands are expected to be converted into two linear HyperBus commands.

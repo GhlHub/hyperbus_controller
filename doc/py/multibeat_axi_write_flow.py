@@ -79,8 +79,8 @@ box(
 box(
     90, 800, 740, 975, '3) B Response',
     [
-        'HB completion token returns via u_b_fifo.',
-        'AXI drives BVALID/BRESP=OKAY on token pop.',
+        'BRESP is known once the final write cmd segment is queued.',
+        'AXI can drive BVALID/BRESP before HB write drain is complete.',
     ],
     fill='#eaf2ff'
 )
@@ -100,14 +100,6 @@ box(
         'One command per AXI burst:',
         'is_write=1, is_reg=0, byte address, beat_count.',
         'AXI writes only after all W beats are accepted.',
-    ],
-    fill='#eefbea', outline='#2d6a2d'
-)
-
-box(
-    860, 810, 1510, 980, 'u_b_fifo (STD, async)',
-    [
-        'Completion token from HB domain to AXI B channel.',
     ],
     fill='#eefbea', outline='#2d6a2d'
 )
@@ -152,7 +144,7 @@ box(
     1640, 1170, 2300, 1365, '7) Termination + Completion',
     [
         'Keep CS# asserted during configured post-CK hold.',
-        'Then deassert CS# and push completion token to b_fifo.',
+        'Then deassert CS# and return the HB engine to idle.',
     ],
     fill='#fff4ea', outline='#8a4b08'
 )
@@ -162,11 +154,8 @@ arrow(415, 760, 415, 800)
 
 arrow(740, 590, 860, 360)
 arrow(740, 660, 860, 620)
-arrow(740, 880, 860, 895)
-
 arrow(1510, 620, 1640, 300)
 arrow(1510, 360, 1640, 570)
-arrow(1510, 895, 1640, 1260)
 
 arrow(1970, 430, 1970, 470)
 arrow(1970, 760, 1970, 800)

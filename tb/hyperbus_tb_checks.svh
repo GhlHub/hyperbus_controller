@@ -22,6 +22,30 @@
         end
     endfunction
 
+    function automatic logic axif_write_in_progress(input logic [31:0] addr);
+        begin
+            axif_write_in_progress =
+                dut.u_hb_engine.cur_is_write &&
+                !dut.u_hb_engine.cur_src_axil &&
+                (dut.u_hb_engine.cur_addr == addr) &&
+                (dut.u_hb_engine.words_done < dut.u_hb_engine.words_total);
+        end
+    endfunction
+
+    task automatic wait_axif_write_in_progress(input logic [31:0] addr);
+        int wait_cycles;
+        begin
+            wait_cycles = 0;
+            while (!axif_write_in_progress(addr)) begin
+                @(posedge hb_clk_200);
+                wait_cycles = wait_cycles + 1;
+                if (wait_cycles > 4000) begin
+                    $fatal(1, "Timeout waiting for AXI-full write to enter HB drain path @0x%08x", addr);
+                end
+            end
+        end
+    endtask
+
     task automatic check_eq32(
         input logic [31:0] got,
         input logic [31:0] exp,

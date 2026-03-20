@@ -139,8 +139,9 @@ For writes:
   command FIFO
 - malformed `WLAST` handling is detected in the AXI domain and reported back as
   `SLVERR`
-- after the HB engine completes the write, a completion token is returned so the
-  AXI frontend can produce the write response
+- once the final write command segment is queued internally, the AXI frontend can
+  return the write response before the HB-side serializer has finished draining
+  all payload data to the pins
 
 For reads:
 
@@ -174,7 +175,6 @@ important point is not the exact FIFO primitive choice but the role of each queu
 - command FIFO carries transaction descriptors into the HB engine
 - write FIFO carries AXI write payloads and byte strobes into the HB domain
 - read FIFO carries returned read data back to AXI
-- write-response FIFO returns write completion information
 - AXI-lite response FIFO returns AXI-lite read data or completion values
 
 The FIFOs allow the frontend logic and the HB engine to make progress with only
@@ -237,7 +237,7 @@ For writes, the engine:
 2. waits through the required post-CA delay
 3. consumes payload beats from the write FIFO
 4. drives DQ data and RWDS byte-mask information to the PHY
-5. completes the transfer and returns a completion token
+5. completes the transfer on the HyperBus pins
 
 The byte-lane mask carried in AXI `WSTRB` is preserved through the internal path
 and converted into the active-low HyperBus RWDS mask convention at write time.

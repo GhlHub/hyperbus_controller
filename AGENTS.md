@@ -25,6 +25,7 @@ This repository contains a HyperBus / HyperRAM controller, testbench, software u
 - WRAP burst support is required.
 - AXI-full addresses are handled as word-aligned for controller access; low address bits `[1:0]` are masked to zero in the frontend.
 - AXI byte-lane masking is carried through `WSTRB` and converted to active-low HyperBus `RWDS` byte masks.
+- AXI-full writes are posted once the final write-command segment is accepted into the internal command path; `BVALID` does not imply the HyperBus pins have finished draining the payload.
 - The AXI-Lite frontend contains the visible controller version register. Bump it when making externally visible HW/SW interface changes.
 
 ## Editing Rules
@@ -48,6 +49,7 @@ After modifying controller RTL:
 - For RTL behavior changes, run the most relevant simulation available.
 - For IP packaging changes, rerun the Vivado packaging flow and confirm `ip_repo/hyperbus_controller/src/` matches `rtl/` where appropriate.
 - For byte-mask, wrap, or address-alignment changes, inspect the AXI-full testbench coverage in `tb/` and the simulation logs under `sim_m/xsim/` when available.
+- For AXI write-response timing changes, verify overlap behavior: AXI-full and AXI-Lite traffic should still be accepted while a prior AXI-full write is draining from `wr_fifo`.
 - If you do not run verification, state that explicitly.
 
 ## Repo-Specific Workflow Notes
@@ -57,6 +59,7 @@ After modifying controller RTL:
   - `doc/jpg/` for generated images
   - `doc/pdf/` for PDFs
   - `doc/py/` for documentation helper scripts
+- `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
 - Some files under `hyperbus_test_proj/`, `project_1/`, and Vitis output trees are generated artifacts. Update them only when the task calls for it.
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
 
