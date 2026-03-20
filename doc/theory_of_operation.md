@@ -6,19 +6,21 @@ Last updated: 2026-03-20
 
 ## Purpose
 
-This document is the intended single summary of how the HyperBus / HyperRAM
+This document is the definitive source for how the HyperBus / HyperRAM
 controller operates.
 
-It is written so that overlapping explanatory material can eventually be removed
-from:
+The architecture narrative, clocking model, transaction flow, and block
+responsibilities should be maintained here rather than duplicated elsewhere.
+
+Companion documents are intentionally narrower:
 
 - `doc/README.md`
+  - documentation index, reference entry points, and workflow notes
 - `doc/system_level_operating_guide.md`
+  - checked-in project bring-up, delay tuning, debug workflow, and integration
+    procedure
 - `doc/hyperbus_phy_design_notes.md`
-
-At that point, those documents should focus on reference material, operating
-procedures, and implementation constraints, while `doc/README.md` can refer here
-for the controller narrative.
+  - PHY implementation constraints and change checklist
 
 ## Scope
 
@@ -31,7 +33,8 @@ This note describes:
 - the intended bring-up and tuning model at a high level
 
 This note does not attempt to replace detailed timing notes, full register
-definitions, or primitive-specific integration rules.
+definitions, checked-in project procedures, or primitive-specific integration
+rules.
 
 ## Top-Level Architecture
 
@@ -357,8 +360,12 @@ The most important behavioral intent to preserve in future changes is:
 ## Related Documents
 
 - `doc/README.md`
+  - documentation index, testbench notes, software API summary, packaging flow
 - `doc/system_level_operating_guide.md`
+  - checked-in project clock-source table, bring-up order, delay workflow, debug
+    guide
 - `doc/hyperbus_phy_design_notes.md`
+  - PHY implementation contract, reset/clock assumptions, integration checklist
 - `doc/hb_dq_input_vs_hb_ck_p_timing.md`
 - `doc/hb_dq_vs_hb_ck_p_timing.md`
 - `doc/hb_dq_vs_hb_ck_p_output_relative_timing.md`

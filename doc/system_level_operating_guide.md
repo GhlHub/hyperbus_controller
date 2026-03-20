@@ -2,25 +2,32 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus System-Level Operating Guide
 
-Last updated: 2026-03-18
+Last updated: 2026-03-20
 
 ## Scope
 
-This note describes how the checked-in project is intended to run as a system:
+This note describes how to bring up, tune, and debug the checked-in project as a
+system.
 
-- where each controller clock comes from
-- how HyperBus CK gating works in the implemented design
 - recommended software bring-up order
 - how to tune CK and RWDS delays
 - which debug signals and counters are most useful when the interface misbehaves
+- checked-in project integration details that are useful during lab debug
 
-This is complementary to:
+The theory of operation is maintained in:
+
+- `doc/theory_of_operation.md`
+
+This note intentionally does not repeat the full controller narrative. It assumes
+the architecture, transaction flow, and clocking model described there.
+
+This note is complementary to:
 
 - `doc/hyperbus_phy_design_notes.md` for primitive-level PHY rules
 - `doc/implemented_ff_by_clock_domain.md` for implemented resource counts
 - the timing notes under `doc/*.md` for extracted pin-level timing windows
 
-## Clocking Overview
+## Checked-In Project Clock Sources
 
 In the checked-in block design, `hyperbus_controller_0` uses five `clk_wiz_0`
 outputs:
@@ -33,29 +40,11 @@ outputs:
 | `clk_out4` | `i_ref_clk300` | 300 MHz `IDELAYCTRL` reference |
 | `clk_out5` | `i_hb_clk_200_gated` | Gated 200 MHz clock used only for HyperBus CK forwarding |
 
-Important implementation detail:
+Checked-in project wiring notes:
 
 - `i_hb_clk_200_gated` is not a LUT-gated derivative of `i_hb_clk_200`.
 - In the checked-in Vivado design, it is a separate `clk_wiz_0` output.
 - `hyperbus_controller_0/o_hb_clk_ce` drives `clk_wiz_0/clk_out5_ce`.
-
-So the gated HyperBus transmit clock is implemented as a dedicated clock-wizard
-output with CE control, not as ordinary fabric clock gating.
-
-## CK Forwarding Path
-
-The outgoing HyperBus CK path is:
-
-1. `clk_wiz_0/clk_out5`
-2. `hyperbus_controller_0/i_hb_clk_200_gated`
-3. PHY `ODDRE1` clock input `C`
-4. `ODDRE1` generates `1010...` forwarded clock pattern
-5. `ODELAYE3` shifts CK timing
-6. `OBUF` drives `o_hb_ck_p`
-
-`o_hb_clk_ce` therefore controls whether the forwarded CK source clock reaches the
-PHY CK `ODDRE1`. The HB engine asserts this enable during command/data activity and
-deasserts it when the bus is idle or terminating.
 
 The AXI-Lite local register `HB_CLK_CE_FORCE` (`0x008C`, bit0) is ORed with the
 engine-generated enable. Software can use this to force the gated CK path on during
@@ -136,10 +125,6 @@ Recommended workflow:
 2. Then move RWDS IDELAY to center the read-valid window.
 3. Re-check `ID0`, AXI-Lite register reads, and AXI-full data reads after each
    meaningful change.
-
-The design intentionally delays DQ and RWDS alignment in the HB engine, not in the
-PHY, so RWDS tuning problems usually show up as read-valid timing failures rather
-than total PHY inactivity.
 
 ## Debug Signals and Counters
 
@@ -242,6 +227,7 @@ Interpretation:
 
 ## Related Notes
 
+- `doc/theory_of_operation.md`
 - `doc/hyperbus_phy_design_notes.md`
 - `doc/implemented_ff_by_clock_domain.md`
 - `doc/hb_dq_input_vs_hb_ck_p_timing.md`

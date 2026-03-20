@@ -2,14 +2,21 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus PHY Design Notes
 
-Last updated: 2026-03-17
+Last updated: 2026-03-20
 
 ## Scope
 
 This note captures the current implementation constraints and integration rules for
 `rtl/hyperbus_phy_xilinx.sv`, so future updates preserve known-good behavior.
 
-## Primitive Architecture
+The definitive controller narrative is in:
+
+- `doc/theory_of_operation.md`
+
+This note intentionally focuses on the PHY implementation contract and the checks
+required when the PHY changes.
+
+## Current PHY Implementation Contract
 
 - TX clock forwarding:
   - External logic supplies the gated TX clock on `i_hb_clk_200_gated`.
@@ -49,7 +56,7 @@ Assumptions used by the current design/testbench:
 - `i_iddre1_rst` is synchronous to `i_hb_clk_200_samp_90`.
 - `i_idelayctrl_rst` is driven externally and not combined with other resets.
 
-## Latency Alignment Rule
+## Capture Export Contract
 
 Current PHY exports raw `IDDRE1` capture outputs directly:
 
@@ -58,12 +65,16 @@ Current PHY exports raw `IDDRE1` capture outputs directly:
 - `o_rwds_q1/o_rwds_q2` are also direct exports of raw `IDDRE1` samples
 
 Required consequence in HB engine:
+
 - Read-path alignment is performed in `rtl/hyperbus_hb_engine.sv`, not in the PHY.
 - Current implementation delays both DQ and RWDS by one `i_hb_clk_200` cycle using:
   - `dq_q1_dly/dq_q2_dly`
   - `rwds_q1_dly/rwds_q2_dly`
 - `hb_word16` is built from delayed DQ samples, and RWDS edge qualification is taken
   from the delayed RWDS samples so the read datapath stays phase-aligned.
+
+See `doc/theory_of_operation.md` for the architectural rationale behind this
+partitioning.
 
 ## Integration Checklist (Do Not Skip)
 

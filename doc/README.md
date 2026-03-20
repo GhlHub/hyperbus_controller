@@ -2,17 +2,36 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Documentation
 
-Last updated: 2026-03-18
+Last updated: 2026-03-20
+
+## Start Here
+
+This file is the documentation index. The definitive controller narrative is:
+
+- `doc/theory_of_operation.md`
+
+Use the companion documents for narrower topics:
+
+- `doc/system_level_operating_guide.md`
+  - checked-in project bring-up, delay tuning, debug workflow, integration notes
+- `doc/hyperbus_phy_design_notes.md`
+  - PHY implementation constraints and change checklist
+- `doc/implemented_ff_by_clock_domain.md`
+  - implemented resource counts
+- `doc/hb_dq_input_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_timing.md`
+- `doc/hb_dq_vs_hb_ck_p_output_relative_timing.md`
+  - extracted timing windows
 
 ## Overview
 
-This project implements a HyperBus/HyperRAM controller with:
+This project implements a HyperBus / HyperRAM controller with:
 
-- AXI4-Full slave data path (32-bit, burst capable up to 128 bytes)
-- AXI4-Lite slave register/config path (32-bit single-beat transactions)
+- AXI4-Full slave data path
+- AXI4-Lite slave control and register path
 - HyperBus physical interface using Xilinx primitives
 
-Target assumptions include:
+Reference assumptions:
 
 - AXI clock: 50 MHz
 - HyperBus clock: 200 MHz
@@ -27,130 +46,8 @@ Main RTL:
 - `rtl/hyperbus_phy_xilinx.sv`
 - `rtl/hyperbus_fifo_bank_xilinx.sv`
 
-## Block Partitioning
-
-- `hyperbus_controller.sv`
-  - Top-level integration only (AXI front-ends, HB engine, FIFO bank, PHY)
-- `hyperbus_axi_full_frontend.sv`
-  - AXI-full slave handling (AW/W/B and AR/R control, command and data enqueue/dequeue)
-- `hyperbus_axi_lite_frontend.sv`
-  - AXI-lite single-beat command/response handling
-- `hyperbus_hb_engine.sv`
-  - HyperBus transaction FSM (CA/latency/read/write/termination control)
-- `hyperbus_phy_xilinx.sv`
-  - Non-FIFO Xilinx primitive PHY (`ODDRE1`, `ODELAYE3`, `OBUF`, `IOBUF`, `IDDRE1`, `IDELAYCTRL`)
-  - Uses externally gated HyperBus clock input (`i_hb_clk_200_gated`)
-  - Configured for single-ended CK mode (`o_hb_ck_p` driven, `o_hb_ck_n` held low)
-- `hyperbus_fifo_bank_xilinx.sv`
-  - All XPM async FIFOs (`xpm_fifo_async`)
-
-## FIFO Configuration
-
-All FIFO instances are in `rtl/hyperbus_fifo_bank_xilinx.sv`.
-
-- `u_cmd_fifo`: async, standard mode, depth 32, width 75
-- `u_wr_fifo`: async, FWFT mode, depth 256, width 36 (`WSTRB+WDATA`)
-- `u_rd_fifo`: async, FWFT mode, depth 256, width 32
-- `u_b_fifo`: async, standard mode, depth 32, width 1
-- `u_axil_rsp_fifo`: async, standard mode, depth 32, width 32
-
-## AXI-Full Behavior
-
-### Writes
-
-- AW supports INCR bursts, 32-bit beats, `AWLEN <= 31` (max 32 beats / 128 bytes).
-- W channel pushes directly into `u_wr_fifo` on `WVALID && WREADY`.
-- `WLAST` protocol is checked:
-  - `WLAST=1` is required only on the final accepted beat.
-  - Early or missing-final `WLAST` is flagged as a write protocol error.
-- Write command is issued to `u_cmd_fifo` at final accepted beat.
-- If `u_cmd_fifo` is full at final beat, command issue is deferred until space is available.
-- B response is returned after HyperBus write completion token (`u_b_fifo`).
-- `BRESP` behavior:
-  - `OKAY (2'b00)` for normal write bursts.
-  - `SLVERR (2'b10)` for malformed `WLAST` bursts.
-
-### Reads
-
-- AR supports INCR bursts, 32-bit beats, `ARLEN <= 31`.
-- Read data is collected in HyperBus domain and pushed to `u_rd_fifo`.
-- AXI side consumes via FWFT FIFO with a one-cycle refill wait guard to avoid duplicate beat sampling.
-- RLAST is generated from remaining beat count.
-
-### Read/Write Priority
-
-- If AXI-full read and write commands arrive in the same cycle, write is prioritized first.
-
-## AXI-Lite Behavior
-
-- Single-beat command model for register accesses.
-- AXI-Lite register map:
-  - HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
-    - `0x0000` -> HyperBus `0x0000` (ID0)
-    - `0x0002` -> HyperBus `0x0000` (ID1 16-bit alias)
-    - `0x0004` -> HyperBus `0x0002` (ID1)
-    - `0x0800` -> HyperBus `0x0800` (CR0)
-    - `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
-    - `0x0804` -> HyperBus `0x0802` (CR1)
-  - Local controller registers:
-    - `0x0024` VERSION (read-only, `0x01000003`)
-    - `0x0028` DQ (read-only, sampled DQ debug view)
-    - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
-    - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
-    - `0x0088` AXIL_RWDS_CNTR (read-only, 6-bit counter)
-    - `0x008C` HB_CLK_CE_FORCE (bit0 ORed with `o_hb_clk_ce`, reset default `1`)
-    - `0x0100` CK_P_ODELAY_CTRL
-    - `0x0104` CK_P_ODELAY_TIME
-    - `0x0108` CK_P_ODELAY_STATUS
-    - `0x01C0` RWDS_IDELAY_CTRL
-    - `0x01C4` RWDS_IDELAY_TIME
-    - `0x01C8` RWDS_IDELAY_STATUS
-    - `0x0200` DELAY_RST_CTRL
-      - bit0 IDELAYCTRL reset request
-      - bit1 CK_P ODELAY reset request
-      - bit2 RWDS IDELAY reset request
-    - `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
-- AXI-Lite AR accept condition (`ARREADY`) requires:
-  - `axil_state == AXIL_IDLE`
-  - `!i_cmd_fifo_full`
-  - `!i_req_block`
-  - `!i_aw_pending`
-  - `!i_s_axi_arvalid && !i_s_axi_awvalid` (AXI-full command issue backpressure guard)
-- Unmapped AXI-Lite addresses are handled locally:
-  - reads return `0x00000000` with `OKAY`
-  - writes complete with `OKAY` and no side effects
-- AXI-lite is backpressured while AXI-full command issue is active to avoid command FIFO collisions.
-
-## HyperBus Transaction Notes
-
-- Latency mode (1x/2x) is decided after the second CA clock based on RWDS.
-- For AXI-full writes, post-CA RWDS wait is applied before data phase.
-- HyperBus read termination waits for required RWDS transitions and then performs CS#/CK termination hold sequencing.
-- CK is gated off when idle.
-
-## Debug Exports
-
-The controller currently exposes the following top-level debug outputs:
-
-- Read-path alignment/debug:
-  - `o_dbg_dq_q1_dly`
-  - `o_dbg_dq_q2_dly`
-  - `o_dbg_rwds_q1_dly`
-  - `o_dbg_rwds_q2_dly`
-- Write/IO control debug:
-  - `o_dbg_dq_o_d1`
-  - `o_dbg_dq_o_d2`
-  - `o_dbg_rwds_o_d1`
-  - `o_dbg_rwds_o_d2`
-  - `o_dbg_i_dq_t`
-  - `o_dbg_i_rwds_t`
-- HyperBus control debug:
-  - `o_dbg_hb_cs_n_q` (`HB engine` registered CS# state before top-level `assign o_hb_cs_n = hb_cs_n_q`)
-
-Notes:
-
-- `o_dbg_dq_q*_dly` and `o_dbg_rwds_q*_dly` are the HB-engine aligned samples used by the read datapath.
-- `o_dbg_hb_cs_n_q` is useful for distinguishing the engine-controlled CS# state from downstream pin-level effects.
+For block responsibilities, internal data flow, clocking semantics, transaction
+sequencing, and read-path alignment, refer to `doc/theory_of_operation.md`.
 
 ## Testbench
 
@@ -256,6 +153,10 @@ Reference PDFs are stored under:
 
 ## Additional Notes
 
+Theory of operation:
+
+- `doc/theory_of_operation.md`
+
 System-level operating guidance:
 
 - `doc/system_level_operating_guide.md`
@@ -275,10 +176,36 @@ Implemented resource notes:
 
 - `doc/implemented_ff_by_clock_domain.md`
 
-## PHY Reuse Notes
+## AXI-Lite Register Summary
 
-- `doc/hyperbus_phy_design_notes.md` captures the current HyperBus PHY architecture,
-  reset/clock assumptions, and a checklist for future PHY changes.
+HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
+
+- `0x0000` -> HyperBus `0x0000` (ID0)
+- `0x0002` -> HyperBus `0x0000` (ID1 16-bit alias)
+- `0x0004` -> HyperBus `0x0002` (ID1)
+- `0x0800` -> HyperBus `0x0800` (CR0)
+- `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
+- `0x0804` -> HyperBus `0x0802` (CR1)
+
+Local controller registers:
+
+- `0x0024` VERSION (read-only, `0x01000003`)
+- `0x0028` DQ (read-only, sampled DQ debug view)
+- `0x0080` ERR_STATUS (bit0 timeout status, W1C)
+- `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
+- `0x0088` AXIL_RWDS_CNTR (read-only, 6-bit counter)
+- `0x008C` HB_CLK_CE_FORCE (bit0 ORed with `o_hb_clk_ce`, reset default `1`)
+- `0x0100` CK_P_ODELAY_CTRL
+- `0x0104` CK_P_ODELAY_TIME
+- `0x0108` CK_P_ODELAY_STATUS
+- `0x01C0` RWDS_IDELAY_CTRL
+- `0x01C4` RWDS_IDELAY_TIME
+- `0x01C8` RWDS_IDELAY_STATUS
+- `0x0200` DELAY_RST_CTRL
+  - bit0 IDELAYCTRL reset request
+  - bit1 CK_P ODELAY reset request
+  - bit2 RWDS IDELAY reset request
+- `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
 
 ## Software Delay Control API
 
