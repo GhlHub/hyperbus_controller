@@ -334,7 +334,7 @@ module hyperbus_axi_lite_frontend #(
                 if (axil_is_local_addr(s_axil_araddr)) begin
                     unique case (s_axil_araddr)
                         AXIL_ERR_STATUS_ADDR:         s_axil_rdata <= {31'h0, timeout_status_q};
-                        AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0003;
+                        AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0004;
                         AXIL_AXIF_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axif_rwds_cntr};
                         AXIL_AXIL_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axil_rwds_cntr};
                         AXIL_HB_CLK_CE_FORCE_ADDR:    s_axil_rdata <= {31'h0, hb_clk_ce_force_q};

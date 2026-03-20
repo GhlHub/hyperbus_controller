@@ -25,10 +25,6 @@ module hyperbus_hb_engine #(
     output logic [31:0]         o_rd_fifo_din,
     output logic                o_rd_fifo_wr_en,
 
-    input  wire                 i_b_fifo_full,
-    output logic [0:0]          o_b_fifo_din,
-    output logic                o_b_fifo_wr_en,
-
     input  wire                 i_axil_rsp_fifo_full,
     output logic [31:0]         o_axil_rsp_fifo_din,
     output logic                o_axil_rsp_fifo_wr_en,
@@ -173,8 +169,6 @@ module hyperbus_hb_engine #(
             o_rd_fifo_din <= 32'h0;
             rd_pack <= 32'h0;
             rd_half <= 1'b0;
-            o_b_fifo_wr_en <= 1'b0;
-            o_b_fifo_din <= 1'b0;
             o_axil_rsp_fifo_wr_en <= 1'b0;
             o_axil_rsp_fifo_din <= 32'h0;
             o_last_read_word32 <= 32'h0;
@@ -200,7 +194,6 @@ module hyperbus_hb_engine #(
             o_cmd_fifo_rd_en <= 1'b0;
             o_wr_fifo_rd_en <= 1'b0;
             o_rd_fifo_wr_en <= 1'b0;
-            o_b_fifo_wr_en <= 1'b0;
             o_axil_rsp_fifo_wr_en <= 1'b0;
             o_timeout_pulse_hb <= 1'b0;
             if (timeout_holdoff_cnt != 0) begin
@@ -764,9 +757,6 @@ module hyperbus_hb_engine #(
                             o_axil_rsp_fifo_din <= 32'h0000_0000;
                             o_axil_rsp_fifo_wr_en <= 1'b1;
                         end
-                    end else if (cur_is_write && !i_b_fifo_full) begin
-                        o_b_fifo_din <= 1'b0;
-                        o_b_fifo_wr_en <= 1'b1;
                     end
                     if (timeout_tripped_cur) begin
                         timeout_holdoff_cnt <= TIMEOUT_HOLDOFF_CYCLES;

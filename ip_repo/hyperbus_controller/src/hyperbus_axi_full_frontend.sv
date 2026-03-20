@@ -25,10 +25,6 @@ module hyperbus_axi_full_frontend #(
     input  wire                         i_rd_fifo_empty,
     output logic                        o_rd_fifo_rd_en,
 
-    input  wire                         i_b_fifo_empty,
-    input  wire                         i_b_fifo_dout_valid,
-    output logic                        o_b_fifo_rd_en,
-
     input  wire [AXI_ADDR_WIDTH-1:0]    s_axi_awaddr,
     input  wire [AXI_ID_WIDTH-1:0]      s_axi_awid,
     input  wire [7:0]                   s_axi_awlen,
@@ -82,7 +78,6 @@ module hyperbus_axi_full_frontend #(
     logic [1:0]  rd_stage_count;
     logic        rd_pop_cooldown;
 
-    logic b_pop_pending;
     logic wr_proto_err;
     logic [1:0] bresp_q_mem [0:31];
     logic [AXI_ID_WIDTH-1:0] bid_q_mem [0:31];
@@ -145,10 +140,8 @@ module hyperbus_axi_full_frontend #(
             rd_active <= 1'b0;
             rd_beats_left <= '0;
             o_rd_fifo_rd_en <= 1'b0;
-            o_b_fifo_rd_en <= 1'b0;
             o_cmd_fifo_wr_en_full <= 1'b0;
             o_cmd_fifo_din_full <= '0;
-            b_pop_pending <= 1'b0;
             wr_proto_err <= 1'b0;
             bresp_q_wr_ptr <= 5'd0;
             bresp_q_rd_ptr <= 5'd0;
@@ -189,7 +182,6 @@ module hyperbus_axi_full_frontend #(
 
             o_cmd_fifo_wr_en_full <= 1'b0;
             o_rd_fifo_rd_en <= 1'b0;
-            o_b_fifo_rd_en <= 1'b0;
             if (rd_pop_cooldown) rd_pop_cooldown <= 1'b0;
 
             // AW: only INCR, 32-bit beats, up to 32 beats
@@ -270,25 +262,14 @@ module hyperbus_axi_full_frontend #(
                 end
             end
 
-            if (!s_axi_bvalid && !i_b_fifo_empty && !b_pop_pending) begin
-                o_b_fifo_rd_en <= 1'b1;
-                b_pop_pending <= 1'b1;
-            end
-            if (b_pop_pending && i_b_fifo_dout_valid) begin
+            if (!s_axi_bvalid && (bresp_q_count != 0)) begin
                 s_axi_bvalid <= 1'b1;
-                bresp_pop = 1'b1;
-                if (bresp_q_count != 0) begin
-                    s_axi_bresp <= bresp_q_mem[bresp_q_rd_ptr];
-                    s_axi_bid <= bid_q_mem[bresp_q_rd_ptr];
-                end else begin
-                    // Safety fallback: completion token without matching queued response.
-                    s_axi_bresp <= 2'b10;
-                    s_axi_bid <= '0;
-                end
-                b_pop_pending <= 1'b0;
+                s_axi_bresp <= bresp_q_mem[bresp_q_rd_ptr];
+                s_axi_bid <= bid_q_mem[bresp_q_rd_ptr];
             end
             if (s_axi_bvalid && s_axi_bready) begin
                 s_axi_bvalid <= 1'b0;
+                bresp_pop = 1'b1;
             end
 
             // Write-response code queue tracking (preserves ordering across bursts).

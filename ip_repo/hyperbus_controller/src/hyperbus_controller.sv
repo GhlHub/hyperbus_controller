@@ -122,9 +122,6 @@ module hyperbus_controller #(
     logic wr_fifo_wr_en, wr_fifo_rd_en, wr_fifo_full, wr_fifo_empty, wr_fifo_dout_valid;
     logic rd_fifo_wr_en, rd_fifo_rd_en, rd_fifo_full, rd_fifo_empty, rd_fifo_dout_valid;
 
-    logic [0:0] b_fifo_din, b_fifo_dout;
-    logic b_fifo_wr_en, b_fifo_rd_en, b_fifo_full, b_fifo_empty, b_fifo_dout_valid;
-
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
     logic [5:0] axif_rwds_cntr;
@@ -177,13 +174,6 @@ module hyperbus_controller #(
         .i_rd_fifo_rd_en          (          rd_fifo_rd_en),
         .o_rd_fifo_empty          (          rd_fifo_empty),
         .o_rd_fifo_dout_valid     (     rd_fifo_dout_valid),
-        .i_b_fifo_din             (             b_fifo_din),
-        .i_b_fifo_wr_en           (           b_fifo_wr_en),
-        .o_b_fifo_full            (            b_fifo_full),
-        .o_b_fifo_dout            (            b_fifo_dout),
-        .i_b_fifo_rd_en           (           b_fifo_rd_en),
-        .o_b_fifo_empty           (           b_fifo_empty),
-        .o_b_fifo_dout_valid      (      b_fifo_dout_valid),
         .i_axil_rsp_fifo_din      (      axil_rsp_fifo_din),
         .i_axil_rsp_fifo_wr_en    (    axil_rsp_fifo_wr_en),
         .o_axil_rsp_fifo_full     (     axil_rsp_fifo_full),
@@ -218,9 +208,6 @@ module hyperbus_controller #(
         .i_rd_fifo_dout        (           rd_fifo_dout),
         .i_rd_fifo_empty       (          rd_fifo_empty),
         .o_rd_fifo_rd_en       (          rd_fifo_rd_en),
-        .i_b_fifo_empty        (           b_fifo_empty),
-        .i_b_fifo_dout_valid   (      b_fifo_dout_valid),
-        .o_b_fifo_rd_en        (           b_fifo_rd_en),
         .s_axi_awaddr          (           s_axi_awaddr),
         .s_axi_awid            (             s_axi_awid),
         .s_axi_awlen           (            s_axi_awlen),
@@ -389,9 +376,6 @@ module hyperbus_controller #(
         .i_rd_fifo_full        (           rd_fifo_full),
         .o_rd_fifo_din         (            rd_fifo_din),
         .o_rd_fifo_wr_en       (          rd_fifo_wr_en),
-        .i_b_fifo_full          (            b_fifo_full),
-        .o_b_fifo_din           (             b_fifo_din),
-        .o_b_fifo_wr_en         (           b_fifo_wr_en),
         .i_axil_rsp_fifo_full   (     axil_rsp_fifo_full),
         .o_axil_rsp_fifo_din    (      axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en  (    axil_rsp_fifo_wr_en),
@@ -460,12 +444,6 @@ module hyperbus_controller #(
             if (s_axi_rvalid && s_axi_rready) begin
                 $display("[%0d][AXI] [ RD_FIFO] POP_DATA data=0x%08h", ns_time(), s_axi_rdata);
             end
-            if (b_fifo_rd_en) begin
-                $display("[%0d][AXI] [  B_FIFO] POP_REQ", ns_time());
-            end
-            if (b_fifo_dout_valid) begin
-                $display("[%0d][AXI] [  B_FIFO] POP_DATA data=0x%0h", ns_time(), b_fifo_dout);
-            end
             if (axil_rsp_fifo_rd_en) begin
                 $display("[%0d][AXI] AXIL_RSP_FIFO POP_REQ", ns_time());
             end
@@ -489,9 +467,6 @@ module hyperbus_controller #(
             end
             if (rd_fifo_wr_en) begin
                 $display("[%0d][ HB] [ RD_FIFO] PUSH data=0x%08h", ns_time(), rd_fifo_din);
-            end
-            if (b_fifo_wr_en) begin
-                $display("[%0d][ HB] [  B_FIFO] PUSH data=0x%0h", ns_time(), b_fifo_din);
             end
             if (axil_rsp_fifo_wr_en) begin
                 $display("[%0d][ HB] AXIL_RSP_FIFO PUSH data=0x%08h", ns_time(), axil_rsp_fifo_din);
