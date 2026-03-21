@@ -366,7 +366,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_crossbar_1_M00_AXI] [get_bd_
   [get_bd_pins hyperbus_controller_0/i_hb_clk_200]
   connect_bd_net -net clk_300m  [get_bd_pins clk_wiz_0/clk_out4] \
   [get_bd_pins proc_sys_reset_2/slowest_sync_clk] \
-  [get_bd_pins hyperbus_controller_0/i_ref_clk300]
+  [get_bd_pins hyperbus_controller_0/i_ref_clk_300]
   connect_bd_net -net clk_wiz_0_clk_out2  [get_bd_pins clk_wiz_0/clk_out2] \
   [get_bd_pins proc_sys_reset_3/slowest_sync_clk] \
   [get_bd_pins hyperbus_controller_0/i_hb_clk_200_samp_90]
@@ -453,4 +453,3 @@ create_root_design ""
 
 
 common::send_gid_msg -ssname BD::TCL -id 2053 -severity "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
-

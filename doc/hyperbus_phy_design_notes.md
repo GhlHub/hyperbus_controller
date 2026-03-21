@@ -35,9 +35,9 @@ required when the PHY changes.
   - PHY exports raw RWDS `IDDRE1` samples; HB-engine alignment/debug taps are downstream.
 - Delay calibration:
   - `IDELAYCTRL` is instantiated.
-  - `REFCLK` must be external 300 MHz (`i_ref_clk300`).
+  - `REFCLK` must be external 300 MHz (`i_ref_clk_300`).
   - `IDELAYCTRL.RST` is driven from AXI-Lite `DELAY_RST_CTRL[0]` through a
-    synchronizer into `i_ref_clk300` domain.
+    synchronizer into `i_ref_clk_300` domain.
   - `IDELAYCTRL.RDY` is synchronized into AXI clock domain and exposed through
     AXI-Lite `IDELAYCTRL_STATUS[0]`.
   - `ODELAYE3` runtime control signals are driven from AXI-Lite registers.
@@ -47,7 +47,7 @@ required when the PHY changes.
 - `i_hb_clk_200`: HyperBus fabric/PHY TX clock.
 - `i_hb_clk_200_gated`: externally gated TX clock used by CK forward `ODDRE1`.
 - `i_hb_clk_200_samp_90`: external +90-degree sample clock for `IDDRE1`.
-- `i_ref_clk300`: external `IDELAYCTRL` reference clock.
+- `i_ref_clk_300`: external `IDELAYCTRL` reference clock.
 - `i_hb_rstn`: HyperBus-domain reset for TX path primitives/registers.
 - `i_idelayctrl_rst`: dedicated reset for `IDELAYCTRL`.
 - `i_iddre1_rst`: dedicated reset for all `IDDRE1` instances.

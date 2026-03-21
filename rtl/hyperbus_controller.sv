@@ -18,7 +18,7 @@ module hyperbus_controller #(
     input  wire                         i_axi_aresetn,
     input  wire                         i_hb_clk_200,    // 200 MHz
     input  wire                         i_hb_clk_200_gated, // externally gated 200 MHz for HB CK forwarding
-    input  wire                         i_ref_clk300,    // externally sourced 300 MHz IDELAYCTRL refclk
+    input  wire                         i_ref_clk_300,   // externally sourced 300 MHz IDELAYCTRL refclk
     input  wire                         i_idelayctrl_rst, // externally sourced IDELAYCTRL reset (active high)
     input  wire                         i_hb_clk_200_samp_90, // externally sourced 200 MHz, +90 deg
     input  wire                         i_iddre1_rst,    // externally sourced IDDRE1 reset (active high)
@@ -130,6 +130,8 @@ module hyperbus_controller #(
     logic [8:0] odly_cntvaluein, odly_cntvalueout;
     logic rwds_idly_en_vtc, rwds_idly_ce, rwds_idly_inc, rwds_idly_load;
     logic [8:0] rwds_idly_cntvaluein, rwds_idly_cntvalueout;
+    logic [7:0] dq_idly_en_vtc, dq_idly_ce, dq_idly_inc, dq_idly_load;
+    logic [71:0] dq_idly_cntvaluein, dq_idly_cntvalueout;
     logic idelayctrl_rst_req, odelay_rst_req, rwds_idelay_rst_req;
     logic hb_clk_ce_force;
     logic idelayctrl_rdy_axi;
@@ -265,6 +267,7 @@ module hyperbus_controller #(
         .i_axil_rwds_cntr         (         axil_rwds_cntr),
         .i_odly_cntvalueout       (       odly_cntvalueout),
         .i_rwds_idly_cntvalueout  (  rwds_idly_cntvalueout),
+        .i_dq_idly_cntvalueout    (    dq_idly_cntvalueout),
         .i_idelayctrl_rdy_sync    (       idelayctrl_rdy_axi),
         .o_axil_rsp_fifo_rd_en    (    axil_rsp_fifo_rd_en),
         .o_cmd_fifo_din_axil      (      cmd_fifo_din_axil),
@@ -279,6 +282,11 @@ module hyperbus_controller #(
         .o_rwds_idly_inc          (          rwds_idly_inc),
         .o_rwds_idly_load         (         rwds_idly_load),
         .o_rwds_idly_cntvaluein   (   rwds_idly_cntvaluein),
+        .o_dq_idly_en_vtc         (         dq_idly_en_vtc),
+        .o_dq_idly_ce             (             dq_idly_ce),
+        .o_dq_idly_inc            (            dq_idly_inc),
+        .o_dq_idly_load           (           dq_idly_load),
+        .o_dq_idly_cntvaluein     (    dq_idly_cntvaluein),
         .o_idelayctrl_rst_req     (     idelayctrl_rst_req),
         .o_odelay_rst_req         (         odelay_rst_req),
         .o_rwds_idelay_rst_req    (    rwds_idelay_rst_req),
@@ -321,7 +329,7 @@ module hyperbus_controller #(
         .i_axi_aresetn          (         i_axi_aresetn),
         .i_hb_clk_200           (          i_hb_clk_200),
         .i_hb_clk_200_gated     (    i_hb_clk_200_gated),
-        .i_ref_clk300           (           i_ref_clk300),
+        .i_ref_clk_300          (          i_ref_clk_300),
         .i_idelayctrl_rst       (       i_idelayctrl_rst),
         .i_idelayctrl_rst_req      (i_idelayctrl_rst | idelayctrl_rst_req),
         .i_odelay_rst_req       (         odelay_rst_req),
@@ -356,6 +364,12 @@ module hyperbus_controller #(
         .i_rwds_idly_load       (       rwds_idly_load),
         .i_rwds_idly_cntvaluein ( rwds_idly_cntvaluein),
         .o_rwds_idly_cntvalueout(rwds_idly_cntvalueout),
+        .i_dq_idly_en_vtc       (         dq_idly_en_vtc),
+        .i_dq_idly_ce           (             dq_idly_ce),
+        .i_dq_idly_inc          (            dq_idly_inc),
+        .i_dq_idly_load         (           dq_idly_load),
+        .i_dq_idly_cntvaluein   (    dq_idly_cntvaluein),
+        .o_dq_idly_cntvalueout  (   dq_idly_cntvalueout),
         .o_idelayctrl_rdy_axi   (   idelayctrl_rdy_axi)
     );
 

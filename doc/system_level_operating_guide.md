@@ -37,7 +37,7 @@ outputs:
 | `clk_out1` | `i_hb_clk_200` | Main 200 MHz HyperBus fabric clock |
 | `clk_out2` | `i_hb_clk_200_samp_90` | 200 MHz sample clock shifted by 90 degrees for `IDDRE1` capture |
 | `clk_out3` | `i_axi_aclk` | 50 MHz AXI / software / ILA clock |
-| `clk_out4` | `i_ref_clk300` | 300 MHz `IDELAYCTRL` reference |
+| `clk_out4` | `i_ref_clk_300` | 300 MHz `IDELAYCTRL` reference |
 | `clk_out5` | `i_hb_clk_200_gated` | Gated 200 MHz clock used only for HyperBus CK forwarding |
 
 Checked-in project wiring notes:
@@ -113,6 +113,9 @@ Relevant registers:
 - `0x01C0` `RWDS_IDELAY_CTRL`
 - `0x01C4` `RWDS_IDELAY_TIME`
 - `0x01C8` `RWDS_IDELAY_STATUS`
+- `0x0300 + n*0x10` `DQn_IDELAY_CTRL` for `n=0..7`
+- `0x0304 + n*0x10` `DQn_IDELAY_TIME` for `n=0..7`
+- `0x0308 + n*0x10` `DQn_IDELAY_STATUS` for `n=0..7`
 
 Useful helper APIs:
 

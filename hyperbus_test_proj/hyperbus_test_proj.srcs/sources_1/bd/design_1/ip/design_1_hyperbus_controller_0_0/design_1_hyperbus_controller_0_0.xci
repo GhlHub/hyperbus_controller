@@ -56,7 +56,7 @@
         "i_axi_aresetn": [ { "direction": "in" } ],
         "i_hb_clk_200": [ { "direction": "in" } ],
         "i_hb_clk_200_gated": [ { "direction": "in" } ],
-        "i_ref_clk300": [ { "direction": "in" } ],
+        "i_ref_clk_300": [ { "direction": "in" } ],
         "i_idelayctrl_rst": [ { "direction": "in" } ],
         "i_hb_clk_200_samp_90": [ { "direction": "in" } ],
         "i_iddre1_rst": [ { "direction": "in" } ],
@@ -348,5 +348,5 @@
       }
     }
   },
-  "checksum": "6a8d5e75"
+  "checksum": "3d776036"
 }

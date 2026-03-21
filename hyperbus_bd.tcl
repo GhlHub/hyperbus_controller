@@ -367,7 +367,7 @@ proc create_root_design { parentCell } {
   [get_bd_pins hyperbus_controller_0/i_hb_clk_200]
   connect_bd_net -net clk_300m  [get_bd_pins clk_wiz_0/clk_out4] \
   [get_bd_pins proc_sys_reset_2/slowest_sync_clk] \
-  [get_bd_pins hyperbus_controller_0/i_ref_clk300]
+  [get_bd_pins hyperbus_controller_0/i_ref_clk_300]
   connect_bd_net -net clk_wiz_0_clk_out2  [get_bd_pins clk_wiz_0/clk_out2] \
   [get_bd_pins proc_sys_reset_3/slowest_sync_clk] \
   [get_bd_pins hyperbus_controller_0/i_hb_clk_200_samp_90]
@@ -454,5 +454,4 @@ proc create_root_design { parentCell } {
 ##################################################################
 
 create_root_design ""
-
 

@@ -189,7 +189,7 @@ HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
 
 Local controller registers:
 
-- `0x0024` VERSION (read-only, `0x01000004`)
+- `0x0024` VERSION (read-only, `0x01000005`)
 - `0x0028` DQ (read-only, sampled DQ debug view)
 - `0x0080` ERR_STATUS (bit0 timeout status, W1C)
 - `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
@@ -201,10 +201,13 @@ Local controller registers:
 - `0x01C0` RWDS_IDELAY_CTRL
 - `0x01C4` RWDS_IDELAY_TIME
 - `0x01C8` RWDS_IDELAY_STATUS
+- `0x0300 + n*0x10` DQ`n`_IDELAY_CTRL for `n=0..7`
+- `0x0304 + n*0x10` DQ`n`_IDELAY_TIME for `n=0..7`
+- `0x0308 + n*0x10` DQ`n`_IDELAY_STATUS for `n=0..7`
 - `0x0200` DELAY_RST_CTRL
   - bit0 IDELAYCTRL reset request
   - bit1 CK_P ODELAY reset request
-  - bit2 RWDS IDELAY reset request
+  - bit2 RWDS and DQ IDELAY reset request
 - `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
 
 ## Software Delay Control API

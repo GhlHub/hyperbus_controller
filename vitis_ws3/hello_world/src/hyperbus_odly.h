@@ -23,6 +23,11 @@ extern "C" {
 #define HB_RWDS_IDLY_CTRL_OFFSET        0x01C0u
 #define HB_RWDS_IDLY_TIME_OFFSET        0x01C4u
 #define HB_RWDS_IDLY_STATUS_OFFSET      0x01C8u
+#define HB_DQ_IDLY_BASE_OFFSET          0x0300u
+#define HB_DQ_IDLY_STRIDE               0x0010u
+#define HB_DQ_IDLY_CTRL_OFFSET(n)       (HB_DQ_IDLY_BASE_OFFSET + ((uint32_t)(n) * HB_DQ_IDLY_STRIDE) + 0x0u)
+#define HB_DQ_IDLY_TIME_OFFSET(n)       (HB_DQ_IDLY_BASE_OFFSET + ((uint32_t)(n) * HB_DQ_IDLY_STRIDE) + 0x4u)
+#define HB_DQ_IDLY_STATUS_OFFSET(n)     (HB_DQ_IDLY_BASE_OFFSET + ((uint32_t)(n) * HB_DQ_IDLY_STRIDE) + 0x8u)
 #define HB_DELAY_RST_CTRL_OFFSET        0x0200u
 #define HB_IDELAYCTRL_STATUS_OFFSET     0x0204u
 
@@ -39,7 +44,7 @@ extern "C" {
 /*
  * Constant values and common masks.
  */
-#define HB_VERSION_VALUE                0x01000004u
+#define HB_VERSION_VALUE                0x01000005u
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
@@ -82,6 +87,7 @@ extern "C" {
  * HB_DELAY_RST_CTRL bit definitions.
  * bit0 IDELAYCTRL reset request
  * bit1 ODELAY reset request
+ * bit2 RWDS and DQ IDELAY reset request
  */
 #define HB_DELAY_RST_IDELAYCTRL (1u << 0)
 #define HB_DELAY_RST_CKP_ODELAY (1u << 1)

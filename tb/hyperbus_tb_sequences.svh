@@ -507,9 +507,14 @@
         logic [31:0] rd32;
         int push_base;
         int poll_i;
+        int dq_lane;
+        logic [15:0] dq_ctrl_addr;
+        logic [15:0] dq_time_addr;
+        logic [15:0] dq_status_addr;
+        string dq_label;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0004, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0005, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");
@@ -594,6 +599,63 @@
                 $fatal(1, "CK_P_ODELAY_STATUS @0x0108 mismatch after LOAD: got=0x%03x exp=0x00a", rd32[8:0]);
             end
             $display("[%0d][ TB] TEST PASS: AXI-Lite CK_P ODELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
+
+            for (dq_lane = 0; dq_lane < 8; dq_lane++) begin
+                dq_ctrl_addr = 16'h0300 + (dq_lane << 4);
+                dq_time_addr = dq_ctrl_addr + 16'h0004;
+                dq_status_addr = dq_ctrl_addr + 16'h0008;
+
+                axil_read(dq_ctrl_addr, rd32);
+                dq_label = $sformatf("DQ%0d_IDELAY_CTRL reset default EN_VTC=0 @0x%04x", dq_lane, dq_ctrl_addr);
+                check_eq32(rd32, 32'h0000_0000, dq_label);
+
+                push_base = axil_cmd_push_count;
+                axil_write(dq_ctrl_addr, 32'h0000_0002);
+                if ((axil_cmd_push_count - push_base) != 0) begin
+                    $fatal(1, "DQ%0d IDELAY local write @0x%04x unexpectedly pushed cmd fifo (delta=%0d)",
+                           dq_lane, dq_ctrl_addr, (axil_cmd_push_count - push_base));
+                end
+                axil_read(dq_ctrl_addr, rd32);
+                dq_label = $sformatf("DQ%0d_IDELAY_CTRL INC set @0x%04x", dq_lane, dq_ctrl_addr);
+                check_eq32(rd32, 32'h0000_0002, dq_label);
+
+                push_base = axil_cmd_push_count;
+                axil_write(dq_time_addr, 32'h0000_000A);
+                if ((axil_cmd_push_count - push_base) != 0) begin
+                    $fatal(1, "DQ%0d IDELAY local write @0x%04x unexpectedly pushed cmd fifo (delta=%0d)",
+                           dq_lane, dq_time_addr, (axil_cmd_push_count - push_base));
+                end
+                axil_read(dq_time_addr, rd32);
+                dq_label = $sformatf("DQ%0d_IDELAY_TIME set/readback 10 @0x%04x", dq_lane, dq_time_addr);
+                check_eq32(rd32, 32'h0000_000A, dq_label);
+
+                push_base = axil_cmd_push_count;
+                axil_write(dq_ctrl_addr, 32'h0000_000A);
+                if ((axil_cmd_push_count - push_base) != 0) begin
+                    $fatal(1, "DQ%0d IDELAY local write @0x%04x unexpectedly pushed cmd fifo (delta=%0d)",
+                           dq_lane, dq_ctrl_addr, (axil_cmd_push_count - push_base));
+                end
+                axil_read(dq_ctrl_addr, rd32);
+                dq_label = $sformatf("DQ%0d_IDELAY_CTRL LOAD pulse non-sticky @0x%04x", dq_lane, dq_ctrl_addr);
+                check_eq32(rd32, 32'h0000_0002, dq_label);
+
+                for (poll_i = 0; poll_i < 32; poll_i++) begin
+                    axil_read(dq_status_addr, rd32);
+                    if (^rd32[8:0] === 1'bx) begin
+                        $fatal(1, "DQ%0d_IDELAY_STATUS @0x%04x returned X while EN_VTC=0: 0x%03x",
+                               dq_lane, dq_status_addr, rd32[8:0]);
+                    end
+                    if (rd32[8:0] == 9'd10) begin
+                        break;
+                    end
+                    @(posedge axi_aclk);
+                end
+                if (rd32[8:0] !== 9'd10) begin
+                    $fatal(1, "DQ%0d_IDELAY_STATUS @0x%04x mismatch after LOAD: got=0x%03x exp=0x00a",
+                           dq_lane, dq_status_addr, rd32[8:0]);
+                end
+            end
+            $display("[%0d][ TB] TEST PASS: AXI-Lite DQ IDELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
         end
     endtask
 

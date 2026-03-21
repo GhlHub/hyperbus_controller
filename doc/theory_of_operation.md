@@ -103,7 +103,7 @@ The design is intentionally multi-clock:
   - main HyperBus fabric domain used by the HB engine
 - `i_hb_clk_200_samp_90`
   - sample clock for `IDDRE1` capture of DQ and RWDS
-- `i_ref_clk300`
+- `i_ref_clk_300`
   - `IDELAYCTRL` reference clock
 - `i_hb_clk_200_gated`
   - gated transmit clock used only to forward HyperBus CK

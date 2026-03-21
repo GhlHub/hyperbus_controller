@@ -24,10 +24,10 @@
       "ilconcat_0": "",
       "hyperbus_controller_0": "",
       "reset_gen": {
-        "proc_sys_reset_0": "",
-        "proc_sys_reset_1": "",
-        "proc_sys_reset_2": "",
-        "proc_sys_reset_3": ""
+        "hb_clk_reset_gen": "",
+        "axi_clk_reset_gen": "",
+        "clk_300m_reset_gen": "",
+        "hb_phy_rx_clk_reset_gen": ""
       }
     },
     "interface_ports": {
@@ -673,39 +673,39 @@
             "type": "rst",
             "direction": "I"
           },
-          "slowest_sync_clk": {
+          "hb_phy_clk": {
             "type": "clk",
             "direction": "I"
           },
-          "peripheral_aresetn": {
+          "hb_clk_peripheral_aresetn": {
             "type": "rst",
             "direction": "O",
             "left": "0",
             "right": "0"
           },
-          "interconnect_aresetn1": {
+          "axi_clk_interconnect_aresetn": {
             "type": "rst",
             "direction": "O",
             "left": "0",
             "right": "0"
           },
-          "peripheral_aresetn1": {
+          "axi_clk_peripheral_aresetn": {
             "type": "rst",
             "direction": "O",
             "left": "0",
             "right": "0"
           },
-          "bus_struct_reset1": {
+          "axi_clk_bus_struct_reset": {
             "type": "rst",
             "direction": "O",
             "left": "0",
             "right": "0"
           },
-          "slowest_sync_clk1": {
+          "axi_clk": {
             "type": "clk",
             "direction": "I"
           },
-          "mb_reset1": {
+          "mb_reset": {
             "type": "rst",
             "direction": "O"
           },
@@ -713,21 +713,21 @@
             "type": "rst",
             "direction": "I"
           },
-          "slowest_sync_clk2": {
+          "clk_300m": {
             "type": "clk",
             "direction": "I"
           },
-          "peripheral_reset2": {
+          "clk_300m_peripheral_reset": {
             "type": "rst",
             "direction": "O",
             "left": "0",
             "right": "0"
           },
-          "slowest_sync_clk3": {
+          "hb_phy_rx_clk": {
             "type": "clk",
             "direction": "I"
           },
-          "peripheral_reset3": {
+          "hb_phy_rx_clk_peripheral_reset": {
             "type": "rst",
             "direction": "O",
             "left": "0",
@@ -735,36 +735,36 @@
           }
         },
         "components": {
-          "proc_sys_reset_0": {
+          "hb_clk_reset_gen": {
             "vlnv": "xilinx.com:ip:proc_sys_reset:5.0",
             "ip_revision": "17",
             "xci_name": "design_1_proc_sys_reset_0_0",
             "xci_path": "ip/design_1_proc_sys_reset_0_0/design_1_proc_sys_reset_0_0.xci",
-            "inst_hier_path": "reset_gen/proc_sys_reset_0",
+            "inst_hier_path": "reset_gen/hb_clk_reset_gen",
             "has_run_ip_tcl": "true"
           },
-          "proc_sys_reset_1": {
+          "axi_clk_reset_gen": {
             "vlnv": "xilinx.com:ip:proc_sys_reset:5.0",
             "ip_revision": "17",
             "xci_name": "design_1_proc_sys_reset_1_0",
             "xci_path": "ip/design_1_proc_sys_reset_1_0/design_1_proc_sys_reset_1_0.xci",
-            "inst_hier_path": "reset_gen/proc_sys_reset_1",
+            "inst_hier_path": "reset_gen/axi_clk_reset_gen",
             "has_run_ip_tcl": "true"
           },
-          "proc_sys_reset_2": {
+          "clk_300m_reset_gen": {
             "vlnv": "xilinx.com:ip:proc_sys_reset:5.0",
             "ip_revision": "17",
             "xci_name": "design_1_proc_sys_reset_2_0",
             "xci_path": "ip/design_1_proc_sys_reset_2_0/design_1_proc_sys_reset_2_0.xci",
-            "inst_hier_path": "reset_gen/proc_sys_reset_2",
+            "inst_hier_path": "reset_gen/clk_300m_reset_gen",
             "has_run_ip_tcl": "true"
           },
-          "proc_sys_reset_3": {
+          "hb_phy_rx_clk_reset_gen": {
             "vlnv": "xilinx.com:ip:proc_sys_reset:5.0",
             "ip_revision": "17",
             "xci_name": "design_1_proc_sys_reset_3_0",
             "xci_path": "ip/design_1_proc_sys_reset_3_0/design_1_proc_sys_reset_3_0.xci",
-            "inst_hier_path": "reset_gen/proc_sys_reset_3",
+            "inst_hier_path": "reset_gen/hb_phy_rx_clk_reset_gen",
             "has_run_ip_tcl": "true"
           }
         },
@@ -772,91 +772,91 @@
           "dcm_locked_1": {
             "ports": [
               "dcm_locked",
-              "proc_sys_reset_0/dcm_locked",
-              "proc_sys_reset_1/dcm_locked",
-              "proc_sys_reset_2/dcm_locked",
-              "proc_sys_reset_3/dcm_locked"
+              "hb_clk_reset_gen/dcm_locked",
+              "axi_clk_reset_gen/dcm_locked",
+              "clk_300m_reset_gen/dcm_locked",
+              "hb_phy_rx_clk_reset_gen/dcm_locked"
             ]
           },
           "ext_reset_in_0_1": {
             "ports": [
               "ext_reset_in_0",
-              "proc_sys_reset_1/ext_reset_in"
+              "axi_clk_reset_gen/ext_reset_in"
             ]
           },
           "mb_debug_sys_rst_1": {
             "ports": [
               "mb_debug_sys_rst",
-              "proc_sys_reset_0/mb_debug_sys_rst"
+              "hb_clk_reset_gen/mb_debug_sys_rst"
             ]
           },
           "proc_sys_reset_0_peripheral_aresetn": {
             "ports": [
-              "proc_sys_reset_0/peripheral_aresetn",
-              "peripheral_aresetn"
+              "hb_clk_reset_gen/peripheral_aresetn",
+              "hb_clk_peripheral_aresetn"
             ]
           },
           "proc_sys_reset_1_bus_struct_reset": {
             "ports": [
-              "proc_sys_reset_1/bus_struct_reset",
-              "bus_struct_reset1"
+              "axi_clk_reset_gen/bus_struct_reset",
+              "axi_clk_bus_struct_reset"
             ]
           },
           "proc_sys_reset_1_interconnect_aresetn": {
             "ports": [
-              "proc_sys_reset_1/interconnect_aresetn",
-              "interconnect_aresetn1"
+              "axi_clk_reset_gen/interconnect_aresetn",
+              "axi_clk_interconnect_aresetn"
             ]
           },
           "proc_sys_reset_1_mb_reset": {
             "ports": [
-              "proc_sys_reset_1/mb_reset",
-              "mb_reset1"
+              "axi_clk_reset_gen/mb_reset",
+              "mb_reset"
             ]
           },
           "proc_sys_reset_1_peripheral_aresetn": {
             "ports": [
-              "proc_sys_reset_1/peripheral_aresetn",
-              "proc_sys_reset_0/ext_reset_in",
-              "peripheral_aresetn1",
-              "proc_sys_reset_2/ext_reset_in",
-              "proc_sys_reset_3/ext_reset_in"
+              "axi_clk_reset_gen/peripheral_aresetn",
+              "hb_clk_reset_gen/ext_reset_in",
+              "axi_clk_peripheral_aresetn",
+              "clk_300m_reset_gen/ext_reset_in",
+              "hb_phy_rx_clk_reset_gen/ext_reset_in"
             ]
           },
           "proc_sys_reset_2_peripheral_reset": {
             "ports": [
-              "proc_sys_reset_2/peripheral_reset",
-              "peripheral_reset2"
+              "clk_300m_reset_gen/peripheral_reset",
+              "clk_300m_peripheral_reset"
             ]
           },
           "proc_sys_reset_3_peripheral_reset": {
             "ports": [
-              "proc_sys_reset_3/peripheral_reset",
-              "peripheral_reset3"
+              "hb_phy_rx_clk_reset_gen/peripheral_reset",
+              "hb_phy_rx_clk_peripheral_reset"
             ]
           },
           "slowest_sync_clk1_1": {
             "ports": [
-              "slowest_sync_clk1",
-              "proc_sys_reset_1/slowest_sync_clk"
+              "axi_clk",
+              "axi_clk_reset_gen/slowest_sync_clk"
             ]
           },
           "slowest_sync_clk2_1": {
             "ports": [
-              "slowest_sync_clk2",
-              "proc_sys_reset_2/slowest_sync_clk"
+              "clk_300m",
+              "clk_300m_reset_gen/slowest_sync_clk"
             ]
           },
           "slowest_sync_clk3_1": {
             "ports": [
-              "slowest_sync_clk3",
-              "proc_sys_reset_3/slowest_sync_clk"
+              "hb_phy_rx_clk",
+              "hb_phy_rx_clk_reset_gen/slowest_sync_clk"
             ]
           },
           "slowest_sync_clk_1": {
             "ports": [
-              "slowest_sync_clk",
-              "proc_sys_reset_0/slowest_sync_clk"
+              "hb_phy_clk",
+              "hb_clk_reset_gen/slowest_sync_clk"
             ]
           }
         }
@@ -967,6 +967,20 @@
           "hyperbus_controller_0/io_hb_dq"
         ]
       },
+      "axi_clk": {
+        "ports": [
+          "clk_wiz_0/clk_out3",
+          "microblaze_riscv_0/Clk",
+          "axi_crossbar_1/aclk",
+          "axi_crossbar_0/aclk",
+          "lmb_bram_if_cntlr_0/LMB_Clk",
+          "axi_uartlite_0/s_axi_aclk",
+          "axi_intc_0/s_axi_aclk",
+          "axi_timer_0/s_axi_aclk",
+          "reset_gen/axi_clk",
+          "hyperbus_controller_0/i_axi_aclk"
+        ]
+      },
       "axi_timer_0_interrupt": {
         "ports": [
           "axi_timer_0/interrupt",
@@ -979,45 +993,11 @@
           "ilconcat_0/In0"
         ]
       },
-      "clk_200m": {
-        "ports": [
-          "clk_wiz_0/clk_out1",
-          "reset_gen/slowest_sync_clk",
-          "hyperbus_controller_0/i_hb_clk_200"
-        ]
-      },
       "clk_300m": {
         "ports": [
           "clk_wiz_0/clk_out4",
-          "reset_gen/slowest_sync_clk2",
-          "hyperbus_controller_0/i_ref_clk300"
-        ]
-      },
-      "clk_wiz_0_clk_out2": {
-        "ports": [
-          "clk_wiz_0/clk_out2",
-          "reset_gen/slowest_sync_clk3",
-          "hyperbus_controller_0/i_hb_clk_200_samp_90"
-        ]
-      },
-      "clk_wiz_0_clk_out3": {
-        "ports": [
-          "clk_wiz_0/clk_out3",
-          "microblaze_riscv_0/Clk",
-          "axi_crossbar_1/aclk",
-          "axi_crossbar_0/aclk",
-          "lmb_bram_if_cntlr_0/LMB_Clk",
-          "axi_uartlite_0/s_axi_aclk",
-          "axi_intc_0/s_axi_aclk",
-          "axi_timer_0/s_axi_aclk",
-          "reset_gen/slowest_sync_clk1",
-          "hyperbus_controller_0/i_axi_aclk"
-        ]
-      },
-      "clk_wiz_0_clk_out5": {
-        "ports": [
-          "clk_wiz_0/clk_out5",
-          "hyperbus_controller_0/i_hb_clk_200_gated"
+          "reset_gen/clk_300m",
+          "hyperbus_controller_0/i_ref_clk_300"
         ]
       },
       "clk_wiz_0_locked": {
@@ -1030,6 +1010,26 @@
         "ports": [
           "ext_reset_in_0",
           "reset_gen/ext_reset_in_0"
+        ]
+      },
+      "hb_clk_gated": {
+        "ports": [
+          "clk_wiz_0/clk_out5",
+          "hyperbus_controller_0/i_hb_clk_200_gated"
+        ]
+      },
+      "hb_phy_clk": {
+        "ports": [
+          "clk_wiz_0/clk_out1",
+          "reset_gen/hb_phy_clk",
+          "hyperbus_controller_0/i_hb_clk_200"
+        ]
+      },
+      "hb_phy_rx_clk": {
+        "ports": [
+          "clk_wiz_0/clk_out2",
+          "reset_gen/hb_phy_rx_clk",
+          "hyperbus_controller_0/i_hb_clk_200_samp_90"
         ]
       },
       "hyperbus_controller_1_o_hb_ck_n": {
@@ -1076,14 +1076,14 @@
       },
       "proc_sys_reset_1_interconnect_aresetn": {
         "ports": [
-          "reset_gen/interconnect_aresetn1",
+          "reset_gen/axi_clk_interconnect_aresetn",
           "axi_crossbar_0/aresetn",
           "axi_crossbar_1/aresetn"
         ]
       },
       "proc_sys_reset_1_peripheral_aresetn": {
         "ports": [
-          "reset_gen/peripheral_aresetn1",
+          "reset_gen/axi_clk_peripheral_aresetn",
           "axi_uartlite_0/s_axi_aresetn",
           "axi_intc_0/s_axi_aresetn",
           "axi_timer_0/s_axi_aresetn",
@@ -1092,31 +1092,31 @@
       },
       "reset_gen_bus_struct_reset": {
         "ports": [
-          "reset_gen/bus_struct_reset1",
+          "reset_gen/axi_clk_bus_struct_reset",
           "lmb_bram_if_cntlr_0/LMB_Rst"
         ]
       },
       "reset_gen_mb_reset": {
         "ports": [
-          "reset_gen/mb_reset1",
+          "reset_gen/mb_reset",
           "microblaze_riscv_0/Reset"
         ]
       },
       "reset_gen_peripheral_aresetn": {
         "ports": [
-          "reset_gen/peripheral_aresetn",
+          "reset_gen/hb_clk_peripheral_aresetn",
           "hyperbus_controller_0/i_hb_rstn"
         ]
       },
       "reset_gen_peripheral_reset": {
         "ports": [
-          "reset_gen/peripheral_reset2",
+          "reset_gen/clk_300m_peripheral_reset",
           "hyperbus_controller_0/i_idelayctrl_rst"
         ]
       },
       "reset_gen_peripheral_reset1": {
         "ports": [
-          "reset_gen/peripheral_reset3",
+          "reset_gen/hb_phy_rx_clk_peripheral_reset",
           "hyperbus_controller_0/i_iddre1_rst"
         ]
       }

@@ -34,7 +34,7 @@ module hyperbus_controller_tb;
     logic hb_clk_200;
     wire  hb_clk_200_gated;
     wire  hb_clk_ce;
-    logic ref_clk300;
+    logic ref_clk_300;
     logic idelayctrl_rst;
     logic iddre1_rst;
     logic hb_clk_200_samp_90;
@@ -116,7 +116,7 @@ module hyperbus_controller_tb;
         .i_axi_aresetn(axi_aresetn),
         .i_hb_clk_200(hb_clk_200),
         .i_hb_clk_200_gated(hb_clk_200_gated),
-        .i_ref_clk300(ref_clk300),
+        .i_ref_clk_300(ref_clk_300),
         .i_idelayctrl_rst(idelayctrl_rst),
         .i_hb_clk_200_samp_90(hb_clk_200_samp_90),
         .i_iddre1_rst(iddre1_rst),
@@ -220,8 +220,8 @@ module hyperbus_controller_tb;
     end
 
     initial begin
-        ref_clk300 = 1'b0;
-        forever #1.6666666667 ref_clk300 = ~ref_clk300; // 300 MHz
+        ref_clk_300 = 1'b0;
+        forever #1.6666666667 ref_clk_300 = ~ref_clk_300; // 300 MHz
     end
 
     // 200 MHz sampling clock, 90-degree shifted from hb_clk_200.
