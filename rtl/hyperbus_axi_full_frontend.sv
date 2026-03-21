@@ -20,6 +20,7 @@ module hyperbus_axi_full_frontend #(
     output logic [35:0]                 o_wr_fifo_din,
     output logic                        o_wr_fifo_wr_en,
     input  wire                         i_wr_fifo_full,
+    input  wire                         i_wr_fifo_prog_full,
 
     input  wire [31:0]                  i_rd_fifo_dout,
     input  wire                         i_rd_fifo_empty,
@@ -104,6 +105,7 @@ module hyperbus_axi_full_frontend #(
     assign araddr_word = s_axi_araddr[31:2];
 
     assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
+                           (!i_wr_fifo_prog_full) &&
                            (!bresp_q_full) &&
                            (s_axi_awsize == 3'd2) &&
                            ((s_axi_awburst == 2'b01) ||

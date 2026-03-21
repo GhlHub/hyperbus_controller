@@ -309,6 +309,110 @@
         end
     endtask
 
+    task automatic run_wr_fifo_prog_full_backpressure_check;
+        logic [31:0] rd_one [0:31];
+        int stall_cycles;
+        begin
+            $display("[%0d][ TB] Forcing WR FIFO prog_full high", ns_time());
+            force dut.u_fifo_bank.o_wr_fifo_prog_full = 1'b1;
+
+            @(posedge axi_aclk);
+            s_axi_awaddr  <= 32'h0000_0240;
+            s_axi_awid    <= 4'h4;
+            s_axi_awlen   <= 8'd0;
+            s_axi_awsize  <= 3'd2;
+            s_axi_awburst <= 2'b01;
+            s_axi_awvalid <= 1'b1;
+
+            for (stall_cycles = 0; stall_cycles < 6; stall_cycles++) begin
+                @(posedge axi_aclk);
+                if (s_axi_awready) begin
+                    $fatal(1, "AXI-full AW accepted while WR FIFO prog_full asserted at cycle %0d", stall_cycles);
+                end
+                if (dut.aw_pending) begin
+                    $fatal(1, "AXI-full aw_pending asserted while WR FIFO prog_full blocked AW at cycle %0d", stall_cycles);
+                end
+            end
+
+            $display("[%0d][ TB] Forcing WR FIFO prog_full low to release backpressure", ns_time());
+            force dut.u_fifo_bank.o_wr_fifo_prog_full = 1'b0;
+            `WAIT_AXI_COND(s_axi_awready, "AXI-full AWREADY after WR FIFO prog_full release")
+            @(posedge axi_aclk);
+            s_axi_awvalid <= 1'b0;
+            $display("[%0d][ TB] Releasing WR FIFO prog_full force", ns_time());
+            release dut.u_fifo_bank.o_wr_fifo_prog_full;
+
+            @(negedge axi_aclk);
+            s_axi_wdata  <= 32'hFACE_0240;
+            s_axi_wstrb  <= 4'hF;
+            s_axi_wlast  <= 1'b1;
+            s_axi_wvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axi_wready && s_axi_wvalid, "AXI-full WREADY after WR FIFO prog_full release")
+            @(negedge axi_aclk);
+            s_axi_wvalid <= 1'b0;
+            s_axi_wlast  <= 1'b0;
+
+            s_axi_bready <= 1'b1;
+            `WAIT_AXI_COND(s_axi_bvalid, "AXI-full BVALID after WR FIFO prog_full release")
+            @(posedge axi_aclk);
+            s_axi_bready <= 1'b0;
+
+            axi_full_read_burst(32'h0000_0240, 1, rd_one);
+            check_eq32(rd_one[0], 32'hFACE_0240, "AXI-full write accepted after WR FIFO prog_full clears @0x0240");
+            $display("[%0d][ TB] TEST PASS: AXI-full writes blocked until WR FIFO prog_full cleared", ns_time());
+        end
+    endtask
+
+    task automatic run_rd_fifo_prog_full_launch_block_check;
+        int hold_cycles;
+        logic [31:0] rd_word;
+        begin
+            axi_full_write_burst(32'h0000_0260, 1, 32'hFACE_0260, 4'hF);
+
+            $display("[%0d][ TB] Forcing RD FIFO prog_full high", ns_time());
+            force dut.u_fifo_bank.o_rd_fifo_prog_full = 1'b1;
+
+            @(posedge axi_aclk);
+            s_axi_araddr  <= 32'h0000_0260;
+            s_axi_arid    <= 4'h5;
+            s_axi_arlen   <= 8'd0;
+            s_axi_arsize  <= 3'd2;
+            s_axi_arburst <= 2'b01;
+            s_axi_arvalid <= 1'b1;
+            `WAIT_AXI_COND(s_axi_arready, "AXI-full ARREADY with RD FIFO prog_full asserted")
+            @(posedge axi_aclk);
+            s_axi_arvalid <= 1'b0;
+
+            wait_axif_read_cmd_loaded(32'h0000_0260);
+
+            for (hold_cycles = 0; hold_cycles < 8; hold_cycles++) begin
+                @(posedge hb_clk_200);
+                if (!dut.u_hb_engine.cmd_loaded) begin
+                    $fatal(1, "AXI-full read command was not held while RD FIFO prog_full remained asserted");
+                end
+                if (hb_cs_n !== 1'b1) begin
+                    $fatal(1, "HyperBus read launched while RD FIFO prog_full asserted at HB cycle %0d", hold_cycles);
+                end
+            end
+
+            $display("[%0d][ TB] Releasing RD FIFO prog_full force", ns_time());
+            release dut.u_fifo_bank.o_rd_fifo_prog_full;
+            wait_axif_read_launch(32'h0000_0260);
+
+            s_axi_rready <= 1'b1;
+            `WAIT_AXI_COND(s_axi_rvalid, "AXI-full RVALID after RD FIFO prog_full release")
+            rd_word = s_axi_rdata;
+            if (!s_axi_rlast) begin
+                $fatal(1, "AXI-full read gated by RD FIFO prog_full missing RLAST");
+            end
+            @(posedge axi_aclk);
+            s_axi_rready <= 1'b0;
+
+            check_eq32(rd_word, 32'hFACE_0260, "AXI-full read launched after RD FIFO prog_full clears @0x0260");
+            $display("[%0d][ TB] TEST PASS: HyperBus read launch blocked until RD FIFO prog_full cleared", ns_time());
+        end
+    endtask
+
     task automatic run_delay_reset_self_checks;
         logic [31:0] rd32;
         int push_base;

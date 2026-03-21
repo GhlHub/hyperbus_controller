@@ -32,6 +32,26 @@
         end
     endfunction
 
+    function automatic logic axif_read_cmd_loaded(input logic [31:0] addr);
+        begin
+            axif_read_cmd_loaded =
+                dut.u_hb_engine.cmd_loaded &&
+                !dut.u_hb_engine.cur_is_write &&
+                !dut.u_hb_engine.cur_src_axil &&
+                (dut.u_hb_engine.cur_addr == addr);
+        end
+    endfunction
+
+    function automatic logic axif_read_launched(input logic [31:0] addr);
+        begin
+            axif_read_launched =
+                !dut.u_hb_engine.cur_is_write &&
+                !dut.u_hb_engine.cur_src_axil &&
+                (dut.u_hb_engine.cur_addr == addr) &&
+                (hb_cs_n === 1'b0);
+        end
+    endfunction
+
     task automatic wait_axif_write_in_progress(input logic [31:0] addr);
         int wait_cycles;
         begin
@@ -41,6 +61,34 @@
                 wait_cycles = wait_cycles + 1;
                 if (wait_cycles > 4000) begin
                     $fatal(1, "Timeout waiting for AXI-full write to enter HB drain path @0x%08x", addr);
+                end
+            end
+        end
+    endtask
+
+    task automatic wait_axif_read_cmd_loaded(input logic [31:0] addr);
+        int wait_cycles;
+        begin
+            wait_cycles = 0;
+            while (!axif_read_cmd_loaded(addr)) begin
+                @(posedge hb_clk_200);
+                wait_cycles = wait_cycles + 1;
+                if (wait_cycles > 4000) begin
+                    $fatal(1, "Timeout waiting for AXI-full read command load @0x%08x", addr);
+                end
+            end
+        end
+    endtask
+
+    task automatic wait_axif_read_launch(input logic [31:0] addr);
+        int wait_cycles;
+        begin
+            wait_cycles = 0;
+            while (!axif_read_launched(addr)) begin
+                @(posedge hb_clk_200);
+                wait_cycles = wait_cycles + 1;
+                if (wait_cycles > 4000) begin
+                    $fatal(1, "Timeout waiting for AXI-full read launch @0x%08x", addr);
                 end
             end
         end

@@ -460,6 +460,8 @@ module hyperbus_controller_tb;
         );
         run_posted_write_overlap_axif_checks();
         run_posted_write_overlap_axil_checks();
+        run_wr_fifo_prog_full_backpressure_check();
+        run_rd_fifo_prog_full_launch_block_check();
 
         // AXI-full WRAP write/read checks:
         // WRAP commands are expected to be converted into two linear HyperBus commands.

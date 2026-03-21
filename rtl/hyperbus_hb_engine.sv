@@ -22,6 +22,7 @@ module hyperbus_hb_engine #(
     output logic                o_wr_fifo_rd_en,
 
     input  wire                 i_rd_fifo_full,
+    input  wire                 i_rd_fifo_prog_full,
     output logic [31:0]         o_rd_fifo_din,
     output logic                o_rd_fifo_wr_en,
 
@@ -121,6 +122,7 @@ module hyperbus_hb_engine #(
     logic [7:0] timeout_full_beats_left;
     logic timeout_tripped_cur;
     logic [7:0] timeout_holdoff_cnt;
+    logic cmd_loaded;
 
     assign hb_word16    = {dq_q1_dly, dq_q2_dly};
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
@@ -185,6 +187,7 @@ module hyperbus_hb_engine #(
             timeout_full_beats_left <= 8'd0;
             timeout_tripped_cur <= 1'b0;
             timeout_holdoff_cnt <= 8'd0;
+            cmd_loaded <= 1'b0;
         end else begin
             // Keep DQ and RWDS qualifiers phase-aligned in this domain.
             dq_q1_dly <= i_dq_q1;
@@ -214,7 +217,12 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_GET_CMD: begin
-                    if (i_cmd_fifo_dout_valid) begin
+                    o_hb_cs_n_q <= 1'b1;
+                    o_hb_clk_ce <= 1'b0;
+                    o_dq_t <= 8'hFF;
+                    o_rwds_t <= 1'b1;
+
+                    if (!cmd_loaded && i_cmd_fifo_dout_valid) begin
                         cur_cmd <= i_cmd_fifo_dout;
                         cur_src_axil <= i_cmd_fifo_dout[74];
                         cur_is_write <= i_cmd_fifo_dout[73];
@@ -270,6 +278,15 @@ module hyperbus_hb_engine #(
                         rd_beats_pushed <= 8'd0;
                         timeout_full_beats_left <= 8'd0;
                         timeout_tripped_cur <= 1'b0;
+                        cmd_loaded <= 1'b1;
+                        if (i_cmd_fifo_dout[73] || i_cmd_fifo_dout[74] || !i_rd_fifo_prog_full) begin
+                            cmd_loaded <= 1'b0;
+                            o_hb_cs_n_q <= 1'b0;
+                            o_hb_clk_ce <= 1'b0;
+                            hb_state <= HB_CS_SETUP;
+                        end
+                    end else if (cmd_loaded && (cur_is_write || cur_src_axil || !i_rd_fifo_prog_full)) begin
+                        cmd_loaded <= 1'b0;
                         o_hb_cs_n_q <= 1'b0;
                         o_hb_clk_ce <= 1'b0;
                         hb_state <= HB_CS_SETUP;

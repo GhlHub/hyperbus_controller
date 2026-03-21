@@ -34,13 +34,13 @@ int main()
     hb_rwds_idly_dec_below_16(DLY_ADDR);
 
     hb_odly_sweep_to_midpoint(DLY_ADDR, NULL, NULL, NULL);
-    /*
+    
     if (hb_memtest_hyperram_worst_case_bytes() != 0) {
         xil_printf("Worst-case HyperRAM memtest failed\r\n");
         cleanup_platform();
         return -1;
     }
-*/
+
     xil_printf("Starting randomized HyperRAM memtest (requires 32 KiB LMB BRAM)\r\n");
     if (hb_memtest_hyperram_random_rw_until_error() != 0) {
         xil_printf("Randomized HyperRAM memtest failed\r\n");

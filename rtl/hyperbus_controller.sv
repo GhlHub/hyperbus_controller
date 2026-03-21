@@ -119,8 +119,8 @@ module hyperbus_controller #(
     logic [35:0] wr_fifo_dout;
     logic [35:0] wr_fifo_din;
     logic [31:0] rd_fifo_din, rd_fifo_dout;
-    logic wr_fifo_wr_en, wr_fifo_rd_en, wr_fifo_full, wr_fifo_empty, wr_fifo_dout_valid;
-    logic rd_fifo_wr_en, rd_fifo_rd_en, rd_fifo_full, rd_fifo_empty, rd_fifo_dout_valid;
+    logic wr_fifo_wr_en, wr_fifo_rd_en, wr_fifo_full, wr_fifo_prog_full, wr_fifo_empty, wr_fifo_dout_valid;
+    logic rd_fifo_wr_en, rd_fifo_rd_en, rd_fifo_full, rd_fifo_prog_full, rd_fifo_empty, rd_fifo_dout_valid;
 
     logic [31:0] axil_rsp_fifo_din, axil_rsp_fifo_dout;
     logic axil_rsp_fifo_wr_en, axil_rsp_fifo_rd_en, axil_rsp_fifo_full, axil_rsp_fifo_empty, axil_rsp_fifo_dout_valid;
@@ -163,6 +163,7 @@ module hyperbus_controller #(
         .i_wr_fifo_din            (            wr_fifo_din),
         .i_wr_fifo_wr_en          (          wr_fifo_wr_en),
         .o_wr_fifo_full           (           wr_fifo_full),
+        .o_wr_fifo_prog_full      (      wr_fifo_prog_full),
         .o_wr_fifo_dout           (           wr_fifo_dout),
         .i_wr_fifo_rd_en          (          wr_fifo_rd_en),
         .o_wr_fifo_empty          (          wr_fifo_empty),
@@ -170,6 +171,7 @@ module hyperbus_controller #(
         .i_rd_fifo_din            (            rd_fifo_din),
         .i_rd_fifo_wr_en          (          rd_fifo_wr_en),
         .o_rd_fifo_full           (           rd_fifo_full),
+        .o_rd_fifo_prog_full      (      rd_fifo_prog_full),
         .o_rd_fifo_dout           (           rd_fifo_dout),
         .i_rd_fifo_rd_en          (          rd_fifo_rd_en),
         .o_rd_fifo_empty          (          rd_fifo_empty),
@@ -205,6 +207,7 @@ module hyperbus_controller #(
         .o_wr_fifo_din         (            wr_fifo_din),
         .o_wr_fifo_wr_en       (          wr_fifo_wr_en),
         .i_wr_fifo_full        (           wr_fifo_full),
+        .i_wr_fifo_prog_full   (      wr_fifo_prog_full),
         .i_rd_fifo_dout        (           rd_fifo_dout),
         .i_rd_fifo_empty       (          rd_fifo_empty),
         .o_rd_fifo_rd_en       (          rd_fifo_rd_en),
@@ -374,6 +377,7 @@ module hyperbus_controller #(
         .i_wr_fifo_dout        (           wr_fifo_dout),
         .o_wr_fifo_rd_en       (          wr_fifo_rd_en),
         .i_rd_fifo_full        (           rd_fifo_full),
+        .i_rd_fifo_prog_full   (      rd_fifo_prog_full),
         .o_rd_fifo_din         (            rd_fifo_din),
         .o_rd_fifo_wr_en       (          rd_fifo_wr_en),
         .i_axil_rsp_fifo_full   (     axil_rsp_fifo_full),
