@@ -8,7 +8,7 @@ module hyperbus_hb_engine #(
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     parameter int HB_READ_CS_DEASSERT_DELAY = 2,
     parameter int RWDS_TIMEOUT_CYCLES = 24,
-    parameter int TIMEOUT_HOLDOFF_CYCLES = 90
+    parameter int TIMEOUT_HOLDOFF_CYCLES = 92
 ) (
     input  wire                 i_hb_clk_200,
     input  wire                 i_hb_rstn,
@@ -263,7 +263,10 @@ module hyperbus_hb_engine #(
                         latency_2x <= 1'b0;
                         base_latency <= HB_LATENCY_DEFAULT[7:0];
                         wr_rwds_wait_cnt <= 2'd0;
-                        cs_preclk_cnt <= 2'd2;
+                        // With the forwarded CK generated as 100 MHz from the 200 MHz
+                        // ODDRE1 source clock, a zero count here yields ~10 ns from
+                        // CS# assertion to the first forwarded CK edge.
+                        cs_preclk_cnt <= 2'd0;
                         term_hold_cnt <= ODDRE1_TX_PIPE_CYCLES[2:0];
 
                         wrbuf_valid <= 1'b0;
@@ -294,7 +297,7 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_CS_SETUP: begin
-                    // Keep CS# asserted for 2 HyperBus clock periods before enabling CK.
+                    // Keep CS# asserted for 10 ns before enabling the forwarded CK.
                     o_hb_cs_n_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;

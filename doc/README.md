@@ -178,37 +178,34 @@ Implemented resource notes:
 
 ## AXI-Lite Register Summary
 
-HyperBus register window (16-bit registers mapped into 32-bit AXI-Lite space):
+AXI-Lite register map in offset order:
 
 - `0x0000` -> HyperBus `0x0000` (ID0)
 - `0x0002` -> HyperBus `0x0000` (ID1 16-bit alias)
 - `0x0004` -> HyperBus `0x0002` (ID1)
-- `0x0800` -> HyperBus `0x0800` (CR0)
-- `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
-- `0x0804` -> HyperBus `0x0802` (CR1)
-
-Local controller registers:
-
-- `0x0024` VERSION (read-only, `0x01000005`)
-- `0x0028` DQ (read-only, sampled DQ debug view)
-- `0x0080` ERR_STATUS (bit0 timeout status, W1C)
-- `0x0084` AXIF_RWDS_CNTR (read-only, 6-bit counter)
-- `0x0088` AXIL_RWDS_CNTR (read-only, 6-bit counter)
-- `0x008C` HB_CLK_CE_FORCE (bit0 ORed with `o_hb_clk_ce`, reset default `1`)
-- `0x0100` CK_P_ODELAY_CTRL
-- `0x0104` CK_P_ODELAY_TIME
-- `0x0108` CK_P_ODELAY_STATUS
-- `0x01C0` RWDS_IDELAY_CTRL
-- `0x01C4` RWDS_IDELAY_TIME
-- `0x01C8` RWDS_IDELAY_STATUS
-- `0x0300 + n*0x10` DQ`n`_IDELAY_CTRL for `n=0..7`
-- `0x0304 + n*0x10` DQ`n`_IDELAY_TIME for `n=0..7`
-- `0x0308 + n*0x10` DQ`n`_IDELAY_STATUS for `n=0..7`
-- `0x0200` DELAY_RST_CTRL
+- `0x0024` VERSION (local, read-only, `0x01000005`)
+- `0x0028` DQ (local, read-only, sampled DQ debug view)
+- `0x0080` ERR_STATUS (local, bit0 timeout status, W1C)
+- `0x0084` AXIF_RWDS_CNTR (local, read-only, 6-bit counter)
+- `0x0088` AXIL_RWDS_CNTR (local, read-only, 6-bit counter)
+- `0x008C` HB_CLK_CE_FORCE (local, bit0 ORed with `o_hb_clk_ce`, reset default `1`)
+- `0x0100` CK_P_ODELAY_CTRL (local)
+- `0x0104` CK_P_ODELAY_TIME (local)
+- `0x0108` CK_P_ODELAY_STATUS (local)
+- `0x01C0` RWDS_IDELAY_CTRL (local)
+- `0x01C4` RWDS_IDELAY_TIME (local)
+- `0x01C8` RWDS_IDELAY_STATUS (local)
+- `0x0200` DELAY_RST_CTRL (local)
   - bit0 IDELAYCTRL reset request
   - bit1 CK_P ODELAY reset request
   - bit2 RWDS and DQ IDELAY reset request
-- `0x0204` IDELAYCTRL_STATUS (bit0 RDY)
+- `0x0204` IDELAYCTRL_STATUS (local, bit0 RDY)
+- `0x0300 + n*0x10` DQ`n`_IDELAY_CTRL for `n=0..7` (local)
+- `0x0304 + n*0x10` DQ`n`_IDELAY_TIME for `n=0..7` (local)
+- `0x0308 + n*0x10` DQ`n`_IDELAY_STATUS for `n=0..7` (local)
+- `0x0800` -> HyperBus `0x0800` (CR0)
+- `0x0802` -> HyperBus `0x0800` (CR1 16-bit alias)
+- `0x0804` -> HyperBus `0x0802` (CR1)
 
 ## Software Delay Control API
 
@@ -267,7 +264,9 @@ Convenience command:
 
 ## Possible Future Improvements
 
-- AXI-slave power management
+- AXI-slave power management, but only if it is easy
 - Multi-HyperRAM device support
-- FIFO power management
+- 16-bit wide HyperRAM device support
+- FIFO power management, though this is more difficult than it sounds
 - HyperRAM device power management
+  - Datasheet wakeup times to account for: hybrid sleep `tEXTHS` up to `100 us`, deep power-down `tEXTDPD` up to `150 us`
