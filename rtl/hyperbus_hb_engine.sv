@@ -308,7 +308,7 @@ module hyperbus_hb_engine #(
 
                 HB_CA_PRIME: begin
                     // Prime CA while CK is gated, then enable CK so first CA appears on first active edge.
-                    $display("[%0d][ HB] CA bytes=%02x %02x %02x %02x %02x %02x | RW=%s AS=%s BURST=LINEAR AXI_ADDR=0x%08x HB_WORD_ADDR=0x%08x SRC=%s BEATS=%0d",
+                    $display("[%0d][ HB]                 CA bytes=%02x %02x %02x %02x %02x %02x | RW=%s AS=%s BURST=LINEAR AXI_ADDR=0x%08x HB_WORD_ADDR=0x%08x SRC=%s BEATS=%0d",
                              int'($rtoi(($realtime / 1ns) + 0.5)),
                              ca_shift[47:40], ca_shift[39:32], ca_shift[31:24],
                              ca_shift[23:16], ca_shift[15:8],  ca_shift[7:0],

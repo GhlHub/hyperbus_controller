@@ -94,6 +94,7 @@ elaborate()
 simulate()
 {
   xsim hyperbus_controller_tb -key {Behavioral:sim_1:Functional:hyperbus_controller_tb} -tclbatch cmd.tcl -log simulate.log
+  awk '/\[[^]]*FIFO\]/' simulate.log > simulate_fifo.log
 }
 
 # STEP: setup

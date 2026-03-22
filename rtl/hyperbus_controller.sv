@@ -445,28 +445,48 @@ module hyperbus_controller #(
 `ifndef SYNTHESIS
 `ifndef NO_FIFO_TRACE
     // FIFO trace instrumentation (simulation-only).
+    task automatic trace_cmd_fifo_data(
+        input string            domain,
+        input string            action,
+        input logic [CMD_W-1:0] cmd_word
+    );
+        begin
+            $display("[%0d][%s] [     CMD_FIFO] %s data=0x%019h src=%s op=%s space=%s addr=0x%08h beats=%0d wdata=0x%08h",
+                     ns_time(),
+                     domain,
+                     action,
+                     cmd_word,
+                     cmd_word[74] ? "AXIL" : "AXIF",
+                     cmd_word[73] ? "WRITE" : "READ",
+                     cmd_word[72] ? "REG" : "MEM",
+                     cmd_word[71:40],
+                     cmd_word[39:32],
+                     cmd_word[31:0]);
+        end
+    endtask
+
     always @(posedge i_axi_aclk) begin
         if (i_axi_aresetn) begin
             if (cmd_fifo_wr_en_full) begin
-                $display("[%0d][AXI] [CMD_FIFO] PUSH(full) data=0x%0h", ns_time(), cmd_fifo_din_full);
+                trace_cmd_fifo_data("AXI", "PUSH(full)", cmd_fifo_din_full);
             end
             if (cmd_fifo_wr_en_axil) begin
-                $display("[%0d][AXI] [CMD_FIFO] PUSH(axil) data=0x%0h", ns_time(), cmd_fifo_din_axil);
+                trace_cmd_fifo_data("AXI", "PUSH(axil)", cmd_fifo_din_axil);
             end
             if (wr_fifo_wr_en) begin
-                $display("[%0d][AXI] [ WR_FIFO] PUSH data=0x%0h", ns_time(), wr_fifo_din);
+                $display("[%0d][AXI] [      WR_FIFO] PUSH data=0x%0h", ns_time(), wr_fifo_din);
             end
             if (rd_fifo_rd_en) begin
-                $display("[%0d][AXI] [ RD_FIFO] POP_REQ", ns_time());
+                $display("[%0d][AXI] [      RD_FIFO] POP_REQ", ns_time());
             end
             if (s_axi_rvalid && s_axi_rready) begin
-                $display("[%0d][AXI] [ RD_FIFO] POP_DATA data=0x%08h", ns_time(), s_axi_rdata);
+                $display("[%0d][AXI] [      RD_FIFO] POP_DATA data=0x%08h", ns_time(), s_axi_rdata);
             end
             if (axil_rsp_fifo_rd_en) begin
-                $display("[%0d][AXI] AXIL_RSP_FIFO POP_REQ", ns_time());
+                $display("[%0d][AXI] [AXIL_RSP_FIFO] POP_REQ", ns_time());
             end
             if (axil_rsp_fifo_dout_valid) begin
-                $display("[%0d][AXI] AXIL_RSP_FIFO POP_DATA data=0x%08h", ns_time(), axil_rsp_fifo_dout);
+                $display("[%0d][AXI] [AXIL_RSP_FIFO] POP_DATA data=0x%08h", ns_time(), axil_rsp_fifo_dout);
             end
         end
     end
@@ -474,20 +494,20 @@ module hyperbus_controller #(
     always @(posedge i_hb_clk_200) begin
         if (i_hb_rstn) begin
             if (cmd_fifo_rd_en) begin
-                $display("[%0d][ HB] [CMD_FIFO] POP_REQ", ns_time());
+                $display("[%0d][ HB] [     CMD_FIFO] POP_REQ", ns_time());
             end
             if (cmd_fifo_dout_valid) begin
-                $display("[%0d][ HB] [CMD_FIFO] POP_DATA data=0x%0h", ns_time(), cmd_fifo_dout);
+                trace_cmd_fifo_data(" HB", "POP_DATA", cmd_fifo_dout);
             end
             if (wr_fifo_rd_en) begin
-                $display("[%0d][ HB] [ WR_FIFO] POP_REQ", ns_time());
-                $display("[%0d][ HB] [ WR_FIFO] POP_DATA data=0x%0h", ns_time(), wr_fifo_dout);
+                $display("[%0d][ HB] [      WR_FIFO] POP_REQ", ns_time());
+                $display("[%0d][ HB] [      WR_FIFO] POP_DATA data=0x%0h", ns_time(), wr_fifo_dout);
             end
             if (rd_fifo_wr_en) begin
-                $display("[%0d][ HB] [ RD_FIFO] PUSH data=0x%08h", ns_time(), rd_fifo_din);
+                $display("[%0d][ HB] [      RD_FIFO] PUSH data=0x%08h", ns_time(), rd_fifo_din);
             end
             if (axil_rsp_fifo_wr_en) begin
-                $display("[%0d][ HB] AXIL_RSP_FIFO PUSH data=0x%08h", ns_time(), axil_rsp_fifo_din);
+                $display("[%0d][ HB] [AXIL_RSP_FIFO] PUSH data=0x%08h", ns_time(), axil_rsp_fifo_din);
             end
         end
     end

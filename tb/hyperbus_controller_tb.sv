@@ -307,7 +307,7 @@ module hyperbus_controller_tb;
             end
 
             if (odly_dbg_en) begin
-                $display("[%0d][ TB] [ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST_REQ=%0b CNTVALUEOUT=0x%03x",
+                $display("[%0d][ TB] [    ODELAY] EN_VTC=%0b LOAD=%0b CE=%0b INC=%0b RST_REQ=%0b CNTVALUEOUT=0x%03x",
                          ns_time(),
                          dut.odly_en_vtc,
                          dut.odly_load,
@@ -316,7 +316,7 @@ module hyperbus_controller_tb;
                          dut.odelay_rst_req,
                          dut.odly_cntvalueout);
                 if (dut.odly_cntvalueout !== odly_cnt_prev) begin
-                    $display("[%0d][ TB] [ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
+                    $display("[%0d][ TB] [    ODELAY] CNTVALUEOUT change: 0x%03x -> 0x%03x",
                              ns_time(), odly_cnt_prev, dut.odly_cntvalueout);
                 end
             end
@@ -400,12 +400,12 @@ module hyperbus_controller_tb;
             $fatal(1, "AXI-LITE RWDS counter changed during AXI-full read: before=0x%02x after=0x%02x",
                    axil_rwds_before[5:0], axil_rwds_after[5:0]);
         end
-        $display("[%0d][ TB] TEST PASS: RWDS counters after single-beat AXI-full read axif=0x%02x axil=0x%02x",
+        $display("[%0d][ TB]                 TEST PASS: RWDS counters after single-beat AXI-full read axif=0x%02x axil=0x%02x",
                  ns_time(), axif_rwds_after[5:0], axil_rwds_after[5:0]);
         if (rd_data[0] !== 32'h1122_3344) begin
             $fatal(1, "WSTRB mask test failed: got 0x%08x exp 0x1122_3344", rd_data[0]);
         end
-        $display("[%0d][ TB] TEST PASS: single-beat full write/read 0x11223344", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: single-beat full write/read 0x11223344", ns_time());
 
         // Exhaustive single-beat byte-mask coverage, including 4'h0 no-op writes.
         mask_base_word = 32'h1122_3344;
@@ -433,7 +433,7 @@ module hyperbus_controller_tb;
                 $fatal(1, "WSTRB mask test failed (WSTRB=0x%1x): got 0x%08x exp 0x%08x",
                        mask_wstrb, rd_data[0], mask_exp_word);
             end
-            $display("[%0d][ TB] TEST PASS: WSTRB masked write/read strb=0x%1x got=0x%08x",
+            $display("[%0d][ TB]                 TEST PASS: WSTRB masked write/read strb=0x%1x got=0x%08x",
                      ns_time(), mask_wstrb, rd_data[0]);
         end
 
@@ -442,13 +442,13 @@ module hyperbus_controller_tb;
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (early) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("[%0d][ TB] TEST PASS: bad WLAST early -> SLVERR", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: bad WLAST early -> SLVERR", ns_time());
 
         axi_full_write_burst_bad_wlast(32'h0000_01D0, 4, 32'hD00D_1000, 4'hF, 1, bresp_chk);
         if (bresp_chk !== 2'b10) begin
             $fatal(1, "Bad WLAST (missing final) expected SLVERR, got BRESP=0x%0h", bresp_chk);
         end
-        $display("[%0d][ TB] TEST PASS: bad WLAST missing-final -> SLVERR", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: bad WLAST missing-final -> SLVERR", ns_time());
 
         // Simultaneous AW+AR request test: write must be serviced first.
         axi_full_write_burst(32'h0000_01A0, 1, 32'hCAFEBABE, 4'hF);
@@ -471,10 +471,10 @@ module hyperbus_controller_tb;
         check_eq32(rd_data[0], 32'hBEEF_1001, "AXI WRAP write mapped @0x0200");
         // HyperBus model uses 16-bit word addressing, so model index = (AXI byte address >> 1).
         // This WRAP write updates around 0x0100..0x0107, dump 8 entries before/after.
-        $display("[%0d][ TB] HyperRAM Mem dump around WRAP write @0x020C (AXI>>1 entries 0x%0h..0x%0h)",
+        $display("[%0d][ TB]                 HyperRAM Mem dump around WRAP write @0x020C (AXI>>1 entries 0x%0h..0x%0h)",
                  ns_time(), 25'h000F8, 25'h0010F);
         for (k = 25'h000F8; k <= 25'h0010F; k++) begin
-            $display("[%0d][ TB]   u_hyperram.Mem[0x%0h] = 0x%04h",
+            $display("[%0d][ TB]                   u_hyperram.Mem[0x%0h] = 0x%04h",
                      ns_time(), k[24:0], u_hyperram.Mem[k][15:0]);
         end
         axi_full_read_burst(32'h0000_0204, 1, rd_data);
@@ -483,7 +483,7 @@ module hyperbus_controller_tb;
         check_eq32(rd_data[0], 32'hBEEF_1003, "AXI WRAP write mapped @0x0208");
         axi_full_read_burst(32'h0000_020C, 1, rd_data);
         check_eq32(rd_data[0], 32'hBEEF_1000, "AXI WRAP write mapped @0x020C");
-        $display("[%0d][ TB] TEST PASS: AXI-full 4-beat WRAP write split into linear HyperBus writes", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: AXI-full 4-beat WRAP write split into linear HyperBus writes", ns_time());
 
         // 4-beat WRAP read should return wrapped AXI order from the same 16-byte group.
         axi_full_read_burst_mode(32'h0000_020C, 4, 2'b10, rd_data);
@@ -491,7 +491,7 @@ module hyperbus_controller_tb;
         check_eq32(rd_data[1], 32'hBEEF_1001, "AXI WRAP read beat1 @0x0200");
         check_eq32(rd_data[2], 32'hBEEF_1002, "AXI WRAP read beat2 @0x0204");
         check_eq32(rd_data[3], 32'hBEEF_1003, "AXI WRAP read beat3 @0x0208");
-        $display("[%0d][ TB] TEST PASS: AXI-full 4-beat WRAP read split into linear HyperBus reads", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: AXI-full 4-beat WRAP read split into linear HyperBus reads", ns_time());
 
         // 2-beat WRAP write/read over an 8-byte boundary.
         axi_full_write_burst_mode(32'h0000_0224, 2, 2'b10, 32'hCAFE_2000, 4'hF);
@@ -502,7 +502,7 @@ module hyperbus_controller_tb;
         axi_full_read_burst_mode(32'h0000_0224, 2, 2'b10, rd_data);
         check_eq32(rd_data[0], 32'hCAFE_2000, "AXI WRAP read beat0 @0x0224");
         check_eq32(rd_data[1], 32'hCAFE_2001, "AXI WRAP read beat1 @0x0220");
-        $display("[%0d][ TB] TEST PASS: AXI-full 2-beat WRAP write/read split into linear HyperBus commands", ns_time());
+        $display("[%0d][ TB]                 TEST PASS: AXI-full 2-beat WRAP write/read split into linear HyperBus commands", ns_time());
 
         // AXI-full multi-beat burst sweep (self-checking): 2..32 beats.
         for (beats = 2; beats <= 32; beats++) begin
@@ -522,7 +522,7 @@ module hyperbus_controller_tb;
                 $fatal(1, "AXI-LITE RWDS counter changed during AXI-full burst read beats=%0d: before=0x%02x after=0x%02x",
                        beats, axil_rwds_before[5:0], axil_rwds_after[5:0]);
             end
-            $display("[%0d][ TB] TEST PASS: RWDS counters after %0d-beat AXI-full read axif=0x%02x axil=0x%02x",
+            $display("[%0d][ TB]                 TEST PASS: RWDS counters after %0d-beat AXI-full read axif=0x%02x axil=0x%02x",
                      ns_time(), beats, axif_rwds_after[5:0], axil_rwds_after[5:0]);
 
             for (k = 0; k < beats; k++) begin
@@ -531,7 +531,7 @@ module hyperbus_controller_tb;
                            beats, k, rd_data[k], (burst_base + k));
                 end
             end
-            $display("[%0d][ TB] TEST PASS: %0d-beat full burst write/read", ns_time(), beats);
+            $display("[%0d][ TB]                 TEST PASS: %0d-beat full burst write/read", ns_time(), beats);
         end
 
 

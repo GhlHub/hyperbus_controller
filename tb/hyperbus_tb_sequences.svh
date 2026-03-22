@@ -45,7 +45,7 @@
                        (axil_cmd_push_count - push_base));
             end
 
-            $display("[%0d][ TB] TEST PASS: AXI-Lite AWVALID/ARVALID hold stress", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-Lite AWVALID/ARVALID hold stress", ns_time());
         end
     endtask
 
@@ -152,7 +152,7 @@
                 $fatal(1, "Same-cycle RW write-commit mismatch: got=0x%08x exp=0x%08x", rd_one[0], wr_data);
             end
 
-            $display("[%0d][ TB] TEST PASS: same-cycle AXI-full read+write arbitration and data integrity", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: same-cycle AXI-full read+write arbitration and data integrity", ns_time());
         end
     endtask
 
@@ -234,7 +234,7 @@
             axi_full_read_burst(32'h0000_0380, 1, rd_one);
             check_eq32(rd_one[0], 32'hC0DE_0380, "AXI-full overlap posted write committed @0x0380");
 
-            $display("[%0d][ TB] TEST PASS: AXI-full read/write accepted while prior write still drained from WR_FIFO", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-full read/write accepted while prior write still drained from WR_FIFO", ns_time());
         end
     endtask
 
@@ -305,7 +305,7 @@
 
             axil_write(16'h0800, 32'h0000_8F2F);
 
-            $display("[%0d][ TB] TEST PASS: AXI-Lite read/write accepted while AXI-full write still drained from WR_FIFO", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-Lite read/write accepted while AXI-full write still drained from WR_FIFO", ns_time());
         end
     endtask
 
@@ -313,7 +313,7 @@
         logic [31:0] rd_one [0:31];
         int stall_cycles;
         begin
-            $display("[%0d][ TB] Forcing WR FIFO prog_full high", ns_time());
+            $display("[%0d][ TB]                 Forcing WR FIFO prog_full high", ns_time());
             force dut.u_fifo_bank.o_wr_fifo_prog_full = 1'b1;
 
             @(posedge axi_aclk);
@@ -334,12 +334,12 @@
                 end
             end
 
-            $display("[%0d][ TB] Forcing WR FIFO prog_full low to release backpressure", ns_time());
+            $display("[%0d][ TB]                 Forcing WR FIFO prog_full low to release backpressure", ns_time());
             force dut.u_fifo_bank.o_wr_fifo_prog_full = 1'b0;
             `WAIT_AXI_COND(s_axi_awready, "AXI-full AWREADY after WR FIFO prog_full release")
             @(posedge axi_aclk);
             s_axi_awvalid <= 1'b0;
-            $display("[%0d][ TB] Releasing WR FIFO prog_full force", ns_time());
+            $display("[%0d][ TB]                 Releasing WR FIFO prog_full force", ns_time());
             release dut.u_fifo_bank.o_wr_fifo_prog_full;
 
             @(negedge axi_aclk);
@@ -359,7 +359,7 @@
 
             axi_full_read_burst(32'h0000_0240, 1, rd_one);
             check_eq32(rd_one[0], 32'hFACE_0240, "AXI-full write accepted after WR FIFO prog_full clears @0x0240");
-            $display("[%0d][ TB] TEST PASS: AXI-full writes blocked until WR FIFO prog_full cleared", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-full writes blocked until WR FIFO prog_full cleared", ns_time());
         end
     endtask
 
@@ -369,7 +369,7 @@
         begin
             axi_full_write_burst(32'h0000_0260, 1, 32'hFACE_0260, 4'hF);
 
-            $display("[%0d][ TB] Forcing RD FIFO prog_full high", ns_time());
+            $display("[%0d][ TB]                 Forcing RD FIFO prog_full high", ns_time());
             force dut.u_fifo_bank.o_rd_fifo_prog_full = 1'b1;
 
             @(posedge axi_aclk);
@@ -395,7 +395,7 @@
                 end
             end
 
-            $display("[%0d][ TB] Releasing RD FIFO prog_full force", ns_time());
+            $display("[%0d][ TB]                 Releasing RD FIFO prog_full force", ns_time());
             release dut.u_fifo_bank.o_rd_fifo_prog_full;
             wait_axif_read_launch(32'h0000_0260);
 
@@ -409,7 +409,7 @@
             s_axi_rready <= 1'b0;
 
             check_eq32(rd_word, 32'hFACE_0260, "AXI-full read launched after RD FIFO prog_full clears @0x0260");
-            $display("[%0d][ TB] TEST PASS: HyperBus read launch blocked until RD FIFO prog_full cleared", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: HyperBus read launch blocked until RD FIFO prog_full cleared", ns_time());
         end
     endtask
 
@@ -470,7 +470,7 @@
             if (!rd32[0]) begin
                 $fatal(1, "IDELAYCTRL_STATUS @0x0204 did not assert RDY within poll window");
             end
-            $display("[%0d][ TB] TEST PASS: IDELAYCTRL RDY poll via AXI-Lite @0x0204", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: IDELAYCTRL RDY poll via AXI-Lite @0x0204", ns_time());
 
             // After IDELAYCTRL RDY is high, deassert CK_P ODELAY and RWDS IDELAY resets.
             push_base = axil_cmd_push_count;
@@ -482,7 +482,7 @@
             axil_read(16'h0200, rd32);
             check_eq32(rd32, 32'h0000_0000, "DELAY_RST_CTRL CK_P/RWDS delay resets deasserted after IDELAYCTRL RDY @0x0200");
 
-            $display("[%0d][ TB] TEST PASS: AXI-Lite delay reset control @0x0200/0x0204", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-Lite delay reset control @0x0200/0x0204", ns_time());
         end
     endtask
 
@@ -586,7 +586,7 @@
 
             for (poll_i = 0; poll_i < 32; poll_i++) begin
                 axil_read(16'h0108, rd32);
-                $display("[%0d][ TB] CLKCNTVALUEOUT read @0x0108 = 0x%03x", ns_time(), rd32[8:0]);
+                $display("[%0d][ TB]                 CLKCNTVALUEOUT read @0x0108 = 0x%03x", ns_time(), rd32[8:0]);
                 if (^rd32[8:0] === 1'bx) begin
                     $fatal(1, "CK_P_ODELAY_STATUS @0x0108 returned X while EN_VTC=0: 0x%03x", rd32[8:0]);
                 end
@@ -598,7 +598,7 @@
             if (rd32[8:0] !== 9'd10) begin
                 $fatal(1, "CK_P_ODELAY_STATUS @0x0108 mismatch after LOAD: got=0x%03x exp=0x00a", rd32[8:0]);
             end
-            $display("[%0d][ TB] TEST PASS: AXI-Lite CK_P ODELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-Lite CK_P ODELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
 
             for (dq_lane = 0; dq_lane < 8; dq_lane++) begin
                 dq_ctrl_addr = 16'h0300 + (dq_lane << 4);
@@ -655,7 +655,7 @@
                            dq_lane, dq_status_addr, rd32[8:0]);
                 end
             end
-            $display("[%0d][ TB] TEST PASS: AXI-Lite DQ IDELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-Lite DQ IDELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
         end
     endtask
 
@@ -700,14 +700,14 @@
                 $fatal(1, "Timeout reset pulse too short: low for %0d ns",
                        int'($rtoi((((t_reset_rise - t_reset_fall) / 1ns)) + 0.5)));
             end
-            $display("[%0d][ TB] TEST PASS: timeout reset pulse low width=%0d ns",
+            $display("[%0d][ TB]                 TEST PASS: timeout reset pulse low width=%0d ns",
                      ns_time(), int'($rtoi((((t_reset_rise - t_reset_fall) / 1ns)) + 0.5)));
 
             axil_read(16'h0080, status32);
             if (status32[0] !== 1'b1) begin
                 $fatal(1, "Timeout status bit not set after timeout, status=0x%08x", status32);
             end
-            $display("[%0d][ TB] TEST PASS: timeout status bit set", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: timeout status bit set", ns_time());
 
             // Hold ARVALID high and ensure new command acceptance is blocked for >=450ns.
             @(posedge axi_aclk);
@@ -730,7 +730,7 @@
                 $fatal(1, "Holdoff too short: AR accepted after %0d ns (<450ns)",
                        int'($rtoi((((t_ar_accept - t_resp_done) / 1ns)) + 0.5)));
             end
-            $display("[%0d][ TB] TEST PASS: post-timeout AXI holdoff duration=%0d ns",
+            $display("[%0d][ TB]                 TEST PASS: post-timeout AXI holdoff duration=%0d ns",
                      ns_time(), int'($rtoi((((t_ar_accept - t_resp_done) / 1ns)) + 0.5)));
 
             // Clear timeout sticky status by write-1-to-clear.
@@ -739,7 +739,7 @@
             if (status32[0] !== 1'b0) begin
                 $fatal(1, "Timeout status bit clear failed, status=0x%08x", status32);
             end
-            $display("[%0d][ TB] TEST PASS: timeout status clear via AXI-Lite @0x0080", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: timeout status clear via AXI-Lite @0x0080", ns_time());
 
             // AXI-full timeout should complete with all-ones read data beats.
             #500ns;
@@ -750,12 +750,12 @@
                 $fatal(1, "AXI-full timeout read mismatch: beat0=0x%08x beat1=0x%08x",
                        rd_timeout[0], rd_timeout[1]);
             end
-            $display("[%0d][ TB] TEST PASS: AXI-full timeout read data 0xFFFFFFFF", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: AXI-full timeout read data 0xFFFFFFFF", ns_time());
             axil_read(16'h0080, status32);
             if (status32[0] !== 1'b1) begin
                 $fatal(1, "Timeout status bit not set after AXI-full timeout, status=0x%08x", status32);
             end
-            $display("[%0d][ TB] TEST PASS: timeout status bit set after AXI-full timeout", ns_time());
+            $display("[%0d][ TB]                 TEST PASS: timeout status bit set after AXI-full timeout", ns_time());
             #500ns;
         end
     endtask
