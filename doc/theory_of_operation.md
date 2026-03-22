@@ -271,7 +271,9 @@ For transmit:
 
 For receive:
 
-- `IDDRE1` samples DQ and RWDS on the 90-degree sample clock
+- `IOBUF` receives DQ and RWDS from the pads
+- `IDELAYE3` provides programmable input delay on both DQ and RWDS receive paths
+- `IDDRE1` samples the delayed DQ and RWDS signals on the 90-degree sample clock
 - the PHY exports the raw sampled values directly
 
 The PHY therefore captures bits, but it does not perform the final read-path

@@ -69,3 +69,7 @@ set_property DRIVE 6 [get_ports {io_hb_dq_0[3]}]
 set_property DRIVE 6 [get_ports {io_hb_dq_0[2]}]
 set_property DRIVE 6 [get_ports {io_hb_dq_0[1]}]
 set_property DRIVE 6 [get_ports {io_hb_dq_0[0]}]
+
+set_property DRIVE 8 [get_ports io_hb_rwds_0]
+set_property DRIVE 8 [get_ports o_hb_ck_p_0]
+set_property DRIVE 12 [get_ports o_hb_cs_n_0]

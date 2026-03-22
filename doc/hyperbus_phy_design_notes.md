@@ -27,11 +27,13 @@ required when the PHY changes.
 - DQ TX/RX:
   - Per-bit `ODDRE1` drives TX DDR data from `i_dq_o_d1/d2`.
   - Per-bit `IOBUF` controls tri-state with `i_dq_t`.
-  - Per-bit `IDDRE1` samples DQ on `i_hb_clk_200_samp_90`.
+  - Per-bit `IDELAYE3` applies programmable delay on the DQ receive path.
+  - Per-bit `IDDRE1` samples delayed DQ on `i_hb_clk_200_samp_90`.
   - PHY exports raw `IDDRE1` DQ samples; post-capture alignment is in the HB engine.
 - RWDS TX/RX:
   - `ODDRE1` + `IOBUF` for TX/IO direction control.
-  - `IDDRE1` for RWDS capture on `i_hb_clk_200_samp_90`.
+  - `IDELAYE3` applies programmable delay on the RWDS receive path.
+  - `IDDRE1` captures delayed RWDS on `i_hb_clk_200_samp_90`.
   - PHY exports raw RWDS `IDDRE1` samples; HB-engine alignment/debug taps are downstream.
 - Delay calibration:
   - `IDELAYCTRL` is instantiated.
@@ -60,8 +62,9 @@ Assumptions used by the current design/testbench:
 
 Current PHY exports raw `IDDRE1` capture outputs directly:
 
-- `IDDRE1.Q1/Q2 -> dq_q1_raw/dq_q2_raw`
+- `IOBUF -> IDELAYE3 -> IDDRE1.Q1/Q2 -> dq_q1_raw/dq_q2_raw`
 - `o_dq_q1/o_dq_q2` are direct exports of those raw samples
+- `IOBUF -> IDELAYE3 -> IDDRE1.Q1/Q2 -> rwds_q1_raw/rwds_q2_raw`
 - `o_rwds_q1/o_rwds_q2` are also direct exports of raw `IDDRE1` samples
 
 Required consequence in HB engine:

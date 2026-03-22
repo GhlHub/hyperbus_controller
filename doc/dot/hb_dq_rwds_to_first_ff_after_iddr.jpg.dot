@@ -14,6 +14,7 @@ digraph hb_post_iddr_current {
   // DQ path
   dq_pad    [label="hb_dq[i] pad", fillcolor="#EAF4FF"];
   dq_iobuf  [label="IOBUF\nu_iobuf_dq\n(comb primitive)", fillcolor="#EAF4FF"];
+  dq_idelay [label="IDELAYE3\nu_idelay_dq\nprogrammable delay", fillcolor="#D9ECFF"];
   dq_iddr   [label="IDDRE1\nu_iddr_dq\nQ1/Q2=dq_q*_raw\n(sample @ i_hb_clk_200_samp_90)", fillcolor="#CFE6FF"];
   dq_ff1    [label="First FF after IDDRE1\nHB engine\ndq_q*_dly <= i_dq_q*\n@ i_hb_clk_200", fillcolor="#9DCCFF"];
 
@@ -24,7 +25,7 @@ digraph hb_post_iddr_current {
   rw_iddr   [label="IDDRE1\nu_iddr_rwds\nQ1/Q2=rwds_q*_raw\n(sample @ i_hb_clk_200_samp_90)", fillcolor="#FFD7BF"];
   rw_ff1    [label="First FF after IDDRE1\nHB engine\nrwds_q*_dly <= i_rwds_q*\n@ i_hb_clk_200", fillcolor="#FFB988"];
 
-  dq_pad -> dq_iobuf -> dq_iddr -> dq_ff1;
+  dq_pad -> dq_iobuf -> dq_idelay -> dq_iddr -> dq_ff1;
   rw_pad -> rw_iobuf -> rw_idelay -> rw_iddr -> rw_ff1;
 
   {rank=same; dq_pad; rw_pad}
@@ -32,7 +33,7 @@ digraph hb_post_iddr_current {
   {rank=same; dq_iddr; rw_iddr}
   {rank=same; dq_ff1; rw_ff1}
 
-  note [shape=note, fillcolor="#FFFFDD", label="Relative delay view:\n- Both sampled by IDDRE1 on i_hb_clk_200_samp_90\n- RWDS has extra IDELAYE3 stage before IDDRE1\n- First post-IDDRE1 FF for both is now in HB engine\n  (one i_hb_clk_200 cycle alignment stage)"];
+  note [shape=note, fillcolor="#FFFFDD", label="Relative delay view:\n- Both sampled by IDDRE1 on i_hb_clk_200_samp_90\n- Both DQ and RWDS include an IDELAYE3 stage before IDDRE1\n- First post-IDDRE1 FF for both is now in HB engine\n  (one i_hb_clk_200 cycle alignment stage)"];
   dq_ff1 -> note [style=dashed, arrowhead=none, color="#777777"];
   rw_ff1 -> note [style=dashed, arrowhead=none, color="#777777"];
 }

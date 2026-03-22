@@ -14,7 +14,8 @@ digraph hb_paths {
   // DQ row
   dq_pad   [label="hb_dq[i] pad\n(Stage 0)", fillcolor="#EAF4FF"];
   dq_iobuf [label="IOBUF\nu_iobuf_dq\n(comb primitive)\n(Stage 1)", fillcolor="#EAF4FF"];
-  dq_iddr  [label="IDDRE1\nu_iddr_dq\nFIRST FF\nC/CB=i_hb_clk_200_samp_90\n(Stage 2)", fillcolor="#CDE5FF"];
+  dq_idelay [label="IDELAYE3\nu_idelay_dq\nprogrammable delay\n(Stage 2)", fillcolor="#D9ECFF"];
+  dq_iddr  [label="IDDRE1\nu_iddr_dq\nFIRST FF\nC/CB=i_hb_clk_200_samp_90\n(Stage 3)", fillcolor="#CDE5FF"];
 
   // RWDS row
   rw_pad    [label="hb_rwds pad\n(Stage 0)", fillcolor="#FFF2E8"];
@@ -23,16 +24,17 @@ digraph hb_paths {
   rw_iddr   [label="IDDRE1\nu_iddr_rwds\nFIRST FF\nC/CB=i_hb_clk_200_samp_90\n(Stage 3)", fillcolor="#FFD0B3"];
 
   // Flow edges
-  dq_pad -> dq_iobuf -> dq_iddr;
+  dq_pad -> dq_iobuf -> dq_idelay -> dq_iddr;
   rw_pad -> rw_iobuf -> rw_idelay -> rw_iddr;
 
   // Alignment helpers
   {rank=same; dq_pad; rw_pad}
   {rank=same; dq_iobuf; rw_iobuf}
-  {rank=same; dq_iddr; rw_idelay}
+  {rank=same; dq_idelay; rw_idelay}
+  {rank=same; dq_iddr; rw_iddr}
 
   // Relative note
-  note [shape=note, fillcolor="#FFFFDD", label="Relative pipeline to first FF:\nDQ path: IOBUF -> IDDRE1\nRWDS path: IOBUF -> IDELAYE3 -> IDDRE1\n=> RWDS has one extra primitive stage before first FF."];
+  note [shape=note, fillcolor="#FFFFDD", label="Relative pipeline to first FF:\nDQ path: IOBUF -> IDELAYE3 -> IDDRE1\nRWDS path: IOBUF -> IDELAYE3 -> IDDRE1\n=> both receive paths include an IDELAYE3 stage before the first FF."];
   dq_iddr -> note [style=dashed, arrowhead=none, color="#777777"];
   rw_iddr -> note [style=dashed, arrowhead=none, color="#777777"];
 }

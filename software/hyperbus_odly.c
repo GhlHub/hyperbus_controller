@@ -290,10 +290,14 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
 {
     /* Return codes: 0=success, -3=no match found, -4=window end not found, <0=helper failure. */
     int rc;
+    int id0_valid;
+    uint32_t match_run_count;
     uint16_t cntvalue;
     uint16_t cntvalue_min;
     uint16_t cntvalue_max;
     uint16_t cntvalue_mid;
+    uint16_t cntvalue_delta;
+    uint16_t cntvalue_prev_valid;
     uint32_t cr0;
     uint32_t id0;
     uint32_t err_status;
@@ -304,6 +308,7 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
     cr0 &= ~HB_CR0_DRIVE_STRENGTH_MASK;
     cr0 |= HB_CR0_DRIVE_STRENGTH_46_OHM;
     hb_reg_write(base_addr, HB_CR0_OFFSET, cr0);
+    match_run_count = 0U;
 
     for (;;) {
         rc = hb_odly_sample_status(base_addr, &cntvalue, &id0, &err_status,
@@ -313,13 +318,20 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
         }
 
         hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        id0_valid = ((err_status & HB_ERR_STATUS_TIMEOUT) == 0U);
         if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
             hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
         }
 
-        if (id0 == HB_ODLY_ID0_MATCH_VALUE) {
-            cntvalue_min = cntvalue;
-            break;
+        if (id0_valid && (id0 == HB_ODLY_ID0_MATCH_VALUE)) {
+            match_run_count++;
+            if (match_run_count >= 4U) {
+                cntvalue_min = (uint16_t)((cntvalue - 3U) & HB_ODLY_MASK_9BIT);
+                cntvalue_prev_valid = cntvalue;
+                break;
+            }
+        } else {
+            match_run_count = 0U;
         }
 
         if (cntvalue > HB_ODLY_SWEEP_GUARD_MAX) {
@@ -345,22 +357,25 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
         }
 
         hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        id0_valid = ((err_status & HB_ERR_STATUS_TIMEOUT) == 0U);
         if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
             hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
         }
 
-        if (id0 != HB_ODLY_ID0_MATCH_VALUE) {
-            cntvalue_max = (uint16_t)((cntvalue - 1U) & HB_ODLY_MASK_9BIT);
+        if (!id0_valid || (id0 != HB_ODLY_ID0_MATCH_VALUE)) {
+            cntvalue_max = cntvalue_prev_valid;
             break;
         }
+
+        cntvalue_prev_valid = cntvalue;
 
         if (cntvalue > HB_ODLY_SWEEP_GUARD_MAX) {
             return -4;
         }
     }
 
-    cntvalue_mid = (uint16_t)((((uint32_t)cntvalue_max - (uint32_t)cntvalue_min) >> 1) +
-                              (uint32_t)cntvalue_min);
+    cntvalue_delta = (uint16_t)((uint32_t)cntvalue_max - (uint32_t)cntvalue_min);
+    cntvalue_mid = (uint16_t)(((uint32_t)cntvalue_delta >> 1) + (uint32_t)cntvalue_min);
 
     while (cntvalue > cntvalue_mid) {
         rc = hb_odly_dec(base_addr, 1);
@@ -376,8 +391,9 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
         }
     }
 
-    xil_printf("ODLY_WINDOW cntvalue_min=0x%03x cntvalue_max=0x%03x cntvalue_mid=0x%03x\r\n",
-               (unsigned)cntvalue_min, (unsigned)cntvalue_max, (unsigned)cntvalue_mid);
+    xil_printf("ODLY_WINDOW cntvalue_min=0x%03x cntvalue_max=0x%03x cntvalue_delta=0x%03x cntvalue_mid=0x%03x\r\n",
+               (unsigned)cntvalue_min, (unsigned)cntvalue_max,
+               (unsigned)cntvalue_delta, (unsigned)cntvalue_mid);
 
     if (cntvalue_min_out != 0U) {
         *cntvalue_min_out = cntvalue_min;
