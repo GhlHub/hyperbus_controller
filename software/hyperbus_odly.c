@@ -294,10 +294,16 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
     uint16_t cntvalue_min;
     uint16_t cntvalue_max;
     uint16_t cntvalue_mid;
+    uint32_t cr0;
     uint32_t id0;
     uint32_t err_status;
     uint32_t axif_rwds_cntr;
     uint32_t axil_rwds_cntr;
+
+    cr0 = hb_reg_read(base_addr, HB_CR0_OFFSET);
+    cr0 &= ~HB_CR0_DRIVE_STRENGTH_MASK;
+    cr0 |= HB_CR0_DRIVE_STRENGTH_46_OHM;
+    hb_reg_write(base_addr, HB_CR0_OFFSET, cr0);
 
     for (;;) {
         rc = hb_odly_sample_status(base_addr, &cntvalue, &id0, &err_status,

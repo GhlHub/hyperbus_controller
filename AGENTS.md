@@ -25,6 +25,7 @@ This repository contains a HyperBus / HyperRAM controller, testbench, software u
 - WRAP burst support is required.
 - AXI-full addresses are handled as word-aligned for controller access; low address bits `[1:0]` are masked to zero in the frontend.
 - AXI byte-lane masking is carried through `WSTRB` and converted to active-low HyperBus `RWDS` byte masks.
+- The forwarded HyperBus CK design intent is `200 MHz` when enabled. Distinguish that from any separate internal clocking or mistaken divide-by-two assumptions.
 - AXI-full writes are posted once the final write-command segment is accepted into the internal command path; `BVALID` does not imply the HyperBus pins have finished draining the payload.
 - The AXI-Lite frontend contains the visible controller version register. Bump it when making externally visible HW/SW interface changes.
 

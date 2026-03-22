@@ -48,6 +48,8 @@ extern "C" {
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
+#define HB_CR0_DRIVE_STRENGTH_MASK      0x00007000u
+#define HB_CR0_DRIVE_STRENGTH_46_OHM    0x00003000u
 
 /*
  * HB_ODLY_CTRL bit definitions.
