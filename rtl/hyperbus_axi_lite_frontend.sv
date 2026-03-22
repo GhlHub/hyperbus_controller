@@ -4,7 +4,7 @@
 
 module hyperbus_axi_lite_frontend #(
     parameter int AXIL_ADDR_WIDTH = 16,
-    parameter int CMD_W = 75
+    parameter int CMD_W = 59
 ) (
     input  wire                         i_axi_aclk,
     input  wire                         i_axi_aresetn,
@@ -379,7 +379,7 @@ module hyperbus_axi_lite_frontend #(
                     axil_state <= AXIL_WR_WAIT_B;
                 end else if (axil_is_hb_reg_addr(axil_awaddr_q) && !i_cmd_fifo_full) begin
                     o_cmd_fifo_din_axil <= {1'b1, 1'b1, 1'b1, axil_to_hb_addr(axil_awaddr_q), 8'd1,
-                                            {16'h0000, axil_wdata_to_word16(s_axil_wdata, s_axil_wstrb)}};
+                                            axil_wdata_to_word16(s_axil_wdata, s_axil_wstrb)};
                     o_cmd_fifo_wr_en_axil <= 1'b1;
                     axil_aw_seen <= 1'b0;
                     axil_state <= AXIL_WR_WAIT_B;
@@ -432,7 +432,7 @@ module hyperbus_axi_lite_frontend #(
                     // wdata[1] = duplicate control (disabled: return 16-bit data with upper bits zero).
                     read_dup16 = 1'b0;
                     o_cmd_fifo_din_axil <= {1'b1, 1'b0, 1'b1, axil_to_hb_addr(s_axil_araddr), 8'd1,
-                                            {30'h0, read_dup16, s_axil_araddr[1]}};
+                                            {14'h0, read_dup16, s_axil_araddr[1]}};
                     o_cmd_fifo_wr_en_axil <= 1'b1;
                     axil_state <= AXIL_RD_WAIT_DATA;
                 end else begin

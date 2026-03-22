@@ -3,7 +3,7 @@
 `timescale 1ns/1ps
 
 module hyperbus_fifo_bank_xilinx #(
-    parameter int CMD_W = 75
+    parameter int CMD_W = 59
 ) (
     input  wire             i_axi_aclk,
     input  wire             i_axi_aresetn,

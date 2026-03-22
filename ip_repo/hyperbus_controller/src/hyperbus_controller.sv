@@ -100,7 +100,7 @@ module hyperbus_controller #(
     output wire                         o_dbg_hb_cs_n_q
 );
 
-    localparam int CMD_W = 75;
+    localparam int CMD_W = 59;
     localparam int AXI_MAX_BEATS = 32; // 128B on 32-bit interface
     localparam int HB_TIMEOUT_RESET_CYCLES = 44; // 220ns @ 200MHz
 
@@ -110,7 +110,7 @@ module hyperbus_controller #(
         end
     endfunction
 
-    // cmd packing: [74] src_axil, [73] is_write, [72] is_reg, [71:40] addr, [39:32] beats, [31:0] wdata
+    // cmd packing: [58] src_axil, [57] is_write, [56] is_reg, [55:24] addr, [23:16] beats, [15:0] wdata
     logic [CMD_W-1:0] cmd_fifo_din, cmd_fifo_dout;
     logic cmd_fifo_wr_en, cmd_fifo_rd_en, cmd_fifo_full, cmd_fifo_empty, cmd_fifo_dout_valid;
     logic cmd_fifo_wr_en_full, cmd_fifo_wr_en_axil;
@@ -451,17 +451,17 @@ module hyperbus_controller #(
         input logic [CMD_W-1:0] cmd_word
     );
         begin
-            $display("[%0d][%s] [     CMD_FIFO] %s data=0x%019h src=%s op=%s space=%s addr=0x%08h beats=%0d wdata=0x%08h",
+            $display("[%0d][%s] [     CMD_FIFO] %s data=0x%015h src=%s op=%s space=%s addr=0x%08h beats=%0d wdata=0x%04h",
                      ns_time(),
                      domain,
                      action,
                      cmd_word,
-                     cmd_word[74] ? "AXIL" : "AXIF",
-                     cmd_word[73] ? "WRITE" : "READ",
-                     cmd_word[72] ? "REG" : "MEM",
-                     cmd_word[71:40],
-                     cmd_word[39:32],
-                     cmd_word[31:0]);
+                     cmd_word[58] ? "AXIL" : "AXIF",
+                     cmd_word[57] ? "WRITE" : "READ",
+                     cmd_word[56] ? "REG" : "MEM",
+                     cmd_word[55:24],
+                     cmd_word[23:16],
+                     cmd_word[15:0]);
         end
     endtask
 

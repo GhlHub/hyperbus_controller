@@ -3,7 +3,7 @@
 `timescale 1ns/1ps
 
 module hyperbus_hb_engine #(
-    parameter int CMD_W = 75,
+    parameter int CMD_W = 59,
     parameter int HB_LATENCY_DEFAULT = 7,
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     parameter int HB_READ_CS_DEASSERT_DELAY = 2,
@@ -80,7 +80,7 @@ module hyperbus_hb_engine #(
     logic cur_src_axil, cur_is_write, cur_is_reg;
     logic [31:0] cur_addr;
     logic [7:0] cur_axi_beats;
-    logic [31:0] cur_wdata;
+    logic [15:0] cur_wdata;
 
     logic [47:0] ca_shift;
     logic [2:0]  ca_cycle;
@@ -224,38 +224,38 @@ module hyperbus_hb_engine #(
 
                     if (!cmd_loaded && i_cmd_fifo_dout_valid) begin
                         cur_cmd <= i_cmd_fifo_dout;
-                        cur_src_axil <= i_cmd_fifo_dout[74];
-                        cur_is_write <= i_cmd_fifo_dout[73];
-                        cur_is_reg <= i_cmd_fifo_dout[72];
-                        cur_addr <= i_cmd_fifo_dout[71:40];
-                        cur_axi_beats <= i_cmd_fifo_dout[39:32];
-                        cur_wdata <= i_cmd_fifo_dout[31:0];
+                        cur_src_axil <= i_cmd_fifo_dout[58];
+                        cur_is_write <= i_cmd_fifo_dout[57];
+                        cur_is_reg <= i_cmd_fifo_dout[56];
+                        cur_addr <= i_cmd_fifo_dout[55:24];
+                        cur_axi_beats <= i_cmd_fifo_dout[23:16];
+                        cur_wdata <= i_cmd_fifo_dout[15:0];
 
                         // Build CA (linear burst, memory/register selection)
                         // AXI-full memory space uses HyperBus word addressing (byte_addr >> 1).
                         // AXI-lite/register space keeps the existing unshifted mapping.
-                        ca_shift[47]   <= ~i_cmd_fifo_dout[73]; // RW#: 1=read
-                        ca_shift[46]   <= i_cmd_fifo_dout[72];  // AS
+                        ca_shift[47]   <= ~i_cmd_fifo_dout[57]; // RW#: 1=read
+                        ca_shift[46]   <= i_cmd_fifo_dout[56];  // AS
                         ca_shift[45]   <= 1'b1;                 // linear burst
-                        if (i_cmd_fifo_dout[74]) begin
+                        if (i_cmd_fifo_dout[58]) begin
                             // AXI-lite: keep unshifted register-space addressing.
-                            ca_shift[44:16] <= i_cmd_fifo_dout[71:43];
-                            ca_shift[2:0]  <= i_cmd_fifo_dout[43:41];
+                            ca_shift[44:16] <= i_cmd_fifo_dout[55:27];
+                            ca_shift[2:0]  <= i_cmd_fifo_dout[27:25];
                         end else begin
                             // AXI-full: internal frontend alignment guarantees byte_addr[1:0] = 2'b00.
                             // That makes the lowest HyperBus word-address bit constant zero.
-                            ca_shift[44:16] <= {1'b0, i_cmd_fifo_dout[71:44]};
-                            ca_shift[2:1]  <= i_cmd_fifo_dout[43:42];
+                            ca_shift[44:16] <= {1'b0, i_cmd_fifo_dout[55:28]};
+                            ca_shift[2:1]  <= i_cmd_fifo_dout[27:26];
                             ca_shift[0]    <= 1'b0;
                         end
                         ca_shift[15:3] <= 13'h0;
 
-                        if (i_cmd_fifo_dout[74]) begin
+                        if (i_cmd_fifo_dout[58]) begin
                             words_total <= 9'd1;
                             rwds_edges_needed <= 11'd2; // 16-bit read/write uses 2 RWDS transitions
                         end else begin
-                            words_total <= {i_cmd_fifo_dout[39:32], 1'b0}; // beats * 2 words
-                            rwds_edges_needed <= {i_cmd_fifo_dout[39:32], 2'b00}; // beats * 4 bytes/transitions
+                            words_total <= {i_cmd_fifo_dout[23:16], 1'b0}; // beats * 2 words
+                            rwds_edges_needed <= {i_cmd_fifo_dout[23:16], 2'b00}; // beats * 4 bytes/transitions
                         end
                         words_done <= 9'd0;
                         rwds_edges_seen <= 11'd0;
@@ -279,7 +279,7 @@ module hyperbus_hb_engine #(
                         timeout_full_beats_left <= 8'd0;
                         timeout_tripped_cur <= 1'b0;
                         cmd_loaded <= 1'b1;
-                        if (i_cmd_fifo_dout[73] || i_cmd_fifo_dout[74] || !i_rd_fifo_prog_full) begin
+                        if (i_cmd_fifo_dout[57] || i_cmd_fifo_dout[58] || !i_rd_fifo_prog_full) begin
                             cmd_loaded <= 1'b0;
                             o_hb_cs_n_q <= 1'b0;
                             o_hb_clk_ce <= 1'b0;

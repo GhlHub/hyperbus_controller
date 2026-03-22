@@ -6,7 +6,7 @@ module hyperbus_axi_full_frontend #(
     parameter int AXI_ADDR_WIDTH = 32,
     parameter int AXI_DATA_WIDTH = 32,
     parameter int AXI_ID_WIDTH = 1,
-    parameter int CMD_W = 75
+    parameter int CMD_W = 59
 ) (
     input  wire                         i_axi_aclk,
     input  wire                         i_axi_aresetn,
@@ -229,11 +229,11 @@ module hyperbus_axi_full_frontend #(
                 // Push write command at final beat when cmd_fifo has space.
                 if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                     if ((aw_burst_q == 2'b10) && (aw_split_beats2_q != 8'd0)) begin
-                        // First linear segment of WRAP burst; bit31 marks non-final segment.
-                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, aw_split_beats1_q, 32'h8000_0000};
+                        // First linear segment of WRAP burst; low field is trace/debug only.
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, aw_split_beats1_q, 16'h8000};
                         aw_cmd2_pending_q <= 1'b1;
                     end else begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 32'h0};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 16'h0};
                         bresp_push = 1'b1;
                         bresp_push_data =
                             (wr_proto_err ||
@@ -249,14 +249,14 @@ module hyperbus_axi_full_frontend #(
             if (o_aw_pending && (w_beats_rcvd > aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                 if (aw_cmd2_pending_q) begin
                     // Second/final linear segment.
-                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_wrap_base_q, 2'b00}, aw_split_beats2_q, 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_wrap_base_q, 2'b00}, aw_split_beats2_q, 16'h0};
                     o_cmd_fifo_wr_en_full <= 1'b1;
                     aw_cmd2_pending_q <= 1'b0;
                     bresp_push = 1'b1;
                     bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
                     o_aw_pending <= 1'b0;
                 end else begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b1, 1'b0, {aw_addr_q, 2'b00}, (aw_len_q + 8'd1), 16'h0};
                     o_cmd_fifo_wr_en_full <= 1'b1;
                     bresp_push = 1'b1;
                     bresp_push_data = wr_proto_err ? 2'b10 : 2'b00;
@@ -312,16 +312,16 @@ module hyperbus_axi_full_frontend #(
                     ar_beats1_calc = ar_words_to_boundary[7:0];
                     ar_beats2_calc = ar_total_beats[7:0] - ar_beats1_calc;
                     if (ar_beats2_calc != 8'd0) begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, ar_beats1_calc, 32'h8000_0000};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, ar_beats1_calc, 16'h8000};
                         rd_cmd2_addr_q <= ar_wrap_base;
                         rd_cmd2_beats_q <= ar_beats2_calc;
                         rd_cmd2_pending_q <= 1'b1;
                     end else begin
-                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 32'h0};
+                        o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 16'h0};
                         rd_cmd2_pending_q <= 1'b0;
                     end
                 end else begin
-                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 32'h0};
+                    o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {araddr_word, 2'b00}, (s_axi_arlen + 8'd1), 16'h0};
                     rd_cmd2_pending_q <= 1'b0;
                 end
                 o_cmd_fifo_wr_en_full <= 1'b1;
@@ -334,7 +334,7 @@ module hyperbus_axi_full_frontend #(
                 s_axi_rvalid <= 1'b0;
             end
             if (rd_active && rd_cmd2_pending_q && !i_cmd_fifo_full) begin
-                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {rd_cmd2_addr_q, 2'b00}, rd_cmd2_beats_q, 32'h0};
+                o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {rd_cmd2_addr_q, 2'b00}, rd_cmd2_beats_q, 16'h0};
                 o_cmd_fifo_wr_en_full <= 1'b1;
                 rd_cmd2_pending_q <= 1'b0;
             end
