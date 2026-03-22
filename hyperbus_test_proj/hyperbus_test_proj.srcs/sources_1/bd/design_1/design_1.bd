@@ -301,6 +301,9 @@
           "CLKOUT1_MATCHED_ROUTING": {
             "value": "true"
           },
+          "CLKOUT1_PHASE_ERROR": {
+            "value": "87.180"
+          },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
             "value": "200"
           },
@@ -370,11 +373,23 @@
           "CLK_IN1_BOARD_INTERFACE": {
             "value": "sys_diff_clock"
           },
+          "JITTER_SEL": {
+            "value": "Min_O_Jitter"
+          },
+          "MMCM_BANDWIDTH": {
+            "value": "HIGH"
+          },
           "MMCM_CLKOUT0_DIVIDE_F": {
             "value": "6.000"
           },
+          "MMCM_CLKOUT0_DUTY_CYCLE": {
+            "value": "0.500"
+          },
           "MMCM_CLKOUT1_DIVIDE": {
             "value": "6"
+          },
+          "MMCM_CLKOUT1_DUTY_CYCLE": {
+            "value": "0.500"
           },
           "MMCM_CLKOUT1_PHASE": {
             "value": "90.000"
@@ -382,20 +397,29 @@
           "MMCM_CLKOUT2_DIVIDE": {
             "value": "24"
           },
+          "MMCM_CLKOUT2_DUTY_CYCLE": {
+            "value": "0.500"
+          },
           "MMCM_CLKOUT2_PHASE": {
             "value": "0.000"
           },
           "MMCM_CLKOUT3_DIVIDE": {
             "value": "4"
           },
+          "MMCM_CLKOUT3_DUTY_CYCLE": {
+            "value": "0.500"
+          },
           "MMCM_CLKOUT4_DIVIDE": {
             "value": "6"
+          },
+          "MMCM_CLKOUT4_DUTY_CYCLE": {
+            "value": "0.500"
           },
           "NUM_OUT_CLKS": {
             "value": "5"
           },
           "OPTIMIZE_CLOCKING_STRUCTURE_EN": {
-            "value": "false"
+            "value": "true"
           },
           "PHASE_DUTY_CONFIG": {
             "value": "false"
@@ -407,6 +431,9 @@
             "value": "false"
           },
           "USE_DYN_RECONFIG": {
+            "value": "false"
+          },
+          "USE_MIN_POWER": {
             "value": "false"
           }
         }
