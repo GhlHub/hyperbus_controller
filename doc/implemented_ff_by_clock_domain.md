@@ -8,7 +8,7 @@ Last updated: 2026-03-17
 
 These counts were taken from the implemented routed checkpoint:
 
-- `hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/design_1_wrapper_routed.dcp`
+- `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/design_1_wrapper_routed.dcp`
 
 The query counted implemented fabric flip-flop primitives with `REF_NAME =~ FD*`
 and grouped them by the resolved clock object on each cell's `C` pin.
@@ -38,8 +38,8 @@ wizard configuration:
 
 Relevant sources:
 
-- `hyperbus_test_proj/my_bd.tcl`
-- `hyperbus_test_proj/hyperbus_test_proj.srcs/sources_1/bd/design_1/ip/design_1_clk_wiz_0_0/design_1_clk_wiz_0_0.xci`
+- `vivado_projects/hyperbus_test_proj/my_bd.tcl`
+- `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.srcs/sources_1/bd/design_1/ip/design_1_clk_wiz_0_0/design_1_clk_wiz_0_0.xci`
 
 ## Notes
 

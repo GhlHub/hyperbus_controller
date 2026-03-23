@@ -5,7 +5,7 @@
 Last updated: 2026-03-11
 
 Note: `hyperram_test_proj` is not present in this workspace; implemented timing was taken from:
-- `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/`
+- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/`
 
 Source reports:
 - `hb_ck_p_output_min.rpt`

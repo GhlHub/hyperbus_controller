@@ -5,8 +5,8 @@
 Last updated: 2026-03-11
 
 Source reports (implemented design):
-- `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/hb_dq_input_min.rpt`
-- `/raid/work/hyperbus_ai3/hyperbus_test_proj/timing_extract_impl/hb_dq_input_max.rpt`
+- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/hb_dq_input_min.rpt`
+- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/hb_dq_input_max.rpt`
 
 Extracted implemented input delay to IDDRE1.D:
 - `t_in_min = 0.256 ns`

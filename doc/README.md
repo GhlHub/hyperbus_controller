@@ -110,7 +110,7 @@ Clock constraint note:
 - The reusable controller source package does not include a dedicated standalone
   controller `.xdc`.
 - The checked-in Vivado project does contain project-level constraints, including
-  [`hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc`](/raid/work/hyperbus_ai3/hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc).
+  [`vivado_projects/hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc`](/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.srcs/constrs_1/new/constraints.xdc).
 - In an integrating project, apply single-ended clock constraints to HyperBus `CK`
   on `o_hb_ck_p` and do not model `o_hb_ck_n` as a differential complement output.
 
@@ -237,15 +237,15 @@ Current public APIs:
 
 Post-implementation simulation assets are under:
 
-- `hyperbus_test_proj/post_impl/export_post_impl_netlist.tcl`
-- `hyperbus_test_proj/post_impl/design_1_wrapper_post_impl_tb.sv`
-- `hyperbus_test_proj/post_impl/run_post_impl_xsim.sh`
+- `vivado_projects/hyperbus_test_proj/post_impl/export_post_impl_netlist.tcl`
+- `vivado_projects/hyperbus_test_proj/post_impl/design_1_wrapper_post_impl_tb.sv`
+- `vivado_projects/hyperbus_test_proj/post_impl/run_post_impl_xsim.sh`
 
 Flow summary:
 
 1. Export routed netlist + SDF from `impl_1`:
-   - Generates `hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl_timesim.v`
-   - Generates `hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl.sdf`
+   - Generates `vivado_projects/hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl_timesim.v`
+   - Generates `vivado_projects/hyperbus_test_proj/post_impl/generated/design_1_wrapper_impl.sdf`
 2. Compile/elaborate with the post-impl TB and `s27kl0642` HyperRAM model.
 3. Run xsim with SDF plusarg:
    - `--testplusarg SDF_FILE=<.../design_1_wrapper_impl.sdf>`
@@ -259,7 +259,7 @@ Included post-impl testcase:
 Convenience command:
 
 ```bash
-./hyperbus_test_proj/post_impl/run_post_impl_xsim.sh
+./vivado_projects/hyperbus_test_proj/post_impl/run_post_impl_xsim.sh
 ```
 
 ## Possible Future Improvements

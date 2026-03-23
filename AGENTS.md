@@ -9,14 +9,14 @@ This repository contains a HyperBus / HyperRAM controller, testbench, software u
 - `software/`: shared software-side helpers and test code.
 - `vitis_ws3/hello_world/src/`: Vitis app copy of selected software sources.
 - `ip_repo/hyperbus_controller/src/`: packaged IP source mirror generated from `rtl/`.
-- `hyperbus_test_proj/`: checked-in Vivado block design and project artifacts.
+- `vivado_projects/hyperbus_test_proj/`: checked-in Vivado block design and project artifacts.
 - `doc/`: design notes, timing notes, diagrams, scripts, and supporting documentation.
 
 ## Source Of Truth
 
 - Treat `rtl/` as the canonical implementation source.
 - Treat `ip_repo/hyperbus_controller/src/` as generated output that must be refreshed after RTL changes.
-- If a top-level IP interface changes, the consuming Vivado artifacts under `hyperbus_test_proj/` may also need regeneration.
+- If a top-level IP interface changes, the consuming Vivado artifacts under `vivado_projects/hyperbus_test_proj/` may also need regeneration.
 - Do not assume checked-in `.bd`, `.xci`, `.ui`, or project files are automatically in sync with the RTL.
 
 ## Design Assumptions
@@ -42,7 +42,7 @@ This repository contains a HyperBus / HyperRAM controller, testbench, software u
 After modifying controller RTL:
 
 1. Update the corresponding packaged IP under `ip_repo/hyperbus_controller/`.
-2. If interfaces changed, refresh any affected block-design artifacts under `hyperbus_test_proj/`.
+2. If interfaces changed, refresh any affected block-design artifacts under `vivado_projects/hyperbus_test_proj/`.
 3. If the software-visible register map or version changed, update the matching software headers and relevant docs.
 
 ## Verification Expectations
@@ -61,7 +61,7 @@ After modifying controller RTL:
   - `doc/pdf/` for PDFs
   - `doc/py/` for documentation helper scripts
 - `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
-- Some files under `hyperbus_test_proj/`, `project_1/`, and Vitis output trees are generated artifacts. Update them only when the task calls for it.
+- Some files under `vivado_projects/` and Vitis output trees are generated artifacts. Update them only when the task calls for it.
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
 
 ## Common Tasks

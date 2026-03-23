@@ -5,7 +5,7 @@
 Last updated: 2026-03-11
 
 Source checkpoint:
-- `/raid/work/hyperbus_ai3/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/design_1_wrapper_routed.dcp`
+- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/design_1_wrapper_routed.dcp`
 
 Extracted pin delays (ns):
 - `hb_ck_p` output: `min=0.494`, `max=1.162`
