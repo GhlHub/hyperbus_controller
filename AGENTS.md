@@ -7,7 +7,7 @@ This repository contains a HyperBus / HyperRAM controller, testbench, software u
 - `rtl/`: hand-edited source RTL. This is the primary source of truth for the controller logic.
 - `tb/`: simulation testbench and AXI helper/check files.
 - `software/`: shared software-side helpers and test code.
-- `vitis_ws3/hello_world/src/`: Vitis app copy of selected software sources.
+- `vitis_workspace/hello_world/src/`: Vitis app copy of selected software sources.
 - `ip_repo/hyperbus_controller/src/`: packaged IP source mirror generated from `rtl/`.
 - `vivado_projects/hyperbus_test_proj/`: checked-in Vivado block design and project artifacts.
 - `doc/`: design notes, timing notes, diagrams, scripts, and supporting documentation.
@@ -67,6 +67,6 @@ After modifying controller RTL:
 ## Common Tasks
 
 - Refresh packaged IP after RTL changes.
-- Keep `software/` and `vitis_ws3/hello_world/src/` copies aligned when shared helpers are modified.
+- Keep `software/` and `vitis_workspace/hello_world/src/` copies aligned when shared helpers are modified.
 - Update documentation when behavior, interfaces, or debug visibility changes.
 - When reporting implementation facts, distinguish between RTL intent and implemented-design results.
