@@ -60,6 +60,8 @@ After modifying controller RTL:
   - `doc/jpg/` for generated images
   - `doc/pdf/` for PDFs
   - `doc/py/` for documentation helper scripts
+- Redirect explicitly configurable tool `.log` / `.jou` outputs into `logs/` when launching Vivado or similar tools from the repo.
+- Keep existing flow-local simulation artifacts such as `simulate.log`, `compile.log`, and `elaborate.log` in the directories where the checked-in scripts already generate them, unless the task explicitly asks to change that behavior.
 - `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
 - Some files under `vivado_projects/` and Vitis output trees are generated artifacts. Update them only when the task calls for it.
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
