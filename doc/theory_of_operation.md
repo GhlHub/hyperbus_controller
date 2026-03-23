@@ -14,7 +14,7 @@ responsibilities should be maintained here rather than duplicated elsewhere.
 
 Companion documents are intentionally narrower:
 
-- `doc/README.md`
+- `README.md`
   - documentation index, reference entry points, and workflow notes
 - `doc/system_level_operating_guide.md`
   - checked-in project bring-up, delay tuning, debug workflow, and integration
@@ -361,7 +361,7 @@ The most important behavioral intent to preserve in future changes is:
 
 ## Related Documents
 
-- `doc/README.md`
+- `README.md`
   - documentation index, testbench notes, software API summary, packaging flow
 - `doc/system_level_operating_guide.md`
   - checked-in project clock-source table, bring-up order, delay workflow, debug
