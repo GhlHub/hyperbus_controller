@@ -1,0 +1,46 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
+digraph hb_dq_input_vs_hb_ck_p_timing {
+  graph [
+    rankdir=LR,
+    splines=ortho,
+    nodesep=0.45,
+    ranksep=0.7,
+    pad=0.2,
+    bgcolor="white",
+    label="HB_DQ Input Timing vs o_hb_ck_p_0 (Implemented Design)",
+    labelloc=t,
+    fontsize=20,
+    fontname="Helvetica-Bold"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Helvetica",
+    fontsize=12,
+    color="#3A3A3A",
+    penwidth=1.2,
+    margin="0.14,0.08"
+  ];
+
+  edge [
+    color="#4A4A4A",
+    penwidth=1.4,
+    arrowsize=0.8
+  ];
+
+  ref_ck [label="o_hb_ck_p_0 edge\nlaunch / timing reference\n0.000 ns", fillcolor="#E6E6E6"];
+  dq_earliest [label="Earliest DQ arrival\nIDDRE1.D\n0.256 ns", fillcolor="#CFE6FF"];
+  dq_latest [label="Latest DQ arrival\nIDDRE1.D\n0.783 ns", fillcolor="#9DCCFF"];
+  sample [label="IDDRE1 sample edge\n+90° sample clock\n1.250 ns", fillcolor="#FFD7BF"];
+
+  ref_ck -> dq_earliest [label="+0.256 ns"];
+  dq_earliest -> dq_latest [label="+0.527 ns"];
+  dq_latest -> sample [label="+0.467 ns worst-case margin"];
+
+  best [shape=note, fillcolor="#FFF8CC",
+        label="Setup margins to the 1.250 ns sample edge:\n- Best case: 1.250 - 0.256 = 0.994 ns\n- Worst case: 1.250 - 0.783 = 0.467 ns\n\nAssumes 200 MHz HyperBus CK and a +90° IDDRE1 sample clock."];
+
+  sample -> best [style=dashed, arrowhead=none];
+}

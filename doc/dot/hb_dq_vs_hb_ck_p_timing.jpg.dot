@@ -1,0 +1,46 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
+digraph hb_dq_vs_hb_ck_p_timing {
+  graph [
+    rankdir=LR,
+    splines=ortho,
+    nodesep=0.45,
+    ranksep=0.7,
+    pad=0.2,
+    bgcolor="white",
+    label="HB_DQ vs HB_CK_P Timing (Implemented Design)",
+    labelloc=t,
+    fontsize=20,
+    fontname="Helvetica-Bold"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Helvetica",
+    fontsize=12,
+    color="#3A3A3A",
+    penwidth=1.2,
+    margin="0.14,0.08"
+  ];
+
+  edge [
+    color="#4A4A4A",
+    penwidth=1.4,
+    arrowsize=0.8
+  ];
+
+  ck_min [label="Earliest hb_ck_p pin edge\n0.494 ns", fillcolor="#FFE2C7"];
+  dq_min [label="Earliest hb_dq pin valid\n0.701 ns", fillcolor="#CFE6FF"];
+  ck_max [label="Latest hb_ck_p pin edge\n1.162 ns", fillcolor="#FFC487"];
+  dq_max [label="Latest hb_dq pin valid\n1.679 ns", fillcolor="#9DCCFF"];
+
+  ck_min -> dq_min [label="+0.207 ns"];
+  dq_min -> ck_max [label="+0.461 ns"];
+  ck_max -> dq_max [label="+0.517 ns"];
+
+  note [shape=note, fillcolor="#FFF8CC",
+        label="Relative timing definition:\nΔ = t(hb_dq_at_pin) - t(hb_ck_p_at_pin)\n\nWindow across all DQ[7:0]:\n- Δ_min = 0.701 - 1.162 = -0.461 ns\n  (DQ leads CK)\n- Δ_max = 1.679 - 0.494 = +1.185 ns\n  (DQ lags CK)"];
+
+  dq_max -> note [style=dashed, arrowhead=none];
+}
