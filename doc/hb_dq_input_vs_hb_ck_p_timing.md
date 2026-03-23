@@ -2,11 +2,18 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HB_DQ Input Timing vs o_hb_ck_p_0 (Implemented Design)
 
-Last updated: 2026-03-11
+Last updated: 2026-03-22
 
 Source reports (implemented design):
-- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/hb_dq_input_min.rpt`
-- `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/hb_dq_input_max.rpt`
+- Archived extracted reports from the prior `timing_extract_impl` flow:
+  - `hb_dq_input_min.rpt`
+  - `hb_dq_input_max.rpt`
+
+Note:
+- The `timing_extract_impl` report directory is not currently checked in under this
+  workspace.
+- The numeric values below are retained from the last extracted implemented timing
+  summary and should be regenerated if the routed checkpoint changes materially.
 
 Extracted implemented input delay to IDDRE1.D:
 - `t_in_min = 0.256 ns`

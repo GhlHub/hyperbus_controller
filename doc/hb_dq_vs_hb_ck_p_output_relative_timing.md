@@ -2,10 +2,16 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HB_DQ vs HB_CK_P Relative Output Timing (Implemented Design)
 
-Last updated: 2026-03-11
+Last updated: 2026-03-22
 
-Note: `hyperram_test_proj` is not present in this workspace; implemented timing was taken from:
+Implemented timing was taken from the prior `timing_extract_impl` flow under:
 - `/raid/work/hyperbus_ai3/vivado_projects/hyperbus_test_proj/timing_extract_impl/`
+
+Note:
+- That `timing_extract_impl` report directory is not currently checked in under this
+  workspace.
+- The numeric values below are retained from the last extracted implemented timing
+  summary and should be regenerated if the routed checkpoint changes materially.
 
 Source reports:
 - `hb_ck_p_output_min.rpt`
