@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Documentation
 
-Last updated: 2026-03-20
+Last updated: 2026-03-26
 
 ## Start Here
 
@@ -35,7 +35,9 @@ Reference assumptions:
 
 - AXI clock: 50 MHz
 - HyperBus clock: 200 MHz
-- External 90-degree HyperBus sample clock: `i_hb_clk_200_samp_90`
+- External HyperBus sample clock on `i_hb_clk_200_samp_90`
+  - default testbench run: 90-degree offset for UltraScale+
+  - 7-series testbench run: 144-degree offset
 
 Main RTL:
 
@@ -44,6 +46,8 @@ Main RTL:
 - `rtl/hyperbus_axi_lite_frontend.sv`
 - `rtl/hyperbus_hb_engine.sv`
 - `rtl/hyperbus_phy_xilinx.sv`
+- `rtl/hyperbus_phy_xilinx_usplus.sv`
+- `rtl/hyperbus_phy_xilinx_7series.sv`
 - `rtl/hyperbus_fifo_bank_xilinx.sv`
 
 For block responsibilities, internal data flow, clocking semantics, transaction
@@ -82,7 +86,17 @@ Contains self-checking cases for:
 
 Simulation compile note:
 
-- `sim_m/xsim/vlog.prj` includes `-i "../../tb"` so xvlog can resolve TB `include` files.
+- `sim_m/xsim/hyperbus_controller_tb.sh` generates a run-local `vlog.prj` in the selected run directory before compile.
+- The default launcher runs the UltraScale+ PHY configuration.
+- `sim_m/xsim/hyperbus_controller_tb_7series.sh` runs the 7-series PHY configuration.
+- `sim_m/xsim/hyperbus_controller_tb_parallel.sh` launches both in parallel and writes logs under:
+  - `sim_m/xsim/runs/usplus/`
+  - `sim_m/xsim/runs/7series/`
+
+Implementation status note:
+
+- The UltraScale+ PHY design has been verified on an implemented FPGA design.
+- The 7-series PHY design currently has simulation coverage, but implemented-FPGA verification is still future work.
 
 ## Vivado IP Packaging
 

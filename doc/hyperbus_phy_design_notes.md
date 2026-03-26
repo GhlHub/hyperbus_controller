@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus PHY Design Notes
 
-Last updated: 2026-03-20
+Last updated: 2026-03-26
 
 ## Scope
 
@@ -16,39 +16,51 @@ The definitive controller narrative is in:
 This note intentionally focuses on the PHY implementation contract and the checks
 required when the PHY changes.
 
+## Verification Status
+
+- The UltraScale+ PHY path has been verified in an implemented FPGA design.
+- The 7-series PHY path is available in simulation and testbench flows, but implemented-FPGA verification is still a future project.
+
 ## Current PHY Implementation Contract
 
+- `rtl/hyperbus_phy_xilinx.sv` is a wrapper that selects one of two family-specific PHYs using `PHY_FAMILY`:
+  - `0` -> `rtl/hyperbus_phy_xilinx_usplus.sv`
+  - `1` -> `rtl/hyperbus_phy_xilinx_7series.sv`
 - TX clock forwarding:
   - External logic supplies the gated TX clock on `i_hb_clk_200_gated`.
-  - `ODDRE1` (`D1=1`, `D2=0`) generates forwarded CK waveform (`hb_ck_fwd`).
-  - `ODELAYE3` delays forwarded CK before output.
-  - `OBUF` drives delayed CK on `o_hb_ck_p` (single-ended mode).
+  - UltraScale+ uses `ODDRE1` plus `ODELAYE3` to generate and delay forwarded CK.
+  - 7-series uses `ODDR` plus `ODELAYE2` for the same function.
+  - `OBUF` drives delayed CK on `o_hb_ck_p` in single-ended mode.
   - `o_hb_ck_n` is tied low for single-ended HyperRAM clocking.
 - DQ TX/RX:
-  - Per-bit `ODDRE1` drives TX DDR data from `i_dq_o_d1/d2`.
+  - Per-bit DDR output launch is family-specific:
+    - UltraScale+: `ODDRE1`
+    - 7-series: `ODDR`
   - Per-bit `IOBUF` controls tri-state with `i_dq_t`.
-  - Per-bit `IDELAYE3` applies programmable delay on the DQ receive path.
-  - Per-bit `IDDRE1` samples delayed DQ on `i_hb_clk_200_samp_90`.
-  - PHY exports raw `IDDRE1` DQ samples; post-capture alignment is in the HB engine.
+  - Per-bit input delay is family-specific:
+    - UltraScale+: `IDELAYE3`
+    - 7-series: `IDELAYE2`
+  - Per-bit DDR capture is family-specific:
+    - UltraScale+: `IDDRE1`
+    - 7-series: `IDDR`
+  - PHY exports raw DQ capture samples; post-capture alignment is in the HB engine.
 - RWDS TX/RX:
-  - `ODDRE1` + `IOBUF` for TX/IO direction control.
-  - `IDELAYE3` applies programmable delay on the RWDS receive path.
-  - `IDDRE1` captures delayed RWDS on `i_hb_clk_200_samp_90`.
-  - PHY exports raw RWDS `IDDRE1` samples; HB-engine alignment/debug taps are downstream.
+  - DDR TX and RX primitives follow the same family split as DQ.
+  - PHY exports raw RWDS capture samples; HB-engine alignment/debug taps are downstream.
 - Delay calibration:
-  - `IDELAYCTRL` is instantiated.
+  - `IDELAYCTRL` is instantiated in both family implementations.
   - `REFCLK` must be external 300 MHz (`i_ref_clk_300`).
   - `IDELAYCTRL.RST` is driven from AXI-Lite `DELAY_RST_CTRL[0]` through a
     synchronizer into `i_ref_clk_300` domain.
   - `IDELAYCTRL.RDY` is synchronized into AXI clock domain and exposed through
     AXI-Lite `IDELAYCTRL_STATUS[0]`.
-  - `ODELAYE3` runtime control signals are driven from AXI-Lite registers.
+  - Runtime delay control is driven from AXI-Lite registers, using the family-appropriate delay primitive.
 
 ## External Clock/Reset Inputs
 
 - `i_hb_clk_200`: HyperBus fabric/PHY TX clock.
 - `i_hb_clk_200_gated`: externally gated TX clock used by CK forward `ODDRE1`.
-- `i_hb_clk_200_samp_90`: external +90-degree sample clock for `IDDRE1`.
+- `i_hb_clk_200_samp_90`: external sample clock for DDR input capture.
 - `i_ref_clk_300`: external `IDELAYCTRL` reference clock.
 - `i_hb_rstn`: HyperBus-domain reset for TX path primitives/registers.
 - `i_idelayctrl_rst`: dedicated reset for `IDELAYCTRL`.
@@ -57,15 +69,16 @@ required when the PHY changes.
 Assumptions used by the current design/testbench:
 - `i_iddre1_rst` is synchronous to `i_hb_clk_200_samp_90`.
 - `i_idelayctrl_rst` is driven externally and not combined with other resets.
+- Default UltraScale+ TB runs use a 90-degree sample-clock offset; the 7-series TB run uses a 144-degree offset.
 
 ## Capture Export Contract
 
-Current PHY exports raw `IDDRE1` capture outputs directly:
+Current PHY exports raw DDR capture outputs directly:
 
-- `IOBUF -> IDELAYE3 -> IDDRE1.Q1/Q2 -> dq_q1_raw/dq_q2_raw`
+- `IOBUF -> IDELAY -> DDR input register Q1/Q2 -> dq_q1_raw/dq_q2_raw`
 - `o_dq_q1/o_dq_q2` are direct exports of those raw samples
-- `IOBUF -> IDELAYE3 -> IDDRE1.Q1/Q2 -> rwds_q1_raw/rwds_q2_raw`
-- `o_rwds_q1/o_rwds_q2` are also direct exports of raw `IDDRE1` samples
+- `IOBUF -> IDELAY -> DDR input register Q1/Q2 -> rwds_q1_raw/rwds_q2_raw`
+- `o_rwds_q1/o_rwds_q2` are also direct exports of raw DDR-capture samples
 
 Required consequence in HB engine:
 

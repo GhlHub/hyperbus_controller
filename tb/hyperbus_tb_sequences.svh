@@ -600,7 +600,6 @@
             end
             $display("[%0d][ TB]                 TEST PASS: AXI-Lite CK_P ODELAY dynamic-step/LOAD with EN_VTC=0", ns_time());
 
-            $display("[%0d][ TB]                 SKIP: per-lane DQ IDELAY control checks disabled", ns_time());
         end
     endtask
 

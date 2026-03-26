@@ -4,11 +4,21 @@
 
 module hyperbus_controller_tb;
 
+`ifndef TB_PHY_FAMILY
+`define TB_PHY_FAMILY 0
+`endif
+
+`ifndef TB_SAMP_OFFSET_PS
+`define TB_SAMP_OFFSET_PS 1250
+`endif
+
     localparam int AXI_ADDR_WIDTH  = 32;
     localparam int AXI_DATA_WIDTH  = 32;
     localparam int AXI_ID_WIDTH    = 4;
     localparam int AXIL_ADDR_WIDTH = 16;
     localparam int MAX_WAIT_AXI_CYCLES = 20000;
+    localparam int PHY_FAMILY = `TB_PHY_FAMILY;
+    localparam time HB_SAMP_CLK_OFFSET = `TB_SAMP_OFFSET_PS * 1ps;
 
 `define WAIT_AXI_COND(_cond, _msg) \
     begin \
@@ -110,7 +120,7 @@ module hyperbus_controller_tb;
         .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
         .AXI_ID_WIDTH(AXI_ID_WIDTH),
         .AXIL_ADDR_WIDTH(AXIL_ADDR_WIDTH),
-        .PHY_FAMILY(0),
+        .PHY_FAMILY(PHY_FAMILY),
         .HB_LATENCY_DEFAULT(7)
     ) dut (
         .i_axi_aclk(axi_aclk),
@@ -225,10 +235,10 @@ module hyperbus_controller_tb;
         forever #1.6666666667 ref_clk_300 = ~ref_clk_300; // 300 MHz
     end
 
-    // 200 MHz sampling clock, 144-degree shifted from hb_clk_200.
+    // 200 MHz sampling clock. Default is 90-degree shifted for UltraScale+ runs.
     initial begin
         hb_clk_200_samp_90 = 1'b0;
-        #2.0;
+        #HB_SAMP_CLK_OFFSET;
         forever #2.5 hb_clk_200_samp_90 = ~hb_clk_200_samp_90;
     end
 
