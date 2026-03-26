@@ -22,6 +22,8 @@ set_property source_mgmt_mode None [current_project]
 set rtl_files [list \
     [file join $repo_root "rtl" "hyperbus_fifo_bank_xilinx.sv"] \
     [file join $repo_root "rtl" "hyperbus_phy_xilinx.sv"] \
+    [file join $repo_root "rtl" "hyperbus_phy_xilinx_usplus.sv"] \
+    [file join $repo_root "rtl" "hyperbus_phy_xilinx_7series.sv"] \
     [file join $repo_root "rtl" "hyperbus_axi_lite_frontend.sv"] \
     [file join $repo_root "rtl" "hyperbus_axi_full_frontend.sv"] \
     [file join $repo_root "rtl" "hyperbus_hb_engine.sv"] \

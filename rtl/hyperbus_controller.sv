@@ -8,6 +8,7 @@ module hyperbus_controller #(
     parameter int AXI_ID_WIDTH = 1,
     parameter int AXIL_ADDR_WIDTH = 16,
     parameter int HB_LATENCY_DEFAULT = 7,
+    parameter int PHY_FAMILY = 0,
     // Compensation window (in i_hb_clk_200 cycles) for ODDRE1 forwarded outputs.
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     // Read termination requirement: keep CS# asserted this many HB cycles
@@ -324,7 +325,9 @@ module hyperbus_controller #(
     assign o_dbg_i_rwds_t = rwds_t;
     assign o_dbg_hb_cs_n_q = hb_cs_n_q;
 
-    hyperbus_phy_xilinx u_hyperbus_phy (
+    hyperbus_phy_xilinx #(
+        .PHY_FAMILY(PHY_FAMILY)
+    ) u_hyperbus_phy (
         .i_axi_aclk             (            i_axi_aclk),
         .i_axi_aresetn          (         i_axi_aresetn),
         .i_hb_clk_200           (          i_hb_clk_200),

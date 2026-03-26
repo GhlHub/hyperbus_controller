@@ -10,6 +10,7 @@ proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "HB_LATENCY_DEFAULT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "HB_READ_CS_DEASSERT_DELAY" -parent ${Page_0}
   ipgui::add_param $IPINST -name "ODDRE1_TX_PIPE_CYCLES" -parent ${Page_0}
+  ipgui::add_param $IPINST -name "PHY_FAMILY" -parent ${Page_0}
 
 
 }
@@ -77,6 +78,15 @@ proc validate_PARAM_VALUE.ODDRE1_TX_PIPE_CYCLES { PARAM_VALUE.ODDRE1_TX_PIPE_CYC
 	return true
 }
 
+proc update_PARAM_VALUE.PHY_FAMILY { PARAM_VALUE.PHY_FAMILY } {
+	# Procedure called to update PHY_FAMILY when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.PHY_FAMILY { PARAM_VALUE.PHY_FAMILY } {
+	# Procedure called to validate PHY_FAMILY
+	return true
+}
+
 
 proc update_MODELPARAM_VALUE.AXI_ADDR_WIDTH { MODELPARAM_VALUE.AXI_ADDR_WIDTH PARAM_VALUE.AXI_ADDR_WIDTH } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
@@ -101,6 +111,11 @@ proc update_MODELPARAM_VALUE.AXIL_ADDR_WIDTH { MODELPARAM_VALUE.AXIL_ADDR_WIDTH 
 proc update_MODELPARAM_VALUE.HB_LATENCY_DEFAULT { MODELPARAM_VALUE.HB_LATENCY_DEFAULT PARAM_VALUE.HB_LATENCY_DEFAULT } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.HB_LATENCY_DEFAULT}] ${MODELPARAM_VALUE.HB_LATENCY_DEFAULT}
+}
+
+proc update_MODELPARAM_VALUE.PHY_FAMILY { MODELPARAM_VALUE.PHY_FAMILY PARAM_VALUE.PHY_FAMILY } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.PHY_FAMILY}] ${MODELPARAM_VALUE.PHY_FAMILY}
 }
 
 proc update_MODELPARAM_VALUE.ODDRE1_TX_PIPE_CYCLES { MODELPARAM_VALUE.ODDRE1_TX_PIPE_CYCLES PARAM_VALUE.ODDRE1_TX_PIPE_CYCLES } {

@@ -110,6 +110,7 @@ module hyperbus_controller_tb;
         .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
         .AXI_ID_WIDTH(AXI_ID_WIDTH),
         .AXIL_ADDR_WIDTH(AXIL_ADDR_WIDTH),
+        .PHY_FAMILY(0),
         .HB_LATENCY_DEFAULT(7)
     ) dut (
         .i_axi_aclk(axi_aclk),
@@ -224,10 +225,10 @@ module hyperbus_controller_tb;
         forever #1.6666666667 ref_clk_300 = ~ref_clk_300; // 300 MHz
     end
 
-    // 200 MHz sampling clock, 90-degree shifted from hb_clk_200.
+    // 200 MHz sampling clock, 144-degree shifted from hb_clk_200.
     initial begin
         hb_clk_200_samp_90 = 1'b0;
-        #1.25;
+        #2.0;
         forever #2.5 hb_clk_200_samp_90 = ~hb_clk_200_samp_90;
     end
 

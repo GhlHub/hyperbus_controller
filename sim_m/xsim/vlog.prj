@@ -4,6 +4,8 @@ verilog xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
 sv xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" -i "../../tb" \
 "../../rtl/hyperbus_fifo_bank_xilinx.sv" \
 "../../rtl/hyperbus_phy_xilinx.sv" \
+"../../rtl/hyperbus_phy_xilinx_usplus.sv" \
+"../../rtl/hyperbus_phy_xilinx_7series.sv" \
 "../../rtl/hyperbus_axi_lite_frontend.sv" \
 "../../rtl/hyperbus_axi_full_frontend.sv" \
 "../../rtl/hyperbus_hb_engine.sv" \
