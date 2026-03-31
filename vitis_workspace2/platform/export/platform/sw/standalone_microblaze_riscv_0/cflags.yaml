@@ -1,0 +1,2 @@
+cflags: -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32
+linkflags: -march=rv32imacb_zicsr_zifencei_zbc_zicbom

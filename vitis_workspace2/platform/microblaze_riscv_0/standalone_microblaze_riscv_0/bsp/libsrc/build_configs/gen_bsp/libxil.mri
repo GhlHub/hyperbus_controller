@@ -1,0 +1,7 @@
+create libxil.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src/libuartlite.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/tmrctr/src/libtmrctr.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/intc/src/libintc.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/bram/src/libbram.a
+save
+end

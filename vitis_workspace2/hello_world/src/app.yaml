@@ -1,0 +1,4 @@
+domain_path: /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/export/platform/sw/standalone_microblaze_riscv_0
+app_src_dir: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/lib/sw_apps/hello_world
+template: hello_world
+lang: c
