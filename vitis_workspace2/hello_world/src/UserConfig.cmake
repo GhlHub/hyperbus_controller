@@ -42,6 +42,7 @@ set(USER_COMPILE_SOURCES
 "freertos_port_hooks.c"
 "platform.c"
 "euart_console.c"
+"xil_printf_fast.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/list.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/queue.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/tasks.c"

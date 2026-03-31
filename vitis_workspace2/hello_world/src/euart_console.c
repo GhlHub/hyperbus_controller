@@ -3,10 +3,14 @@
 * SPDX-License-Identifier: MIT
 ******************************************************************************/
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include "xparameters.h"
 #include "xil_io.h"
 
 #define EUART_TX_BYTE_FIFO_OFFSET       0x00U
+#define EUART_TX_WORD_FIFO_OFFSET       0x04U
 #define EUART_RX_BYTE_FIFO_OFFSET       0x08U
 #define EUART_INT_MASK_OFFSET           0x14U
 #define EUART_CTRL_OFFSET               0x18U
@@ -25,6 +29,7 @@
 #define EUART_OVERSAMPLE_RATE           5U
 #define EUART_BAUD_RATE                 115200U
 #define EUART_FIFO_DEPTH_BYTES          1024U
+#define EUART_WORD_WIDTH_BYTES          4U
 
 static unsigned int prvEUartReadFifoOccupancy( unsigned int ulOffset )
 {
@@ -36,6 +41,27 @@ static unsigned int prvEUartReadFifoOccupancy( unsigned int ulOffset )
     }
 
     return ulOccupancy;
+}
+
+static void prvEUartWaitForTxBytes( unsigned int ulBytesRequired )
+{
+    while( prvEUartReadFifoOccupancy( EUART_TX_FIFO_CNT_OFFSET ) >
+           ( EUART_FIFO_DEPTH_BYTES - ulBytesRequired ) )
+    {
+    }
+}
+
+static void prvEUartWriteByte( unsigned char ucValue )
+{
+    prvEUartWaitForTxBytes( 1U );
+    Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_BYTE_FIFO_OFFSET,
+               ( unsigned int ) ucValue );
+}
+
+static void prvEUartWriteWord( uint32_t ulValue )
+{
+    prvEUartWaitForTxBytes( EUART_WORD_WIDTH_BYTES );
+    Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_WORD_FIFO_OFFSET, ulValue );
 }
 
 void euart_console_init( void )
@@ -60,14 +86,77 @@ void euart_console_init( void )
 #endif
 }
 
+void euart_console_write( const char *pcBuffer, size_t xLength )
+{
+#ifdef XPAR_E_UART_0_BASEADDR
+    const unsigned char *pucBuffer = ( const unsigned char * ) pcBuffer;
+    const uint32_t *pulWordBuffer;
+
+    if( ( pucBuffer == NULL ) || ( xLength == 0U ) )
+    {
+        return;
+    }
+
+    while( ( xLength > 0U ) && ( ( ( uintptr_t ) pucBuffer & ( EUART_WORD_WIDTH_BYTES - 1U ) ) != 0U ) )
+    {
+        prvEUartWriteByte( *pucBuffer );
+        pucBuffer++;
+        xLength--;
+    }
+
+    pulWordBuffer = ( const uint32_t * ) pucBuffer;
+
+    while( xLength >= EUART_WORD_WIDTH_BYTES )
+    {
+        prvEUartWriteWord( *pulWordBuffer );
+        pulWordBuffer++;
+        xLength -= EUART_WORD_WIDTH_BYTES;
+    }
+
+    pucBuffer = ( const unsigned char * ) pulWordBuffer;
+
+    while( xLength > 0U )
+    {
+        prvEUartWriteByte( *pucBuffer );
+        pucBuffer++;
+        xLength--;
+    }
+#else
+    ( void ) pcBuffer;
+    ( void ) xLength;
+#endif
+}
+
+void euart_console_write_repeat( char c, size_t xLength )
+{
+#ifdef XPAR_E_UART_0_BASEADDR
+    const uint32_t ulRepeatedWord =
+        ( uint32_t ) ( unsigned char ) c |
+        ( ( uint32_t ) ( unsigned char ) c << 8 ) |
+        ( ( uint32_t ) ( unsigned char ) c << 16 ) |
+        ( ( uint32_t ) ( unsigned char ) c << 24 );
+
+    while( xLength >= EUART_WORD_WIDTH_BYTES )
+    {
+        prvEUartWriteWord( ulRepeatedWord );
+        xLength -= EUART_WORD_WIDTH_BYTES;
+    }
+
+    while( xLength > 0U )
+    {
+        prvEUartWriteByte( ( unsigned char ) c );
+        xLength--;
+    }
+#else
+    ( void ) c;
+    ( void ) xLength;
+#endif
+}
+
 void outbyte( char c )
 {
 #ifdef XPAR_E_UART_0_BASEADDR
-    while( prvEUartReadFifoOccupancy( EUART_TX_FIFO_CNT_OFFSET ) >= EUART_FIFO_DEPTH_BYTES )
-    {
-    }
-
-    Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_BYTE_FIFO_OFFSET, ( unsigned int ) ( unsigned char ) c );
+    prvEUartWriteByte( ( unsigned char ) c );
 #else
     ( void ) c;
 #endif
