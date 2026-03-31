@@ -212,8 +212,9 @@ static void prvMonitorTask( void *pvParameters )
 int main( void )
 {
     BaseType_t xStatus;
+    void ( * volatile pxPlatformInit )( void ) = init_platform;
 
-    init_platform();
+    pxPlatformInit();
 
     xil_printf( "Starting FreeRTOS on MicroBlaze V\r\n" );
 

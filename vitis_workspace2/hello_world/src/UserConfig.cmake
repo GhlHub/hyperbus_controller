@@ -41,6 +41,7 @@ set(USER_COMPILE_SOURCES
 "helloworld.c"
 "freertos_port_hooks.c"
 "platform.c"
+"euart_console.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/list.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/queue.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/tasks.c"

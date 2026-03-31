@@ -24,6 +24,8 @@
  #define UART_BAUD 9600
 #endif
 
+void euart_console_init( void );
+
 void
 enable_caches()
 {
@@ -74,6 +76,8 @@ init_uart()
 #ifdef STDOUT_IS_16550
     XUartNs550_SetBaud(STDOUT_BASEADDR, XPAR_XUARTNS550_CLOCK_HZ, UART_BAUD);
     XUartNs550_SetLineControlReg(STDOUT_BASEADDR, XUN_LCR_8_DATA_BITS);
+#elif defined(XPAR_E_UART_0_BASEADDR)
+    euart_console_init();
 #endif
     /* Bootrom/BSP configures PS7/PSU UART to 115200 bps */
 }
