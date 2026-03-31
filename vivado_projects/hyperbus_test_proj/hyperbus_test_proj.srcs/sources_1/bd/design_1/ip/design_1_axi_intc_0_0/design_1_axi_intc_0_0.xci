@@ -14,7 +14,7 @@
         "C_HAS_IVR": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_HAS_ILR": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_IRQ_ACTIVE": [ { "value": "0x1", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
-        "C_KIND_OF_INTR": [ { "value": "0xFFFFFFFD", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "C_KIND_OF_INTR": [ { "value": "0xFFFFFFFC", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_NUM_INTR_INPUTS": [ { "value": "2", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_NUM_SW_INTR": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_KIND_OF_LVL": [ { "value": "0xFFFFFFFF", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
@@ -44,7 +44,7 @@
         "C_S_AXI_DATA_WIDTH": [ { "value": "32", "format": "long", "usage": "all" } ],
         "C_NUM_INTR_INPUTS": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_NUM_SW_INTR": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_KIND_OF_INTR": [ { "value": "0xfffffffd", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "C_KIND_OF_INTR": [ { "value": "0xfffffffc", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_KIND_OF_EDGE": [ { "value": "0xffffffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_KIND_OF_LVL": [ { "value": "0xffffffff", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_ASYNC_INTR": [ { "value": "0xFFFFFFFC", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
@@ -219,7 +219,7 @@
           "abstraction_type": "xilinx.com:signal:interrupt_rtl:1.0",
           "mode": "slave",
           "parameters": {
-            "SENSITIVITY": [ { "value": "LEVEL_HIGH:EDGE_RISING", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
+            "SENSITIVITY": [ { "value": "LEVEL_HIGH:LEVEL_HIGH", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
             "PortWidth": [ { "value": "2", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ]
           },
           "port_maps": {
@@ -407,5 +407,5 @@
       }
     }
   },
-  "checksum": "31986e65"
+  "checksum": "c6783e72"
 }

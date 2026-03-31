@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Mon Mar 30 23:24:17 2026
+// Date        : Tue Mar 31 04:04:57 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_intc_0_0/design_1_axi_intc_0_0_sim_netlist.v
@@ -56,7 +56,7 @@ module design_1_axi_intc_0_0
   (* x_interface_info = "xilinx.com:interface:aximm:1.0 s_axi RRESP" *) output [1:0]s_axi_rresp;
   (* x_interface_info = "xilinx.com:interface:aximm:1.0 s_axi RVALID" *) output s_axi_rvalid;
   (* x_interface_info = "xilinx.com:interface:aximm:1.0 s_axi RREADY" *) input s_axi_rready;
-  (* x_interface_info = "xilinx.com:signal:interrupt:1.0 interrupt_input INTERRUPT" *) (* x_interface_mode = "slave interrupt_input" *) (* x_interface_parameter = "XIL_INTERFACENAME interrupt_input, SENSITIVITY LEVEL_HIGH:EDGE_RISING, PortWidth 2" *) input [1:0]intr;
+  (* x_interface_info = "xilinx.com:signal:interrupt:1.0 interrupt_input INTERRUPT" *) (* x_interface_mode = "slave interrupt_input" *) (* x_interface_parameter = "XIL_INTERFACENAME interrupt_input, SENSITIVITY LEVEL_HIGH:LEVEL_HIGH, PortWidth 2" *) input [1:0]intr;
   (* x_interface_info = "xilinx.com:interface:mbinterrupt:1.0 interrupt INTERRUPT" *) (* x_interface_mode = "master interrupt" *) (* x_interface_parameter = "XIL_INTERFACENAME interrupt, SENSITIVITY LEVEL_HIGH, LOW_LATENCY 0" *) output irq;
 
   wire \<const0> ;
@@ -110,7 +110,7 @@ module design_1_axi_intc_0_0
   (* C_IRQ_IS_LEVEL = "1" *) 
   (* C_IVAR_RESET_VALUE = "64'b0000000000000000000000000000000000000000000000000000000000010000" *) 
   (* C_KIND_OF_EDGE = "32'b11111111111111111111111111111111" *) 
-  (* C_KIND_OF_INTR = "32'b11111111111111111111111111111101" *) 
+  (* C_KIND_OF_INTR = "32'b11111111111111111111111111111100" *) 
   (* C_KIND_OF_LVL = "32'b11111111111111111111111111111111" *) 
   (* C_MB_CLK_NOT_CONNECTED = "1" *) 
   (* C_NUM_INTR_INPUTS = "2" *) 
@@ -965,7 +965,7 @@ endmodule
 (* C_HAS_ILR = "0" *) (* C_HAS_IPR = "1" *) (* C_HAS_IVR = "1" *) 
 (* C_HAS_SIE = "1" *) (* C_INSTANCE = "design_1_axi_intc_0_0" *) (* C_IRQ_ACTIVE = "1'b1" *) 
 (* C_IRQ_IS_LEVEL = "1" *) (* C_IVAR_RESET_VALUE = "64'b0000000000000000000000000000000000000000000000000000000000010000" *) (* C_KIND_OF_EDGE = "32'b11111111111111111111111111111111" *) 
-(* C_KIND_OF_INTR = "32'b11111111111111111111111111111101" *) (* C_KIND_OF_LVL = "32'b11111111111111111111111111111111" *) (* C_MB_CLK_NOT_CONNECTED = "1" *) 
+(* C_KIND_OF_INTR = "32'b11111111111111111111111111111100" *) (* C_KIND_OF_LVL = "32'b11111111111111111111111111111111" *) (* C_MB_CLK_NOT_CONNECTED = "1" *) 
 (* C_NUM_INTR_INPUTS = "2" *) (* C_NUM_SW_INTR = "0" *) (* C_NUM_SYNC_FF = "2" *) 
 (* C_S_AXI_ADDR_WIDTH = "9" *) (* C_S_AXI_DATA_WIDTH = "32" *) (* ORIG_REF_NAME = "axi_intc" *) 
 (* hdl = "VHDL" *) (* imp_netlist = "TRUE" *) (* ip_group = "LOGICORE" *) 
@@ -1497,7 +1497,6 @@ module design_1_axi_intc_0_0_intc_core
     iar0_out,
     s_axi_aclk,
     iar,
-    intr,
     \mer_int_reg[1]_0 ,
     \SIE_GEN.SIE_BIT_GEN[0].sie_reg[0]_1 ,
     \SIE_GEN.SIE_BIT_GEN[1].sie_reg[1]_0 ,
@@ -1508,6 +1507,7 @@ module design_1_axi_intc_0_0_intc_core
     s_axi_wdata,
     Bus_RNW_reg,
     p_18_in,
+    intr,
     \REG_GEN[0].ier_reg[0]_1 );
   output [0:0]SR;
   output \IVR_GEN.ivr_reg[1]_0 ;
@@ -1527,7 +1527,6 @@ module design_1_axi_intc_0_0_intc_core
   input iar0_out;
   input s_axi_aclk;
   input iar;
-  input [1:0]intr;
   input \mer_int_reg[1]_0 ;
   input \SIE_GEN.SIE_BIT_GEN[0].sie_reg[0]_1 ;
   input \SIE_GEN.SIE_BIT_GEN[1].sie_reg[1]_0 ;
@@ -1538,14 +1537,14 @@ module design_1_axi_intc_0_0_intc_core
   input [1:0]s_axi_wdata;
   input Bus_RNW_reg;
   input p_18_in;
+  input [1:0]intr;
   input \REG_GEN[0].ier_reg[0]_1 ;
 
   wire Bus_RNW_reg;
   wire \CIE_GEN.CIE_BIT_GEN[0].cie_reg[0]_0 ;
   wire \CIE_GEN.CIE_BIT_GEN[0].cie_reg[0]_1 ;
   wire \CIE_GEN.CIE_BIT_GEN[1].cie_reg[1]_0 ;
-  wire \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0 ;
-  wire \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1 ;
+  wire \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0 ;
   wire \INTR_DETECT_GEN[1].LVL_DETECT_GEN.hw_intr[1]_i_1_n_0 ;
   wire \IPR_GEN.ipr[0]_i_1_n_0 ;
   wire \IPR_GEN.ipr[1]_i_1_n_0 ;
@@ -1602,25 +1601,18 @@ module design_1_axi_intc_0_0_intc_core
         .D(\CIE_GEN.CIE_BIT_GEN[1].cie_reg[1]_0 ),
         .Q(p_0_in3_in),
         .R(1'b0));
-  LUT3 #(
-    .INIT(8'hF4)) 
-    \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1 
-       (.I0(\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1 ),
-        .I1(intr[0]),
-        .I2(hw_intr[0]),
-        .O(\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0 ));
-  FDRE \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr_reg[0] 
+  LUT2 #(
+    .INIT(4'hE)) 
+    \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1 
+       (.I0(intr[0]),
+        .I1(hw_intr[0]),
+        .O(\INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0 ));
+  FDRE \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr_reg[0] 
        (.C(s_axi_aclk),
         .CE(1'b1),
-        .D(\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0 ),
+        .D(\INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0 ),
         .Q(hw_intr[0]),
         .R(\REG_GEN[0].IAR_NORMAL_MODE_GEN.iar[0]_i_1_n_0 ));
-  FDRE \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1_reg 
-       (.C(s_axi_aclk),
-        .CE(1'b1),
-        .D(intr[0]),
-        .Q(\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1 ),
-        .R(SR));
   LUT2 #(
     .INIT(4'hE)) 
     \INTR_DETECT_GEN[1].LVL_DETECT_GEN.hw_intr[1]_i_1 

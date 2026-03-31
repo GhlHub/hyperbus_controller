@@ -4,9 +4,9 @@ axi_intc_0:
 axi_timer_0:
 - axi_timer
 - tmrctr
-axi_uartlite_0:
-- axi_uartlite
-- uartlite
+e_uart_0:
+- e_uart
+- None
 hyperbus_controller_0:
 - hyperbus_controller
 - None

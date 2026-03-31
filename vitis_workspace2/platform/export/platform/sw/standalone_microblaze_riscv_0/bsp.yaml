@@ -60,20 +60,20 @@ os_config:
       permission: read_write
       type: string
       value: axi_uartlite_0
-      default: axi_uartlite_0
+      default: None;
       options:
       - None
-      - axi_uartlite_0
+      - ''
       description: stdin peripheral
     standalone_stdout:
       name: standalone_stdout
       permission: read_write
       type: string
       value: axi_uartlite_0
-      default: axi_uartlite_0
+      default: None;
       options:
       - None
-      - axi_uartlite_0
+      - ''
       description: stdout peripheral
     standalone_ttc_select_cntr:
       name: standalone_ttc_select_cntr
@@ -158,10 +158,7 @@ drv_info:
     driver: tmrctr
     ip_name: axi_timer
     path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/tmrctr_v4_14
-  axi_uartlite_0:
-    driver: uartlite
-    ip_name: axi_uartlite
-    path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/uartlite_v3_12
+  e_uart_0: None
   hyperbus_controller_0: None
   lmb_bram_if_cntlr_0:
     driver: bram

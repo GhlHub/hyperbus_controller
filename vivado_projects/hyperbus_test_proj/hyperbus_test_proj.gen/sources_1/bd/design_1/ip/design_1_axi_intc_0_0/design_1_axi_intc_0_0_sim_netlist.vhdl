@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Mon Mar 30 23:24:17 2026
+-- Date        : Tue Mar 31 04:04:57 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_intc_0_0/design_1_axi_intc_0_0_sim_netlist.vhdl
@@ -971,7 +971,6 @@ entity design_1_axi_intc_0_0_intc_core is
     iar0_out : in STD_LOGIC;
     s_axi_aclk : in STD_LOGIC;
     iar : in STD_LOGIC;
-    intr : in STD_LOGIC_VECTOR ( 1 downto 0 );
     \mer_int_reg[1]_0\ : in STD_LOGIC;
     \SIE_GEN.SIE_BIT_GEN[0].sie_reg[0]_1\ : in STD_LOGIC;
     \SIE_GEN.SIE_BIT_GEN[1].sie_reg[1]_0\ : in STD_LOGIC;
@@ -982,6 +981,7 @@ entity design_1_axi_intc_0_0_intc_core is
     s_axi_wdata : in STD_LOGIC_VECTOR ( 1 downto 0 );
     Bus_RNW_reg : in STD_LOGIC;
     p_18_in : in STD_LOGIC;
+    intr : in STD_LOGIC_VECTOR ( 1 downto 0 );
     \REG_GEN[0].ier_reg[0]_1\ : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -990,8 +990,7 @@ end design_1_axi_intc_0_0_intc_core;
 
 architecture STRUCTURE of design_1_axi_intc_0_0_intc_core is
   signal \^cie_gen.cie_bit_gen[0].cie_reg[0]_0\ : STD_LOGIC;
-  signal \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0\ : STD_LOGIC;
-  signal \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1\ : STD_LOGIC;
+  signal \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0\ : STD_LOGIC;
   signal \INTR_DETECT_GEN[1].LVL_DETECT_GEN.hw_intr[1]_i_1_n_0\ : STD_LOGIC;
   signal \IPR_GEN.ipr[0]_i_1_n_0\ : STD_LOGIC;
   signal \IPR_GEN.ipr[1]_i_1_n_0\ : STD_LOGIC;
@@ -1052,31 +1051,22 @@ begin
       Q => \^p_0_in3_in\,
       R => '0'
     );
-\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1\: unisim.vcomponents.LUT3
+\INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1\: unisim.vcomponents.LUT2
     generic map(
-      INIT => X"F4"
+      INIT => X"E"
     )
         port map (
-      I0 => \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1\,
-      I1 => intr(0),
-      I2 => hw_intr(0),
-      O => \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0\
+      I0 => intr(0),
+      I1 => hw_intr(0),
+      O => \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0\
     );
-\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr_reg[0]\: unisim.vcomponents.FDRE
+\INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr_reg[0]\: unisim.vcomponents.FDRE
      port map (
       C => s_axi_aclk,
       CE => '1',
-      D => \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.hw_intr[0]_i_1_n_0\,
+      D => \INTR_DETECT_GEN[0].LVL_DETECT_GEN.hw_intr[0]_i_1_n_0\,
       Q => hw_intr(0),
       R => \REG_GEN[0].IAR_NORMAL_MODE_GEN.iar[0]_i_1_n_0\
-    );
-\INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1_reg\: unisim.vcomponents.FDRE
-     port map (
-      C => s_axi_aclk,
-      CE => '1',
-      D => intr(0),
-      Q => \INTR_DETECT_GEN[0].EDGE_DETECT_GEN.intr_d1\,
-      R => \^sr\(0)
     );
 \INTR_DETECT_GEN[1].LVL_DETECT_GEN.hw_intr[1]_i_1\: unisim.vcomponents.LUT2
     generic map(
@@ -2409,7 +2399,7 @@ entity design_1_axi_intc_0_0_axi_intc is
   attribute C_KIND_OF_EDGE : string;
   attribute C_KIND_OF_EDGE of design_1_axi_intc_0_0_axi_intc : entity is "32'b11111111111111111111111111111111";
   attribute C_KIND_OF_INTR : string;
-  attribute C_KIND_OF_INTR of design_1_axi_intc_0_0_axi_intc : entity is "32'b11111111111111111111111111111101";
+  attribute C_KIND_OF_INTR of design_1_axi_intc_0_0_axi_intc : entity is "32'b11111111111111111111111111111100";
   attribute C_KIND_OF_LVL : string;
   attribute C_KIND_OF_LVL of design_1_axi_intc_0_0_axi_intc : entity is "32'b11111111111111111111111111111111";
   attribute C_MB_CLK_NOT_CONNECTED : integer;
@@ -2764,7 +2754,7 @@ architecture STRUCTURE of design_1_axi_intc_0_0 is
   attribute C_KIND_OF_EDGE : string;
   attribute C_KIND_OF_EDGE of U0 : label is "32'b11111111111111111111111111111111";
   attribute C_KIND_OF_INTR : string;
-  attribute C_KIND_OF_INTR of U0 : label is "32'b11111111111111111111111111111101";
+  attribute C_KIND_OF_INTR of U0 : label is "32'b11111111111111111111111111111100";
   attribute C_KIND_OF_LVL : string;
   attribute C_KIND_OF_LVL of U0 : label is "32'b11111111111111111111111111111111";
   attribute C_MB_CLK_NOT_CONNECTED : integer;
@@ -2815,7 +2805,7 @@ architecture STRUCTURE of design_1_axi_intc_0_0 is
   attribute x_interface_info of s_axi_wvalid : signal is "xilinx.com:interface:aximm:1.0 s_axi WVALID";
   attribute x_interface_info of intr : signal is "xilinx.com:signal:interrupt:1.0 interrupt_input INTERRUPT";
   attribute x_interface_mode of intr : signal is "slave interrupt_input";
-  attribute x_interface_parameter of intr : signal is "XIL_INTERFACENAME interrupt_input, SENSITIVITY LEVEL_HIGH:EDGE_RISING, PortWidth 2";
+  attribute x_interface_parameter of intr : signal is "XIL_INTERFACENAME interrupt_input, SENSITIVITY LEVEL_HIGH:LEVEL_HIGH, PortWidth 2";
   attribute x_interface_info of s_axi_araddr : signal is "xilinx.com:interface:aximm:1.0 s_axi ARADDR";
   attribute x_interface_info of s_axi_awaddr : signal is "xilinx.com:interface:aximm:1.0 s_axi AWADDR";
   attribute x_interface_mode of s_axi_awaddr : signal is "slave s_axi";

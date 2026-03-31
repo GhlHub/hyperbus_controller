@@ -58,9 +58,9 @@ module design_1_sv (
   (* X_INTERFACE_IGNORE = "true" *)
   input wire CLK_IN1_D_0_clk_p,
   (* X_INTERFACE_IGNORE = "true" *)
-  input wire UART_0_rxd,
-  (* X_INTERFACE_IGNORE = "true" *)
   output wire UART_0_txd,
+  (* X_INTERFACE_IGNORE = "true" *)
+  input wire UART_0_rxd,
   (* X_INTERFACE_IGNORE = "true" *)
   output wire o_hb_cs_n_0,
   (* X_INTERFACE_IGNORE = "true" *)
@@ -80,8 +80,8 @@ module design_1_sv (
   design_1 inst (
     .CLK_IN1_D_0_clk_n(CLK_IN1_D_0_clk_n),
     .CLK_IN1_D_0_clk_p(CLK_IN1_D_0_clk_p),
-    .UART_0_rxd(UART_0_rxd),
     .UART_0_txd(UART_0_txd),
+    .UART_0_rxd(UART_0_rxd),
     .o_hb_cs_n_0(o_hb_cs_n_0),
     .o_hb_ck_p_0(o_hb_ck_p_0),
     .o_hb_ck_n_0(o_hb_ck_n_0),

@@ -43,9 +43,6 @@
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_i.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_l.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_i.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_l.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xmem_config.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xcommon_drv_config.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/lib/libxilstandalone.a
@@ -94,9 +91,6 @@
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_i.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_l.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_i.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_l.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xmem_config.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xcommon_drv_config.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/lib/libxiltimer.a
@@ -145,8 +139,5 @@
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_i.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xtmrctr_l.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_i.h
-/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xuartlite_l.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xmem_config.h
 /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include/../include/xcommon_drv_config.h

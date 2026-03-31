@@ -397,15 +397,6 @@ tmrctr_IS_TOP_LEVEL:STATIC=OFF
 tmrctr_SOURCE_DIR:STATIC=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/tmrctr/src
 
 //Value Computed by CMake
-uartlite_BINARY_DIR:STATIC=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src
-
-//Value Computed by CMake
-uartlite_IS_TOP_LEVEL:STATIC=OFF
-
-//Value Computed by CMake
-uartlite_SOURCE_DIR:STATIC=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src
-
-//Value Computed by CMake
 xilstandalone_BINARY_DIR:STATIC=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/standalone/src
 
 //Value Computed by CMake
@@ -535,7 +526,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=14
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=13
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -593,9 +584,9 @@ standalone_profile_timer-STRINGS:INTERNAL=None
 //STRINGS property for variable: standalone_sleep_timer
 standalone_sleep_timer-STRINGS:INTERNAL=None
 //STRINGS property for variable: standalone_stdin
-standalone_stdin-STRINGS:INTERNAL=None;axi_uartlite_0
+standalone_stdin-STRINGS:INTERNAL=None;
 //STRINGS property for variable: standalone_stdout
-standalone_stdout-STRINGS:INTERNAL=None;axi_uartlite_0
+standalone_stdout-STRINGS:INTERNAL=None;
 //STRINGS property for variable: standalone_ttc_select_cntr
 standalone_ttc_select_cntr-STRINGS:INTERNAL=None
 

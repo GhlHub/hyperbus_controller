@@ -19,9 +19,9 @@
                 address-map = <0x0 &lmb_bram_if_cntlr_0_memory 0x0 0x10000>,
                  <0x0 &lmb_bram_if_cntlr_0 0x0 0x10000>,
                  <0x10000 &hyperbus_controller_0 0x10000 0x10000>,
-                 <0x40600000 &axi_uartlite_0 0x40600000 0x10000>,
                  <0x41200000 &axi_intc_0 0x41200000 0x10000>,
-                 <0x41c00000 &axi_timer_0 0x41c00000 0x10000>;
+                 <0x41c00000 &axi_timer_0 0x41c00000 0x10000>,
+                 <0x44a00000 &e_uart_0 0x44a00000 0x10000>;
                 #ranges-address-cells = <0x1>;
                 #ranges-size-cells = <0x1>;
 
@@ -273,11 +273,11 @@
                 #size-cells = <0x1>;
 
                 axi_intc_0: interrupt-controller@41200000 {
-                        phandle = <0x5>;
+                        phandle = <0x4>;
                         #interrupt-cells = <0x2>;
                         xlnx,sense-of-irq-edge-type = "Rising";
                         xlnx,edk-special = "INTR_CTRL";
-                        xlnx,kind-of-intr = <0x1>;
+                        xlnx,kind-of-intr = <0x0>;
                         xlnx,kind-of-edge = <0xffffffff>;
                         xlnx,irq-is-level = <0x1>;
                         xlnx,has-ivr = <0x1>;
@@ -315,7 +315,7 @@
                 };
 
                 axi_timer_0: timer@41c00000 {
-                        phandle = <0x6>;
+                        phandle = <0x5>;
                         interrupts = <0x1 0x2>;
                         compatible = "xlnx,axi-timer-2.0", "xlnx,xps-timer-1.00.a";
                         xlnx,gen1-assert = <0x1>;
@@ -337,27 +337,19 @@
                         xlnx,name = "axi_timer_0";
                 };
 
-                axi_uartlite_0: serial@40600000 {
-                        phandle = <0x4>;
-                        interrupts = <0x0 0x0>;
-                        compatible = "xlnx,axi-uartlite-2.0", "xlnx,xps-uartlite-1.00.a";
-                        clock-frequency = <0x2faf080>;
-                        xlnx,uartlite-board-interface = "Custom";
-                        xlnx,s-axi-aclk-freq-hz-d = <0x32>;
+                e_uart_0: e_uart@44a00000 {
+                        phandle = <0x6>;
                         interrupt-parent = <&axi_intc_0>;
-                        xlnx,ip-name = "axi_uartlite";
-                        reg = <0x40600000 0x10000>;
-                        xlnx,baudrate = <0x1c200>;
-                        clocks = <&clk_bus_0>;
-                        current-speed = <0x1c200>;
-                        xlnx,use-parity = <0x0>;
-                        xlnx,edk-iptype = "PERIPHERAL";
-                        xlnx,odd-parity = <0x0>;
+                        interrupts = <0x0 0x2>;
+                        xlnx,s00-axi-data-width = <0x20>;
+                        compatible = "xlnx,e-uart-1.1";
                         status = "okay";
-                        interrupt-names = "interrupt";
-                        xlnx,name = "axi_uartlite_0";
-                        xlnx,data-bits = <0x8>;
-                        xlnx,parity = "No_Parity";
+                        xlnx,s00-axi-addr-width = <0x6>;
+                        xlnx,ip-name = "e_uart";
+                        interrupt-names = "intr";
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        reg = <0x44a00000 0x10000>;
+                        xlnx,name = "e_uart_0";
                 };
 
                 hyperbus_controller_0: hyperbus_controller@10000 {
@@ -437,11 +429,9 @@
         };
 
         chosen {
-                stdout-path = "serial0:115200n8";
         };
 
         aliases {
-                serial0 = "/amba_pl/serial@40600000";
         };
 
         __symbols__ {
@@ -453,7 +443,7 @@
                 amba_pl = "/amba_pl";
                 axi_intc_0 = "/amba_pl/interrupt-controller@41200000";
                 axi_timer_0 = "/amba_pl/timer@41c00000";
-                axi_uartlite_0 = "/amba_pl/serial@40600000";
+                e_uart_0 = "/amba_pl/e_uart@44a00000";
                 hyperbus_controller_0 = "/amba_pl/hyperbus_controller@10000";
                 lmb_bram_if_cntlr_0 = "/amba_pl/lmb_bram_if_cntlr@0";
                 lmb_bram_if_cntlr_0_memory = "/memory@0";

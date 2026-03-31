@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Tue Mar 31 00:21:05 2026
+//Date        : Tue Mar 31 04:04:25 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=17,numReposBlks=16,numNonXlnxBlks=1,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=17,numReposBlks=16,numNonXlnxBlks=2,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK_IN1_D_0_clk_n,
     CLK_IN1_D_0_clk_p,
@@ -75,9 +75,11 @@ module design_1
   wire [7:4]axi_crossbar_0_M01_AXI_WSTRB;
   wire [1:1]axi_crossbar_0_M01_AXI_WVALID;
   wire [95:64]axi_crossbar_0_M02_AXI_ARADDR;
+  wire [8:6]axi_crossbar_0_M02_AXI_ARPROT;
   wire axi_crossbar_0_M02_AXI_ARREADY;
   wire [2:2]axi_crossbar_0_M02_AXI_ARVALID;
   wire [95:64]axi_crossbar_0_M02_AXI_AWADDR;
+  wire [8:6]axi_crossbar_0_M02_AXI_AWPROT;
   wire axi_crossbar_0_M02_AXI_AWREADY;
   wire [2:2]axi_crossbar_0_M02_AXI_AWVALID;
   wire [2:2]axi_crossbar_0_M02_AXI_BREADY;
@@ -139,9 +141,9 @@ module design_1
   wire [0:0]axi_crossbar_1_M00_AXI_WVALID;
   wire axi_intc_0_interrupt_INTERRUPT;
   wire axi_timer_0_interrupt;
-  wire axi_uartlite_0_interrupt;
   wire clk_300m;
   wire clk_wiz_0_locked;
+  wire e_uart_0_intr;
   wire ext_reset_in_0;
   wire hb_clk_gated;
   wire hb_phy_clk;
@@ -290,14 +292,18 @@ module design_1
   wire [0:0]reset_gen_peripheral_aresetn;
   wire [0:0]reset_gen_peripheral_reset;
   wire [0:0]reset_gen_peripheral_reset1;
+  wire [11:0]NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED;
+  wire [11:0]NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED;
 
   design_1_axi_crossbar_0_0 axi_crossbar_0
        (.aclk(axi_clk),
         .aresetn(proc_sys_reset_1_interconnect_aresetn),
         .m_axi_araddr({axi_crossbar_0_M03_AXI_ARADDR,axi_crossbar_0_M02_AXI_ARADDR,axi_crossbar_0_M01_AXI_ARADDR,axi_crossbar_0_M00_AXI_ARADDR}),
+        .m_axi_arprot({axi_crossbar_0_M02_AXI_ARPROT,NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED[5:0]}),
         .m_axi_arready({axi_crossbar_0_M03_AXI_ARREADY,axi_crossbar_0_M02_AXI_ARREADY,axi_crossbar_0_M01_AXI_ARREADY,axi_crossbar_0_M00_AXI_ARREADY}),
         .m_axi_arvalid({axi_crossbar_0_M03_AXI_ARVALID,axi_crossbar_0_M02_AXI_ARVALID,axi_crossbar_0_M01_AXI_ARVALID,axi_crossbar_0_M00_AXI_ARVALID}),
         .m_axi_awaddr({axi_crossbar_0_M03_AXI_AWADDR,axi_crossbar_0_M02_AXI_AWADDR,axi_crossbar_0_M01_AXI_AWADDR,axi_crossbar_0_M00_AXI_AWADDR}),
+        .m_axi_awprot({axi_crossbar_0_M02_AXI_AWPROT,NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED[5:0]}),
         .m_axi_awready({axi_crossbar_0_M03_AXI_AWREADY,axi_crossbar_0_M02_AXI_AWREADY,axi_crossbar_0_M01_AXI_AWREADY,axi_crossbar_0_M00_AXI_AWREADY}),
         .m_axi_awvalid({axi_crossbar_0_M03_AXI_AWVALID,axi_crossbar_0_M02_AXI_AWVALID,axi_crossbar_0_M01_AXI_AWVALID,axi_crossbar_0_M00_AXI_AWVALID}),
         .m_axi_bready({axi_crossbar_0_M03_AXI_BREADY,axi_crossbar_0_M02_AXI_BREADY,axi_crossbar_0_M01_AXI_BREADY,axi_crossbar_0_M00_AXI_BREADY}),
@@ -445,29 +451,6 @@ module design_1
         .s_axi_wready(axi_crossbar_0_M03_AXI_WREADY),
         .s_axi_wstrb(axi_crossbar_0_M03_AXI_WSTRB),
         .s_axi_wvalid(axi_crossbar_0_M03_AXI_WVALID));
-  design_1_axi_uartlite_0_0 axi_uartlite_0
-       (.interrupt(axi_uartlite_0_interrupt),
-        .rx(UART_0_rxd),
-        .s_axi_aclk(axi_clk),
-        .s_axi_araddr(axi_crossbar_0_M02_AXI_ARADDR[67:64]),
-        .s_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
-        .s_axi_arready(axi_crossbar_0_M02_AXI_ARREADY),
-        .s_axi_arvalid(axi_crossbar_0_M02_AXI_ARVALID),
-        .s_axi_awaddr(axi_crossbar_0_M02_AXI_AWADDR[67:64]),
-        .s_axi_awready(axi_crossbar_0_M02_AXI_AWREADY),
-        .s_axi_awvalid(axi_crossbar_0_M02_AXI_AWVALID),
-        .s_axi_bready(axi_crossbar_0_M02_AXI_BREADY),
-        .s_axi_bresp(axi_crossbar_0_M02_AXI_BRESP),
-        .s_axi_bvalid(axi_crossbar_0_M02_AXI_BVALID),
-        .s_axi_rdata(axi_crossbar_0_M02_AXI_RDATA),
-        .s_axi_rready(axi_crossbar_0_M02_AXI_RREADY),
-        .s_axi_rresp(axi_crossbar_0_M02_AXI_RRESP),
-        .s_axi_rvalid(axi_crossbar_0_M02_AXI_RVALID),
-        .s_axi_wdata(axi_crossbar_0_M02_AXI_WDATA),
-        .s_axi_wready(axi_crossbar_0_M02_AXI_WREADY),
-        .s_axi_wstrb(axi_crossbar_0_M02_AXI_WSTRB),
-        .s_axi_wvalid(axi_crossbar_0_M02_AXI_WVALID),
-        .tx(UART_0_txd));
   design_1_blk_mem_gen_0_0 blk_mem_gen_0
        (.addra({lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[0],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[1],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[2],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[3],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[4],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[5],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[6],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[7],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[8],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[9],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[10],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[11],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[12],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[13],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[14],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[15],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[16],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[17],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[18],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[19],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[20],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[21],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[22],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[23],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[24],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[25],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[26],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[27],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[28],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[29],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[30],lmb_bram_if_cntlr_0_BRAM_PORT_ADDR[31]}),
         .clka(lmb_bram_if_cntlr_0_BRAM_PORT_CLK),
@@ -487,6 +470,31 @@ module design_1
         .clk_out5_ce(hyperbus_controller_1_o_hb_clk_ce),
         .locked(clk_wiz_0_locked),
         .reset(1'b0));
+  design_1_e_uart_0_0 e_uart_0
+       (.intr(e_uart_0_intr),
+        .rxd(UART_0_rxd),
+        .s00_axi_aclk(axi_clk),
+        .s00_axi_araddr(axi_crossbar_0_M02_AXI_ARADDR[69:64]),
+        .s00_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
+        .s00_axi_arprot(axi_crossbar_0_M02_AXI_ARPROT),
+        .s00_axi_arready(axi_crossbar_0_M02_AXI_ARREADY),
+        .s00_axi_arvalid(axi_crossbar_0_M02_AXI_ARVALID),
+        .s00_axi_awaddr(axi_crossbar_0_M02_AXI_AWADDR[69:64]),
+        .s00_axi_awprot(axi_crossbar_0_M02_AXI_AWPROT),
+        .s00_axi_awready(axi_crossbar_0_M02_AXI_AWREADY),
+        .s00_axi_awvalid(axi_crossbar_0_M02_AXI_AWVALID),
+        .s00_axi_bready(axi_crossbar_0_M02_AXI_BREADY),
+        .s00_axi_bresp(axi_crossbar_0_M02_AXI_BRESP),
+        .s00_axi_bvalid(axi_crossbar_0_M02_AXI_BVALID),
+        .s00_axi_rdata(axi_crossbar_0_M02_AXI_RDATA),
+        .s00_axi_rready(axi_crossbar_0_M02_AXI_RREADY),
+        .s00_axi_rresp(axi_crossbar_0_M02_AXI_RRESP),
+        .s00_axi_rvalid(axi_crossbar_0_M02_AXI_RVALID),
+        .s00_axi_wdata(axi_crossbar_0_M02_AXI_WDATA),
+        .s00_axi_wready(axi_crossbar_0_M02_AXI_WREADY),
+        .s00_axi_wstrb(axi_crossbar_0_M02_AXI_WSTRB),
+        .s00_axi_wvalid(axi_crossbar_0_M02_AXI_WVALID),
+        .txd(UART_0_txd));
   design_1_hyperbus_controller_0_0 hyperbus_controller_0
        (.i_axi_aclk(axi_clk),
         .i_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
@@ -550,7 +558,7 @@ module design_1
         .s_axil_wready(axi_crossbar_0_M01_AXI_WREADY),
         .s_axil_wstrb(axi_crossbar_0_M01_AXI_WSTRB),
         .s_axil_wvalid(axi_crossbar_0_M01_AXI_WVALID));
-  assign ilconcat_0_dout = {axi_timer_0_interrupt, axi_uartlite_0_interrupt};
+  assign ilconcat_0_dout = {axi_timer_0_interrupt, e_uart_0_intr};
   (* BMM_INFO_ADDRESS_SPACE = "byte  0x00000000 32 > design_1 blk_mem_gen_0" *) 
   (* KEEP_HIERARCHY = "YES" *) 
   design_1_lmb_bram_if_cntlr_0_0 lmb_bram_if_cntlr_0

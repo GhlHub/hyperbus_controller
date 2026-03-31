@@ -55,8 +55,8 @@ COMPONENT design_1
   PORT (
     CLK_IN1_D_0_clk_n : IN STD_LOGIC;
     CLK_IN1_D_0_clk_p : IN STD_LOGIC;
-    UART_0_rxd : IN STD_LOGIC;
     UART_0_txd : OUT STD_LOGIC;
+    UART_0_rxd : IN STD_LOGIC;
     o_hb_cs_n_0 : OUT STD_LOGIC;
     o_hb_ck_p_0 : OUT STD_LOGIC;
     o_hb_ck_n_0 : OUT STD_LOGIC;
@@ -76,8 +76,8 @@ your_instance_name : design_1
   PORT MAP (
     CLK_IN1_D_0_clk_n => CLK_IN1_D_0_clk_n,
     CLK_IN1_D_0_clk_p => CLK_IN1_D_0_clk_p,
-    UART_0_rxd => UART_0_rxd,
     UART_0_txd => UART_0_txd,
+    UART_0_rxd => UART_0_rxd,
     o_hb_cs_n_0 => o_hb_cs_n_0,
     o_hb_ck_p_0 => o_hb_ck_p_0,
     o_hb_ck_n_0 => o_hb_ck_n_0,

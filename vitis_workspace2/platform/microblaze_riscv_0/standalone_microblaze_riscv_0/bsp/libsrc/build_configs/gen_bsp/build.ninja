@@ -124,7 +124,7 @@ build CMakeFiles/print_compiler | ${cmake_ninja_workdir}CMakeFiles/print_compile
 #############################################
 # Utility command for combined
 
-build libsrc/combined: phony libsrc/CMakeFiles/combined libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a libsrc/uartlite/src/libuartlite.a
+build libsrc/combined: phony libsrc/CMakeFiles/combined libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a
 
 
 #############################################
@@ -196,7 +196,7 @@ build libsrc/install/strip: phony libsrc/CMakeFiles/install/strip.util
 #############################################
 # Custom command for libsrc/CMakeFiles/combined
 
-build libsrc/CMakeFiles/combined | ${cmake_ninja_workdir}libsrc/CMakeFiles/combined: CUSTOM_COMMAND libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a libsrc/uartlite/src/libuartlite.a || libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a libsrc/uartlite/src/libuartlite.a
+build libsrc/CMakeFiles/combined | ${cmake_ninja_workdir}libsrc/CMakeFiles/combined: CUSTOM_COMMAND libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a || libsrc/bram/src/libbram.a libsrc/intc/src/libintc.a libsrc/tmrctr/src/libtmrctr.a
   COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp && riscv64-unknown-elf-ar -M</raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libxil.mri && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E copy /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libxil.a /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/lib
   DESC = Archiving C static library libsrc/build_configs/gen_bsp/libxil.a
 
@@ -691,151 +691,6 @@ build libsrc/tmrctr/src/CMakeFiles/install/strip.util: CUSTOM_COMMAND libsrc/tmr
   restat = 1
 
 build libsrc/tmrctr/src/install/strip: phony libsrc/tmrctr/src/CMakeFiles/install/strip.util
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/CMakeLists.txt
-# =============================================================================
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target uartlite
-
-
-#############################################
-# Order-only phony target for uartlite
-
-build cmake_object_order_depends_target_uartlite: phony || libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_g.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_g.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_g.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_intr.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_intr.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_intr.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_l.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_l.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_l.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_selftest.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_selftest.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_selftest.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_sinit.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_sinit.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_sinit.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-build libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_stats.c.obj: C_COMPILER__uartlite_ /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/xuartlite_stats.c || cmake_object_order_depends_target_uartlite
-  DEP_FILE = libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_stats.c.obj.d
-  FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include   -c  -O2 -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
-  INCLUDES = -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/include -isystem /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include -isystem /tools/Xilinx/2025.2/gnu/riscv/lin/x86_64-oesdk-linux/usr/lib/riscv32-xilinx-elf/gcc/riscv32-xilinx-elf/13.4.0/include-fixed -isystem /tools/Xilinx/2025.2/Vitis/gnu/riscv/lin/riscv32-xilinx-elf/usr/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  OBJECT_FILE_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target uartlite
-
-
-#############################################
-# Link the static library libsrc/uartlite/src/libuartlite.a
-
-build libsrc/uartlite/src/libuartlite.a: C_STATIC_LIBRARY_LINKER__uartlite_ libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_g.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_intr.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_l.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_selftest.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_sinit.c.obj libsrc/uartlite/src/CMakeFiles/uartlite.dir/xuartlite_stats.c.obj
-  LANGUAGE_COMPILE_FLAGS = -march=rv32imacb_zicsr_zifencei_zbc_zicbom -mabi=ilp32 -DSDT  -MMD -MP  -specs=/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Xilinx.spec -I/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/include
-  OBJECT_DIR = libsrc/uartlite/src/CMakeFiles/uartlite.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = libsrc/uartlite/src/libuartlite.a
-  TARGET_PDB = uartlite.a.dbg
-
-
-#############################################
-# Utility command for edit_cache
-
-build libsrc/uartlite/src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/ccmake -S/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp -B/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp
-  DESC = Running CMake cache editor...
-  pool = console
-  restat = 1
-
-build libsrc/uartlite/src/edit_cache: phony libsrc/uartlite/src/CMakeFiles/edit_cache.util
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build libsrc/uartlite/src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake --regenerate-during-build -S/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp -B/raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build libsrc/uartlite/src/rebuild_cache: phony libsrc/uartlite/src/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for list_install_components
-
-build libsrc/uartlite/src/list_install_components: phony
-
-
-#############################################
-# Utility command for install
-
-build libsrc/uartlite/src/CMakeFiles/install.util: CUSTOM_COMMAND libsrc/uartlite/src/all
-  COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -P cmake_install.cmake
-  DESC = Install the project...
-  pool = console
-  restat = 1
-
-build libsrc/uartlite/src/install: phony libsrc/uartlite/src/CMakeFiles/install.util
-
-
-#############################################
-# Utility command for install/local
-
-build libsrc/uartlite/src/CMakeFiles/install/local.util: CUSTOM_COMMAND libsrc/uartlite/src/all
-  COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-  DESC = Installing only the local directory...
-  pool = console
-  restat = 1
-
-build libsrc/uartlite/src/install/local: phony libsrc/uartlite/src/CMakeFiles/install/local.util
-
-
-#############################################
-# Utility command for install/strip
-
-build libsrc/uartlite/src/CMakeFiles/install/strip.util: CUSTOM_COMMAND libsrc/uartlite/src/all
-  COMMAND = cd /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-  DESC = Installing the project stripped...
-  pool = console
-  restat = 1
-
-build libsrc/uartlite/src/install/strip: phony libsrc/uartlite/src/CMakeFiles/install/strip.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
@@ -1693,15 +1548,11 @@ build libintc.a: phony libsrc/intc/src/libintc.a
 
 build libtmrctr.a: phony libsrc/tmrctr/src/libtmrctr.a
 
-build libuartlite.a: phony libsrc/uartlite/src/libuartlite.a
-
 build libxilstandalone.a: phony libsrc/standalone/src/libxilstandalone.a
 
 build libxiltimer.a: phony libsrc/xiltimer/src/libxiltimer.a
 
 build tmrctr: phony libsrc/tmrctr/src/libtmrctr.a
-
-build uartlite: phony libsrc/uartlite/src/libuartlite.a
 
 build xilstandalone: phony libsrc/standalone/src/libxilstandalone.a
 
@@ -1722,7 +1573,7 @@ build all: phony print_compiler libsrc/all libsrc/standalone/src/all libsrc/xilt
 #############################################
 # Folder: /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc
 
-build libsrc/all: phony libsrc/combined libsrc/bram/src/all libsrc/common/src/all libsrc/intc/src/all libsrc/tmrctr/src/all libsrc/uartlite/src/all
+build libsrc/all: phony libsrc/combined libsrc/bram/src/all libsrc/common/src/all libsrc/intc/src/all libsrc/tmrctr/src/all
 
 # =============================================================================
 
@@ -1783,13 +1634,6 @@ build libsrc/tmrctr/src/all: phony libsrc/tmrctr/src/libtmrctr.a
 # =============================================================================
 
 #############################################
-# Folder: /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/uartlite/src
-
-build libsrc/uartlite/src/all: phony libsrc/uartlite/src/libuartlite.a
-
-# =============================================================================
-
-#############################################
 # Folder: /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/build_configs/gen_bsp/libsrc/xiltimer/src
 
 build libsrc/xiltimer/src/all: phony libsrc/xiltimer/src/libxiltimer.a libsrc/xiltimer/src/core/all
@@ -1815,14 +1659,14 @@ build libsrc/xiltimer/src/core/default_timer/all: phony
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommon.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommonmeta.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/DRVLISTConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/bram/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/common/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/INTCConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/MemConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/bspconfig.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/StandaloneExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/intr/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/riscv/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/xilstandalone.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/tmrctr/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/XiltimerExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/default_timer/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xiltimer.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xtimer_config.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/microblaze_riscv_toolchain.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeASMInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-ASM.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.24.2/CMakeASMCompiler.cmake CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommon.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommonmeta.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/DRVLISTConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/bram/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/common/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/INTCConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/MemConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/bspconfig.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/StandaloneExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/intr/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/riscv/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/xilstandalone.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/tmrctr/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/XiltimerExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/default_timer/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xiltimer.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xtimer_config.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/microblaze_riscv_toolchain.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeASMInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-ASM.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.24.2/CMakeASMCompiler.cmake CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommon.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommonmeta.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/DRVLISTConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/bram/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/common/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/INTCConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/MemConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/bspconfig.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/StandaloneExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/intr/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/riscv/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/xilstandalone.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/tmrctr/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/uartlite/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/XiltimerExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/default_timer/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xiltimer.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xtimer_config.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/microblaze_riscv_toolchain.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeASMInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-ASM.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.24.2/CMakeASMCompiler.cmake CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake: phony
+build /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommon.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/Findcommonmeta.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/DRVLISTConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/bram/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/common/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/intc/src/INTCConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/MemConfig.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/bspconfig.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/StandaloneExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/common/intr/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/riscv/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/standalone/src/xilstandalone.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/tmrctr/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/XiltimerExample.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/core/default_timer/CMakeLists.txt /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xiltimer.cmake /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/libsrc/xiltimer/src/xtimer_config.h.in /raid/work/hyperbus_controller_freertos_port/vitis_workspace2/platform/microblaze_riscv_0/standalone_microblaze_riscv_0/bsp/microblaze_riscv_toolchain.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeASMInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-ASM.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Compiler/GNU.cmake /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/share/cmake-3.24/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.24.2/CMakeASMCompiler.cmake CMakeFiles/3.24.2/CMakeCCompiler.cmake CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake: phony
 
 
 #############################################

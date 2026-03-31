@@ -116,10 +116,10 @@ standalone_profile_timer:STRING=None
 standalone_sleep_timer:STRING=None
 
 // stdin peripheral
-standalone_stdin:STRING=axi_uartlite_0
+standalone_stdin:STRING=None;
 
 // stdout peripheral
-standalone_stdout:STRING=axi_uartlite_0
+standalone_stdout:STRING=None;
 
 // Deprecated in favor of xiltimer
 standalone_ttc_select_cntr:STRING=None

@@ -17,7 +17,6 @@
       "axi_crossbar_0": "",
       "blk_mem_gen_0": "",
       "lmb_bram_if_cntlr_0": "",
-      "axi_uartlite_0": "",
       "axi_intc_0": "",
       "axi_crossbar_1": "",
       "axi_timer_0": "",
@@ -28,7 +27,8 @@
         "axi_clk_reset_gen": "",
         "clk_300m_reset_gen": "",
         "hb_phy_rx_clk_reset_gen": ""
-      }
+      },
+      "e_uart_0": ""
     },
     "interface_ports": {
       "CLK_IN1_D_0": {
@@ -73,13 +73,13 @@
           }
         },
         "port_maps": {
-          "RxD": {
-            "physical_name": "UART_0_rxd",
-            "direction": "I"
-          },
           "TxD": {
             "physical_name": "UART_0_txd",
             "direction": "O"
+          },
+          "RxD": {
+            "physical_name": "UART_0_rxd",
+            "direction": "I"
           }
         }
       }
@@ -569,19 +569,6 @@
           }
         }
       },
-      "axi_uartlite_0": {
-        "vlnv": "xilinx.com:ip:axi_uartlite:2.0",
-        "ip_revision": "39",
-        "xci_name": "design_1_axi_uartlite_0_0",
-        "xci_path": "ip/design_1_axi_uartlite_0_0/design_1_axi_uartlite_0_0.xci",
-        "inst_hier_path": "axi_uartlite_0",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "C_BAUDRATE": {
-            "value": "115200"
-          }
-        }
-      },
       "axi_intc_0": {
         "vlnv": "xilinx.com:ip:axi_intc:4.1",
         "ip_revision": "22",
@@ -899,6 +886,14 @@
             ]
           }
         }
+      },
+      "e_uart_0": {
+        "vlnv": "SFG:user:e_uart:1.1",
+        "ip_revision": "19",
+        "xci_name": "design_1_e_uart_0_0",
+        "xci_path": "ip/design_1_e_uart_0_0/design_1_e_uart_0_0.xci",
+        "inst_hier_path": "e_uart_0",
+        "has_run_ip_tcl": "true"
       }
     },
     "interface_nets": {
@@ -922,8 +917,8 @@
       },
       "axi_crossbar_0_M02_AXI": {
         "interface_ports": [
-          "axi_crossbar_0/M02_AXI",
-          "axi_uartlite_0/S_AXI"
+          "e_uart_0/S00_AXI",
+          "axi_crossbar_0/M02_AXI"
         ]
       },
       "axi_crossbar_0_M03_AXI": {
@@ -944,10 +939,10 @@
           "microblaze_riscv_0/INTERRUPT"
         ]
       },
-      "axi_uartlite_0_UART": {
+      "e_uart_0_UART": {
         "interface_ports": [
           "UART_0",
-          "axi_uartlite_0/UART"
+          "e_uart_0/UART"
         ]
       },
       "lmb_bram_if_cntlr_0_BRAM_PORT": {
@@ -1013,23 +1008,17 @@
           "axi_crossbar_1/aclk",
           "axi_crossbar_0/aclk",
           "lmb_bram_if_cntlr_0/LMB_Clk",
-          "axi_uartlite_0/s_axi_aclk",
           "axi_intc_0/s_axi_aclk",
           "axi_timer_0/s_axi_aclk",
           "reset_gen/axi_clk",
-          "hyperbus_controller_0/i_axi_aclk"
+          "hyperbus_controller_0/i_axi_aclk",
+          "e_uart_0/s00_axi_aclk"
         ]
       },
       "axi_timer_0_interrupt": {
         "ports": [
           "axi_timer_0/interrupt",
           "ilconcat_0/In1"
-        ]
-      },
-      "axi_uartlite_0_interrupt": {
-        "ports": [
-          "axi_uartlite_0/interrupt",
-          "ilconcat_0/In0"
         ]
       },
       "clk_300m": {
@@ -1043,6 +1032,12 @@
         "ports": [
           "clk_wiz_0/locked",
           "reset_gen/dcm_locked"
+        ]
+      },
+      "e_uart_0_intr": {
+        "ports": [
+          "e_uart_0/intr",
+          "ilconcat_0/In0"
         ]
       },
       "ext_reset_in_0_1": {
@@ -1123,10 +1118,10 @@
       "proc_sys_reset_1_peripheral_aresetn": {
         "ports": [
           "reset_gen/axi_clk_peripheral_aresetn",
-          "axi_uartlite_0/s_axi_aresetn",
           "axi_intc_0/s_axi_aresetn",
           "axi_timer_0/s_axi_aresetn",
-          "hyperbus_controller_0/i_axi_aresetn"
+          "hyperbus_controller_0/i_axi_aresetn",
+          "e_uart_0/s00_axi_aresetn"
         ]
       },
       "reset_gen_bus_struct_reset": {
@@ -1175,10 +1170,12 @@
                 "offset": "0x41C00000",
                 "range": "64K"
               },
-              "SEG_axi_uartlite_0_Reg": {
-                "address_block": "/axi_uartlite_0/S_AXI/Reg",
-                "offset": "0x40600000",
-                "range": "64K"
+              "SEG_e_uart_0_S00_AXI_reg": {
+                "address_block": "/e_uart_0/S00_AXI/S00_AXI_reg",
+                "offset": "0x44A00000",
+                "range": "64K",
+                "offset_base_param": "C_S00_AXI_BASEADDR",
+                "offset_high_param": "C_S00_AXI_HIGHADDR"
               },
               "SEG_hyperbus_controller_0_reg0": {
                 "address_block": "/hyperbus_controller_0/s_axi/reg0",
