@@ -138,8 +138,20 @@
           "C_I_LMB": {
             "value": "1"
           },
+          "C_USE_ATOMIC": {
+            "value": "1"
+          },
           "C_USE_BITMAN_A": {
-            "value": "0"
+            "value": "1"
+          },
+          "C_USE_BITMAN_B": {
+            "value": "1"
+          },
+          "C_USE_BITMAN_C": {
+            "value": "1"
+          },
+          "C_USE_BITMAN_S": {
+            "value": "1"
           },
           "C_USE_DCACHE": {
             "value": "1"
@@ -1181,7 +1193,7 @@
               "SEG_lmb_bram_if_cntlr_0_Mem": {
                 "address_block": "/lmb_bram_if_cntlr_0/SLMB/Mem",
                 "offset": "0x00000000",
-                "range": "32K",
+                "range": "64K",
                 "offset_high_param": "C_HIGHADDR"
               }
             }
@@ -1196,7 +1208,7 @@
               "SEG_lmb_bram_if_cntlr_0_Mem": {
                 "address_block": "/lmb_bram_if_cntlr_0/SLMB1/Mem",
                 "offset": "0x00000000",
-                "range": "32K",
+                "range": "64K",
                 "offset_high_param": "C_HIGHADDR"
               }
             }
