@@ -44,6 +44,7 @@ set(USER_COMPILE_SOURCES
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/list.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/queue.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/tasks.c"
+"${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/timers.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/portable/GCC/RISC-V/port.c"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/portable/GCC/RISC-V/portASM.S"
 "${CMAKE_CURRENT_SOURCE_DIR}/../../../FreeRTOS-LTS/FreeRTOS/FreeRTOS-Kernel/portable/MemMang/heap_4.c"
