@@ -7,6 +7,7 @@ module hyperbus_hb_engine #(
     parameter int HB_LATENCY_DEFAULT = 7,
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     parameter int HB_READ_CS_DEASSERT_DELAY = 2,
+    parameter int HB_READ_STROBE_GATE_CYCLES = 15,
     parameter int RWDS_TIMEOUT_CYCLES = 24,
     parameter int TIMEOUT_HOLDOFF_CYCLES = 92
 ) (
@@ -30,6 +31,7 @@ module hyperbus_hb_engine #(
     output logic [31:0]         o_axil_rsp_fifo_din,
     output logic                o_axil_rsp_fifo_wr_en,
     output logic [31:0]         o_last_read_word32,
+    output logic                o_rd_half_dbg,
     output logic [5:0]          o_axif_rwds_cntr,
     output logic [5:0]          o_axil_rwds_cntr,
     output logic [7:0]          o_dq_q1_dly_dbg,
@@ -113,12 +115,17 @@ module hyperbus_hb_engine #(
 
     logic [15:0] hb_word16;
     logic [15:0] hb_word16_le;
+    logic [15:0] hb_word16_cur;
+    logic [15:0] hb_word16_cur_le;
+    logic [15:0] hb_word16_read;
+    logic [15:0] hb_word16_read_le;
     logic [7:0] dq_q1_dly;
     logic [7:0] dq_q2_dly;
     logic rwds_q1_dly;
     logic rwds_q2_dly;
     logic [5:0] rwds_timeout_cnt;
     logic [7:0] rd_beats_pushed;
+    logic [7:0] read_strobe_gate_cnt;
     logic [7:0] timeout_full_beats_left;
     logic timeout_tripped_cur;
     logic [7:0] timeout_holdoff_cnt;
@@ -126,10 +133,20 @@ module hyperbus_hb_engine #(
 
     assign hb_word16    = {dq_q1_dly, dq_q2_dly};
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
+    assign hb_word16_cur = {i_dq_q1, i_dq_q2};
+    assign hb_word16_cur_le = {hb_word16_cur[7:0], hb_word16_cur[15:8]};
+`ifdef SYNTHESIS
+    assign hb_word16_read = hb_word16_cur;
+    assign hb_word16_read_le = hb_word16_cur_le;
+`else
+    assign hb_word16_read = hb_word16;
+    assign hb_word16_read_le = hb_word16_le;
+`endif
     assign o_dq_q1_dly_dbg = dq_q1_dly;
     assign o_dq_q2_dly_dbg = dq_q2_dly;
     assign o_rwds_q1_dly_dbg = rwds_q1_dly;
     assign o_rwds_q2_dly_dbg = rwds_q2_dly;
+    assign o_rd_half_dbg = rd_half;
 
     always_ff @(posedge i_hb_clk_200) begin
         if (!i_hb_rstn) begin
@@ -184,6 +201,7 @@ module hyperbus_hb_engine #(
             last_read_half <= 1'b0;
             rwds_timeout_cnt <= 6'd0;
             rd_beats_pushed <= 8'd0;
+            read_strobe_gate_cnt <= 8'd0;
             timeout_full_beats_left <= 8'd0;
             timeout_tripped_cur <= 1'b0;
             timeout_holdoff_cnt <= 8'd0;
@@ -366,6 +384,8 @@ module hyperbus_hb_engine #(
                             latency_left = latency_2x ? ((base_latency - ODDRE1_TX_PIPE_CYCLES[7:0]) << 1) - 1 :
                                                      (base_latency - ODDRE1_TX_PIPE_CYCLES[7:0]);
                             wr_rwds_wait_cnt <= cur_is_write ? 2'd2 : 2'd0;
+                            read_strobe_gate_cnt <= cur_is_write ? 8'd0 :
+                                                     HB_READ_STROBE_GATE_CYCLES[7:0];
                             hb_state <= cur_src_axil ? HB_AXIL_LAT : HB_FULL_LAT;
                         end
                     end
@@ -396,6 +416,9 @@ module hyperbus_hb_engine #(
 
                 HB_FULL_LAT: begin
                     o_dq_t <= 8'hFF;
+                    if (read_strobe_gate_cnt != 0) begin
+                        read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                    end
                     if (cur_is_write) begin
                         // For AXI-full bursts, all write beats are present before command issue.
                         // Pop exactly when emit/next pipeline has space.
@@ -447,6 +470,9 @@ module hyperbus_hb_engine #(
 
                 HB_AXIL_LAT: begin
                     o_dq_t <= 8'hFF;
+                    if (read_strobe_gate_cnt != 0) begin
+                        read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                    end
                     o_rwds_t <= 1'b1;
                     o_rwds_o_d1 <= 1'b0;
                     o_rwds_o_d2 <= 1'b0;
@@ -592,28 +618,34 @@ module hyperbus_hb_engine #(
                     logic       took_word;
                     logic [10:0] rwds_edges_seen_next;
                     logic        rwds_data_valid;
+                    logic        read_strobe_gate_active;
                     logic [7:0]  rd_beats_pushed_next;
 
                     words_done_next = words_done;
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
                     rd_beats_pushed_next = rd_beats_pushed;
+                    read_strobe_gate_active = (read_strobe_gate_cnt != 0);
                     // RWDS transition-aligned data: treat RWDS edge activity as data valid qualifier.
-                    rwds_data_valid = (rwds_q1_dly ^ rwds_q2_dly);
+                    rwds_data_valid = !read_strobe_gate_active && (rwds_q1_dly ^ rwds_q2_dly);
 
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
 
+                    if (read_strobe_gate_active) begin
+                        read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                    end
+
                     if (rwds_data_valid && !rd_half) begin
                         o_axif_rwds_cntr <= o_axif_rwds_cntr + 6'd1;
-                        rd_pack[15:0] <= hb_word16_le;
+                        rd_pack[15:0] <= hb_word16_read_le;
                         rd_half <= 1'b1;
                         if (!last_read_half) begin
-                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_pack[15:0] <= hb_word16_read_le;
                             last_read_half <= 1'b1;
                         end else begin
-                            last_read_pack[31:16] <= hb_word16_le;
-                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_pack[31:16] <= hb_word16_read_le;
+                            o_last_read_word32 <= {hb_word16_read_le, last_read_pack[15:0]};
                             last_read_half <= 1'b0;
                         end
                         words_done_next = words_done + 9'd1;
@@ -621,19 +653,19 @@ module hyperbus_hb_engine #(
                         rwds_edges_seen_next = rwds_edges_seen + 11'd2;
                     end else if (rwds_data_valid) begin
                         o_axif_rwds_cntr <= o_axif_rwds_cntr + 6'd1;
-                        rd_pack[31:16] <= hb_word16_le;
+                        rd_pack[31:16] <= hb_word16_read_le;
                         if (!last_read_half) begin
-                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_pack[15:0] <= hb_word16_read_le;
                             last_read_half <= 1'b1;
                         end else begin
-                            last_read_pack[31:16] <= hb_word16_le;
-                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_pack[31:16] <= hb_word16_read_le;
+                            o_last_read_word32 <= {hb_word16_read_le, last_read_pack[15:0]};
                             last_read_half <= 1'b0;
                         end
                         // rd_fifo_full guard intentionally omitted:
                         // rd_fifo depth (256) >> max AXI-full read burst (32 beats), and
                         // only one AXI-full read is outstanding at a time.
-                        o_rd_fifo_din <= {hb_word16_le, rd_pack[15:0]};
+                        o_rd_fifo_din <= {hb_word16_read_le, rd_pack[15:0]};
                         o_rd_fifo_wr_en <= 1'b1;
                         rd_half <= 1'b0;
                         words_done_next = words_done + 9'd1;
@@ -646,6 +678,8 @@ module hyperbus_hb_engine #(
                     rwds_edges_seen <= rwds_edges_seen_next;
                     rd_beats_pushed <= rd_beats_pushed_next;
                     if (rwds_data_valid) begin
+                        rwds_timeout_cnt <= 6'd0;
+                    end else if (read_strobe_gate_active) begin
                         rwds_timeout_cnt <= 6'd0;
                     end else if (rwds_timeout_cnt < RWDS_TIMEOUT_CYCLES) begin
                         rwds_timeout_cnt <= rwds_timeout_cnt + 6'd1;
@@ -670,33 +704,39 @@ module hyperbus_hb_engine #(
                     logic       took_word;
                     logic [10:0] rwds_edges_seen_next;
                     logic        rwds_data_valid;
+                    logic        read_strobe_gate_active;
 
                     words_done_next = words_done;
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
-                    rwds_data_valid = (rwds_q1_dly ^ rwds_q2_dly);
+                    read_strobe_gate_active = (read_strobe_gate_cnt != 0);
+                    rwds_data_valid = !read_strobe_gate_active && (rwds_q1_dly ^ rwds_q2_dly);
 
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
+
+                    if (read_strobe_gate_active) begin
+                        read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                    end
 
                     // AXI-Lite 16-bit read support:
                     // cur_wdata[0] mirrors ARADDR[1], selecting return halfword lane.
                     // cur_wdata[1] requests duplication into both halfwords for 32-bit readback.
                     if (cur_wdata[1]) begin
-                        o_axil_rsp_fifo_din <= {hb_word16, hb_word16};
+                        o_axil_rsp_fifo_din <= {hb_word16_read, hb_word16_read};
                     end else if (cur_wdata[0]) begin
-                        o_axil_rsp_fifo_din <= {hb_word16, 16'h0};
+                        o_axil_rsp_fifo_din <= {hb_word16_read, 16'h0};
                     end else begin
-                        o_axil_rsp_fifo_din <= {16'h0, hb_word16};
+                        o_axil_rsp_fifo_din <= {16'h0, hb_word16_read};
                     end
                     if (rwds_data_valid) begin
                         o_axil_rwds_cntr <= o_axil_rwds_cntr + 6'd1;
                         if (!last_read_half) begin
-                            last_read_pack[15:0] <= hb_word16_le;
+                            last_read_pack[15:0] <= hb_word16_read_le;
                             last_read_half <= 1'b1;
                         end else begin
-                            last_read_pack[31:16] <= hb_word16_le;
-                            o_last_read_word32 <= {hb_word16_le, last_read_pack[15:0]};
+                            last_read_pack[31:16] <= hb_word16_read_le;
+                            o_last_read_word32 <= {hb_word16_read_le, last_read_pack[15:0]};
                             last_read_half <= 1'b0;
                         end
                     end
@@ -710,6 +750,8 @@ module hyperbus_hb_engine #(
                     words_done <= words_done_next;
                     rwds_edges_seen <= rwds_edges_seen_next;
                     if (rwds_data_valid) begin
+                        rwds_timeout_cnt <= 6'd0;
+                    end else if (read_strobe_gate_active) begin
                         rwds_timeout_cnt <= 6'd0;
                     end else if (rwds_timeout_cnt < RWDS_TIMEOUT_CYCLES) begin
                         rwds_timeout_cnt <= rwds_timeout_cnt + 6'd1;

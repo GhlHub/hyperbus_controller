@@ -1,60 +1,3 @@
-namespace eval hyperbus_controller_xgui {
-  variable phy_family_autofill_done
-  array set phy_family_autofill_done {}
-}
-
-proc hyperbus_controller_detect_phy_family {} {
-	set default_phy_family 0
-	set project_obj ""
-	set part_name ""
-
-	if {[catch {set project_obj [current_project]}]} {
-		return $default_phy_family
-	}
-	if {$project_obj eq ""} {
-		return $default_phy_family
-	}
-	if {[catch {set part_name [string tolower [get_property PART $project_obj]]}]} {
-		return $default_phy_family
-	}
-	if {$part_name eq ""} {
-		return $default_phy_family
-	}
-
-	if {[regexp {^xc7|^xa7|^xq7|^xqr7} $part_name]} {
-		return 1
-	}
-
-	if {![catch {set part_obj [get_parts $part_name]}] && [llength $part_obj] > 0} {
-		set family ""
-		set arch ""
-		catch {set family [string tolower [get_property FAMILY $part_obj]]}
-		catch {set arch [string tolower [get_property ARCHITECTURE $part_obj]]}
-
-		if {[regexp {(artix7|kintex7|virtex7|spartan7|zynq|7series)} $family]} {
-			return 1
-		}
-		if {[regexp {(artix7|kintex7|virtex7|spartan7|zynq|7series)} $arch]} {
-			return 1
-		}
-	}
-
-	return $default_phy_family
-}
-
-proc hyperbus_controller_prefill_phy_family {param_obj} {
-	variable ::hyperbus_controller_xgui::phy_family_autofill_done
-	set key [format %s $param_obj]
-
-	if {[info exists phy_family_autofill_done($key)]} {
-		return
-	}
-
-	set detected_phy_family [hyperbus_controller_detect_phy_family]
-	catch {set_property value $detected_phy_family $param_obj}
-	set phy_family_autofill_done($key) 1
-}
-
 # Definitional proc to organize widgets for parameters.
 proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "Component_Name"
@@ -67,8 +10,7 @@ proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "HB_LATENCY_DEFAULT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "HB_READ_CS_DEASSERT_DELAY" -parent ${Page_0}
   ipgui::add_param $IPINST -name "ODDRE1_TX_PIPE_CYCLES" -parent ${Page_0}
-  set phy_family_widget [ipgui::add_param $IPINST -name "PHY_FAMILY" -parent ${Page_0}]
-  set_property tooltip "Prefilled from the current project family on first open; you can override it manually." $phy_family_widget
+  ipgui::add_param $IPINST -name "PHY_FAMILY" -parent ${Page_0}
 
 
 }
@@ -138,7 +80,6 @@ proc validate_PARAM_VALUE.ODDRE1_TX_PIPE_CYCLES { PARAM_VALUE.ODDRE1_TX_PIPE_CYC
 
 proc update_PARAM_VALUE.PHY_FAMILY { PARAM_VALUE.PHY_FAMILY } {
 	# Procedure called to update PHY_FAMILY when any of the dependent parameters in the arguments change
-	hyperbus_controller_prefill_phy_family ${PARAM_VALUE.PHY_FAMILY}
 }
 
 proc validate_PARAM_VALUE.PHY_FAMILY { PARAM_VALUE.PHY_FAMILY } {
@@ -186,3 +127,4 @@ proc update_MODELPARAM_VALUE.HB_READ_CS_DEASSERT_DELAY { MODELPARAM_VALUE.HB_REA
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.HB_READ_CS_DEASSERT_DELAY}] ${MODELPARAM_VALUE.HB_READ_CS_DEASSERT_DELAY}
 }
+

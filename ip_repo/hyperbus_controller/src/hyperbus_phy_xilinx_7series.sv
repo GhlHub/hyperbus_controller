@@ -148,7 +148,7 @@ module hyperbus_phy_xilinx_7series (
     generate
         for (gi = 0; gi < 8; gi = gi + 1) begin : g_dq_phy
             ODDR #(
-                .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+                .DDR_CLK_EDGE("SAME_EDGE"),
                 .INIT(1'b0),
                 .SRTYPE("SYNC")
             ) u_oddr_dq (
@@ -215,7 +215,7 @@ module hyperbus_phy_xilinx_7series (
     assign o_dq = {dq_q2_raw, dq_q1_raw};
 
     ODDR #(
-        .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+        .DDR_CLK_EDGE("SAME_EDGE"),
         .INIT(1'b0),
         .SRTYPE("SYNC")
     ) u_oddr_rwds (
@@ -261,7 +261,7 @@ module hyperbus_phy_xilinx_7series (
     assign o_rwds_idly_cntvalueout[8:5] = 4'h0;
 
     IDDR #(
-        .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+        .DDR_CLK_EDGE("SAME_EDGE"),
         .INIT_Q1(1'b0),
         .INIT_Q2(1'b0),
         .SRTYPE("SYNC")

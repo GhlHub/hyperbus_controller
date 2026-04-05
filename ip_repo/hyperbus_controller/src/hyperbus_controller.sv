@@ -98,7 +98,11 @@ module hyperbus_controller #(
     output wire                         o_dbg_rwds_o_d2,
     output wire [7:0]                   o_dbg_i_dq_t,
     output wire                         o_dbg_i_rwds_t,
-    output wire                         o_dbg_hb_cs_n_q
+    output wire                         o_dbg_hb_cs_n_q,
+    output wire [31:0]                  o_dbg_rd_fifo_din,
+    output wire                         o_dbg_rd_fifo_wr_en,
+    output wire [31:0]                  o_dbg_last_read_word32,
+    output wire                         o_dbg_rd_half
 );
 
     localparam int CMD_W = 59;
@@ -148,6 +152,8 @@ module hyperbus_controller #(
     logic rwds_t, rwds_o_d1, rwds_o_d2;
     logic [7:0] dq_q1, dq_q2;
     logic rwds_q1, rwds_q2;
+    logic [31:0] last_read_word32_dbg;
+    logic rd_half_dbg;
 
     hyperbus_fifo_bank_xilinx #(
         .CMD_W(CMD_W)
@@ -324,6 +330,10 @@ module hyperbus_controller #(
     assign o_dbg_i_dq_t = dq_t;
     assign o_dbg_i_rwds_t = rwds_t;
     assign o_dbg_hb_cs_n_q = hb_cs_n_q;
+    assign o_dbg_rd_fifo_din = rd_fifo_din;
+    assign o_dbg_rd_fifo_wr_en = rd_fifo_wr_en;
+    assign o_dbg_last_read_word32 = last_read_word32_dbg;
+    assign o_dbg_rd_half = rd_half_dbg;
 
     hyperbus_phy_xilinx #(
         .PHY_FAMILY(PHY_FAMILY)
@@ -400,7 +410,8 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_full   (     axil_rsp_fifo_full),
         .o_axil_rsp_fifo_din    (      axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en  (    axil_rsp_fifo_wr_en),
-        .o_last_read_word32     (                   ),
+        .o_last_read_word32     ( last_read_word32_dbg),
+        .o_rd_half_dbg          (         rd_half_dbg),
         .o_axif_rwds_cntr       (         axif_rwds_cntr),
         .o_axil_rwds_cntr       (         axil_rwds_cntr),
         .o_dq_q1_dly_dbg        (      o_dbg_dq_q1_dly),
