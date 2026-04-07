@@ -95,7 +95,7 @@ Recommended workflow:
 
 1. Initialize delay blocks with `hb_dly_init()`.
 2. Sweep CK delay while repeatedly reading HyperRAM `ID0`.
-3. Record regions where `ID0 == 0x0000810C` and `ERR_STATUS` stays clear.
+3. Record regions where `ID0 == 0x00000C81` and `ERR_STATUS` stays clear.
 4. Choose a stable interior point, not an edge of the passing window.
 
 `hb_odly_sweep()` is a useful first-pass tool because it prints:

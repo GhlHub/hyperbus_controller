@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Theory of Operation
 
-Last updated: 2026-03-20
+Last updated: 2026-04-05
 
 ## Purpose
 
@@ -214,6 +214,29 @@ That decision determines when read capture or write data movement should begin.
 For writes, the engine applies the post-CA wait behavior needed before launching
 write data. For reads, the engine waits until returning data is expected and then
 qualifies capture using RWDS activity and the aligned internal samples.
+
+Observed-system note:
+
+- In bench and implemented-system debug, HyperRAM read behavior has not always
+  matched the simplest datasheet interpretation that RWDS strobes begin only when
+  returned data is already valid at the controller capture point.
+- In this design, RWDS may begin toggling before the retimed DQ samples are ready
+  to be consumed by the HB engine.
+- Because of that, the controller should not treat the first post-latency RWDS
+  transition as automatically valid data. The read path may need an additional
+  post-CA gate interval before RWDS transitions are allowed to qualify read data.
+- It is also firmware/software responsibility to avoid HyperRAM accesses until the
+  full reset timing window has elapsed. That means software should wait long
+  enough to cover both the possible `RESET#` assertion interval and the required
+  post-deassert quiet time before issuing any HyperBus transaction.
+- In bench and implemented-system debug, the HyperRAM write path also showed
+  behavior that was more permissive than the simplest write-latency model.
+  The device may sometimes sample write data while still nominally inside the
+  latency window.
+- Because of that, the controller should not default write-latency RWDS low
+  after the initial post-CA undriven interval. The implemented write path drives
+  RWDS high during the remaining latency wait and only switches to the active-low
+  byte mask when real write data starts.
 
 ### Read Transactions
 

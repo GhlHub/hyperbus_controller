@@ -242,7 +242,8 @@ Current public APIs:
 - `hb_odly_sweep()` (prints one-line training status per step:
   `CNTVALUEOUT`, `ID0`, `ERR_STATUS`, AXI RWDS counters)
 - `hb_odly_sweep_to_midpoint()` (finds first/last passing CK ODELAY values from
-  `ID0`, computes midpoint, then steps back to the midpoint)
+  `ID0`, computes midpoint, then steps back to the midpoint; default terse logging)
+- `hb_odly_sweep_to_midpoint_verbose()` (same sweep, with per-step logging)
 - `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
 - `hb_memtest_hyperram_worst_case_bytes()` (runs byte-oriented worst-case patterns:
   solid fills, checkerboards, walking 1/0 bytes, and address-derived byte patterns)

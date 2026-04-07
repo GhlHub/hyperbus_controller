@@ -68,6 +68,14 @@ After modifying controller RTL:
 - `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
 - Some files under `vivado_projects/` and Vitis output trees are generated artifacts. Update them only when the task calls for it.
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
+- When patching the bootloader into the FPGA image, make sure the flashed packaged image is the bootloader-specific one:
+  use `design_1_wrapper_bootloader.rcdo` when running `updatemem`, regenerate `design_1_wrapper_bootloader.pdi` from `design_1_wrapper_bootloader.bif`, and flash that bootloader `.pdi`.
+  Do not flash `design_1_wrapper.pdi` unless `design_1_wrapper.rcdo` was the file actually patched.
+- For this Spartan UltraScale+ project, the known-good bootloader image patch flow is:
+  1. use `updatemem` to patch `bootloader.elf` into `design_1_wrapper.bit`, producing `design_1_wrapper_bootloader.bit`
+  2. keep the Vivado-generated packaged-image flow intact by regenerating the `.pdi` from `design_1_wrapper_bootloader.bif`, which references `static_files/plm.elf` plus `design_1_wrapper_bootloader.rcdo`
+  3. flash the packaged `.pdi`, not a raw bitstream-derived `BOOT.bin`
+- Do not substitute an ad hoc `BOOT.bin` or manually improvised image format for the normal `spartanup` `.bif` -> `.pdi` flow unless the task explicitly requires reworking the boot-image format.
 
 ## Common Tasks
 
@@ -75,3 +83,8 @@ After modifying controller RTL:
 - Keep `software/` and `vitis_workspace/hello_world/src/` copies aligned when shared helpers are modified.
 - Update documentation when behavior, interfaces, or debug visibility changes.
 - When reporting implementation facts, distinguish between RTL intent and implemented-design results.
+- When patching the bootloader into the FPGA image, preserve the implementation run artifacts under `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/`:
+  - `design_1_wrapper_bootloader.bit`
+  - `design_1_wrapper_bootloader.rcdo`
+  - `design_1_wrapper_bootloader.bif`
+  - `design_1_wrapper_bootloader.pdi`
