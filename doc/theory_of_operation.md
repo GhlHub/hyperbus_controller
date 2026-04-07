@@ -229,6 +229,20 @@ Observed-system note:
   full reset timing window has elapsed. That means software should wait long
   enough to cover both the possible `RESET#` assertion interval and the required
   post-deassert quiet time before issuing any HyperBus transaction.
+- There also appears to be a power-on-reset sequencing issue on the actual
+  system. After initial boot, the first HyperRAM reset sequence is not always
+  sufficient to leave the device in a clean state.
+- The observed symptom of that condition was that HyperBus write transactions
+  could land at the wrong memory location.
+- As a temporary mitigation, the bootloader added a post-load verification step
+  after loading the SREC image so that this condition could be detected before
+  transferring control.
+- A second explicit software-controlled pulse of the HyperRAM `RESET#` pin,
+  issued after the initial guard delay, appears to clear the condition. After
+  adding that second reset, the misplaced-write behavior has no longer been
+  observed in bench testing.
+- This is still being treated as an observed-system behavior to monitor, not as
+  a fully root-caused hardware explanation.
 - In bench and implemented-system debug, the HyperRAM write path also showed
   behavior that was more permissive than the simplest write-latency model.
   The device may sometimes sample write data while still nominally inside the

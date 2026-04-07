@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "xil_printf.h"
 
-#define HB_ODLY_ID0_MATCH_VALUE 0x0000810Cu
+#define HB_ODLY_ID0_MATCH_VALUE 0x00000C81u
 #define HB_ODLY_SWEEP_GUARD_MAX 500U
 
 static inline volatile uint32_t *hb_reg_ptr(uintptr_t base, uint32_t offset)
@@ -283,10 +283,11 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches)
     }
 }
 
-int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
-                              uint16_t *cntvalue_min_out,
-                              uint16_t *cntvalue_max_out,
-                              uint16_t *cntvalue_mid_out)
+static int hb_odly_sweep_to_midpoint_impl(uintptr_t base_addr,
+                                          uint16_t *cntvalue_min_out,
+                                          uint16_t *cntvalue_max_out,
+                                          uint16_t *cntvalue_mid_out,
+                                          int verbose)
 {
     /* Return codes: 0=success, -3=no match found, -4=window end not found, <0=helper failure. */
     int rc;
@@ -317,7 +318,9 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
             return rc;
         }
 
-        hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        if (verbose) {
+            hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        }
         id0_valid = ((err_status & HB_ERR_STATUS_TIMEOUT) == 0U);
         if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
             hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
@@ -356,7 +359,9 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
             return rc;
         }
 
-        hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        if (verbose) {
+            hb_odly_print_status(cntvalue, id0, err_status, axif_rwds_cntr, axil_rwds_cntr);
+        }
         id0_valid = ((err_status & HB_ERR_STATUS_TIMEOUT) == 0U);
         if ((err_status & HB_ERR_STATUS_TIMEOUT) != 0U) {
             hb_reg_write(base_addr, HB_ERR_STATUS_OFFSET, HB_ERR_STATUS_TIMEOUT);
@@ -408,6 +413,30 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
     return 0;
 }
 
+int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
+                              uint16_t *cntvalue_min_out,
+                              uint16_t *cntvalue_max_out,
+                              uint16_t *cntvalue_mid_out)
+{
+    return hb_odly_sweep_to_midpoint_impl(base_addr,
+                                          cntvalue_min_out,
+                                          cntvalue_max_out,
+                                          cntvalue_mid_out,
+                                          0);
+}
+
+int hb_odly_sweep_to_midpoint_verbose(uintptr_t base_addr,
+                                      uint16_t *cntvalue_min_out,
+                                      uint16_t *cntvalue_max_out,
+                                      uint16_t *cntvalue_mid_out)
+{
+    return hb_odly_sweep_to_midpoint_impl(base_addr,
+                                          cntvalue_min_out,
+                                          cntvalue_max_out,
+                                          cntvalue_mid_out,
+                                          1);
+}
+
 int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out)
 {
     /* Return codes: 0=success. */
@@ -427,15 +456,42 @@ int hb_err_status_read_print_clear(uintptr_t base_addr, uint32_t *err_status_out
     return 0;
 }
 
+static int hb_rwds_idly_step(uintptr_t base_addr, int inc, int reenable_en_vtc)
+{
+    uint32_t ctrl;
+    uint32_t ctrl_sticky;
+
+    ctrl = hb_reg_read(base_addr, HB_RWDS_IDLY_CTRL_OFFSET);
+    ctrl_sticky = ctrl & (HB_RWDS_IDLY_CTRL_EN_VTC | HB_RWDS_IDLY_CTRL_INC);
+
+    ctrl_sticky &= ~HB_RWDS_IDLY_CTRL_EN_VTC;
+    if (inc) {
+        ctrl_sticky |= HB_RWDS_IDLY_CTRL_INC;
+    } else {
+        ctrl_sticky &= ~HB_RWDS_IDLY_CTRL_INC;
+    }
+
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_sticky);
+    hb_delay_cycles(64);
+
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_sticky | HB_RWDS_IDLY_CTRL_CE);
+    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_sticky);
+
+    if (reenable_en_vtc) {
+        hb_delay_cycles(64);
+        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_sticky | HB_RWDS_IDLY_CTRL_EN_VTC);
+    }
+
+    return 0;
+}
+
 int hb_rwds_idly_inc_until(uintptr_t base_addr, uint16_t target_cntvalue)
 {
     /* Return codes: 0=success, -1=invalid argument, -2=target below current, -3=guard timeout. */
     uint32_t target;
     uint32_t cur;
-    uint32_t ctrl;
-    uint32_t ctrl_orig_sticky;
-    uint32_t ctrl_step_sticky;
     uint32_t guard;
+    int rc;
 
     if (((uint32_t)target_cntvalue & ~HB_ODLY_MASK_9BIT) != 0U) {
         return -1;
@@ -450,26 +506,18 @@ int hb_rwds_idly_inc_until(uintptr_t base_addr, uint16_t target_cntvalue)
         return -2;
     }
 
-    ctrl = hb_reg_read(base_addr, HB_RWDS_IDLY_CTRL_OFFSET);
-    ctrl_orig_sticky = ctrl & (HB_RWDS_IDLY_CTRL_EN_VTC | HB_RWDS_IDLY_CTRL_INC);
-    ctrl_step_sticky = ctrl_orig_sticky | HB_RWDS_IDLY_CTRL_INC;
-
-    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky);
-
     for (guard = 0U; guard < 2048U; ++guard) {
-        /* Pulse CE to request one increment step. */
-        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky | HB_RWDS_IDLY_CTRL_CE);
-        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky);
+        rc = hb_rwds_idly_step(base_addr, 1, 1);
+        if (rc != 0) {
+            return rc;
+        }
 
         cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
         if (cur >= target) {
-            hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_orig_sticky);
             return 0;
         }
     }
 
-    /* Restore original sticky control bits before returning failure. */
-    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_orig_sticky);
     return -3;
 }
 
@@ -477,36 +525,70 @@ int hb_rwds_idly_dec_below_16(uintptr_t base_addr)
 {
     /* Return codes: 0=success, -3=guard timeout. */
     uint32_t cur;
-    uint32_t ctrl;
-    uint32_t ctrl_orig_sticky;
-    uint32_t ctrl_step_sticky;
     uint32_t guard;
+    int rc;
 
     cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
     if (cur < 16U) {
         return 0;
     }
 
-    ctrl = hb_reg_read(base_addr, HB_RWDS_IDLY_CTRL_OFFSET);
-    ctrl_orig_sticky = ctrl & (HB_RWDS_IDLY_CTRL_EN_VTC | HB_RWDS_IDLY_CTRL_INC);
-    ctrl_step_sticky = ctrl_orig_sticky & ~HB_RWDS_IDLY_CTRL_INC;
-
-    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky);
-
     for (guard = 0U; guard < 2048U; ++guard) {
-        /* Pulse CE to request one decrement step. */
-        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky | HB_RWDS_IDLY_CTRL_CE);
-        hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_step_sticky);
+        rc = hb_rwds_idly_step(base_addr, 0, 1);
+        if (rc != 0) {
+            return rc;
+        }
 
         cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
         if (cur < 16U) {
-            hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_orig_sticky);
             return 0;
         }
     }
 
-    /* Restore original sticky control bits before returning failure. */
-    hb_reg_write(base_addr, HB_RWDS_IDLY_CTRL_OFFSET, ctrl_orig_sticky);
+    return -3;
+}
+
+int hb_rwds_idly_move_near_target(uintptr_t base_addr,
+                                  uint16_t target_cntvalue,
+                                  uint16_t tolerance_cntvalue)
+{
+    uint32_t target;
+    uint32_t tolerance;
+    uint32_t target_min;
+    uint32_t target_max;
+    uint32_t cur;
+    uint32_t guard;
+    int rc;
+
+    if (((uint32_t)target_cntvalue & ~HB_ODLY_MASK_9BIT) != 0U) {
+        return -1;
+    }
+
+    target = (uint32_t)target_cntvalue & HB_ODLY_MASK_9BIT;
+    tolerance = (uint32_t)tolerance_cntvalue;
+    target_min = (target > tolerance) ? (target - tolerance) : 0U;
+    target_max = target + tolerance;
+    if (target_max > HB_ODLY_MASK_9BIT) {
+        target_max = HB_ODLY_MASK_9BIT;
+    }
+
+    cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+    if ((cur >= target_min) && (cur <= target_max)) {
+        return 0;
+    }
+
+    for (guard = 0U; guard < 2048U; ++guard) {
+        rc = hb_rwds_idly_step(base_addr, (cur < target_min) ? 1 : 0, 1);
+        if (rc != 0) {
+            return rc;
+        }
+
+        cur = hb_reg_read(base_addr, HB_RWDS_IDLY_STATUS_OFFSET) & HB_ODLY_MASK_9BIT;
+        if ((cur >= target_min) && (cur <= target_max)) {
+            return 0;
+        }
+    }
+
     return -3;
 }
 

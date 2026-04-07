@@ -47,6 +47,7 @@ module hyperbus_axi_lite_frontend #(
     output logic                        o_odelay_rst_req,
     output logic                        o_rwds_idelay_rst_req,
     output logic                        o_hb_clk_ce_force,
+    output logic                        o_hb_reset_req,
 
     output logic [CMD_W-1:0]            o_cmd_fifo_din_axil,
     output logic                        o_cmd_fifo_wr_en_axil,
@@ -121,7 +122,7 @@ module hyperbus_axi_lite_frontend #(
     logic [7:0]  dq_idly_en_vtc_q;
     logic [7:0]  dq_idly_inc_q;
     logic [71:0] dq_idly_time_value_q;
-    logic [2:0]  delay_rst_ctrl_q;
+    logic [3:0]  delay_rst_ctrl_q;
     logic        hb_clk_ce_force_q;
     logic        timeout_status_q;
     logic        timeout_holdoff_d;
@@ -270,7 +271,7 @@ module hyperbus_axi_lite_frontend #(
             dq_idly_time_value_q <= '0;
             // Default asserted: keep IDELAYCTRL and ODELAY in reset until
             // software explicitly sequences release.
-            delay_rst_ctrl_q  <= 3'b111;
+            delay_rst_ctrl_q  <= 4'b0111;
             hb_clk_ce_force_q <= 1'b1;
             timeout_status_q  <= 1'b0;
             timeout_holdoff_d <= 1'b0;
@@ -361,8 +362,8 @@ module hyperbus_axi_lite_frontend #(
                                 rwds_idly_time_value_q <= wr32[8:0];
                             end
                             AXIL_DELAY_RST_CTRL_ADDR: begin
-                                wr32 = apply_wstrb32({29'h0, delay_rst_ctrl_q}, s_axil_wdata, s_axil_wstrb);
-                                delay_rst_ctrl_q <= wr32[2:0];
+                                wr32 = apply_wstrb32({28'h0, delay_rst_ctrl_q}, s_axil_wdata, s_axil_wstrb);
+                                delay_rst_ctrl_q <= wr32[3:0];
                             end
                             AXIL_HB_CLK_CE_FORCE_ADDR: begin
                                 wr32 = apply_wstrb32({31'h0, hb_clk_ce_force_q}, s_axil_wdata, s_axil_wstrb);
@@ -406,7 +407,7 @@ module hyperbus_axi_lite_frontend #(
                     end else begin
                         unique case (s_axil_araddr)
                             AXIL_ERR_STATUS_ADDR:         s_axil_rdata <= {31'h0, timeout_status_q};
-                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0005;
+                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0006;
                             AXIL_AXIF_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axif_rwds_cntr};
                             AXIL_AXIL_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axil_rwds_cntr};
                             AXIL_HB_CLK_CE_FORCE_ADDR:    s_axil_rdata <= {31'h0, hb_clk_ce_force_q};
@@ -417,7 +418,7 @@ module hyperbus_axi_lite_frontend #(
                             AXIL_RWDS_IDELAY_CTRL_ADDR:   s_axil_rdata <= {27'h0, 1'b0, 1'b0, 1'b0, rwds_idly_inc_q, rwds_idly_en_vtc_q};
                             AXIL_RWDS_IDELAY_TIME_ADDR:   s_axil_rdata <= {23'h0, rwds_idly_time_value_q};
                             AXIL_RWDS_IDELAY_STATUS_ADDR: s_axil_rdata <= {23'h0, i_rwds_idly_cntvalueout};
-                            AXIL_DELAY_RST_CTRL_ADDR:     s_axil_rdata <= {29'h0, delay_rst_ctrl_q};
+                            AXIL_DELAY_RST_CTRL_ADDR:     s_axil_rdata <= {28'h0, delay_rst_ctrl_q};
                             AXIL_IDELAYCTRL_STATUS_ADDR:  s_axil_rdata <= {31'h0, i_idelayctrl_rdy_sync};
                             default:                      s_axil_rdata <= 32'h0000_0000;
                         endcase
@@ -492,7 +493,8 @@ module hyperbus_axi_lite_frontend #(
     assign o_dq_idly_cntvaluein = dq_idly_time_value_q;
     assign o_idelayctrl_rst_req = delay_rst_ctrl_q[0];
     assign o_odelay_rst_req     = delay_rst_ctrl_q[1];
-    assign o_hb_clk_ce_force    = hb_clk_ce_force_q;
+    assign o_hb_clk_ce_force     = hb_clk_ce_force_q;
     assign o_rwds_idelay_rst_req = delay_rst_ctrl_q[2];
+    assign o_hb_reset_req        = delay_rst_ctrl_q[3];
 
 endmodule

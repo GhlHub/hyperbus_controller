@@ -139,6 +139,7 @@ module hyperbus_controller #(
     logic [71:0] dq_idly_cntvaluein, dq_idly_cntvalueout;
     logic idelayctrl_rst_req, odelay_rst_req, rwds_idelay_rst_req;
     logic hb_clk_ce_force;
+    logic hb_reset_req;
     logic idelayctrl_rdy_axi;
     logic hb_timeout_pulse_hb;
     logic hb_timeout_holdoff_hb;
@@ -298,6 +299,7 @@ module hyperbus_controller #(
         .o_odelay_rst_req         (         odelay_rst_req),
         .o_rwds_idelay_rst_req    (    rwds_idelay_rst_req),
         .o_hb_clk_ce_force        (        hb_clk_ce_force),
+        .o_hb_reset_req           (           hb_reset_req),
         .s_axil_awaddr            (           s_axil_awaddr),
         .s_axil_awvalid           (          s_axil_awvalid),
         .s_axil_awready           (          s_axil_awready),
@@ -322,7 +324,7 @@ module hyperbus_controller #(
     // -------------------------
     assign o_hb_cs_n = hb_cs_n_q;
     assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
-    assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0);
+    assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0) && !hb_reset_req;
     assign o_dbg_dq_o_d1 = dq_o_d1;
     assign o_dbg_dq_o_d2 = dq_o_d2;
     assign o_dbg_rwds_o_d1 = rwds_o_d1;
