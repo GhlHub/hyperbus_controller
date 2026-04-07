@@ -439,7 +439,8 @@ module hyperbus_hb_engine #(
                             end
                         end
                     end
-                    // For writes, keep RWDS undriven for 2 clocks after CA completion.
+                    // For writes, keep RWDS undriven for 2 clocks after CA completion,
+                    // then drive it high until the real byte mask is presented.
                     if (cur_is_write && (wr_rwds_wait_cnt != 0)) begin
                         o_rwds_t <= 1'b1;
                         o_rwds_o_d1 <= 1'b0;
@@ -447,8 +448,8 @@ module hyperbus_hb_engine #(
                         wr_rwds_wait_cnt <= wr_rwds_wait_cnt - 2'd1;
                     end else begin
                         o_rwds_t <= cur_is_write ? 1'b0 : 1'b1;
-                        o_rwds_o_d1 <= 1'b0;
-                        o_rwds_o_d2 <= 1'b0;
+                        o_rwds_o_d1 <= cur_is_write ? 1'b1 : 1'b0;
+                        o_rwds_o_d2 <= cur_is_write ? 1'b1 : 1'b0;
                     end
                     if (latency_left != 0) begin
                         latency_left <= latency_left - 8'd1;
