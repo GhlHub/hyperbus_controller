@@ -1,0 +1,1 @@
+{"generate.platform":[{"uri":"/raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform_freertos/vitis-comp.json","md5":"ab7813553fc0c0326dd9521707cd0ba3"},{"uri":"/raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform_freertos/microblaze_0/standalone_microblaze_0/bsp/bsp.yaml","md5":"1484d785b2ee0f6d3ce05732adf4506a"}]}

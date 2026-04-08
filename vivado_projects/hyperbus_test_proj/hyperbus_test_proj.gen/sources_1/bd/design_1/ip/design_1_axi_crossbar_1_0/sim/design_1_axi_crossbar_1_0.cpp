@@ -688,7 +688,7 @@ void design_1_axi_crossbar_1_0::before_end_of_elaboration()
     M00_AXI_transactor_param_props.addLong("SUPPORTS_NARROW_BURST", "0");
     M00_AXI_transactor_param_props.addLong("NUM_READ_OUTSTANDING", "2");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_OUTSTANDING", "2");
-    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "4");
+    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "8");
     M00_AXI_transactor_param_props.addLong("NUM_READ_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("RUSER_BITS_PER_BYTE", "0");
@@ -1637,7 +1637,7 @@ void design_1_axi_crossbar_1_0::before_end_of_elaboration()
     M00_AXI_transactor_param_props.addLong("SUPPORTS_NARROW_BURST", "0");
     M00_AXI_transactor_param_props.addLong("NUM_READ_OUTSTANDING", "2");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_OUTSTANDING", "2");
-    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "4");
+    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "8");
     M00_AXI_transactor_param_props.addLong("NUM_READ_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("RUSER_BITS_PER_BYTE", "0");
@@ -2586,7 +2586,7 @@ void design_1_axi_crossbar_1_0::before_end_of_elaboration()
     M00_AXI_transactor_param_props.addLong("SUPPORTS_NARROW_BURST", "0");
     M00_AXI_transactor_param_props.addLong("NUM_READ_OUTSTANDING", "2");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_OUTSTANDING", "2");
-    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "4");
+    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "8");
     M00_AXI_transactor_param_props.addLong("NUM_READ_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("RUSER_BITS_PER_BYTE", "0");
@@ -3405,7 +3405,7 @@ design_1_axi_crossbar_1_0::design_1_axi_crossbar_1_0(const sc_core::sc_module_na
     M00_AXI_transactor_param_props.addLong("SUPPORTS_NARROW_BURST", "0");
     M00_AXI_transactor_param_props.addLong("NUM_READ_OUTSTANDING", "2");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_OUTSTANDING", "2");
-    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "4");
+    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "8");
     M00_AXI_transactor_param_props.addLong("NUM_READ_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("RUSER_BITS_PER_BYTE", "0");
@@ -4353,7 +4353,7 @@ design_1_axi_crossbar_1_0::design_1_axi_crossbar_1_0(const sc_core::sc_module_na
     M00_AXI_transactor_param_props.addLong("SUPPORTS_NARROW_BURST", "0");
     M00_AXI_transactor_param_props.addLong("NUM_READ_OUTSTANDING", "2");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_OUTSTANDING", "2");
-    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "4");
+    M00_AXI_transactor_param_props.addLong("MAX_BURST_LENGTH", "8");
     M00_AXI_transactor_param_props.addLong("NUM_READ_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("NUM_WRITE_THREADS", "1");
     M00_AXI_transactor_param_props.addLong("RUSER_BITS_PER_BYTE", "0");

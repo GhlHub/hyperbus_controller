@@ -1,0 +1,18 @@
+axi_intc_0:
+- axi_intc
+- intc
+axi_quad_spi_0:
+- axi_quad_spi
+- spi
+axi_timer_0:
+- axi_timer
+- tmrctr
+e_uart_0:
+- e_uart
+- None
+hyperbus_controller_0:
+- hyperbus_controller
+- None
+lmb_bram_if_cntlr_0:
+- lmb_bram_if_cntlr
+- bram

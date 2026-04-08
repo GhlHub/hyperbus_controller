@@ -1,0 +1,4 @@
+domain_path: /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform_freertos/export/platform_freertos/sw/standalone_microblaze_0
+app_src_dir: /raid/work/hyperbus_controller_freertos_port/vitis_ws4/hello_world_freertos/src
+template: empty_application
+lang: c

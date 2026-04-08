@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Mon Mar 30 23:24:27 2026
+-- Date        : Fri Apr  3 07:01:13 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 -- Command     : write_vhdl -force -mode synth_stub
 --               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_crossbar_1_0/design_1_axi_crossbar_1_0_stub.vhdl
@@ -98,7 +98,7 @@ entity design_1_axi_crossbar_1_0 is
   attribute CHECK_LICENSE_TYPE : string;
   attribute CHECK_LICENSE_TYPE of design_1_axi_crossbar_1_0 : entity is "design_1_axi_crossbar_1_0,axi_crossbar_v2_1_38_axi_crossbar,{}";
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1_axi_crossbar_1_0 : entity is "design_1_axi_crossbar_1_0,axi_crossbar_v2_1_38_axi_crossbar,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_crossbar,x_ipVersion=2.1,x_ipCoreRevision=38,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=spartanuplus,C_NUM_SLAVE_SLOTS=2,C_NUM_MASTER_SLOTS=1,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=32,C_AXI_PROTOCOL=0,C_NUM_ADDR_RANGES=1,C_M_AXI_BASE_ADDR=0x0000000080000000,C_M_AXI_ADDR_WIDTH=0x00000017,C_S_AXI_BASE_ID=0x0000000100000000,C_S_AXI_THREAD_ID_WIDTH=0x0000000000000000,C_AXI_SUPPORTS_USER_SIGNALS=0,C_AXI_AWUSER_WIDTH=1,C_AXI_ARUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_M_AXI_WRITE_CONNECTIVITY=0x00000001,C_M_AXI_READ_CONNECTIVITY=0x00000003,C_R_REGISTER=0,C_S_AXI_SINGLE_THREAD=0x0000000000000000,C_S_AXI_WRITE_ACCEPTANCE=0x0000000200000002,C_S_AXI_READ_ACCEPTANCE=0x0000000200000002,C_M_AXI_WRITE_ISSUING=0x00000002,C_M_AXI_READ_ISSUING=0x00000002,C_S_AXI_ARB_PRIORITY=0x0000000000000000,C_M_AXI_SECURE=0x00000000,C_CONNECTIVITY_MODE=1}";
+  attribute CORE_GENERATION_INFO of design_1_axi_crossbar_1_0 : entity is "design_1_axi_crossbar_1_0,axi_crossbar_v2_1_38_axi_crossbar,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_crossbar,x_ipVersion=2.1,x_ipCoreRevision=38,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=spartanuplus,C_NUM_SLAVE_SLOTS=2,C_NUM_MASTER_SLOTS=1,C_AXI_ID_WIDTH=1,C_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=32,C_AXI_PROTOCOL=0,C_NUM_ADDR_RANGES=1,C_M_AXI_BASE_ADDR=0x0000000080000000,C_M_AXI_ADDR_WIDTH=0x0000001f,C_S_AXI_BASE_ID=0x0000000100000000,C_S_AXI_THREAD_ID_WIDTH=0x0000000000000000,C_AXI_SUPPORTS_USER_SIGNALS=0,C_AXI_AWUSER_WIDTH=1,C_AXI_ARUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_M_AXI_WRITE_CONNECTIVITY=0x00000001,C_M_AXI_READ_CONNECTIVITY=0x00000003,C_R_REGISTER=0,C_S_AXI_SINGLE_THREAD=0x0000000000000000,C_S_AXI_WRITE_ACCEPTANCE=0x0000000200000002,C_S_AXI_READ_ACCEPTANCE=0x0000000200000002,C_M_AXI_WRITE_ISSUING=0x00000002,C_M_AXI_READ_ISSUING=0x00000002,C_S_AXI_ARB_PRIORITY=0x0000000000000000,C_M_AXI_SECURE=0x00000000,C_CONNECTIVITY_MODE=1}";
   attribute DowngradeIPIdentifiedWarnings : string;
   attribute DowngradeIPIdentifiedWarnings of design_1_axi_crossbar_1_0 : entity is "yes";
 end design_1_axi_crossbar_1_0;
@@ -158,7 +158,7 @@ architecture stub of design_1_axi_crossbar_1_0 is
   attribute X_INTERFACE_INFO of s_axi_rready : signal is "xilinx.com:interface:aximm:1.0 S00_AXI RREADY [0:0] [0:0], xilinx.com:interface:aximm:1.0 S01_AXI RREADY [0:0] [1:1]";
   attribute X_INTERFACE_INFO of m_axi_awid : signal is "xilinx.com:interface:aximm:1.0 M00_AXI AWID";
   attribute X_INTERFACE_MODE of m_axi_awid : signal is "master";
-  attribute X_INTERFACE_PARAMETER of m_axi_awid : signal is "XIL_INTERFACENAME M00_AXI, DATA_WIDTH 32, PROTOCOL AXI4, FREQ_HZ 50000000, ID_WIDTH 1, ADDR_WIDTH 32, AWUSER_WIDTH 0, ARUSER_WIDTH 0, WUSER_WIDTH 0, RUSER_WIDTH 0, BUSER_WIDTH 0, READ_WRITE_MODE READ_WRITE, HAS_BURST 1, HAS_LOCK 1, HAS_PROT 1, HAS_CACHE 1, HAS_QOS 1, HAS_REGION 0, HAS_WSTRB 1, HAS_BRESP 1, HAS_RRESP 1, SUPPORTS_NARROW_BURST 0, NUM_READ_OUTSTANDING 2, NUM_WRITE_OUTSTANDING 2, MAX_BURST_LENGTH 4, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, NUM_READ_THREADS 1, NUM_WRITE_THREADS 1, RUSER_BITS_PER_BYTE 0, WUSER_BITS_PER_BYTE 0, INSERT_VIP 0";
+  attribute X_INTERFACE_PARAMETER of m_axi_awid : signal is "XIL_INTERFACENAME M00_AXI, DATA_WIDTH 32, PROTOCOL AXI4, FREQ_HZ 50000000, ID_WIDTH 1, ADDR_WIDTH 32, AWUSER_WIDTH 0, ARUSER_WIDTH 0, WUSER_WIDTH 0, RUSER_WIDTH 0, BUSER_WIDTH 0, READ_WRITE_MODE READ_WRITE, HAS_BURST 1, HAS_LOCK 1, HAS_PROT 1, HAS_CACHE 1, HAS_QOS 1, HAS_REGION 0, HAS_WSTRB 1, HAS_BRESP 1, HAS_RRESP 1, SUPPORTS_NARROW_BURST 0, NUM_READ_OUTSTANDING 2, NUM_WRITE_OUTSTANDING 2, MAX_BURST_LENGTH 8, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, NUM_READ_THREADS 1, NUM_WRITE_THREADS 1, RUSER_BITS_PER_BYTE 0, WUSER_BITS_PER_BYTE 0, INSERT_VIP 0";
   attribute X_INTERFACE_INFO of m_axi_awaddr : signal is "xilinx.com:interface:aximm:1.0 M00_AXI AWADDR";
   attribute X_INTERFACE_INFO of m_axi_awlen : signal is "xilinx.com:interface:aximm:1.0 M00_AXI AWLEN";
   attribute X_INTERFACE_INFO of m_axi_awsize : signal is "xilinx.com:interface:aximm:1.0 M00_AXI AWSIZE";

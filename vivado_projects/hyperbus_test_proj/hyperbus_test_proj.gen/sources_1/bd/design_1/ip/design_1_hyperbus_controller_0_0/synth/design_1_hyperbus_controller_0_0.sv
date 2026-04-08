@@ -127,7 +127,11 @@ module design_1_hyperbus_controller_0_0 (
   o_dbg_rwds_o_d2,
   o_dbg_i_dq_t,
   o_dbg_i_rwds_t,
-  o_dbg_hb_cs_n_q
+  o_dbg_hb_cs_n_q,
+  o_dbg_rd_fifo_din,
+  o_dbg_rd_fifo_wr_en,
+  o_dbg_last_read_word32,
+  o_dbg_rd_half
 );
 
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_axi_aclk CLK" *)
@@ -270,6 +274,10 @@ output wire o_dbg_rwds_o_d2;
 output wire [7 : 0] o_dbg_i_dq_t;
 output wire o_dbg_i_rwds_t;
 output wire o_dbg_hb_cs_n_q;
+output wire [31 : 0] o_dbg_rd_fifo_din;
+output wire o_dbg_rd_fifo_wr_en;
+output wire [31 : 0] o_dbg_last_read_word32;
+output wire o_dbg_rd_half;
 
   hyperbus_controller #(
     .AXI_ADDR_WIDTH(32),
@@ -353,6 +361,10 @@ output wire o_dbg_hb_cs_n_q;
     .o_dbg_rwds_o_d2(o_dbg_rwds_o_d2),
     .o_dbg_i_dq_t(o_dbg_i_dq_t),
     .o_dbg_i_rwds_t(o_dbg_i_rwds_t),
-    .o_dbg_hb_cs_n_q(o_dbg_hb_cs_n_q)
+    .o_dbg_hb_cs_n_q(o_dbg_hb_cs_n_q),
+    .o_dbg_rd_fifo_din(o_dbg_rd_fifo_din),
+    .o_dbg_rd_fifo_wr_en(o_dbg_rd_fifo_wr_en),
+    .o_dbg_last_read_word32(o_dbg_last_read_word32),
+    .o_dbg_rd_half(o_dbg_rd_half)
   );
 endmodule

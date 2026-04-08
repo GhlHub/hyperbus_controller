@@ -126,7 +126,11 @@
         "o_dbg_rwds_o_d2": [ { "direction": "out" } ],
         "o_dbg_i_dq_t": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
         "o_dbg_i_rwds_t": [ { "direction": "out" } ],
-        "o_dbg_hb_cs_n_q": [ { "direction": "out" } ]
+        "o_dbg_hb_cs_n_q": [ { "direction": "out" } ],
+        "o_dbg_rd_fifo_din": [ { "direction": "out", "size_left": "31", "size_right": "0" } ],
+        "o_dbg_rd_fifo_wr_en": [ { "direction": "out" } ],
+        "o_dbg_last_read_word32": [ { "direction": "out", "size_left": "31", "size_right": "0" } ],
+        "o_dbg_rd_half": [ { "direction": "out" } ]
       },
       "interfaces": {
         "s_axi": {
@@ -330,7 +334,7 @@
           "address_blocks": {
             "reg0": {
               "base_address": "0x0",
-              "range": "4294967296",
+              "range": "0x100000000",
               "display_name": "reg0",
               "usage": "register"
             }
@@ -341,7 +345,7 @@
           "address_blocks": {
             "reg0": {
               "base_address": "0x0",
-              "range": "65536",
+              "range": "0x10000",
               "display_name": "reg0",
               "usage": "register"
             }
@@ -350,5 +354,5 @@
       }
     }
   },
-  "checksum": "2605d50b"
+  "checksum": "b207977c"
 }

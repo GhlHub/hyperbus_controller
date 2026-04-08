@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Mon Mar 30 23:25:10 2026
+// Date        : Tue Apr  7 09:04:04 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode synth_stub
 //               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_hyperbus_controller_0_0/design_1_hyperbus_controller_0_0_stub.v
@@ -28,8 +28,9 @@ module design_1_hyperbus_controller_0_0(i_axi_aclk, i_axi_aresetn, i_hb_clk_200,
   s_axil_rresp, s_axil_rvalid, s_axil_rready, o_hb_cs_n, o_hb_clk_ce, o_hb_ck_p, o_hb_ck_n, 
   io_hb_rwds, io_hb_dq, o_hb_reset_n, o_dbg_dq_q1_dly, o_dbg_dq_q2_dly, o_dbg_rwds_q1_dly, 
   o_dbg_rwds_q2_dly, o_dbg_dq_o_d1, o_dbg_dq_o_d2, o_dbg_rwds_o_d1, o_dbg_rwds_o_d2, 
-  o_dbg_i_dq_t, o_dbg_i_rwds_t, o_dbg_hb_cs_n_q)
-/* synthesis syn_black_box black_box_pad_pin="i_axi_aresetn,i_idelayctrl_rst,i_iddre1_rst,i_hb_rstn,s_axi_awaddr[31:0],s_axi_awid[0:0],s_axi_awlen[7:0],s_axi_awsize[2:0],s_axi_awburst[1:0],s_axi_awvalid,s_axi_awready,s_axi_wdata[31:0],s_axi_wstrb[3:0],s_axi_wlast,s_axi_wvalid,s_axi_wready,s_axi_bresp[1:0],s_axi_bid[0:0],s_axi_bvalid,s_axi_bready,s_axi_araddr[31:0],s_axi_arid[0:0],s_axi_arlen[7:0],s_axi_arsize[2:0],s_axi_arburst[1:0],s_axi_arvalid,s_axi_arready,s_axi_rdata[31:0],s_axi_rid[0:0],s_axi_rresp[1:0],s_axi_rlast,s_axi_rvalid,s_axi_rready,s_axil_awaddr[15:0],s_axil_awvalid,s_axil_awready,s_axil_wdata[31:0],s_axil_wstrb[3:0],s_axil_wvalid,s_axil_wready,s_axil_bresp[1:0],s_axil_bvalid,s_axil_bready,s_axil_araddr[15:0],s_axil_arvalid,s_axil_arready,s_axil_rdata[31:0],s_axil_rresp[1:0],s_axil_rvalid,s_axil_rready,o_hb_cs_n,o_hb_clk_ce,o_hb_ck_p,o_hb_ck_n,io_hb_rwds,io_hb_dq[7:0],o_hb_reset_n,o_dbg_dq_q1_dly[7:0],o_dbg_dq_q2_dly[7:0],o_dbg_rwds_q1_dly,o_dbg_rwds_q2_dly,o_dbg_dq_o_d1[7:0],o_dbg_dq_o_d2[7:0],o_dbg_rwds_o_d1,o_dbg_rwds_o_d2,o_dbg_i_dq_t[7:0],o_dbg_i_rwds_t,o_dbg_hb_cs_n_q" */
+  o_dbg_i_dq_t, o_dbg_i_rwds_t, o_dbg_hb_cs_n_q, o_dbg_rd_fifo_din, o_dbg_rd_fifo_wr_en, 
+  o_dbg_last_read_word32, o_dbg_rd_half)
+/* synthesis syn_black_box black_box_pad_pin="i_axi_aresetn,i_idelayctrl_rst,i_iddre1_rst,i_hb_rstn,s_axi_awaddr[31:0],s_axi_awid[0:0],s_axi_awlen[7:0],s_axi_awsize[2:0],s_axi_awburst[1:0],s_axi_awvalid,s_axi_awready,s_axi_wdata[31:0],s_axi_wstrb[3:0],s_axi_wlast,s_axi_wvalid,s_axi_wready,s_axi_bresp[1:0],s_axi_bid[0:0],s_axi_bvalid,s_axi_bready,s_axi_araddr[31:0],s_axi_arid[0:0],s_axi_arlen[7:0],s_axi_arsize[2:0],s_axi_arburst[1:0],s_axi_arvalid,s_axi_arready,s_axi_rdata[31:0],s_axi_rid[0:0],s_axi_rresp[1:0],s_axi_rlast,s_axi_rvalid,s_axi_rready,s_axil_awaddr[15:0],s_axil_awvalid,s_axil_awready,s_axil_wdata[31:0],s_axil_wstrb[3:0],s_axil_wvalid,s_axil_wready,s_axil_bresp[1:0],s_axil_bvalid,s_axil_bready,s_axil_araddr[15:0],s_axil_arvalid,s_axil_arready,s_axil_rdata[31:0],s_axil_rresp[1:0],s_axil_rvalid,s_axil_rready,o_hb_cs_n,o_hb_clk_ce,o_hb_ck_p,o_hb_ck_n,io_hb_rwds,io_hb_dq[7:0],o_hb_reset_n,o_dbg_dq_q1_dly[7:0],o_dbg_dq_q2_dly[7:0],o_dbg_rwds_q1_dly,o_dbg_rwds_q2_dly,o_dbg_dq_o_d1[7:0],o_dbg_dq_o_d2[7:0],o_dbg_rwds_o_d1,o_dbg_rwds_o_d2,o_dbg_i_dq_t[7:0],o_dbg_i_rwds_t,o_dbg_hb_cs_n_q,o_dbg_rd_fifo_din[31:0],o_dbg_rd_fifo_wr_en,o_dbg_last_read_word32[31:0],o_dbg_rd_half" */
 /* synthesis syn_force_seq_prim="i_axi_aclk" */
 /* synthesis syn_force_seq_prim="i_hb_clk_200" */
 /* synthesis syn_force_seq_prim="i_hb_clk_200_gated" */
@@ -108,4 +109,8 @@ module design_1_hyperbus_controller_0_0(i_axi_aclk, i_axi_aresetn, i_hb_clk_200,
   output [7:0]o_dbg_i_dq_t;
   output o_dbg_i_rwds_t;
   output o_dbg_hb_cs_n_q;
+  output [31:0]o_dbg_rd_fifo_din;
+  output o_dbg_rd_fifo_wr_en;
+  output [31:0]o_dbg_last_read_word32;
+  output o_dbg_rd_half;
 endmodule

@@ -8,7 +8,12 @@
 #create_clock -name i_hb_clk_200 -period 5.000  [get_ports i_hb_clk_200]
 #create_clock -name i_ref_clk_300 -period 3.333 [get_ports i_ref_clk_300]
 
-# Example generated clock for forwarded HyperBus clock path:
+# Forwarded HyperBus clock at the package pin. Read-side timing below uses the
+# trained forwarded clock as the external reference.
+create_generated_clock -name hb_ck_fwd \
+  -source [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/u_oddr_ck/CLK}] \
+  -divide_by 1 \
+  [get_ports o_hb_ck_p_0]
 
 # Example HyperBus output timing constraints (uncomment and tune as needed):
 
@@ -52,14 +57,27 @@ set_property IOSTANDARD LVCMOS33 [get_ports UART_0_rxd]
 set_property IOSTANDARD LVCMOS33 [get_ports UART_0_txd]
 set_property IOSTANDARD LVCMOS33 [get_ports ext_reset_in_0]
 
-set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/C}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
+# Ignore the non-functional path from the HyperBus input sampling clock pins
+# into the AXI-Lite read-data muxing/registering logic.
+set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/C}]  -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
+set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
 
-set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
-set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets clk]
+# HyperBus DQ bus-skew limits, assuming zero board-contributed skew for now.
+# Read-side: pad to IDDRE1 capture input.
+set_bus_skew 0.050 \
+  -from [get_ports {io_hb_dq_0[*]}] \
+  -to   [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/D}]
+
+# Read-side DQ/RWDS timing budget after training centers the observed eye.
+set_input_delay -clock hb_ck_fwd -max  0.250 [get_ports {io_hb_dq_0[*] io_hb_rwds_0}]
+set_input_delay -clock hb_ck_fwd -min -0.250 [get_ports {io_hb_dq_0[*] io_hb_rwds_0}]
+set_input_delay -clock hb_ck_fwd -clock_fall -add_delay -max  0.250 [get_ports {io_hb_dq_0[*] io_hb_rwds_0}]
+set_input_delay -clock hb_ck_fwd -clock_fall -add_delay -min -0.250 [get_ports {io_hb_dq_0[*] io_hb_rwds_0}]
+
+# Write-side: ODDRE1 output to package pin.
+set_bus_skew 0.095 \
+  -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_oddr_dq/OQ}] \
+  -to   [get_ports {io_hb_dq_0[*]}]
 
 set_property DRIVE 6 [get_ports {io_hb_dq_0[7]}]
 set_property DRIVE 6 [get_ports {io_hb_dq_0[6]}]
@@ -73,3 +91,5 @@ set_property DRIVE 6 [get_ports {io_hb_dq_0[0]}]
 set_property DRIVE 8 [get_ports io_hb_rwds_0]
 set_property DRIVE 8 [get_ports o_hb_ck_p_0]
 set_property DRIVE 12 [get_ports o_hb_cs_n_0]
+
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]

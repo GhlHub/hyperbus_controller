@@ -797,11 +797,11 @@
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>SENSITIVITY</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.INTERRUPT_INPUT.SENSITIVITY">LEVEL_HIGH:LEVEL_HIGH</spirit:value>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.INTERRUPT_INPUT.SENSITIVITY">EDGE_RISING:LEVEL_HIGH:LEVEL_HIGH</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>PortWidth</spirit:name>
-          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.INTERRUPT_INPUT.PortWidth">2</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.INTERRUPT_INPUT.PortWidth">3</spirit:value>
           <spirit:vendorExtensions>
             <xilinx:parameterInfo>
               <xilinx:parameterUsage>none</xilinx:parameterUsage>
@@ -891,7 +891,7 @@
           <spirit:displayName>Interrupt Status Register</spirit:displayName>
           <spirit:description>Interrupt Status Register</spirit:description>
           <spirit:addressOffset>0x0</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -909,7 +909,7 @@ For remaining bits defined by number of software interrupts:
   W - Writes software interrupt value.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-write</spirit:access>
             <spirit:writeValueConstraint>
@@ -924,7 +924,7 @@ For remaining bits defined by number of software interrupts:
           <spirit:displayName>Interrupt Pending Register</spirit:displayName>
           <spirit:description>Interrupt Pending Register</spirit:description>
           <spirit:addressOffset>0x4</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-only</spirit:access>
           <spirit:reset>
@@ -939,7 +939,7 @@ For each bit:
   W - No effect.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-only</spirit:access>
             <spirit:writeValueConstraint>
@@ -961,7 +961,7 @@ For each bit:
           <spirit:displayName>Interrupt Enable Register</spirit:displayName>
           <spirit:description>Interrupt Enable Register</spirit:description>
           <spirit:addressOffset>0x8</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -976,7 +976,7 @@ For each bit:
   W - Writes interrupt enable value.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-write</spirit:access>
             <spirit:writeValueConstraint>
@@ -991,7 +991,7 @@ For each bit:
           <spirit:displayName>Interrupt Acknowledge Register</spirit:displayName>
           <spirit:description>Interrupt Acknowledge Register</spirit:description>
           <spirit:addressOffset>0xC</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>write-only</spirit:access>
           <spirit:reset>
@@ -1005,7 +1005,7 @@ For each bit:
   W - Acknowledge interrupt.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>write-only</spirit:access>
             <spirit:modifiedWriteValue>oneToClear</spirit:modifiedWriteValue>
@@ -1021,7 +1021,7 @@ For each bit:
           <spirit:displayName>Set Interrupt Enables</spirit:displayName>
           <spirit:description>Set Interrupt Enables</spirit:description>
           <spirit:addressOffset>0x10</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -1036,7 +1036,7 @@ For each bit:
   W - Writing 1 enables the interrupt, writing 0 has no effect.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-write</spirit:access>
             <spirit:modifiedWriteValue>oneToSet</spirit:modifiedWriteValue>
@@ -1059,7 +1059,7 @@ For each bit:
           <spirit:displayName>Clear Interrupt Enables</spirit:displayName>
           <spirit:description>Clear Interrupt Enables</spirit:description>
           <spirit:addressOffset>0x14</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -1074,7 +1074,7 @@ For each bit:
   W - Writing 1 disables the interrupt, writing 0 has no effect.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-write</spirit:access>
             <spirit:modifiedWriteValue>oneToClear</spirit:modifiedWriteValue>
@@ -1178,7 +1178,7 @@ For each bit:
           <spirit:displayName>Interrupt Mode Register</spirit:displayName>
           <spirit:description>Interrupt Mode Register</spirit:description>
           <spirit:addressOffset>0x20</spirit:addressOffset>
-          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:size>
+          <spirit:size spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:size>
           <spirit:volatile>true</spirit:volatile>
           <spirit:access>read-write</spirit:access>
           <spirit:reset>
@@ -1193,7 +1193,7 @@ For each bit:
   W - Sets interrupt mode, where 0 is normal mode and 1 is fast mode.
 </spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">2</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) + spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_SW_INTR&apos;)))">3</spirit:bitWidth>
             <spirit:volatile>true</spirit:volatile>
             <spirit:access>read-write</spirit:access>
             <spirit:writeValueConstraint>
@@ -3434,7 +3434,7 @@ For each bit:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:26de9a69</spirit:value>
+            <spirit:value>9:0ffe6811</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3448,11 +3448,11 @@ For each bit:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:57 UTC 2026</spirit:value>
+            <spirit:value>Tue Mar 31 22:59:23 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:26de9a69</spirit:value>
+            <spirit:value>9:0ffe6811</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3463,7 +3463,7 @@ For each bit:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:26de9a69</spirit:value>
+            <spirit:value>9:0ffe6811</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3486,7 +3486,7 @@ For each bit:
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:57085ca2</spirit:value>
+            <spirit:value>9:f61c9c7d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3502,11 +3502,11 @@ For each bit:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Tue Mar 31 22:58:52 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:57085ca2</spirit:value>
+            <spirit:value>9:f61c9c7d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3529,7 +3529,7 @@ For each bit:
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:26de9a69</spirit:value>
+            <spirit:value>9:0ffe6811</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3545,11 +3545,11 @@ For each bit:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Tue Mar 31 22:58:52 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:26de9a69</spirit:value>
+            <spirit:value>9:0ffe6811</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3835,7 +3835,7 @@ For each bit:
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) - 1)">1</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_NUM_INTR_INPUTS&apos;)) - 1)">2</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -4053,7 +4053,7 @@ For each bit:
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_NUM_INTR_INPUTS</spirit:name>
         <spirit:displayName>Number of Peripheral Interrupts</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_NUM_INTR_INPUTS" spirit:minimum="1" spirit:maximum="32" spirit:rangeType="long">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_NUM_INTR_INPUTS" spirit:minimum="1" spirit:maximum="32" spirit:rangeType="long">3</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_NUM_SW_INTR</spirit:name>
@@ -4346,13 +4346,13 @@ For each bit:
       <spirit:name>C_NUM_INTR_INPUTS</spirit:name>
       <spirit:displayName>Number of Peripheral Interrupts</spirit:displayName>
       <spirit:description>The setting of this option indicates number of interrupts input to the core.</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_INTR_INPUTS" spirit:order="9" spirit:minimum="1" spirit:maximum="32" spirit:rangeType="long">2</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_INTR_INPUTS" spirit:order="9" spirit:minimum="1" spirit:maximum="32" spirit:rangeType="long">3</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_NUM_SW_INTR</spirit:name>
       <spirit:displayName>Number of Software Interrupts</spirit:displayName>
       <spirit:description>Number of interrupts controlled by software in addition to the hardware interrupt inputs</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_SW_INTR" spirit:order="10" spirit:minimum="0" spirit:maximum="30" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_SW_INTR" spirit:order="10" spirit:minimum="0" spirit:maximum="29" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_KIND_OF_LVL</spirit:name>

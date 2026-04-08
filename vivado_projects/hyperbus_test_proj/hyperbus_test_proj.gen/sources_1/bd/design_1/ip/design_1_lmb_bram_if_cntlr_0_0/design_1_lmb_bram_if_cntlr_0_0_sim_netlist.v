@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Mon Mar 30 23:24:56 2026
+// Date        : Fri Apr  3 07:01:06 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.v
@@ -71,7 +71,7 @@ module design_1_lmb_bram_if_cntlr_0_0
   (* x_interface_info = "xilinx.com:interface:lmb:1.0 SLMB1 WAIT" *) output Sl1_Wait;
   (* x_interface_info = "xilinx.com:interface:lmb:1.0 SLMB1 UE" *) output Sl1_UE;
   (* x_interface_info = "xilinx.com:interface:lmb:1.0 SLMB1 CE" *) output Sl1_CE;
-  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORT RST" *) (* x_interface_mode = "master BRAM_PORT" *) (* x_interface_parameter = "XIL_INTERFACENAME BRAM_PORT, MEM_SIZE 65536, MASTER_TYPE BRAM_CTRL, MEM_WIDTH 32, MEM_ECC NONE, READ_LATENCY 1" *) output BRAM_Rst_A;
+  (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORT RST" *) (* x_interface_mode = "master BRAM_PORT" *) (* x_interface_parameter = "XIL_INTERFACENAME BRAM_PORT, MEM_SIZE 32768, MASTER_TYPE BRAM_CTRL, MEM_WIDTH 32, MEM_ECC NONE, READ_LATENCY 1" *) output BRAM_Rst_A;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORT CLK" *) output BRAM_Clk_A;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORT ADDR" *) output [0:31]BRAM_Addr_A;
   (* x_interface_info = "xilinx.com:interface:bram:1.0 BRAM_PORT EN" *) output BRAM_EN_A;
@@ -170,7 +170,7 @@ module design_1_lmb_bram_if_cntlr_0_0
   (* C_ECC_STATUS_REGISTERS = "0" *) 
   (* C_FAMILY = "spartanuplus" *) 
   (* C_FAULT_INJECT = "0" *) 
-  (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000001111111111111111" *) 
+  (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000000111111111111111" *) 
   (* C_INTERCONNECT = "0" *) 
   (* C_LMB_AWIDTH = "32" *) 
   (* C_LMB_DWIDTH = "32" *) 
@@ -332,7 +332,7 @@ endmodule
 (* C_ARBITRATION = "0" *) (* C_BASEADDR = "64'b0000000000000000000000000000000000000000000000000000000000000000" *) (* C_BRAM_AWIDTH = "32" *) 
 (* C_CE_COUNTER_WIDTH = "0" *) (* C_CE_FAILING_REGISTERS = "0" *) (* C_ECC = "0" *) 
 (* C_ECC_ONOFF_REGISTER = "0" *) (* C_ECC_ONOFF_RESET_VALUE = "1" *) (* C_ECC_STATUS_REGISTERS = "0" *) 
-(* C_FAMILY = "spartanuplus" *) (* C_FAULT_INJECT = "0" *) (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000001111111111111111" *) 
+(* C_FAMILY = "spartanuplus" *) (* C_FAULT_INJECT = "0" *) (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000000111111111111111" *) 
 (* C_INTERCONNECT = "0" *) (* C_LMB_AWIDTH = "32" *) (* C_LMB_DWIDTH = "32" *) 
 (* C_LMB_HAS_PROT = "0" *) (* C_LMB_PROTOCOL = "0" *) (* C_MASK = "64'b0000000000000000000000000000000011000000000000010000000000000000" *) 
 (* C_MASK1 = "64'b0000000000000000000000000000000010000000000000000000000000000000" *) (* C_MASK2 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK3 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 

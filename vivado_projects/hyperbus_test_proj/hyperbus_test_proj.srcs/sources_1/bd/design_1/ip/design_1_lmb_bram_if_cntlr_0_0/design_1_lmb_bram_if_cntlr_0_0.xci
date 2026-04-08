@@ -9,7 +9,7 @@
     "parameters": {
       "component_parameters": {
         "C_BASEADDR": [ { "value": "0x0000000000000000", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
-        "C_HIGHADDR": [ { "value": "0x000000000000FFFF", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "C_HIGHADDR": [ { "value": "0x0000000000007FFF", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_MASK": [ { "value": "0x00000000c0010000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_MASK1": [ { "value": "0x0000000080000000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_MASK2": [ { "value": "0x0000000000800000", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "enabled": false, "usage": "all" } ],
@@ -50,7 +50,7 @@
       },
       "model_parameters": {
         "C_FAMILY": [ { "value": "spartanuplus", "resolve_type": "generated", "usage": "all" } ],
-        "C_HIGHADDR": [ { "value": "0x000000000000FFFF", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "C_HIGHADDR": [ { "value": "0x0000000000007FFF", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_BASEADDR": [ { "value": "0x0000000000000000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_NUM_LMB": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_MASK": [ { "value": "0x00000000c0010000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
@@ -204,7 +204,7 @@
           "abstraction_type": "xilinx.com:interface:bram_rtl:1.0",
           "mode": "master",
           "parameters": {
-            "MEM_SIZE": [ { "value": "65536", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
+            "MEM_SIZE": [ { "value": "32768", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
             "MASTER_TYPE": [ { "value": "BRAM_CTRL", "value_src": "constant", "value_permission": "bd", "usage": "all" } ],
             "MEM_WIDTH": [ { "value": "32", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "MEM_ECC": [ { "value": "NONE", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
@@ -415,5 +415,5 @@
       }
     }
   },
-  "checksum": "401e42bc"
+  "checksum": "55df8b5d"
 }

@@ -1,0 +1,45 @@
+{
+  "name": "platform_freertos",
+  "type": "PLATFORM",
+  "configuration": {
+    "description": "",
+    "xsa": "/raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/export/platform/hw/design_1_wrapper.xsa",
+    "xsaPathInPlatform": "platform_freertos/hw/design_1_wrapper.xsa",
+    "emulationXsa": "",
+    "emulationXsaPathInPlatform": "",
+    "isCustomFSBL": true,
+    "fsblPath": "",
+    "pmufwElf": "",
+    "flow": "EMBEDDED",
+    "processorsMap": {
+      "microblaze_0": "microblaze"
+    },
+    "supportedOS": [
+      "standalone",
+      "freertos",
+      "linux"
+    ],
+    "supportedFamily": "fpga",
+    "stdGenHookList": [],
+    "componentType": "PLATFORM",
+    "domains": [
+      {
+        "name": "standalone_microblaze_0",
+        "displayName": "standalone_microblaze_0",
+        "processor": "microblaze_0",
+        "cpuType": "microblaze",
+        "cpuInstance": "microblaze_0",
+        "os": "standalone",
+        "appTemplate": "empty_application",
+        "isBootDomain": false,
+        "qemuData": "",
+        "qemuArgsFile": "",
+        "pmcQemuArgsFile": "",
+        "isBSPGenReq": false
+      }
+    ],
+    "emptyToolchainConfiguration": []
+  },
+  "useSysrootToolchain": false,
+  "templateFlow": "VITIS"
+}

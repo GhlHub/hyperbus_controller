@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Mon Mar 30 23:25:10 2026
+-- Date        : Tue Apr  7 09:04:04 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 -- Command     : write_vhdl -force -mode synth_stub
 --               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_hyperbus_controller_0_0/design_1_hyperbus_controller_0_0_stub.vhdl
@@ -87,7 +87,11 @@ entity design_1_hyperbus_controller_0_0 is
     o_dbg_rwds_o_d2 : out STD_LOGIC;
     o_dbg_i_dq_t : out STD_LOGIC_VECTOR ( 7 downto 0 );
     o_dbg_i_rwds_t : out STD_LOGIC;
-    o_dbg_hb_cs_n_q : out STD_LOGIC
+    o_dbg_hb_cs_n_q : out STD_LOGIC;
+    o_dbg_rd_fifo_din : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    o_dbg_rd_fifo_wr_en : out STD_LOGIC;
+    o_dbg_last_read_word32 : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    o_dbg_rd_half : out STD_LOGIC
   );
 
   attribute CHECK_LICENSE_TYPE : string;
@@ -102,7 +106,7 @@ architecture stub of design_1_hyperbus_controller_0_0 is
   attribute syn_black_box : boolean;
   attribute black_box_pad_pin : string;
   attribute syn_black_box of stub : architecture is true;
-  attribute black_box_pad_pin of stub : architecture is "i_axi_aclk,i_axi_aresetn,i_hb_clk_200,i_hb_clk_200_gated,i_ref_clk_300,i_idelayctrl_rst,i_hb_clk_200_samp_90,i_iddre1_rst,i_hb_rstn,s_axi_awaddr[31:0],s_axi_awid[0:0],s_axi_awlen[7:0],s_axi_awsize[2:0],s_axi_awburst[1:0],s_axi_awvalid,s_axi_awready,s_axi_wdata[31:0],s_axi_wstrb[3:0],s_axi_wlast,s_axi_wvalid,s_axi_wready,s_axi_bresp[1:0],s_axi_bid[0:0],s_axi_bvalid,s_axi_bready,s_axi_araddr[31:0],s_axi_arid[0:0],s_axi_arlen[7:0],s_axi_arsize[2:0],s_axi_arburst[1:0],s_axi_arvalid,s_axi_arready,s_axi_rdata[31:0],s_axi_rid[0:0],s_axi_rresp[1:0],s_axi_rlast,s_axi_rvalid,s_axi_rready,s_axil_awaddr[15:0],s_axil_awvalid,s_axil_awready,s_axil_wdata[31:0],s_axil_wstrb[3:0],s_axil_wvalid,s_axil_wready,s_axil_bresp[1:0],s_axil_bvalid,s_axil_bready,s_axil_araddr[15:0],s_axil_arvalid,s_axil_arready,s_axil_rdata[31:0],s_axil_rresp[1:0],s_axil_rvalid,s_axil_rready,o_hb_cs_n,o_hb_clk_ce,o_hb_ck_p,o_hb_ck_n,io_hb_rwds,io_hb_dq[7:0],o_hb_reset_n,o_dbg_dq_q1_dly[7:0],o_dbg_dq_q2_dly[7:0],o_dbg_rwds_q1_dly,o_dbg_rwds_q2_dly,o_dbg_dq_o_d1[7:0],o_dbg_dq_o_d2[7:0],o_dbg_rwds_o_d1,o_dbg_rwds_o_d2,o_dbg_i_dq_t[7:0],o_dbg_i_rwds_t,o_dbg_hb_cs_n_q";
+  attribute black_box_pad_pin of stub : architecture is "i_axi_aclk,i_axi_aresetn,i_hb_clk_200,i_hb_clk_200_gated,i_ref_clk_300,i_idelayctrl_rst,i_hb_clk_200_samp_90,i_iddre1_rst,i_hb_rstn,s_axi_awaddr[31:0],s_axi_awid[0:0],s_axi_awlen[7:0],s_axi_awsize[2:0],s_axi_awburst[1:0],s_axi_awvalid,s_axi_awready,s_axi_wdata[31:0],s_axi_wstrb[3:0],s_axi_wlast,s_axi_wvalid,s_axi_wready,s_axi_bresp[1:0],s_axi_bid[0:0],s_axi_bvalid,s_axi_bready,s_axi_araddr[31:0],s_axi_arid[0:0],s_axi_arlen[7:0],s_axi_arsize[2:0],s_axi_arburst[1:0],s_axi_arvalid,s_axi_arready,s_axi_rdata[31:0],s_axi_rid[0:0],s_axi_rresp[1:0],s_axi_rlast,s_axi_rvalid,s_axi_rready,s_axil_awaddr[15:0],s_axil_awvalid,s_axil_awready,s_axil_wdata[31:0],s_axil_wstrb[3:0],s_axil_wvalid,s_axil_wready,s_axil_bresp[1:0],s_axil_bvalid,s_axil_bready,s_axil_araddr[15:0],s_axil_arvalid,s_axil_arready,s_axil_rdata[31:0],s_axil_rresp[1:0],s_axil_rvalid,s_axil_rready,o_hb_cs_n,o_hb_clk_ce,o_hb_ck_p,o_hb_ck_n,io_hb_rwds,io_hb_dq[7:0],o_hb_reset_n,o_dbg_dq_q1_dly[7:0],o_dbg_dq_q2_dly[7:0],o_dbg_rwds_q1_dly,o_dbg_rwds_q2_dly,o_dbg_dq_o_d1[7:0],o_dbg_dq_o_d2[7:0],o_dbg_rwds_o_d1,o_dbg_rwds_o_d2,o_dbg_i_dq_t[7:0],o_dbg_i_rwds_t,o_dbg_hb_cs_n_q,o_dbg_rd_fifo_din[31:0],o_dbg_rd_fifo_wr_en,o_dbg_last_read_word32[31:0],o_dbg_rd_half";
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of i_axi_aclk : signal is "xilinx.com:signal:clock:1.0 i_axi_aclk CLK";
   attribute X_INTERFACE_MODE : string;
