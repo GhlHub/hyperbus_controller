@@ -266,6 +266,14 @@ For reads, the engine:
 Read completion therefore depends on both correct command sequencing and correct
 capture alignment.
 
+Observed implementation note:
+
+- In current bench and implemented-system behavior, AXI read data return is not
+  sustained at one beat per AXI clock.
+- The AXI read path currently consumes two AXI clocks per returned data beat.
+- This is functionally acceptable for now, but it should be treated as a future
+  optimization area for AXI read throughput.
+
 ### Write Transactions
 
 For writes, the engine:

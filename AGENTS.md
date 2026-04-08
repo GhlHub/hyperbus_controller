@@ -75,6 +75,7 @@ After modifying controller RTL:
   1. use `updatemem` to patch `bootloader.elf` into `design_1_wrapper.bit`, producing `design_1_wrapper_bootloader.bit`
   2. keep the Vivado-generated packaged-image flow intact by regenerating the `.pdi` from `design_1_wrapper_bootloader.bif`, which references `static_files/plm.elf` plus `design_1_wrapper_bootloader.rcdo`
   3. flash the packaged `.pdi`, not a raw bitstream-derived `BOOT.bin`
+- When running `bootgen` on `design_1_wrapper_bootloader.bif`, invoke it from `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/` or otherwise preserve those relative paths; the BIF expects `static_files/plm.elf` relative to that directory.
 - Do not substitute an ad hoc `BOOT.bin` or manually improvised image format for the normal `spartanup` `.bif` -> `.pdi` flow unless the task explicitly requires reworking the boot-image format.
 
 ## Common Tasks

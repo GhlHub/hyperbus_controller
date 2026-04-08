@@ -44,7 +44,7 @@ extern "C" {
 /*
  * Constant values and common masks.
  */
-#define HB_VERSION_VALUE                0x01000005u
+#define HB_VERSION_VALUE                0x01000006u
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
@@ -90,10 +90,12 @@ extern "C" {
  * bit0 IDELAYCTRL reset request
  * bit1 ODELAY reset request
  * bit2 RWDS and DQ IDELAY reset request
+ * bit3 external HyperRAM RESET# request (active while set)
  */
 #define HB_DELAY_RST_IDELAYCTRL (1u << 0)
 #define HB_DELAY_RST_CKP_ODELAY (1u << 1)
 #define HB_DELAY_RST_RWDS_IDELAY (1u << 2)
+#define HB_DELAY_RST_HB_RESET   (1u << 3)
 
 /*
  * HB_IDELAYCTRL_STATUS bit definitions.
@@ -179,6 +181,8 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
 /*
  * Find a contiguous passing ODELAY window using HyperRAM ID0 readback, then
  * step back to the midpoint of that window.
+ * Default logging mode is terse: only the final ODLY_WINDOW summary line is
+ * printed.
  * Flow:
  * 1) Increment until ID0 matches the expected value and capture that CNTVALUEOUT
  *    as cntvalue_min.
@@ -197,6 +201,16 @@ int hb_odly_sweep_to_midpoint(uintptr_t base_addr,
                               uint16_t *cntvalue_min_out,
                               uint16_t *cntvalue_max_out,
                               uint16_t *cntvalue_mid_out);
+
+/*
+ * Verbose variant of hb_odly_sweep_to_midpoint().
+ * Logging mode:
+ * - verbose: print each sampled step plus the final ODLY_WINDOW summary line
+ */
+int hb_odly_sweep_to_midpoint_verbose(uintptr_t base_addr,
+                                      uint16_t *cntvalue_min_out,
+                                      uint16_t *cntvalue_max_out,
+                                      uint16_t *cntvalue_mid_out);
 
 /*
  * Read ERR_STATUS, print the value, and clear timeout status when set.
@@ -228,6 +242,20 @@ int hb_rwds_idly_inc_until(uintptr_t base_addr, uint16_t target_cntvalue);
  *  -3  = target not reached within guard iteration window
  */
 int hb_rwds_idly_dec_below_16(uintptr_t base_addr);
+
+/*
+ * Step RWDS IDELAY one tap at a time until STATUS reaches target +/- tolerance.
+ * Uses the same stepping control sequence as hb_odly_inc()/hb_odly_dec():
+ * force EN_VTC low, program INC direction, pulse CE, then optionally re-enable
+ * EN_VTC after each step.
+ * Return codes:
+ *   0  = success (status is now within the requested tolerance band)
+ *  -1  = invalid argument (target outside 9-bit range)
+ *  -3  = target band not reached within guard iteration window
+ */
+int hb_rwds_idly_move_near_target(uintptr_t base_addr,
+                                  uint16_t target_cntvalue,
+                                  uint16_t tolerance_cntvalue);
 
 /*
  * Run a full 32-bit memory test across HyperRAM range [0x80000000, 0x807F0000).

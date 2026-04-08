@@ -44,7 +44,7 @@ extern "C" {
 /*
  * Constant values and common masks.
  */
-#define HB_VERSION_VALUE                0x01000005u
+#define HB_VERSION_VALUE                0x01000006u
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu
@@ -90,10 +90,12 @@ extern "C" {
  * bit0 IDELAYCTRL reset request
  * bit1 ODELAY reset request
  * bit2 RWDS and DQ IDELAY reset request
+ * bit3 external HyperRAM RESET# request (active while set)
  */
 #define HB_DELAY_RST_IDELAYCTRL (1u << 0)
 #define HB_DELAY_RST_CKP_ODELAY (1u << 1)
 #define HB_DELAY_RST_RWDS_IDELAY (1u << 2)
+#define HB_DELAY_RST_HB_RESET   (1u << 3)
 
 /*
  * HB_IDELAYCTRL_STATUS bit definitions.
