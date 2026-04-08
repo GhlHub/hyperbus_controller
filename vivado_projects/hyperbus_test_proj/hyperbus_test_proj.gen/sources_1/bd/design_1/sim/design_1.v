@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Tue Apr  7 19:35:18 2026
+//Date        : Wed Apr  8 09:39:34 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=20,numReposBlks=19,numNonXlnxBlks=2,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=21,numReposBlks=20,numNonXlnxBlks=3,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK_IN1_D_0_clk_n,
     CLK_IN1_D_0_clk_p,
@@ -127,6 +127,23 @@ module design_1
   wire axi_crossbar_0_M04_AXI_WREADY;
   wire [19:16]axi_crossbar_0_M04_AXI_WSTRB;
   wire [4:4]axi_crossbar_0_M04_AXI_WVALID;
+  wire [191:160]axi_crossbar_0_M05_AXI_ARADDR;
+  wire axi_crossbar_0_M05_AXI_ARREADY;
+  wire [5:5]axi_crossbar_0_M05_AXI_ARVALID;
+  wire [191:160]axi_crossbar_0_M05_AXI_AWADDR;
+  wire axi_crossbar_0_M05_AXI_AWREADY;
+  wire [5:5]axi_crossbar_0_M05_AXI_AWVALID;
+  wire [5:5]axi_crossbar_0_M05_AXI_BREADY;
+  wire [1:0]axi_crossbar_0_M05_AXI_BRESP;
+  wire axi_crossbar_0_M05_AXI_BVALID;
+  wire [31:0]axi_crossbar_0_M05_AXI_RDATA;
+  wire [5:5]axi_crossbar_0_M05_AXI_RREADY;
+  wire [1:0]axi_crossbar_0_M05_AXI_RRESP;
+  wire axi_crossbar_0_M05_AXI_RVALID;
+  wire [191:160]axi_crossbar_0_M05_AXI_WDATA;
+  wire axi_crossbar_0_M05_AXI_WREADY;
+  wire [23:20]axi_crossbar_0_M05_AXI_WSTRB;
+  wire [5:5]axi_crossbar_0_M05_AXI_WVALID;
   wire [31:0]axi_crossbar_1_M00_AXI_ARADDR;
   wire [1:0]axi_crossbar_1_M00_AXI_ARBURST;
   wire [3:0]axi_crossbar_1_M00_AXI_ARCACHE;
@@ -192,6 +209,8 @@ module design_1
   wire hyperbus_controller_0_o_dbg_rwds_q1_dly;
   wire hyperbus_controller_0_o_dbg_rwds_q2_dly;
   wire hyperbus_controller_1_o_hb_clk_ce;
+  wire ila_1_TRIG_OUT_ACK;
+  wire ila_1_TRIG_OUT_TRIG;
   wire [2:0]ilconcat_0_dout;
   wire [7:0]io_hb_dq_0;
   wire io_hb_rwds_0;
@@ -335,31 +354,31 @@ module design_1
   wire [0:0]reset_gen_peripheral_aresetn;
   wire [0:0]reset_gen_peripheral_reset;
   wire [0:0]reset_gen_peripheral_reset1;
-  wire [14:0]NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED;
-  wire [14:0]NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED;
+  wire [17:0]NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED;
+  wire [17:0]NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED;
 
   design_1_axi_crossbar_0_0 axi_crossbar_0
        (.aclk(axi_clk),
         .aresetn(proc_sys_reset_1_interconnect_aresetn),
-        .m_axi_araddr({axi_crossbar_0_M04_AXI_ARADDR,axi_crossbar_0_M03_AXI_ARADDR,axi_crossbar_0_M02_AXI_ARADDR,axi_crossbar_0_M01_AXI_ARADDR,axi_crossbar_0_M00_AXI_ARADDR}),
+        .m_axi_araddr({axi_crossbar_0_M05_AXI_ARADDR,axi_crossbar_0_M04_AXI_ARADDR,axi_crossbar_0_M03_AXI_ARADDR,axi_crossbar_0_M02_AXI_ARADDR,axi_crossbar_0_M01_AXI_ARADDR,axi_crossbar_0_M00_AXI_ARADDR}),
         .m_axi_arprot({axi_crossbar_0_M02_AXI_ARPROT,NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED[5:0]}),
-        .m_axi_arready({axi_crossbar_0_M04_AXI_ARREADY,axi_crossbar_0_M03_AXI_ARREADY,axi_crossbar_0_M02_AXI_ARREADY,axi_crossbar_0_M01_AXI_ARREADY,axi_crossbar_0_M00_AXI_ARREADY}),
-        .m_axi_arvalid({axi_crossbar_0_M04_AXI_ARVALID,axi_crossbar_0_M03_AXI_ARVALID,axi_crossbar_0_M02_AXI_ARVALID,axi_crossbar_0_M01_AXI_ARVALID,axi_crossbar_0_M00_AXI_ARVALID}),
-        .m_axi_awaddr({axi_crossbar_0_M04_AXI_AWADDR,axi_crossbar_0_M03_AXI_AWADDR,axi_crossbar_0_M02_AXI_AWADDR,axi_crossbar_0_M01_AXI_AWADDR,axi_crossbar_0_M00_AXI_AWADDR}),
+        .m_axi_arready({axi_crossbar_0_M05_AXI_ARREADY,axi_crossbar_0_M04_AXI_ARREADY,axi_crossbar_0_M03_AXI_ARREADY,axi_crossbar_0_M02_AXI_ARREADY,axi_crossbar_0_M01_AXI_ARREADY,axi_crossbar_0_M00_AXI_ARREADY}),
+        .m_axi_arvalid({axi_crossbar_0_M05_AXI_ARVALID,axi_crossbar_0_M04_AXI_ARVALID,axi_crossbar_0_M03_AXI_ARVALID,axi_crossbar_0_M02_AXI_ARVALID,axi_crossbar_0_M01_AXI_ARVALID,axi_crossbar_0_M00_AXI_ARVALID}),
+        .m_axi_awaddr({axi_crossbar_0_M05_AXI_AWADDR,axi_crossbar_0_M04_AXI_AWADDR,axi_crossbar_0_M03_AXI_AWADDR,axi_crossbar_0_M02_AXI_AWADDR,axi_crossbar_0_M01_AXI_AWADDR,axi_crossbar_0_M00_AXI_AWADDR}),
         .m_axi_awprot({axi_crossbar_0_M02_AXI_AWPROT,NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED[5:0]}),
-        .m_axi_awready({axi_crossbar_0_M04_AXI_AWREADY,axi_crossbar_0_M03_AXI_AWREADY,axi_crossbar_0_M02_AXI_AWREADY,axi_crossbar_0_M01_AXI_AWREADY,axi_crossbar_0_M00_AXI_AWREADY}),
-        .m_axi_awvalid({axi_crossbar_0_M04_AXI_AWVALID,axi_crossbar_0_M03_AXI_AWVALID,axi_crossbar_0_M02_AXI_AWVALID,axi_crossbar_0_M01_AXI_AWVALID,axi_crossbar_0_M00_AXI_AWVALID}),
-        .m_axi_bready({axi_crossbar_0_M04_AXI_BREADY,axi_crossbar_0_M03_AXI_BREADY,axi_crossbar_0_M02_AXI_BREADY,axi_crossbar_0_M01_AXI_BREADY,axi_crossbar_0_M00_AXI_BREADY}),
-        .m_axi_bresp({axi_crossbar_0_M04_AXI_BRESP,axi_crossbar_0_M03_AXI_BRESP,axi_crossbar_0_M02_AXI_BRESP,axi_crossbar_0_M01_AXI_BRESP,axi_crossbar_0_M00_AXI_BRESP}),
-        .m_axi_bvalid({axi_crossbar_0_M04_AXI_BVALID,axi_crossbar_0_M03_AXI_BVALID,axi_crossbar_0_M02_AXI_BVALID,axi_crossbar_0_M01_AXI_BVALID,axi_crossbar_0_M00_AXI_BVALID}),
-        .m_axi_rdata({axi_crossbar_0_M04_AXI_RDATA,axi_crossbar_0_M03_AXI_RDATA,axi_crossbar_0_M02_AXI_RDATA,axi_crossbar_0_M01_AXI_RDATA,axi_crossbar_0_M00_AXI_RDATA}),
-        .m_axi_rready({axi_crossbar_0_M04_AXI_RREADY,axi_crossbar_0_M03_AXI_RREADY,axi_crossbar_0_M02_AXI_RREADY,axi_crossbar_0_M01_AXI_RREADY,axi_crossbar_0_M00_AXI_RREADY}),
-        .m_axi_rresp({axi_crossbar_0_M04_AXI_RRESP,axi_crossbar_0_M03_AXI_RRESP,axi_crossbar_0_M02_AXI_RRESP,axi_crossbar_0_M01_AXI_RRESP,axi_crossbar_0_M00_AXI_RRESP}),
-        .m_axi_rvalid({axi_crossbar_0_M04_AXI_RVALID,axi_crossbar_0_M03_AXI_RVALID,axi_crossbar_0_M02_AXI_RVALID,axi_crossbar_0_M01_AXI_RVALID,axi_crossbar_0_M00_AXI_RVALID}),
-        .m_axi_wdata({axi_crossbar_0_M04_AXI_WDATA,axi_crossbar_0_M03_AXI_WDATA,axi_crossbar_0_M02_AXI_WDATA,axi_crossbar_0_M01_AXI_WDATA,axi_crossbar_0_M00_AXI_WDATA}),
-        .m_axi_wready({axi_crossbar_0_M04_AXI_WREADY,axi_crossbar_0_M03_AXI_WREADY,axi_crossbar_0_M02_AXI_WREADY,axi_crossbar_0_M01_AXI_WREADY,axi_crossbar_0_M00_AXI_WREADY}),
-        .m_axi_wstrb({axi_crossbar_0_M04_AXI_WSTRB,axi_crossbar_0_M03_AXI_WSTRB,axi_crossbar_0_M02_AXI_WSTRB,axi_crossbar_0_M01_AXI_WSTRB,axi_crossbar_0_M00_AXI_WSTRB}),
-        .m_axi_wvalid({axi_crossbar_0_M04_AXI_WVALID,axi_crossbar_0_M03_AXI_WVALID,axi_crossbar_0_M02_AXI_WVALID,axi_crossbar_0_M01_AXI_WVALID,axi_crossbar_0_M00_AXI_WVALID}),
+        .m_axi_awready({axi_crossbar_0_M05_AXI_AWREADY,axi_crossbar_0_M04_AXI_AWREADY,axi_crossbar_0_M03_AXI_AWREADY,axi_crossbar_0_M02_AXI_AWREADY,axi_crossbar_0_M01_AXI_AWREADY,axi_crossbar_0_M00_AXI_AWREADY}),
+        .m_axi_awvalid({axi_crossbar_0_M05_AXI_AWVALID,axi_crossbar_0_M04_AXI_AWVALID,axi_crossbar_0_M03_AXI_AWVALID,axi_crossbar_0_M02_AXI_AWVALID,axi_crossbar_0_M01_AXI_AWVALID,axi_crossbar_0_M00_AXI_AWVALID}),
+        .m_axi_bready({axi_crossbar_0_M05_AXI_BREADY,axi_crossbar_0_M04_AXI_BREADY,axi_crossbar_0_M03_AXI_BREADY,axi_crossbar_0_M02_AXI_BREADY,axi_crossbar_0_M01_AXI_BREADY,axi_crossbar_0_M00_AXI_BREADY}),
+        .m_axi_bresp({axi_crossbar_0_M05_AXI_BRESP,axi_crossbar_0_M04_AXI_BRESP,axi_crossbar_0_M03_AXI_BRESP,axi_crossbar_0_M02_AXI_BRESP,axi_crossbar_0_M01_AXI_BRESP,axi_crossbar_0_M00_AXI_BRESP}),
+        .m_axi_bvalid({axi_crossbar_0_M05_AXI_BVALID,axi_crossbar_0_M04_AXI_BVALID,axi_crossbar_0_M03_AXI_BVALID,axi_crossbar_0_M02_AXI_BVALID,axi_crossbar_0_M01_AXI_BVALID,axi_crossbar_0_M00_AXI_BVALID}),
+        .m_axi_rdata({axi_crossbar_0_M05_AXI_RDATA,axi_crossbar_0_M04_AXI_RDATA,axi_crossbar_0_M03_AXI_RDATA,axi_crossbar_0_M02_AXI_RDATA,axi_crossbar_0_M01_AXI_RDATA,axi_crossbar_0_M00_AXI_RDATA}),
+        .m_axi_rready({axi_crossbar_0_M05_AXI_RREADY,axi_crossbar_0_M04_AXI_RREADY,axi_crossbar_0_M03_AXI_RREADY,axi_crossbar_0_M02_AXI_RREADY,axi_crossbar_0_M01_AXI_RREADY,axi_crossbar_0_M00_AXI_RREADY}),
+        .m_axi_rresp({axi_crossbar_0_M05_AXI_RRESP,axi_crossbar_0_M04_AXI_RRESP,axi_crossbar_0_M03_AXI_RRESP,axi_crossbar_0_M02_AXI_RRESP,axi_crossbar_0_M01_AXI_RRESP,axi_crossbar_0_M00_AXI_RRESP}),
+        .m_axi_rvalid({axi_crossbar_0_M05_AXI_RVALID,axi_crossbar_0_M04_AXI_RVALID,axi_crossbar_0_M03_AXI_RVALID,axi_crossbar_0_M02_AXI_RVALID,axi_crossbar_0_M01_AXI_RVALID,axi_crossbar_0_M00_AXI_RVALID}),
+        .m_axi_wdata({axi_crossbar_0_M05_AXI_WDATA,axi_crossbar_0_M04_AXI_WDATA,axi_crossbar_0_M03_AXI_WDATA,axi_crossbar_0_M02_AXI_WDATA,axi_crossbar_0_M01_AXI_WDATA,axi_crossbar_0_M00_AXI_WDATA}),
+        .m_axi_wready({axi_crossbar_0_M05_AXI_WREADY,axi_crossbar_0_M04_AXI_WREADY,axi_crossbar_0_M03_AXI_WREADY,axi_crossbar_0_M02_AXI_WREADY,axi_crossbar_0_M01_AXI_WREADY,axi_crossbar_0_M00_AXI_WREADY}),
+        .m_axi_wstrb({axi_crossbar_0_M05_AXI_WSTRB,axi_crossbar_0_M04_AXI_WSTRB,axi_crossbar_0_M03_AXI_WSTRB,axi_crossbar_0_M02_AXI_WSTRB,axi_crossbar_0_M01_AXI_WSTRB,axi_crossbar_0_M00_AXI_WSTRB}),
+        .m_axi_wvalid({axi_crossbar_0_M05_AXI_WVALID,axi_crossbar_0_M04_AXI_WVALID,axi_crossbar_0_M03_AXI_WVALID,axi_crossbar_0_M02_AXI_WVALID,axi_crossbar_0_M01_AXI_WVALID,axi_crossbar_0_M00_AXI_WVALID}),
         .s_axi_araddr(microblaze_0_M_AXI_DP_ARADDR),
         .s_axi_arprot(microblaze_0_M_AXI_DP_ARPROT),
         .s_axi_arready(microblaze_0_M_AXI_DP_ARREADY),
@@ -670,7 +689,9 @@ module design_1
         .probe6(hyperbus_controller_0_o_dbg_rwds_o_d1),
         .probe7(hyperbus_controller_0_o_dbg_rwds_o_d2),
         .probe8(hyperbus_controller_0_o_dbg_i_dq_t),
-        .probe9(hyperbus_controller_0_o_dbg_i_rwds_t));
+        .probe9(hyperbus_controller_0_o_dbg_i_rwds_t),
+        .trig_in(ila_1_TRIG_OUT_TRIG),
+        .trig_in_ack(ila_1_TRIG_OUT_ACK));
   design_1_ila_1_0 ila_1
        (.clk(axi_clk),
         .probe0(axi_crossbar_1_M00_AXI_WREADY),
@@ -716,7 +737,9 @@ module design_1
         .probe6(axi_crossbar_1_M00_AXI_RREADY),
         .probe7(axi_crossbar_1_M00_AXI_WVALID),
         .probe8(axi_crossbar_1_M00_AXI_ARVALID),
-        .probe9(axi_crossbar_1_M00_AXI_ARREADY));
+        .probe9(axi_crossbar_1_M00_AXI_ARREADY),
+        .trig_out(ila_1_TRIG_OUT_TRIG),
+        .trig_out_ack(ila_1_TRIG_OUT_ACK));
   assign ilconcat_0_dout = {axi_quad_spi_0_ip2intc_irpt, axi_timer_0_interrupt, e_uart_0_intr};
   (* BMM_INFO_ADDRESS_SPACE = "byte  0x00000000 32 > design_1 blk_mem_gen_0" *) 
   (* KEEP_HIERARCHY = "YES" *) 
@@ -906,6 +929,26 @@ module design_1
         .hb_phy_rx_clk_peripheral_reset(reset_gen_peripheral_reset1),
         .mb_debug_sys_rst(mb_debug_sys_rst_1),
         .mb_reset(reset_gen_mb_reset));
+  design_1_util_icape3_axil_0_0 util_icape3_axil_0
+       (.s_axi_aclk(axi_clk),
+        .s_axi_araddr(axi_crossbar_0_M05_AXI_ARADDR[167:160]),
+        .s_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
+        .s_axi_arready(axi_crossbar_0_M05_AXI_ARREADY),
+        .s_axi_arvalid(axi_crossbar_0_M05_AXI_ARVALID),
+        .s_axi_awaddr(axi_crossbar_0_M05_AXI_AWADDR[167:160]),
+        .s_axi_awready(axi_crossbar_0_M05_AXI_AWREADY),
+        .s_axi_awvalid(axi_crossbar_0_M05_AXI_AWVALID),
+        .s_axi_bready(axi_crossbar_0_M05_AXI_BREADY),
+        .s_axi_bresp(axi_crossbar_0_M05_AXI_BRESP),
+        .s_axi_bvalid(axi_crossbar_0_M05_AXI_BVALID),
+        .s_axi_rdata(axi_crossbar_0_M05_AXI_RDATA),
+        .s_axi_rready(axi_crossbar_0_M05_AXI_RREADY),
+        .s_axi_rresp(axi_crossbar_0_M05_AXI_RRESP),
+        .s_axi_rvalid(axi_crossbar_0_M05_AXI_RVALID),
+        .s_axi_wdata(axi_crossbar_0_M05_AXI_WDATA),
+        .s_axi_wready(axi_crossbar_0_M05_AXI_WREADY),
+        .s_axi_wstrb(axi_crossbar_0_M05_AXI_WSTRB),
+        .s_axi_wvalid(axi_crossbar_0_M05_AXI_WVALID));
 endmodule
 
 module reset_gen_imp_1MBKAOM

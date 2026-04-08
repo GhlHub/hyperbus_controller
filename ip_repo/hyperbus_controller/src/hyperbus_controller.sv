@@ -117,7 +117,7 @@ module hyperbus_controller #(
 
     // cmd packing: [58] src_axil, [57] is_write, [56] is_reg, [55:24] addr, [23:16] beats, [15:0] wdata
     logic [CMD_W-1:0] cmd_fifo_din, cmd_fifo_dout;
-    logic cmd_fifo_wr_en, cmd_fifo_rd_en, cmd_fifo_full, cmd_fifo_empty, cmd_fifo_dout_valid;
+    logic cmd_fifo_wr_en, cmd_fifo_rd_en, cmd_fifo_full, cmd_fifo_prog_full, cmd_fifo_empty, cmd_fifo_dout_valid;
     logic cmd_fifo_wr_en_full, cmd_fifo_wr_en_axil;
     logic [CMD_W-1:0] cmd_fifo_din_full, cmd_fifo_din_axil;
 
@@ -166,6 +166,7 @@ module hyperbus_controller #(
         .i_cmd_fifo_din           (           cmd_fifo_din),
         .i_cmd_fifo_wr_en         (         cmd_fifo_wr_en),
         .o_cmd_fifo_full          (          cmd_fifo_full),
+        .o_cmd_fifo_prog_full     (     cmd_fifo_prog_full),
         .o_cmd_fifo_dout          (          cmd_fifo_dout),
         .i_cmd_fifo_rd_en         (         cmd_fifo_rd_en),
         .o_cmd_fifo_empty         (         cmd_fifo_empty),
@@ -211,6 +212,7 @@ module hyperbus_controller #(
         .i_axi_aresetn         (         i_axi_aresetn),
         .i_req_block           (    hb_timeout_block_axi),
         .i_cmd_fifo_full       (          cmd_fifo_full),
+        .i_cmd_fifo_prog_full  (     cmd_fifo_prog_full),
         .o_cmd_fifo_din_full   (      cmd_fifo_din_full),
         .o_cmd_fifo_wr_en_full (    cmd_fifo_wr_en_full),
         .o_aw_pending          (             aw_pending),

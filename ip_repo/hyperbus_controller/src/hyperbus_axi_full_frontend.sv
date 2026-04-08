@@ -13,6 +13,7 @@ module hyperbus_axi_full_frontend #(
     input  wire                         i_req_block,
 
     input  wire                         i_cmd_fifo_full,
+    input  wire                         i_cmd_fifo_prog_full,
     output logic [CMD_W-1:0]            o_cmd_fifo_din_full,
     output logic                        o_cmd_fifo_wr_en_full,
     output logic                        o_aw_pending,
@@ -104,7 +105,7 @@ module hyperbus_axi_full_frontend #(
     assign awaddr_word = s_axi_awaddr[31:2];
     assign araddr_word = s_axi_araddr[31:2];
 
-    assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_full) &&
+    assign aw_can_accept = (!i_req_block) && (!o_aw_pending) && (!i_cmd_fifo_prog_full) &&
                            (!i_wr_fifo_prog_full) &&
                            (!bresp_q_full) &&
                            (s_axi_awsize == 3'd2) &&
@@ -162,6 +163,8 @@ module hyperbus_axi_full_frontend #(
             logic [1:0] bresp_push_data;
             logic rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
             logic [1:0] rd_stage_count_n;
+            logic aw_accept;
+            logic ar_can_accept, ar_accept;
             logic [8:0] aw_total_beats;
             logic [WORD_ADDR_WIDTH-1:0] aw_wrap_span_words;
             logic [WORD_ADDR_WIDTH-1:0] aw_wrap_mask_words;
@@ -181,14 +184,24 @@ module hyperbus_axi_full_frontend #(
             rd_stage_wr_ptr_n = rd_stage_wr_ptr;
             rd_stage_rd_ptr_n = rd_stage_rd_ptr;
             rd_stage_count_n = rd_stage_count;
+            aw_accept = aw_can_accept && s_axi_awvalid;
+            ar_can_accept = (!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
+                            (!i_cmd_fifo_prog_full) && (s_axi_arsize == 3'd2) &&
+                            ((s_axi_arburst == 2'b01) ||
+                             ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
+                            (s_axi_arlen <= 8'd31);
+            ar_accept = ar_can_accept && s_axi_arvalid;
 
             o_cmd_fifo_wr_en_full <= 1'b0;
             o_rd_fifo_rd_en <= 1'b0;
             if (rd_pop_cooldown) rd_pop_cooldown <= 1'b0;
 
-            // AW: only INCR, 32-bit beats, up to 32 beats
-            s_axi_awready <= aw_can_accept;
-            if (aw_can_accept && s_axi_awvalid) begin
+            // Only offer AWREADY once AWVALID is already present. This avoids
+            // pre-asserting READY and accidentally handshaking AW and AR in
+            // the same cycle. Internally, treat acceptance as a real AXI
+            // handshake, not just "request looks acceptable".
+            s_axi_awready <= aw_accept;
+            if (aw_accept) begin
                 o_aw_pending <= 1'b1;
                 aw_addr_q <= awaddr_word;
                 aw_id_q <= s_axi_awid;
@@ -292,17 +305,8 @@ module hyperbus_axi_full_frontend #(
             // AR
             // Write-priority arbitration:
             // if AWVALID and ARVALID arrive together, service write first.
-            s_axi_arready <= (!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
-                             (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
-                             ((s_axi_arburst == 2'b01) ||
-                              ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
-                             (s_axi_arlen <= 8'd31);
-            if ((!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
-                (!i_cmd_fifo_full) && (s_axi_arsize == 3'd2) &&
-                ((s_axi_arburst == 2'b01) ||
-                 ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
-                (s_axi_arlen <= 8'd31) &&
-                s_axi_arvalid) begin
+            s_axi_arready <= ar_accept;
+            if (ar_accept) begin
                 ar_total_beats = {1'b0, s_axi_arlen} + 9'd1;
                 if (s_axi_arburst == 2'b10) begin
                     ar_wrap_span_words = {{(WORD_ADDR_WIDTH-9){1'b0}}, ar_total_beats};

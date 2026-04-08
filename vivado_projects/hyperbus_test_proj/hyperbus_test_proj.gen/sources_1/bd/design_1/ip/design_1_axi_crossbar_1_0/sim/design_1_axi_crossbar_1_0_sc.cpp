@@ -78,7 +78,7 @@ design_1_axi_crossbar_1_0_sc::design_1_axi_crossbar_1_0_sc(const sc_core::sc_mod
     model_param_props.addLong("C_CONNECTIVITY_MODE", "1");
     model_param_props.addString("C_FAMILY", "spartanuplus");
     model_param_props.addBitString("C_M_AXI_BASE_ADDR", "0000000000000000000000000000000010000000000000000000000000000000", 64);
-    model_param_props.addBitString("C_M_AXI_ADDR_WIDTH", "00000000000000000000000000011111", 32);
+    model_param_props.addBitString("C_M_AXI_ADDR_WIDTH", "00000000000000000000000000010111", 32);
     model_param_props.addBitString("C_S_AXI_BASE_ID", "0000000000000000000000000000000100000000000000000000000000000000", 64);
     model_param_props.addBitString("C_S_AXI_THREAD_ID_WIDTH", "0000000000000000000000000000000000000000000000000000000000000000", 64);
     model_param_props.addBitString("C_M_AXI_WRITE_CONNECTIVITY", "00000000000000000000000000000001", 32);

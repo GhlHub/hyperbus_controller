@@ -251,6 +251,7 @@ module hyperbus_controller_tb;
     int k;
     int beats;
     int mask_idx;
+    int axif_cmd_push_count;
     int axil_cmd_push_count;
     logic [1:0] bresp_chk;
     logic [31:0] burst_base;
@@ -272,6 +273,16 @@ module hyperbus_controller_tb;
     `include "hyperbus_tb_axi_tasks.svh"
     `include "hyperbus_tb_checks.svh"
     `include "hyperbus_tb_sequences.svh"
+
+    // Count AXI-full command FIFO push pulses from DUT for explicit
+    // "exactly one command accepted per request" checks.
+    always @(posedge axi_aclk or negedge axi_aresetn) begin
+        if (!axi_aresetn) begin
+            axif_cmd_push_count <= 0;
+        end else if (dut.cmd_fifo_wr_en_full) begin
+            axif_cmd_push_count <= axif_cmd_push_count + 1;
+        end
+    end
 
     // Count AXI-Lite command FIFO push pulses from DUT for explicit
     // "exactly one command accepted per request" checks.

@@ -49,6 +49,7 @@ After modifying controller RTL:
 
 - For RTL behavior changes, run the most relevant simulation available.
 - For HyperBus controller testbench runs under `sim_m/xsim/`, prefer the parallel launcher `hyperbus_controller_tb_parallel.sh` so UltraScale+ and 7-series PHY variants are exercised together.
+- For XSIM runs in `sim_m/xsim/`, keep `cmd.tcl` on `run all` so the testbench decides completion; do not treat a clean `xsim` process exit alone as proof of success. Check `simulate.log` for `TB PASS` and absence of `Fatal:` / `$fatal`.
 - For IP packaging changes, rerun the Vivado packaging flow and confirm `ip_repo/hyperbus_controller/src/` matches `rtl/` where appropriate.
 - For byte-mask, wrap, or address-alignment changes, inspect the AXI-full testbench coverage in `tb/` and the simulation logs under `sim_m/xsim/` when available.
 - For AXI write-response timing changes, verify overlap behavior: AXI-full and AXI-Lite traffic should still be accepted while a prior AXI-full write is draining from `wr_fifo`.
@@ -65,6 +66,7 @@ After modifying controller RTL:
 - Redirect explicitly configurable tool `.log` / `.jou` outputs into `logs/` when launching Vivado or similar tools from the repo.
 - Keep existing flow-local simulation artifacts such as `simulate.log`, `compile.log`, and `elaborate.log` in the directories where the checked-in scripts already generate them, unless the task explicitly asks to change that behavior.
 - The checked-in XSIM launchers now write architecture-specific outputs under `sim_m/xsim/runs/usplus/` and `sim_m/xsim/runs/7series/`; treat those as generated artifacts unless a task explicitly asks to keep or compare them.
+- The AXI-full frontend is intentionally write-first if `AWVALID` and `ARVALID` arrive together; preserve the rule that only one of those address handshakes is accepted in a cycle.
 - `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
 - Some files under `vivado_projects/` and Vitis output trees are generated artifacts. Update them only when the task calls for it.
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
@@ -76,6 +78,7 @@ After modifying controller RTL:
   2. keep the Vivado-generated packaged-image flow intact by regenerating the `.pdi` from `design_1_wrapper_bootloader.bif`, which references `static_files/plm.elf` plus `design_1_wrapper_bootloader.rcdo`
   3. flash the packaged `.pdi`, not a raw bitstream-derived `BOOT.bin`
 - When running `bootgen` on `design_1_wrapper_bootloader.bif`, invoke it from `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/` or otherwise preserve those relative paths; the BIF expects `static_files/plm.elf` relative to that directory.
+- In this MicroBlaze configuration, `XPAR_MICROBLAZE_BASE_VECTORS` is `0`, so interrupt/exception vectors remain active at low memory after the bootloader jumps to an application in HyperRAM. If the loaded application uses interrupts, the bootloader handoff must install the application's vector stubs into `0x0`, `0x8`, `0x10`, and `0x20` before transfer.
 - Do not substitute an ad hoc `BOOT.bin` or manually improvised image format for the normal `spartanup` `.bif` -> `.pdi` flow unless the task explicitly requires reworking the boot-image format.
 
 ## Common Tasks

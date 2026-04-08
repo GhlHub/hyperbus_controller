@@ -250,6 +250,24 @@
             },
             "V6": {
                 "VT": "AC",
+                "BA": "0x00020000",
+                "HA": "0x00020FFF",
+                "BP": "C_BASEADDR",
+                "HP": "C_HIGHADDR",
+                "MA": "Data",
+                "MX": "/microblaze_0",
+                "MI": "M_AXI_DP",
+                "MS": "SEG_util_icape3_axil_0_reg0",
+                "MV": "xilinx.com:ip:microblaze:11.0",
+                "SX": "/util_icape3_axil_0",
+                "SI": "s_axi",
+                "SS": "reg0",
+                "SV": "ghl.local:user:util_icape3_axil:1.0",
+                "TM": "data",
+                "TU": "register"
+            },
+            "V7": {
+                "VT": "AC",
                 "BA": "0x41200000",
                 "HA": "0x4120FFFF",
                 "BP": "C_BASEADDR",
@@ -267,7 +285,7 @@
                 "TM": "data",
                 "TU": "register"
             },
-            "V7": {
+            "V8": {
                 "VT": "AC",
                 "BA": "0x41C00000",
                 "HA": "0x41C0FFFF",
@@ -285,7 +303,7 @@
                 "TM": "data",
                 "TU": "register"
             },
-            "V8": {
+            "V9": {
                 "VT": "AC",
                 "BA": "0x44A00000",
                 "HA": "0x44A0FFFF",
@@ -303,7 +321,7 @@
                 "TM": "data",
                 "TU": "register"
             },
-            "V9": {
+            "V10": {
                 "VT": "AC",
                 "BA": "0x44A10000",
                 "HA": "0x44A1FFFF",
@@ -321,7 +339,25 @@
                 "TM": "data",
                 "TU": "register"
             },
-            "V10": {
+            "V11": {
+                "VT": "AC",
+                "BA": "0x80000000",
+                "HA": "0x807FFFFF",
+                "BP": "C_BASEADDR",
+                "HP": "C_HIGHADDR",
+                "MA": "Data",
+                "MX": "/microblaze_0",
+                "MI": "M_AXI_DC",
+                "MS": "SEG_hyperbus_controller_0_reg0",
+                "MV": "xilinx.com:ip:microblaze:11.0",
+                "SX": "/hyperbus_controller_0",
+                "SI": "s_axi",
+                "SS": "reg0",
+                "SV": "user.org:user:hyperbus_controller:1.0",
+                "TM": "data",
+                "TU": "register"
+            },
+            "V12": {
                 "VT": "AC",
                 "BA": "0x80000000",
                 "HA": "0x807FFFFF",
@@ -337,24 +373,6 @@
                 "SS": "reg0",
                 "SV": "user.org:user:hyperbus_controller:1.0",
                 "TM": "instruction",
-                "TU": "register"
-            },
-            "V11": {
-                "VT": "AC",
-                "BA": "0x80000000",
-                "HA": "0xFFFFFFFF",
-                "BP": "C_BASEADDR",
-                "HP": "C_HIGHADDR",
-                "MA": "Data",
-                "MX": "/microblaze_0",
-                "MI": "M_AXI_DC",
-                "MS": "SEG_hyperbus_controller_0_reg0",
-                "MV": "xilinx.com:ip:microblaze:11.0",
-                "SX": "/hyperbus_controller_0",
-                "SI": "s_axi",
-                "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.0",
-                "TM": "data",
                 "TU": "register"
             }
         },
@@ -409,6 +427,11 @@
             },
             {
                 "src": "V11",
+                "trg": "V2",
+                "EH": "2"
+            },
+            {
+                "src": "V12",
                 "trg": "V2",
                 "EH": "2"
             }

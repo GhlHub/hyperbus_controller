@@ -105,6 +105,10 @@ simulate()
 {
   xsim hyperbus_controller_tb -key {Behavioral:sim_1:Functional:hyperbus_controller_tb} -tclbatch "$cmd_tcl_path" -log simulate.log
   awk '/\[[^]]*FIFO\]/' simulate.log > simulate_fifo.log
+  if rg -n '^(Fatal:|ERROR:|Error:)|\$fatal|TB timeout' simulate.log >/dev/null; then
+    echo "ERROR: Simulation reported a fatal/error condition. See $sim_run_dir/simulate.log" >&2
+    return 1
+  fi
 }
 
 ensure_run_dir()

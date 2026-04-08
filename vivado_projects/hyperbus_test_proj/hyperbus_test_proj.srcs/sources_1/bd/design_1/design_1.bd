@@ -31,7 +31,8 @@
       "ila_1": "",
       "microblaze_0": "",
       "mdm_0": "",
-      "ila_0": ""
+      "ila_0": "",
+      "util_icape3_axil_0": ""
     },
     "interface_ports": {
       "CLK_IN1_D_0": {
@@ -287,7 +288,7 @@
         "has_run_ip_tcl": "true",
         "parameters": {
           "NUM_MI": {
-            "value": "5"
+            "value": "6"
           },
           "NUM_SI": {
             "value": "1"
@@ -297,7 +298,7 @@
           "S00_AXI": {
             "bd_attributes": {
               "BRIDGES": {
-                "value": "M00_AXI:M01_AXI:M02_AXI:M03_AXI:M04_AXI",
+                "value": "M00_AXI:M01_AXI:M02_AXI:M03_AXI:M04_AXI:M05_AXI",
                 "value_src": "auto"
               },
               "TYPE": {
@@ -312,7 +313,8 @@
               "M01_AXI",
               "M02_AXI",
               "M03_AXI",
-              "M04_AXI"
+              "M04_AXI",
+              "M05_AXI"
             ]
           },
           "M00_AXI": {
@@ -348,6 +350,14 @@
             }
           },
           "M04_AXI": {
+            "bd_attributes": {
+              "TYPE": {
+                "value": "interior",
+                "value_src": "default"
+              }
+            }
+          },
+          "M05_AXI": {
             "bd_attributes": {
               "TYPE": {
                 "value": "interior",
@@ -777,7 +787,15 @@
         "xci_name": "design_1_ila_1_0",
         "xci_path": "ip/design_1_ila_1_0/design_1_ila_1_0.xci",
         "inst_hier_path": "ila_1",
-        "has_run_ip_tcl": "true"
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "C_TRIGIN_EN": {
+            "value": "false"
+          },
+          "C_TRIGOUT_EN": {
+            "value": "true"
+          }
+        }
       },
       "microblaze_0": {
         "vlnv": "xilinx.com:ip:microblaze:11.0",
@@ -1021,6 +1039,24 @@
           },
           "C_NUM_OF_PROBES": {
             "value": "15"
+          },
+          "C_TRIGIN_EN": {
+            "value": "true"
+          }
+        }
+      },
+      "util_icape3_axil_0": {
+        "vlnv": "ghl.local:user:util_icape3_axil:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_1_util_icape3_axil_0_0",
+        "xci_path": "ip/design_1_util_icape3_axil_0_0/design_1_util_icape3_axil_0_0.xci",
+        "inst_hier_path": "util_icape3_axil_0",
+        "has_run_ip_tcl": "true",
+        "interface_ports": {
+          "s_axi": {
+            "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
+            "mode": "Slave",
+            "memory_map_ref": "s_axi"
           }
         }
       }
@@ -1062,6 +1098,12 @@
           "axi_quad_spi_0/AXI_LITE"
         ]
       },
+      "axi_crossbar_0_M05_AXI": {
+        "interface_ports": [
+          "axi_crossbar_0/M05_AXI",
+          "util_icape3_axil_0/s_axi"
+        ]
+      },
       "axi_crossbar_1_M00_AXI": {
         "interface_ports": [
           "axi_crossbar_1/M00_AXI",
@@ -1079,6 +1121,12 @@
         "interface_ports": [
           "UART_0",
           "e_uart_0/UART"
+        ]
+      },
+      "ila_1_TRIG_OUT": {
+        "interface_ports": [
+          "ila_1/TRIG_OUT",
+          "ila_0/TRIG_IN"
         ]
       },
       "lmb_bram_if_cntlr_0_BRAM_PORT": {
@@ -1151,6 +1199,7 @@
           "axi_quad_spi_0/s_axi_aclk",
           "ila_1/clk",
           "microblaze_0/Clk",
+          "util_icape3_axil_0/s_axi_aclk",
           "hyperbus_controller_0/i_axi_aclk"
         ]
       },
@@ -1358,6 +1407,7 @@
           "axi_timer_0/s_axi_aresetn",
           "e_uart_0/s00_axi_aresetn",
           "axi_quad_spi_0/s_axi_aresetn",
+          "util_icape3_axil_0/s_axi_aresetn",
           "hyperbus_controller_0/i_axi_aresetn"
         ]
       },
@@ -1423,7 +1473,7 @@
               "SEG_hyperbus_controller_0_reg0": {
                 "address_block": "/hyperbus_controller_0/s_axi/reg0",
                 "offset": "0x80000000",
-                "range": "2G"
+                "range": "8M"
               },
               "SEG_hyperbus_controller_0_reg0_1": {
                 "address_block": "/hyperbus_controller_0/s_axil/reg0",
@@ -1435,6 +1485,11 @@
                 "offset": "0x00000000",
                 "range": "32K",
                 "offset_high_param": "C_HIGHADDR"
+              },
+              "SEG_util_icape3_axil_0_reg0": {
+                "address_block": "/util_icape3_axil_0/s_axi/reg0",
+                "offset": "0x00020000",
+                "range": "4K"
               }
             }
           },

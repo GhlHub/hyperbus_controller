@@ -55,6 +55,7 @@
         input logic [31:0] wr_data,
         input logic [31:0] exp_rd_data
     );
+        int push_base;
         time t_aw_hs;
         time t_ar_acc;
         time t_b_seen;
@@ -63,8 +64,10 @@
         logic ar_acc;
         logic b_seen;
         logic r_seen;
+        logic saw_both_valid;
         logic [31:0] rd_one [0:31];
         begin
+            push_base = axif_cmd_push_count;
             t_aw_hs = 0;
             t_ar_acc = 0;
             t_b_seen = 0;
@@ -73,6 +76,7 @@
             ar_acc = 1'b0;
             b_seen = 1'b0;
             r_seen = 1'b0;
+            saw_both_valid = 1'b0;
 
             @(posedge axi_aclk);
             s_axi_awaddr  <= wr_addr;
@@ -94,12 +98,22 @@
 
             while (!aw_hs) begin
                 @(posedge axi_aclk);
+                if (s_axi_awvalid && s_axi_arvalid) begin
+                    saw_both_valid = 1'b1;
+                    if (s_axi_awready && s_axi_arready) begin
+                        $fatal(1, "Same-cycle RW accepted both AW and AR in the same cycle");
+                    end
+                end
                 if (!aw_hs && s_axi_awvalid && s_axi_awready) begin
                     aw_hs = 1'b1;
                     t_aw_hs = $time;
                     s_axi_awvalid <= 1'b0;
                     s_axi_wvalid  <= 1'b1;
                 end
+            end
+
+            if (!saw_both_valid) begin
+                $fatal(1, "Same-cycle RW test did not present simultaneous AWVALID and ARVALID");
             end
 
             `WAIT_AXI_COND(s_axi_wready && s_axi_wvalid, "same-cycle test W handshake")
@@ -142,6 +156,12 @@
                        int'($rtoi(((t_r_seen / 1ns)) + 0.5)),
                        int'($rtoi(((t_aw_hs / 1ns)) + 0.5)),
                        int'($rtoi(((t_ar_acc / 1ns)) + 0.5)));
+            end
+
+            repeat (8) @(posedge axi_aclk);
+            if ((axif_cmd_push_count - push_base) != 2) begin
+                $fatal(1, "Same-cycle RW expected exactly 2 AXI-full cmd pushes, got %0d",
+                       (axif_cmd_push_count - push_base));
             end
             @(posedge axi_aclk);
             s_axi_bready <= 1'b0;
@@ -514,7 +534,7 @@
         string dq_label;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0005, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0006, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");

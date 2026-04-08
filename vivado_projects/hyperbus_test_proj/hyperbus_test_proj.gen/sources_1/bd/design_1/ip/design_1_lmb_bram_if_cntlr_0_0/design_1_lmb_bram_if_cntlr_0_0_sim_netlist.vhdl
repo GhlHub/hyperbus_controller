@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Fri Apr  3 07:01:06 2026
+-- Date        : Wed Apr  8 03:41:32 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.vhdl
@@ -17,11 +17,11 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 entity design_1_lmb_bram_if_cntlr_0_0_lmb_mux is
   port (
-    BRAM_WEN_A : out STD_LOGIC_VECTOR ( 0 to 3 );
-    lmb_select : out STD_LOGIC;
-    BRAM_EN_A : out STD_LOGIC;
-    BRAM_Addr_A : out STD_LOGIC_VECTOR ( 0 to 31 );
     BRAM_Dout_A : out STD_LOGIC_VECTOR ( 0 to 31 );
+    BRAM_Addr_A : out STD_LOGIC_VECTOR ( 0 to 31 );
+    BRAM_WEN_A : out STD_LOGIC_VECTOR ( 0 to 3 );
+    BRAM_EN_A : out STD_LOGIC;
+    lmb_select : out STD_LOGIC;
     Sl_Ready : out STD_LOGIC;
     Sl1_Ready : out STD_LOGIC;
     Sl1_Wait : out STD_LOGIC;
@@ -31,12 +31,12 @@ entity design_1_lmb_bram_if_cntlr_0_0_lmb_mux is
     LMB1_WriteStrobe : in STD_LOGIC;
     LMB1_ABus : in STD_LOGIC_VECTOR ( 0 to 31 );
     LMB_AddrStrobe : in STD_LOGIC;
-    LMB_ABus : in STD_LOGIC_VECTOR ( 0 to 31 );
     LMB1_WriteDBus : in STD_LOGIC_VECTOR ( 0 to 31 );
     LMB1_BE : in STD_LOGIC_VECTOR ( 0 to 3 );
+    LMB_WriteDBus : in STD_LOGIC_VECTOR ( 0 to 31 );
+    LMB_ABus : in STD_LOGIC_VECTOR ( 0 to 31 );
     LMB_BE : in STD_LOGIC_VECTOR ( 0 to 3 );
     LMB_WriteStrobe : in STD_LOGIC;
-    LMB_WriteDBus : in STD_LOGIC_VECTOR ( 0 to 31 );
     Sl_Rdy : in STD_LOGIC;
     lmb_as : in STD_LOGIC
   );
@@ -59,846 +59,853 @@ architecture STRUCTURE of design_1_lmb_bram_if_cntlr_0_0_lmb_mux is
   signal \more_than_one_lmb.lmb_mux_generate[1].wait_vec[1]_i_1_n_0\ : STD_LOGIC;
   signal \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\ : STD_LOGIC;
   signal \more_than_one_lmb.ongoing_Q\ : STD_LOGIC;
-  signal \more_than_one_lmb.ongoing_new_0\ : STD_LOGIC_VECTOR ( 0 to 0 );
   attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of \BRAM_Addr_A[0]_INST_0_i_2\ : label is "soft_lutpair1";
-  attribute SOFT_HLUTNM of BRAM_EN_A_INST_0 : label is "soft_lutpair0";
-  attribute SOFT_HLUTNM of \BRAM_WEN_A[0]_INST_0_i_2\ : label is "soft_lutpair3";
-  attribute SOFT_HLUTNM of Sl1_Ready_INST_0 : label is "soft_lutpair2";
-  attribute SOFT_HLUTNM of Sl1_Wait_INST_0 : label is "soft_lutpair3";
-  attribute SOFT_HLUTNM of Sl_Ready_INST_0 : label is "soft_lutpair2";
-  attribute SOFT_HLUTNM of \more_than_one_lmb.lmb_mux_generate[1].wait_vec[1]_i_1\ : label is "soft_lutpair1";
-  attribute SOFT_HLUTNM of \more_than_one_lmb.ongoing_Q[0]_i_1\ : label is "soft_lutpair0";
+  attribute SOFT_HLUTNM of \BRAM_WEN_A[0]_INST_0_i_2\ : label is "soft_lutpair0";
+  attribute SOFT_HLUTNM of \BRAM_WEN_A[0]_INST_0_i_3\ : label is "soft_lutpair2";
+  attribute SOFT_HLUTNM of Sl1_Ready_INST_0 : label is "soft_lutpair1";
+  attribute SOFT_HLUTNM of Sl1_Wait_INST_0 : label is "soft_lutpair2";
+  attribute SOFT_HLUTNM of Sl_Ready_INST_0 : label is "soft_lutpair1";
+  attribute SOFT_HLUTNM of \more_than_one_lmb.lmb_mux_generate[1].wait_vec[1]_i_1\ : label is "soft_lutpair0";
 begin
 \BRAM_Addr_A[0]_INST_0\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"B8BBB888"
+      INIT => X"B8FFB800"
     )
         port map (
-      I0 => LMB_ABus(0),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(31),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(0),
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(31),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(0),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(0),
       O => BRAM_Addr_A(0)
     );
-\BRAM_Addr_A[0]_INST_0_i_1\: unisim.vcomponents.LUT6
+\BRAM_Addr_A[0]_INST_0_i_1\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"11111111111111F1"
+      INIT => X"77770070"
     )
         port map (
       I0 => \BRAM_Addr_A[0]_INST_0_i_2_n_0\,
-      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I2 => LMB_AddrStrobe,
-      I3 => LMB_ABus(15),
-      I4 => LMB_ABus(1),
-      I5 => LMB_ABus(0),
+      I1 => LMB_AddrStrobe,
+      I2 => LMB1_AddrStrobe,
+      I3 => LMB1_ABus(0),
+      I4 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
       O => \BRAM_Addr_A[0]_INST_0_i_1_n_0\
     );
-\BRAM_Addr_A[0]_INST_0_i_2\: unisim.vcomponents.LUT2
+\BRAM_Addr_A[0]_INST_0_i_2\: unisim.vcomponents.LUT4
+    generic map(
+      INIT => X"0001"
+    )
+        port map (
+      I0 => LMB_ABus(1),
+      I1 => LMB_ABus(15),
+      I2 => LMB_ABus(0),
+      I3 => LMB_ABus(14),
+      O => \BRAM_Addr_A[0]_INST_0_i_2_n_0\
+    );
+\BRAM_Addr_A[10]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(21),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(10),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(10),
+      O => BRAM_Addr_A(10)
+    );
+\BRAM_Addr_A[11]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(20),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(11),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(11),
+      O => BRAM_Addr_A(11)
+    );
+\BRAM_Addr_A[12]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(19),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(12),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(12),
+      O => BRAM_Addr_A(12)
+    );
+\BRAM_Addr_A[13]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(18),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(13),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(13),
+      O => BRAM_Addr_A(13)
+    );
+\BRAM_Addr_A[14]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(17),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(14),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(14),
+      O => BRAM_Addr_A(14)
+    );
+\BRAM_Addr_A[15]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(16),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(15),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(15),
+      O => BRAM_Addr_A(15)
+    );
+\BRAM_Addr_A[16]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(15),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(16),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(16),
+      O => BRAM_Addr_A(16)
+    );
+\BRAM_Addr_A[17]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(14),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(17),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(17),
+      O => BRAM_Addr_A(17)
+    );
+\BRAM_Addr_A[18]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(13),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(18),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(18),
+      O => BRAM_Addr_A(18)
+    );
+\BRAM_Addr_A[19]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(12),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(19),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(19),
+      O => BRAM_Addr_A(19)
+    );
+\BRAM_Addr_A[1]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(30),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(1),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(1),
+      O => BRAM_Addr_A(1)
+    );
+\BRAM_Addr_A[20]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(11),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(20),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(20),
+      O => BRAM_Addr_A(20)
+    );
+\BRAM_Addr_A[21]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(10),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(21),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(21),
+      O => BRAM_Addr_A(21)
+    );
+\BRAM_Addr_A[22]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(9),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(22),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(22),
+      O => BRAM_Addr_A(22)
+    );
+\BRAM_Addr_A[23]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(8),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(23),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(23),
+      O => BRAM_Addr_A(23)
+    );
+\BRAM_Addr_A[24]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(7),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(24),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(24),
+      O => BRAM_Addr_A(24)
+    );
+\BRAM_Addr_A[25]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(6),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(25),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(25),
+      O => BRAM_Addr_A(25)
+    );
+\BRAM_Addr_A[26]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(5),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(26),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(26),
+      O => BRAM_Addr_A(26)
+    );
+\BRAM_Addr_A[27]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(4),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(27),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(27),
+      O => BRAM_Addr_A(27)
+    );
+\BRAM_Addr_A[28]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(3),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(28),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(28),
+      O => BRAM_Addr_A(28)
+    );
+\BRAM_Addr_A[29]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(2),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(29),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(29),
+      O => BRAM_Addr_A(29)
+    );
+\BRAM_Addr_A[2]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(29),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(2),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(2),
+      O => BRAM_Addr_A(2)
+    );
+\BRAM_Addr_A[30]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(1),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(30),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(30),
+      O => BRAM_Addr_A(30)
+    );
+\BRAM_Addr_A[31]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(0),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(31),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(31),
+      O => BRAM_Addr_A(31)
+    );
+\BRAM_Addr_A[3]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(28),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(3),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(3),
+      O => BRAM_Addr_A(3)
+    );
+\BRAM_Addr_A[4]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(27),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(4),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(4),
+      O => BRAM_Addr_A(4)
+    );
+\BRAM_Addr_A[5]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(26),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(5),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(5),
+      O => BRAM_Addr_A(5)
+    );
+\BRAM_Addr_A[6]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(25),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(6),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(6),
+      O => BRAM_Addr_A(6)
+    );
+\BRAM_Addr_A[7]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(24),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(7),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(7),
+      O => BRAM_Addr_A(7)
+    );
+\BRAM_Addr_A[8]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(23),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(8),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(8),
+      O => BRAM_Addr_A(8)
+    );
+\BRAM_Addr_A[9]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(22),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_ABus(9),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_ABus(9),
+      O => BRAM_Addr_A(9)
+    );
+\BRAM_Dout_A[0]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(31),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(0),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(0),
+      O => BRAM_Dout_A(0)
+    );
+\BRAM_Dout_A[10]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(21),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(10),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(10),
+      O => BRAM_Dout_A(10)
+    );
+\BRAM_Dout_A[11]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(20),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(11),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(11),
+      O => BRAM_Dout_A(11)
+    );
+\BRAM_Dout_A[12]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(19),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(12),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(12),
+      O => BRAM_Dout_A(12)
+    );
+\BRAM_Dout_A[13]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(18),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(13),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(13),
+      O => BRAM_Dout_A(13)
+    );
+\BRAM_Dout_A[14]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(17),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(14),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(14),
+      O => BRAM_Dout_A(14)
+    );
+\BRAM_Dout_A[15]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(16),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(15),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(15),
+      O => BRAM_Dout_A(15)
+    );
+\BRAM_Dout_A[16]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(15),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(16),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(16),
+      O => BRAM_Dout_A(16)
+    );
+\BRAM_Dout_A[17]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(14),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(17),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(17),
+      O => BRAM_Dout_A(17)
+    );
+\BRAM_Dout_A[18]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(13),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(18),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(18),
+      O => BRAM_Dout_A(18)
+    );
+\BRAM_Dout_A[19]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(12),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(19),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(19),
+      O => BRAM_Dout_A(19)
+    );
+\BRAM_Dout_A[1]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(30),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(1),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(1),
+      O => BRAM_Dout_A(1)
+    );
+\BRAM_Dout_A[20]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(11),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(20),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(20),
+      O => BRAM_Dout_A(20)
+    );
+\BRAM_Dout_A[21]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(10),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(21),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(21),
+      O => BRAM_Dout_A(21)
+    );
+\BRAM_Dout_A[22]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(9),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(22),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(22),
+      O => BRAM_Dout_A(22)
+    );
+\BRAM_Dout_A[23]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(8),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(23),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(23),
+      O => BRAM_Dout_A(23)
+    );
+\BRAM_Dout_A[24]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(7),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(24),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(24),
+      O => BRAM_Dout_A(24)
+    );
+\BRAM_Dout_A[25]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(6),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(25),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(25),
+      O => BRAM_Dout_A(25)
+    );
+\BRAM_Dout_A[26]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(5),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(26),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(26),
+      O => BRAM_Dout_A(26)
+    );
+\BRAM_Dout_A[27]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(4),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(27),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(27),
+      O => BRAM_Dout_A(27)
+    );
+\BRAM_Dout_A[28]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(3),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(28),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(28),
+      O => BRAM_Dout_A(28)
+    );
+\BRAM_Dout_A[29]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(2),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(29),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(29),
+      O => BRAM_Dout_A(29)
+    );
+\BRAM_Dout_A[2]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(29),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(2),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(2),
+      O => BRAM_Dout_A(2)
+    );
+\BRAM_Dout_A[30]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(1),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(30),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(30),
+      O => BRAM_Dout_A(30)
+    );
+\BRAM_Dout_A[31]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(0),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(31),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(31),
+      O => BRAM_Dout_A(31)
+    );
+\BRAM_Dout_A[3]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(28),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(3),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(3),
+      O => BRAM_Dout_A(3)
+    );
+\BRAM_Dout_A[4]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(27),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(4),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(4),
+      O => BRAM_Dout_A(4)
+    );
+\BRAM_Dout_A[5]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(26),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(5),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(5),
+      O => BRAM_Dout_A(5)
+    );
+\BRAM_Dout_A[6]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(25),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(6),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(6),
+      O => BRAM_Dout_A(6)
+    );
+\BRAM_Dout_A[7]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(24),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(7),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(7),
+      O => BRAM_Dout_A(7)
+    );
+\BRAM_Dout_A[8]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(23),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(8),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(8),
+      O => BRAM_Dout_A(8)
+    );
+\BRAM_Dout_A[9]_INST_0\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(22),
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_WriteDBus(9),
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_WriteDBus(9),
+      O => BRAM_Dout_A(9)
+    );
+BRAM_EN_A_INST_0: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"B8FFB800"
+    )
+        port map (
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_AddrStrobe_vec_Q_reg_n_0_[1]\,
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => LMB1_AddrStrobe,
+      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I4 => LMB_AddrStrobe,
+      O => BRAM_EN_A
+    );
+\BRAM_WEN_A[0]_INST_0\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"00000000EEE222E2"
+    )
+        port map (
+      I0 => LMB_BE(0),
+      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I2 => LMB1_BE(0),
+      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I4 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(3),
+      I5 => \BRAM_WEN_A[0]_INST_0_i_1_n_0\,
+      O => BRAM_WEN_A(0)
+    );
+\BRAM_WEN_A[0]_INST_0_i_1\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"5501030355FDFFFF"
+    )
+        port map (
+      I0 => LMB_WriteStrobe,
+      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I2 => \BRAM_WEN_A[0]_INST_0_i_2_n_0\,
+      I3 => LMB_AddrStrobe,
+      I4 => \BRAM_Addr_A[0]_INST_0_i_2_n_0\,
+      I5 => \BRAM_WEN_A[0]_INST_0_i_3_n_0\,
+      O => \BRAM_WEN_A[0]_INST_0_i_1_n_0\
+    );
+\BRAM_WEN_A[0]_INST_0_i_2\: unisim.vcomponents.LUT2
     generic map(
       INIT => X"2"
     )
         port map (
       I0 => LMB1_AddrStrobe,
       I1 => LMB1_ABus(0),
-      O => \BRAM_Addr_A[0]_INST_0_i_2_n_0\
+      O => \BRAM_WEN_A[0]_INST_0_i_2_n_0\
     );
-\BRAM_Addr_A[10]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(10),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(21),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(10),
-      O => BRAM_Addr_A(10)
-    );
-\BRAM_Addr_A[11]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(11),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(20),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(11),
-      O => BRAM_Addr_A(11)
-    );
-\BRAM_Addr_A[12]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(12),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(19),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(12),
-      O => BRAM_Addr_A(12)
-    );
-\BRAM_Addr_A[13]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(13),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(18),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(13),
-      O => BRAM_Addr_A(13)
-    );
-\BRAM_Addr_A[14]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(14),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(17),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(14),
-      O => BRAM_Addr_A(14)
-    );
-\BRAM_Addr_A[15]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(15),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(16),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(15),
-      O => BRAM_Addr_A(15)
-    );
-\BRAM_Addr_A[16]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(16),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(15),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(16),
-      O => BRAM_Addr_A(16)
-    );
-\BRAM_Addr_A[17]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(17),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(14),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(17),
-      O => BRAM_Addr_A(17)
-    );
-\BRAM_Addr_A[18]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(18),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(13),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(18),
-      O => BRAM_Addr_A(18)
-    );
-\BRAM_Addr_A[19]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(19),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(12),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(19),
-      O => BRAM_Addr_A(19)
-    );
-\BRAM_Addr_A[1]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(1),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(30),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(1),
-      O => BRAM_Addr_A(1)
-    );
-\BRAM_Addr_A[20]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(20),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(11),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(20),
-      O => BRAM_Addr_A(20)
-    );
-\BRAM_Addr_A[21]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(21),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(10),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(21),
-      O => BRAM_Addr_A(21)
-    );
-\BRAM_Addr_A[22]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(22),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(9),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(22),
-      O => BRAM_Addr_A(22)
-    );
-\BRAM_Addr_A[23]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(23),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(8),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(23),
-      O => BRAM_Addr_A(23)
-    );
-\BRAM_Addr_A[24]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(24),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(7),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(24),
-      O => BRAM_Addr_A(24)
-    );
-\BRAM_Addr_A[25]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(25),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(6),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(25),
-      O => BRAM_Addr_A(25)
-    );
-\BRAM_Addr_A[26]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(26),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(5),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(26),
-      O => BRAM_Addr_A(26)
-    );
-\BRAM_Addr_A[27]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(27),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(4),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(27),
-      O => BRAM_Addr_A(27)
-    );
-\BRAM_Addr_A[28]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(28),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(3),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(28),
-      O => BRAM_Addr_A(28)
-    );
-\BRAM_Addr_A[29]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(29),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(2),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(29),
-      O => BRAM_Addr_A(29)
-    );
-\BRAM_Addr_A[2]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(2),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(29),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(2),
-      O => BRAM_Addr_A(2)
-    );
-\BRAM_Addr_A[30]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(30),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(1),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(30),
-      O => BRAM_Addr_A(30)
-    );
-\BRAM_Addr_A[31]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(31),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(0),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(31),
-      O => BRAM_Addr_A(31)
-    );
-\BRAM_Addr_A[3]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(3),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(28),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(3),
-      O => BRAM_Addr_A(3)
-    );
-\BRAM_Addr_A[4]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(4),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(27),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(4),
-      O => BRAM_Addr_A(4)
-    );
-\BRAM_Addr_A[5]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(5),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(26),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(5),
-      O => BRAM_Addr_A(5)
-    );
-\BRAM_Addr_A[6]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(6),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(25),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(6),
-      O => BRAM_Addr_A(6)
-    );
-\BRAM_Addr_A[7]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(7),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(24),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(7),
-      O => BRAM_Addr_A(7)
-    );
-\BRAM_Addr_A[8]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(8),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(23),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(8),
-      O => BRAM_Addr_A(8)
-    );
-\BRAM_Addr_A[9]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_ABus(9),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q_reg[1]\(22),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_ABus(9),
-      O => BRAM_Addr_A(9)
-    );
-\BRAM_Dout_A[0]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(0),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(31),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(0),
-      O => BRAM_Dout_A(0)
-    );
-\BRAM_Dout_A[10]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(10),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(21),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(10),
-      O => BRAM_Dout_A(10)
-    );
-\BRAM_Dout_A[11]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(11),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(20),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(11),
-      O => BRAM_Dout_A(11)
-    );
-\BRAM_Dout_A[12]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(12),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(19),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(12),
-      O => BRAM_Dout_A(12)
-    );
-\BRAM_Dout_A[13]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(13),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(18),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(13),
-      O => BRAM_Dout_A(13)
-    );
-\BRAM_Dout_A[14]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(14),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(17),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(14),
-      O => BRAM_Dout_A(14)
-    );
-\BRAM_Dout_A[15]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(15),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(16),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(15),
-      O => BRAM_Dout_A(15)
-    );
-\BRAM_Dout_A[16]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(16),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(15),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(16),
-      O => BRAM_Dout_A(16)
-    );
-\BRAM_Dout_A[17]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(17),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(14),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(17),
-      O => BRAM_Dout_A(17)
-    );
-\BRAM_Dout_A[18]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(18),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(13),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(18),
-      O => BRAM_Dout_A(18)
-    );
-\BRAM_Dout_A[19]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(19),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(12),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(19),
-      O => BRAM_Dout_A(19)
-    );
-\BRAM_Dout_A[1]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(1),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(30),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(1),
-      O => BRAM_Dout_A(1)
-    );
-\BRAM_Dout_A[20]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(20),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(11),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(20),
-      O => BRAM_Dout_A(20)
-    );
-\BRAM_Dout_A[21]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(21),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(10),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(21),
-      O => BRAM_Dout_A(21)
-    );
-\BRAM_Dout_A[22]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(22),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(9),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(22),
-      O => BRAM_Dout_A(22)
-    );
-\BRAM_Dout_A[23]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(23),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(8),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(23),
-      O => BRAM_Dout_A(23)
-    );
-\BRAM_Dout_A[24]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(24),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(7),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(24),
-      O => BRAM_Dout_A(24)
-    );
-\BRAM_Dout_A[25]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(25),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(6),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(25),
-      O => BRAM_Dout_A(25)
-    );
-\BRAM_Dout_A[26]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(26),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(5),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(26),
-      O => BRAM_Dout_A(26)
-    );
-\BRAM_Dout_A[27]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(27),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(4),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(27),
-      O => BRAM_Dout_A(27)
-    );
-\BRAM_Dout_A[28]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(28),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(3),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(28),
-      O => BRAM_Dout_A(28)
-    );
-\BRAM_Dout_A[29]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(29),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(2),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(29),
-      O => BRAM_Dout_A(29)
-    );
-\BRAM_Dout_A[2]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(2),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(29),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(2),
-      O => BRAM_Dout_A(2)
-    );
-\BRAM_Dout_A[30]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(30),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(1),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(30),
-      O => BRAM_Dout_A(30)
-    );
-\BRAM_Dout_A[31]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(31),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(0),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(31),
-      O => BRAM_Dout_A(31)
-    );
-\BRAM_Dout_A[3]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(3),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(28),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(3),
-      O => BRAM_Dout_A(3)
-    );
-\BRAM_Dout_A[4]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(4),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(27),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(4),
-      O => BRAM_Dout_A(4)
-    );
-\BRAM_Dout_A[5]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(5),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(26),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(5),
-      O => BRAM_Dout_A(5)
-    );
-\BRAM_Dout_A[6]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(6),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(25),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(6),
-      O => BRAM_Dout_A(6)
-    );
-\BRAM_Dout_A[7]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(7),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(24),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(7),
-      O => BRAM_Dout_A(7)
-    );
-\BRAM_Dout_A[8]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(8),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(23),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(8),
-      O => BRAM_Dout_A(8)
-    );
-\BRAM_Dout_A[9]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_WriteDBus(9),
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteDBus_vec_Q_reg[1]\(22),
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_WriteDBus(9),
-      O => BRAM_Dout_A(9)
-    );
-BRAM_EN_A_INST_0: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"B8BBB888"
-    )
-        port map (
-      I0 => LMB_AddrStrobe,
-      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_AddrStrobe_vec_Q_reg_n_0_[1]\,
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => LMB1_AddrStrobe,
-      O => BRAM_EN_A
-    );
-\BRAM_WEN_A[0]_INST_0\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"00000000FFE200E2"
-    )
-        port map (
-      I0 => LMB1_BE(0),
-      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(3),
-      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I4 => LMB_BE(0),
-      I5 => \BRAM_WEN_A[0]_INST_0_i_1_n_0\,
-      O => BRAM_WEN_A(0)
-    );
-\BRAM_WEN_A[0]_INST_0_i_1\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"454545CC757575FF"
-    )
-        port map (
-      I0 => \BRAM_WEN_A[0]_INST_0_i_2_n_0\,
-      I1 => \BRAM_WEN_A[0]_INST_0_i_3_n_0\,
-      I2 => LMB_AddrStrobe,
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I4 => \BRAM_Addr_A[0]_INST_0_i_2_n_0\,
-      I5 => LMB_WriteStrobe,
-      O => \BRAM_WEN_A[0]_INST_0_i_1_n_0\
-    );
-\BRAM_WEN_A[0]_INST_0_i_2\: unisim.vcomponents.LUT3
+\BRAM_WEN_A[0]_INST_0_i_3\: unisim.vcomponents.LUT3
     generic map(
       INIT => X"B8"
     )
@@ -906,68 +913,58 @@ BRAM_EN_A_INST_0: unisim.vcomponents.LUT5
       I0 => \more_than_one_lmb.lmb_mux_generate[1].LMB_WriteStrobe_vec_Q_reg_n_0_[1]\,
       I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
       I2 => LMB1_WriteStrobe,
-      O => \BRAM_WEN_A[0]_INST_0_i_2_n_0\
-    );
-\BRAM_WEN_A[0]_INST_0_i_3\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"FE"
-    )
-        port map (
-      I0 => LMB_ABus(15),
-      I1 => LMB_ABus(1),
-      I2 => LMB_ABus(0),
       O => \BRAM_WEN_A[0]_INST_0_i_3_n_0\
     );
 \BRAM_WEN_A[1]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"00000000FFE200E2"
+      INIT => X"00000000EEE222E2"
     )
         port map (
-      I0 => LMB1_BE(1),
-      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(2),
-      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I4 => LMB_BE(1),
+      I0 => LMB_BE(1),
+      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I2 => LMB1_BE(1),
+      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I4 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(2),
       I5 => \BRAM_WEN_A[0]_INST_0_i_1_n_0\,
       O => BRAM_WEN_A(1)
     );
 \BRAM_WEN_A[2]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"00000000FFE200E2"
+      INIT => X"00000000EEE222E2"
     )
         port map (
-      I0 => LMB1_BE(2),
-      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(1),
-      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I4 => LMB_BE(2),
+      I0 => LMB_BE(2),
+      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I2 => LMB1_BE(2),
+      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I4 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(1),
       I5 => \BRAM_WEN_A[0]_INST_0_i_1_n_0\,
       O => BRAM_WEN_A(2)
     );
 \BRAM_WEN_A[3]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"00000000FFE200E2"
+      INIT => X"00000000EEE222E2"
     )
         port map (
-      I0 => LMB1_BE(3),
-      I1 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(0),
-      I3 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I4 => LMB_BE(3),
+      I0 => LMB_BE(3),
+      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I2 => LMB1_BE(3),
+      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I4 => \more_than_one_lmb.lmb_mux_generate[1].LMB_BE_vec_Q_reg[1]\(0),
       I5 => \BRAM_WEN_A[0]_INST_0_i_1_n_0\,
       O => BRAM_WEN_A(3)
     );
 \No_ECC.Sl_Rdy_i_1\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"F2F2F2F2F2F2F2FF"
+      INIT => X"FFFFFFFFFFFF0001"
     )
         port map (
-      I0 => LMB1_AddrStrobe,
-      I1 => LMB1_ABus(0),
-      I2 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
-      I3 => LMB_ABus(0),
-      I4 => LMB_ABus(1),
-      I5 => LMB_ABus(15),
+      I0 => LMB_ABus(14),
+      I1 => LMB_ABus(0),
+      I2 => LMB_ABus(15),
+      I3 => LMB_ABus(1),
+      I4 => \BRAM_WEN_A[0]_INST_0_i_2_n_0\,
+      I5 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
       O => lmb_select
     );
 Sl1_Ready_INST_0: unisim.vcomponents.LUT3
@@ -1001,7 +998,7 @@ Sl_Ready_INST_0: unisim.vcomponents.LUT3
     );
 \more_than_one_lmb.lmb_mux_generate[1].LMB_ABus_vec_Q[1][0]_i_1\: unisim.vcomponents.LUT3
     generic map(
-      INIT => X"40"
+      INIT => X"04"
     )
         port map (
       I0 => LMB1_ABus(0),
@@ -1571,13 +1568,13 @@ Sl_Ready_INST_0: unisim.vcomponents.LUT3
     );
 \more_than_one_lmb.lmb_mux_generate[1].wait_vec[1]_i_1\: unisim.vcomponents.LUT4
     generic map(
-      INIT => X"F020"
+      INIT => X"2232"
     )
         port map (
-      I0 => LMB1_AddrStrobe,
-      I1 => LMB1_ABus(0),
-      I2 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      I3 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I0 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
+      I1 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
+      I2 => LMB1_AddrStrobe,
+      I3 => LMB1_ABus(0),
       O => \more_than_one_lmb.lmb_mux_generate[1].wait_vec[1]_i_1_n_0\
     );
 \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg[1]\: unisim.vcomponents.FDRE
@@ -1588,14 +1585,6 @@ Sl_Ready_INST_0: unisim.vcomponents.LUT3
       Q => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
       R => LMB_Rst
     );
-\more_than_one_lmb.ongoing_Q[0]_i_1\: unisim.vcomponents.LUT1
-    generic map(
-      INIT => X"1"
-    )
-        port map (
-      I0 => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
-      O => \more_than_one_lmb.ongoing_new_0\(0)
-    );
 \more_than_one_lmb.ongoing_Q_reg[0]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
@@ -1603,7 +1592,7 @@ Sl_Ready_INST_0: unisim.vcomponents.LUT3
         port map (
       C => LMB_Clk,
       CE => '1',
-      D => \more_than_one_lmb.ongoing_new_0\(0),
+      D => \BRAM_Addr_A[0]_INST_0_i_1_n_0\,
       Q => \more_than_one_lmb.ongoing_Q\,
       R => LMB_Rst
     );
@@ -1777,7 +1766,7 @@ entity design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr is
   attribute C_LMB_PROTOCOL : integer;
   attribute C_LMB_PROTOCOL of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is 0;
   attribute C_MASK : string;
-  attribute C_MASK of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000011000000000000010000000000000000";
+  attribute C_MASK of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000011000000000000110000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000010000000000000000000000000000000";
   attribute C_MASK2 : string;
@@ -2285,7 +2274,7 @@ architecture STRUCTURE of design_1_lmb_bram_if_cntlr_0_0 is
   attribute C_LMB_PROTOCOL : integer;
   attribute C_LMB_PROTOCOL of U0 : label is 0;
   attribute C_MASK : string;
-  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000011000000000000010000000000000000";
+  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000011000000000000110000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of U0 : label is "64'b0000000000000000000000000000000010000000000000000000000000000000";
   attribute C_MASK2 : string;

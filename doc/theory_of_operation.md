@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Theory of Operation
 
-Last updated: 2026-04-05
+Last updated: 2026-04-08
 
 ## Purpose
 
@@ -61,6 +61,29 @@ Conceptually, the design separates into three layers:
 
 The top level exists mainly to connect these layers and expose the software and
 pin interfaces.
+
+## Bootloader Handoff
+
+In the checked-in MicroBlaze configuration, the active processor vector base is
+fixed at low memory (`XPAR_MICROBLAZE_BASE_VECTORS = 0`). That has an important
+software handoff consequence:
+
+- the bootloader is linked with reset, interrupt, and exception vectors at
+  `0x0`, `0x8`, `0x10`, and `0x20`
+- applications loaded into HyperRAM are linked with their own vector stubs at
+  the start of the loaded image, not at low memory
+- after a simple jump from the bootloader into the loaded image, the CPU would
+  still take interrupts and exceptions through the low-memory vector slots
+
+Because of that, a loaded application that uses interrupts cannot rely on its
+own linked vector section becoming active automatically at handoff. The
+bootloader must install the application's vector stubs into the active
+low-memory vector locations before transferring control.
+
+This was observed directly in bench debug: without that vector handoff step, a
+running application could enable its timer interrupt correctly and still fall
+back into the bootloader's interrupt exception path, because the CPU continued
+to enter the bootloader's low-memory vector stub on the first interrupt.
 
 ## Operating Model
 
@@ -143,6 +166,23 @@ For writes:
   return the write response before the HB-side serializer has finished draining
   all payload data to the pins
 
+Because WRAP reads may require the frontend to queue two command entries for one
+accepted AXI transaction, the command FIFO `prog_full` threshold is intentionally
+set conservatively, with `prog_full` asserted when only three entries remain.
+The working theory is that AXI writes can complete back to the host before the
+HB side has fully consumed the associated write command and payload stream, so a
+run of short consecutive writes could otherwise overrun the command path margin.
+That threshold should therefore be adjusted with care in future work or in
+derivative designs.
+
+At the same time, the design intent is that the second command of a split WRAP
+transaction should remain pending and later enqueue successfully once command
+FIFO space is available. A WRAP transaction should not be lost solely because
+the command FIFO was temporarily busy. The existing design still appears to have
+an open bug in that area, so the threshold change should be treated as a
+protective margin rather than as proof that the underlying split-command issue
+is fully resolved.
+
 For reads:
 
 - an accepted AXI read request becomes a read command in the command FIFO
@@ -152,6 +192,12 @@ For reads:
 
 If AXI-full read and write commands arrive together, the frontend gives priority
 to writes.
+
+The AXI-full slave now enforces that priority at the handshake boundary as well:
+it does not leave both `AWREADY` and `ARREADY` preasserted while idle. If the
+host presents `AWVALID` and `ARVALID` together, the slave accepts only the write
+address in that cycle and leaves the read pending for a later cycle. This avoids
+accepting both transactions externally while only one is tracked internally.
 
 ### AXI4-Lite Path
 

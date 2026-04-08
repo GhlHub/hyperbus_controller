@@ -491,6 +491,12 @@ static int32_t prvInitialiseInterruptController( void )
         /* Initialise the exception table. */
         Xil_ExceptionInit();
 
+        /* Route CPU-level interrupts through this port's AXI interrupt
+         * controller instance before any per-source handlers are enabled. */
+        Xil_ExceptionRegisterHandler( XIL_EXCEPTION_ID_INT,
+                                      ( Xil_ExceptionHandler ) XIntc_InterruptHandler,
+                                      &xInterruptControllerInstance );
+
         /* Service all pending interrupts each time the handler is entered. */
         XIntc_SetIntrSvcOption( xInterruptControllerInstance.BaseAddress, XIN_SVC_ALL_ISRS_OPTION );
 

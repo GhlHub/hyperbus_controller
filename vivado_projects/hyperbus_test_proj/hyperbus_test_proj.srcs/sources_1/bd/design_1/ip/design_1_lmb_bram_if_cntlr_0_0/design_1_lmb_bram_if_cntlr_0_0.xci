@@ -10,7 +10,7 @@
       "component_parameters": {
         "C_BASEADDR": [ { "value": "0x0000000000000000", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_HIGHADDR": [ { "value": "0x0000000000007FFF", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
-        "C_MASK": [ { "value": "0x00000000c0010000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
+        "C_MASK": [ { "value": "0x00000000c0030000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_MASK1": [ { "value": "0x0000000080000000", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_MASK2": [ { "value": "0x0000000000800000", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "enabled": false, "usage": "all" } ],
         "C_MASK3": [ { "value": "0x0000000000800000", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "enabled": false, "usage": "all" } ],
@@ -53,7 +53,7 @@
         "C_HIGHADDR": [ { "value": "0x0000000000007FFF", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_BASEADDR": [ { "value": "0x0000000000000000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_NUM_LMB": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_MASK": [ { "value": "0x00000000c0010000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
+        "C_MASK": [ { "value": "0x00000000c0030000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_MASK1": [ { "value": "0x0000000080000000", "resolve_type": "generated", "format": "bitString", "usage": "all" } ],
         "C_MASK2": [ { "value": "0x0000000000800000", "resolve_type": "generated", "format": "bitString", "enabled": false, "usage": "all" } ],
         "C_MASK3": [ { "value": "0x0000000000800000", "resolve_type": "generated", "format": "bitString", "enabled": false, "usage": "all" } ],
@@ -415,5 +415,5 @@
       }
     }
   },
-  "checksum": "55df8b5d"
+  "checksum": "54a4504d"
 }

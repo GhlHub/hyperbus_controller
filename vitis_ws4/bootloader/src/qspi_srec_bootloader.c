@@ -15,9 +15,12 @@
 #include "srec.h"
 #include "xil_cache.h"
 #include "xil_exception.h"
+#include "xil_io.h"
 #include "xil_printf.h"
 #include "xparameters.h"
 #include "xstatus.h"
+#include "xintc_l.h"
+#include "xtmrctr_l.h"
 #include "mb_interface.h"
 
 #if defined(XPAR_XSPI_NUM_INSTANCES) || defined(XPAR_SPI_NUM_INSTANCES) || defined(XPAR_AXI_QUAD_SPI_0_BASEADDR) || defined(XPAR_XSPI_0_BASEADDR)
@@ -48,6 +51,12 @@
 #define BOOT_HB_RESET_TOTAL_GUARD_US         1U
 #define BOOT_HB_RESET_ASSERT_US              1U
 #define BOOT_HB_RESET_DEASSERT_US            1U
+#define BOOT_IMAGE_VECTOR_ENTRY_OFFSET       0x50U
+#define BOOT_VECTOR_SLOT_BYTES               8U
+#define BOOT_VECTOR_RESET_OFFSET             0x00U
+#define BOOT_VECTOR_SW_EXCEPTION_OFFSET      0x08U
+#define BOOT_VECTOR_INTERRUPT_OFFSET         0x10U
+#define BOOT_VECTOR_HW_EXCEPTION_OFFSET      0x20U
 #define BL_PRINTF( ... )                     xil_printf( "[BL] " __VA_ARGS__ )
 
 extern int srec_line;
@@ -520,6 +529,82 @@ static void prvUpdateImageRange( uintptr_t uxStart, size_t xLength )
     }
 }
 
+static void prvQuiesceInterruptStateForHandoff( void )
+{
+    BL_PRINTF( "Quiescing interrupt state for handoff\r\n" );
+
+    /* Stop taking CPU-level interrupts/exceptions before dismantling the
+     * bootloader-owned interrupt state. */
+    Xil_ExceptionDisable();
+
+#if defined( XPAR_XTMRCTR_0_BASEADDR )
+    {
+        const UINTPTR ulTimerBase = ( UINTPTR ) XPAR_XTMRCTR_0_BASEADDR;
+        uint32_t ulTcsr0 = XTmrCtr_ReadReg( ulTimerBase, 0U, XTC_TCSR_OFFSET );
+
+        /* Disable timer 0 and clear any pending interrupt status. */
+        ulTcsr0 &= ~( XTC_CSR_ENABLE_TMR_MASK | XTC_CSR_ENABLE_INT_MASK );
+        XTmrCtr_WriteReg( ulTimerBase,
+                          0U,
+                          XTC_TCSR_OFFSET,
+                          ulTcsr0 | XTC_CSR_INT_OCCURED_MASK );
+    }
+#endif
+
+#if defined( XPAR_XINTC_0_BASEADDR )
+    {
+        const UINTPTR ulIntcBase = ( UINTPTR ) XPAR_XINTC_0_BASEADDR;
+
+        /* Disable all interrupt sources, acknowledge anything pending, and
+         * clear the master-enable bits before transfer to the application. */
+        Xil_Out32( ulIntcBase + XIN_CIE_OFFSET, 0xFFFFFFFFU );
+        Xil_Out32( ulIntcBase + XIN_IAR_OFFSET, 0xFFFFFFFFU );
+        Xil_Out32( ulIntcBase + XIN_MER_OFFSET, 0U );
+    }
+#endif
+}
+
+static int prvInstallApplicationVectorsForHandoff( uintptr_t uxEntry )
+{
+    static const uint32_t pulVectorOffsets[] =
+    {
+        BOOT_VECTOR_RESET_OFFSET,
+        BOOT_VECTOR_SW_EXCEPTION_OFFSET,
+        BOOT_VECTOR_INTERRUPT_OFFSET,
+        BOOT_VECTOR_HW_EXCEPTION_OFFSET
+    };
+    const uintptr_t uxVectorBase =
+        ( iImageRangeValid != 0 ) ? uxImageStart :
+        ( ( uxEntry >= BOOT_IMAGE_VECTOR_ENTRY_OFFSET ) ?
+          ( uxEntry - BOOT_IMAGE_VECTOR_ENTRY_OFFSET ) : 0U );
+    size_t xIndex;
+
+    if( uxVectorBase == 0U )
+    {
+        BL_PRINTF( "Unable to determine application vector base\r\n" );
+        return XST_FAILURE;
+    }
+
+    for( xIndex = 0U; xIndex < ( sizeof( pulVectorOffsets ) / sizeof( pulVectorOffsets[ 0U ] ) ); xIndex++ )
+    {
+        const uintptr_t uxOffset = ( uintptr_t ) pulVectorOffsets[ xIndex ];
+        const uintptr_t uxSource = uxVectorBase + uxOffset;
+        const uintptr_t uxDestination = uxOffset;
+
+        memcpy( ( void * ) uxDestination,
+                ( const void * ) uxSource,
+                BOOT_VECTOR_SLOT_BYTES );
+    }
+
+    Xil_DCacheFlushRange( 0U, BOOT_VECTOR_HW_EXCEPTION_OFFSET + BOOT_VECTOR_SLOT_BYTES );
+    Xil_ICacheInvalidate();
+#if defined(__riscv)
+    __asm__ volatile ( "fence.i" ::: "memory" );
+#endif
+
+    return XST_SUCCESS;
+}
+
 static void prvPrintAndStartImage( void ( *pxEntryPoint )( void ) )
 {
     const uintptr_t uxEntry = ( uintptr_t ) pxEntryPoint;
@@ -535,6 +620,11 @@ static void prvPrintAndStartImage( void ( *pxEntryPoint )( void ) )
                ( unsigned long ) uxSize,
                ( unsigned long ) uxEntry );
     prvWaitForSpacebar( "Press spacebar to continue to the loaded executable..." );
+    prvQuiesceInterruptStateForHandoff();
+    if( prvInstallApplicationVectorsForHandoff( uxEntry ) != XST_SUCCESS )
+    {
+        prvBusyLoopForever();
+    }
     BL_PRINTF( "Jumping to 0x%08lx\r\n", ( unsigned long ) uxEntry );
     euart_console_wait_tx_empty();
     pxEntryPoint();
