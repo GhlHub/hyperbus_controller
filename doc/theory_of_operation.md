@@ -167,21 +167,25 @@ For writes:
   all payload data to the pins
 
 Because WRAP reads may require the frontend to queue two command entries for one
-accepted AXI transaction, the command FIFO `prog_full` threshold is intentionally
-set conservatively, with `prog_full` asserted when only three entries remain.
+accepted AXI transaction, the command FIFO `prog_full` threshold is currently
+set conservatively so `prog_full` asserts with only three entries remaining.
+This is an intentional workaround, not the ideal end-state behavior.
+
 The working theory is that AXI writes can complete back to the host before the
 HB side has fully consumed the associated write command and payload stream, so a
-run of short consecutive writes could otherwise overrun the command path margin.
-That threshold should therefore be adjusted with care in future work or in
-derivative designs.
+run of short consecutive writes could otherwise overrun the command-path margin.
+That `3 entries left` setting should therefore be adjusted with care in future
+work or in derivative designs.
 
-At the same time, the design intent is that the second command of a split WRAP
+However, the design intent is still that temporary command FIFO fullness should
+be handled correctly. In particular, the second command of a split WRAP
 transaction should remain pending and later enqueue successfully once command
 FIFO space is available. A WRAP transaction should not be lost solely because
-the command FIFO was temporarily busy. The existing design still appears to have
-an open bug in that area, so the threshold change should be treated as a
-protective margin rather than as proof that the underlying split-command issue
-is fully resolved.
+the command FIFO was temporarily busy.
+
+That means the current `prog_full` setting should be viewed as a workaround for
+an underlying erratum that still needs future investigation, not as proof that
+the split-command / full-FIFO behavior is architecturally solved.
 
 For reads:
 
