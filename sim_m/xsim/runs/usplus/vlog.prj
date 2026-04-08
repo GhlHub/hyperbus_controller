@@ -1,0 +1,6 @@
+verilog xil_defaultlib -i "/tools/Xilinx/2025.2/data/rsb/busdef" "/raid/work/hyperbus_controller_freertos_port/infinion/002-26518_0B/s27kl0642.v" 
+sv xil_defaultlib -i "/tools/Xilinx/2025.2/data/rsb/busdef" -i "/raid/work/hyperbus_controller_freertos_port/tb" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_fifo_bank_xilinx.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_phy_xilinx.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_phy_xilinx_usplus.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_phy_xilinx_7series.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_axi_lite_frontend.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_axi_full_frontend.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_hb_engine.sv" "/raid/work/hyperbus_controller_freertos_port/rtl/hyperbus_controller.sv" "/raid/work/hyperbus_controller_freertos_port/tb/hyperbus_controller_tb.sv" 
+verilog xil_defaultlib "/raid/work/hyperbus_controller_freertos_port/sim_m/xsim/glbl.v"
+
+# Do not sort compile order
+nosort

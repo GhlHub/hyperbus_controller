@@ -13,6 +13,7 @@ build/
 xsim.dir/
 .nfs*
 *.wdb
+*.ila
 hyperbus_controller_tb.wdb
 .cxl/
 *.pb
