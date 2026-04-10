@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Wed Apr  8 03:41:32 2026
+// Date        : Thu Apr  9 11:22:34 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.v
@@ -176,7 +176,7 @@ module design_1_lmb_bram_if_cntlr_0_0
   (* C_LMB_DWIDTH = "32" *) 
   (* C_LMB_HAS_PROT = "0" *) 
   (* C_LMB_PROTOCOL = "0" *) 
-  (* C_MASK = "64'b0000000000000000000000000000000011000000000000110000000000000000" *) 
+  (* C_MASK = "64'b0000000000000000000000000000000010000101000000010000000000000000" *) 
   (* C_MASK1 = "64'b0000000000000000000000000000000010000000000000000000000000000000" *) 
   (* C_MASK2 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
   (* C_MASK3 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
@@ -334,7 +334,7 @@ endmodule
 (* C_ECC_ONOFF_REGISTER = "0" *) (* C_ECC_ONOFF_RESET_VALUE = "1" *) (* C_ECC_STATUS_REGISTERS = "0" *) 
 (* C_FAMILY = "spartanuplus" *) (* C_FAULT_INJECT = "0" *) (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000000111111111111111" *) 
 (* C_INTERCONNECT = "0" *) (* C_LMB_AWIDTH = "32" *) (* C_LMB_DWIDTH = "32" *) 
-(* C_LMB_HAS_PROT = "0" *) (* C_LMB_PROTOCOL = "0" *) (* C_MASK = "64'b0000000000000000000000000000000011000000000000110000000000000000" *) 
+(* C_LMB_HAS_PROT = "0" *) (* C_LMB_PROTOCOL = "0" *) (* C_MASK = "64'b0000000000000000000000000000000010000101000000010000000000000000" *) 
 (* C_MASK1 = "64'b0000000000000000000000000000000010000000000000000000000000000000" *) (* C_MASK2 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK3 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
 (* C_MASK4 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK5 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK6 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
 (* C_MASK7 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_NUM_LMB = "2" *) (* C_PROT_CFG = "8'b11111111" *) 
@@ -1037,10 +1037,10 @@ module design_1_lmb_bram_if_cntlr_0_0_lmb_mux
   LUT4 #(
     .INIT(16'h0001)) 
     \BRAM_Addr_A[0]_INST_0_i_2 
-       (.I0(LMB_ABus[1]),
+       (.I0(LMB_ABus[5]),
         .I1(LMB_ABus[15]),
         .I2(LMB_ABus[0]),
-        .I3(LMB_ABus[14]),
+        .I3(LMB_ABus[7]),
         .O(\BRAM_Addr_A[0]_INST_0_i_2_n_0 ));
   LUT5 #(
     .INIT(32'hB8FFB800)) 
@@ -1686,10 +1686,10 @@ module design_1_lmb_bram_if_cntlr_0_0_lmb_mux
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFF0001)) 
     \No_ECC.Sl_Rdy_i_1 
-       (.I0(LMB_ABus[14]),
+       (.I0(LMB_ABus[7]),
         .I1(LMB_ABus[0]),
         .I2(LMB_ABus[15]),
-        .I3(LMB_ABus[1]),
+        .I3(LMB_ABus[5]),
         .I4(\BRAM_WEN_A[0]_INST_0_i_2_n_0 ),
         .I5(\more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1] ),
         .O(lmb_select));

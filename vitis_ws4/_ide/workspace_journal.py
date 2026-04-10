@@ -116,3 +116,18 @@ domain = platform.add_domain(cpu = "microblaze_0",os = "freertos",name = "freert
 
 domain = platform.add_domain(cpu = "microblaze_0",os = "freertos",name = "freertos_hello",display_name = "freertos_hello",support_app = "freertos_hello_world",generate_dtb = False,hw_boot_bin = "")
 
+platform = client.get_component(name="platform")
+status = platform.update_hw(hw_design = "$COMPONENT_LOCATION/../../vivado_projects/hyperbus_test_proj/design_1_wrapper.xsa")
+
+comp = client.get_component(name="bootloader")
+status = comp.clean()
+
+status = platform.build()
+
+comp.build()
+
+platform = client.get_component(name="platform_freertos")
+status = platform.build()
+
+status = platform.build()
+

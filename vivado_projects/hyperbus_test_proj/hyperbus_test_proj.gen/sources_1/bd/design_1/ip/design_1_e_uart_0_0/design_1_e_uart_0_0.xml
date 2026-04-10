@@ -717,10 +717,10 @@
         <spirit:register>
           <spirit:name>INT_STATUS</spirit:name>
           <spirit:displayName>Interrupt Status Register</spirit:displayName>
-          <spirit:description>Current interrupt status bits.</spirit:description>
+          <spirit:description>Current interrupt status bits. RX_TIME_COALESCE is write-1-to-clear.</spirit:description>
           <spirit:addressOffset>0x010</spirit:addressOffset>
           <spirit:size spirit:format="long">32</spirit:size>
-          <spirit:access>read-only</spirit:access>
+          <spirit:access>read-write</spirit:access>
           <spirit:field>
             <spirit:name>TX_EMPTY</spirit:name>
             <spirit:description>Transmit FIFO empty interrupt status</spirit:description>
@@ -771,10 +771,10 @@
           </spirit:field>
           <spirit:field>
             <spirit:name>RX_TIME_COALESCE</spirit:name>
-            <spirit:description>Receive timeout coalescing interrupt status</spirit:description>
+            <spirit:description>Receive timeout coalescing interrupt status. Write 1 to clear.</spirit:description>
             <spirit:bitOffset>4</spirit:bitOffset>
             <spirit:bitWidth spirit:format="long">1</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
+            <spirit:access>read-write</spirit:access>
             <spirit:writeValueConstraint>
               <spirit:minimum>0</spirit:minimum>
               <spirit:maximum>0</spirit:maximum>
@@ -1032,7 +1032,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:05:07 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:04:21 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1050,7 +1050,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1068,7 +1068,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1088,7 +1088,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1108,7 +1108,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1128,7 +1128,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1148,7 +1148,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Mar 31 11:04:25 UTC 2026</spirit:value>
+            <spirit:value>Thu Apr 09 16:03:43 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -1639,23 +1639,23 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/hdl/e_uart_slave_lite_v1_0_S00_AXI.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/hdl/e_uart_slave_lite_v1_0_S00_AXI.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/int_holdoff.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/int_holdoff.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_rx.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_rx.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_top.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_top.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_tx.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_tx.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1663,7 +1663,7 @@
         <spirit:userFileType>xci</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/hdl/e_uart.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/hdl/e_uart.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
     </spirit:fileSet>
@@ -1678,23 +1678,23 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogsynthesis_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/hdl/e_uart_slave_lite_v1_0_S00_AXI.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/hdl/e_uart_slave_lite_v1_0_S00_AXI.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/int_holdoff.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/int_holdoff.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_rx.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_rx.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_top.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_top.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/src/uart_tx.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/src/uart_tx.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1702,7 +1702,7 @@
         <spirit:userFileType>xci</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>../../ipshared/30f6/hdl/e_uart.v</spirit:name>
+        <spirit:name>../../ipshared/ff94/hdl/e_uart.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
     </spirit:fileSet>
@@ -1828,8 +1828,8 @@
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="4da56be0"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e94119d2"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a0ce8d5b"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e93afad1"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="9da8d7e5"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="d702df76"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="e7b50784"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="cc37cf56"/>

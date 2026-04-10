@@ -41,6 +41,25 @@ rule C_STATIC_LIBRARY_LINKER__bram_
 #############################################
 # Rule for compiling C files.
 
+rule C_COMPILER__csudma_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER__csudma_
+  command = $PRE_LINK && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling C files.
+
 rule C_COMPILER__intc_
   depfile = $DEP_FILE
   deps = gcc
@@ -52,6 +71,25 @@ rule C_COMPILER__intc_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__intc_
+  command = $PRE_LINK && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling C files.
+
+rule C_COMPILER__ospipsv_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER__ospipsv_
   command = $PRE_LINK && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -90,6 +128,25 @@ rule C_COMPILER__tmrctr_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__tmrctr_
+  command = $PRE_LINK && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling C files.
+
+rule C_COMPILER__trngpsx_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER__trngpsx_
   command = $PRE_LINK && /tools/Xilinx/2025.2/tps/lnx64/cmake-3.24.2/bin/cmake -E rm -f $TARGET_FILE && mb-ar qc $TARGET_FILE $LINK_FLAGS $in && /tools/Xilinx/2025.2/Vitis/gnu/microblaze/lin/bin/mb-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT

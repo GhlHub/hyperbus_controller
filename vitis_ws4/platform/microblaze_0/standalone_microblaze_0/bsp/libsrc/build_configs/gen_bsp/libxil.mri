@@ -1,7 +1,10 @@
 create libxil.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/trngpsx/src/libtrngpsx.a
 addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/tmrctr/src/libtmrctr.a
 addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/spi/src/libspi.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/ospipsv/src/libospipsv.a
 addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/intc/src/libintc.a
+addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/csudma/src/libcsudma.a
 addlib /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/libsrc/bram/src/libbram.a
 save
 end

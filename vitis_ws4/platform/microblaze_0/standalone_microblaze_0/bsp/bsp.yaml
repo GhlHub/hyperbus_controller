@@ -170,6 +170,33 @@ drv_info:
     driver: bram
     ip_name: lmb_bram_if_cntlr
     path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/bram_v4_13
+  pmcbridge_0_ccu_apb_0: None
+  pmcbridge_0_ccu_rd_stream_0: None
+  pmcbridge_0_ccu_wr_stream_0: None
+  pmcbridge_0_plm_config_0: None
+  pmcbridge_0_pmcl_aes_0: None
+  pmcbridge_0_pmcl_dma_0:
+    driver: csudma
+    ip_name: pmcl_dma
+    path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/csudma_v1_18
+  pmcbridge_0_pmcl_efuse_0: None
+  pmcbridge_0_pmcl_global_0: None
+  pmcbridge_0_pmcl_ospi_0:
+    driver: ospipsv
+    ip_name: pmc_ospi
+    path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/ospipsv_v1_13
+  pmcbridge_0_pmcl_puf_0: None
+  pmcbridge_0_pmcl_sha3_0: None
+  pmcbridge_0_pmcl_slave_boot_0: None
+  pmcbridge_0_pmcl_tap_0: None
+  pmcbridge_0_pmcl_trng_0:
+    driver: trngpsx
+    ip_name: pmcl_trng
+    path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/XilinxProcessorIPLib/drivers/trngpsx_v1_5
+  pmcbridge_0_rv_iomodule_0: None
+  pmcbridge_0_rv_ram_data_ecc_ctrl_0: None
+  pmcbridge_0_rv_ram_instr_ecc_ctrl_0: None
+  pmcbridge_0_slave_boot_stream_0: None
 lib_info:
   xiltimer:
     path: /tools/Xilinx/2025.2/Vitis/data/embeddedsw/lib/sw_services/xiltimer_v2_3

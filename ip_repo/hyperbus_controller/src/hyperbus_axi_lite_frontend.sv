@@ -19,7 +19,6 @@ module hyperbus_axi_lite_frontend #(
     input  wire [31:0]                  i_axil_rsp_fifo_dout,
     input  wire                         i_axil_rsp_fifo_empty,
     input  wire                         i_axil_rsp_fifo_dout_valid,
-    input  wire [15:0]                  i_dq,
     input  wire [5:0]                   i_axif_rwds_cntr,
     input  wire [5:0]                   i_axil_rwds_cntr,
     input  wire [8:0]                   i_odly_cntvalueout,
@@ -97,7 +96,6 @@ module hyperbus_axi_lite_frontend #(
                                 !i_aw_pending && !i_s_axi_arvalid && !i_s_axi_awvalid;
 
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_VERSION_ADDR             = 16'h0024;
-    localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_DQ_ADDR                  = 16'h0028;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_ERR_STATUS_ADDR          = 16'h0080;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_AXIF_RWDS_CNTR_ADDR      = 16'h0084;
     localparam logic [AXIL_ADDR_WIDTH-1:0] AXIL_AXIL_RWDS_CNTR_ADDR      = 16'h0088;
@@ -151,7 +149,6 @@ module hyperbus_axi_lite_frontend #(
                     AXIL_AXIF_RWDS_CNTR_ADDR,
                     AXIL_AXIL_RWDS_CNTR_ADDR,
                     AXIL_HB_CLK_CE_FORCE_ADDR,
-                    AXIL_DQ_ADDR,
                     AXIL_CK_P_ODELAY_CTRL_ADDR,
                     AXIL_CK_P_ODELAY_TIME_ADDR,
                     AXIL_CK_P_ODELAY_STATUS_ADDR,
@@ -407,11 +404,10 @@ module hyperbus_axi_lite_frontend #(
                     end else begin
                         unique case (s_axil_araddr)
                             AXIL_ERR_STATUS_ADDR:         s_axil_rdata <= {31'h0, timeout_status_q};
-                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0006;
+                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0007;
                             AXIL_AXIF_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axif_rwds_cntr};
                             AXIL_AXIL_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axil_rwds_cntr};
                             AXIL_HB_CLK_CE_FORCE_ADDR:    s_axil_rdata <= {31'h0, hb_clk_ce_force_q};
-                            AXIL_DQ_ADDR:                 s_axil_rdata <= {16'h0000, i_dq};
                             AXIL_CK_P_ODELAY_CTRL_ADDR:   s_axil_rdata <= {27'h0, 1'b0, 1'b0, 1'b0, odly_inc_q, odly_en_vtc_q};
                             AXIL_CK_P_ODELAY_TIME_ADDR:   s_axil_rdata <= {23'h0, odly_time_value_q};
                             AXIL_CK_P_ODELAY_STATUS_ADDR: s_axil_rdata <= {23'h0, i_odly_cntvalueout};

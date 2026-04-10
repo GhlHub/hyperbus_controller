@@ -272,7 +272,6 @@ module hyperbus_controller #(
         .i_axil_rsp_fifo_dout     (     axil_rsp_fifo_dout),
         .i_axil_rsp_fifo_empty    (    axil_rsp_fifo_empty),
         .i_axil_rsp_fifo_dout_valid(axil_rsp_fifo_dout_valid),
-        .i_dq                     (                 dq),
         .i_axif_rwds_cntr         (         axif_rwds_cntr),
         .i_axil_rwds_cntr         (         axil_rwds_cntr),
         .i_odly_cntvalueout       (       odly_cntvalueout),

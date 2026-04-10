@@ -46,6 +46,9 @@ CMAKE_TOOLCHAIN_FILE:FILEPATH=/raid/work/hyperbus_controller_freertos_port/vitis
 // Device Id
 DEVICE_ID:STRING=xcsu35p
 
+// Number of slrs
+NUMBER_OF_SLRS:STRING=0x1
+
 // The directory containing a CMake configuration file for SCUGIC.
 SCUGIC_DIR:PATH=SCUGIC_DIR-NOTFOUND
 

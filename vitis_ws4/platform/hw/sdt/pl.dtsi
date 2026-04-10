@@ -307,7 +307,7 @@
 			xlnx,ip-name = "hyperbus_controller";
 			xlnx,axi-addr-width = <32>;
 			xlnx,phy-family = <0>;
-			reg = <0x00010000 0x10000 0x80000000 0x80000000 0x80000000 0x800000>;
+			reg = <0x10000 0x10000 0x80000000 0x800000>;
 			xlnx,axi-id-width = <1>;
 			xlnx,hb-latency-default = <7>;
 			xlnx,edk-iptype = "PERIPHERAL";
@@ -322,7 +322,7 @@
 			xlnx,ecc-onoff-register = <0>;
 			xlnx,ecc-onoff-reset-value = <1>;
 			xlnx,s-axi-ctrl-protocol = "AXI4LITE";
-			xlnx,mask = <0xc0010000>;
+			xlnx,mask = <0x85010000>;
 			xlnx,mask1 = <0x80000000>;
 			xlnx,mask2 = <0x800000>;
 			xlnx,fault-inject = <0>;
@@ -331,7 +331,7 @@
 			xlnx,arbitration = <0>;
 			xlnx,num-lmb = <2>;
 			xlnx,mask4 = <0x800000>;
-			reg = <0x00000000 0x8000>;
+			reg = <0x0000 0x8000>;
 			xlnx,s-axi-ctrl-addr-width = <32>;
 			xlnx,mask5 = <0x800000>;
 			xlnx,ecc-status-registers = <0>;
@@ -360,6 +360,144 @@
 			xlnx,prot-cfg7 = <0xff>;
 			xlnx,lmb-awidth = <32>;
 			xlnx,name = "lmb_bram_if_cntlr_0";
+		};
+		pmcbridge_0: pmcbridge@4160000 {
+			compatible = "xlnx,pmcbridge-1.0";
+			status = "okay";
+			xlnx,ip-name = "pmcbridge";
+			xlnx,is-hierarchy;
+			xlnx,edk-iptype = "PERIPHERAL";
+			reg = <0x04160000 0x10000>;
+			xlnx,name = "pmcbridge_0";
+		};
+		pmcbridge_0_ccu_apb_0: pmcbridge_0_ccu_apb_0@4130000 {
+			compatible = "xlnx,ccu-apb-11.0";
+			status = "okay";
+			xlnx,ip-name = "ccu_apb";
+			reg = <0x4130000 0x10000>;
+			xlnx,name = "pmcbridge_0_ccu_apb_0";
+		};
+		pmcbridge_0_ccu_rd_stream_0: pmcbridge_0_ccu_rd_stream_0@4060000 {
+			compatible = "xlnx,ccu-rd-stream-11.0";
+			status = "okay";
+			xlnx,ip-name = "ccu_rd_stream";
+			reg = <0x4060000 0x10000>;
+			xlnx,name = "pmcbridge_0_ccu_rd_stream_0";
+		};
+		pmcbridge_0_ccu_wr_stream_0: pmcbridge_0_ccu_wr_stream_0@4070000 {
+			compatible = "xlnx,ccu-wr-stream-11.0";
+			status = "okay";
+			xlnx,ip-name = "ccu_wr_stream";
+			reg = <0x4070000 0x10000>;
+			xlnx,name = "pmcbridge_0_ccu_wr_stream_0";
+		};
+		pmcbridge_0_plm_config_0: pmcbridge_0_plm_config_0@4020000 {
+			compatible = "xlnx,plm-config-11.0";
+			status = "okay";
+			xlnx,ip-name = "plm_config";
+			reg = <0x4020000 0x10000>;
+			xlnx,name = "pmcbridge_0_plm_config_0";
+		};
+		pmcbridge_0_pmcl_dma_0: pmcbridge_0_pmcl_dma_0@40e0000 {
+			compatible = "xlnx,pmcl-dma-11.0" , "xlnx,pmc-dma";
+			status = "okay";
+			xlnx,ip-name = "pmcl_dma";
+			reg = <0x40e0000 0x10000>;
+			xlnx,dma-type = <1>;
+			xlnx,name = "pmcbridge_0_pmcl_dma_0";
+		};
+		pmcbridge_0_pmcl_efuse_0: pmcbridge_0_pmcl_efuse_0@4160000 {
+			compatible = "xlnx,pmcl-efuse-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_efuse";
+			reg = <0x4160000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_efuse_0";
+		};
+		pmcbridge_0_pmcl_global_0: pmcbridge_0_pmcl_global_0@40a0000 {
+			compatible = "xlnx,pmcl-global-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_global";
+			reg = <0x40a0000 0x20000>;
+			xlnx,name = "pmcbridge_0_pmcl_global_0";
+		};
+		pmcbridge_0_pmcl_ospi_0: pmcbridge_0_pmcl_ospi_0@4090000 {
+			is-stacked = <0>;
+			compatible = "xlnx,pmc-ospi-11.0" , "xlnx,pmc-ospi";
+			status = "okay";
+			xlnx,ip-name = "pmc_ospi";
+			reg = <0x4090000 0x10000>;
+			is-dual = <0>;
+			xlnx,name = "pmcbridge_0_pmcl_ospi_0";
+		};
+		pmcbridge_0_pmcl_puf_0: pmcbridge_0_pmcl_puf_0@4080000 {
+			compatible = "xlnx,pmcl-puf-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_puf";
+			reg = <0x4080000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_puf_0";
+		};
+		pmcbridge_0_pmcl_sha3_0: pmcbridge_0_pmcl_sha3_0@4100000 {
+			compatible = "xlnx,pmcl-sha3-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_sha3";
+			reg = <0x4100000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_sha3_0";
+		};
+		pmcbridge_0_pmcl_slave_boot_0: pmcbridge_0_pmcl_slave_boot_0@4110000 {
+			compatible = "xlnx,pmcl-slave-boot-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_slave_boot";
+			reg = <0x4110000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_slave_boot_0";
+		};
+		pmcbridge_0_pmcl_tap_0: pmcbridge_0_pmcl_tap_0@40c0000 {
+			compatible = "xlnx,pmcl-tap-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_tap";
+			reg = <0x40c0000 0x20000>;
+			xlnx,name = "pmcbridge_0_pmcl_tap_0";
+		};
+		pmcbridge_0_pmcl_trng_0: pmcbridge_0_pmcl_trng_0@4120000 {
+			compatible = "xlnx,pmcl-trng-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_trng";
+			reg = <0x4120000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_trng_0";
+		};
+		pmcbridge_0_pmcl_aes_0: pmcbridge_0_pmcl_aes_0@40f0000 {
+			compatible = "xlnx,pmcl-aes-11.0";
+			status = "okay";
+			xlnx,ip-name = "pmcl_aes";
+			reg = <0x40f0000 0x10000>;
+			xlnx,name = "pmcbridge_0_pmcl_aes_0";
+		};
+		pmcbridge_0_rv_iomodule_0: pmcbridge_0_rv_iomodule_0@4040000 {
+			compatible = "xlnx,rv-iomodule-11.0";
+			status = "okay";
+			xlnx,ip-name = "rv_iomodule";
+			reg = <0x4040000 0x1000>;
+			xlnx,name = "pmcbridge_0_rv_iomodule_0";
+		};
+		pmcbridge_0_rv_ram_data_ecc_ctrl_0: pmcbridge_0_rv_ram_data_ecc_ctrl_0@4042000 {
+			compatible = "xlnx,rv-ram-data-ecc-ctrl-11.0";
+			status = "okay";
+			xlnx,ip-name = "rv_ram_data_ecc_ctrl";
+			reg = <0x4042000 0x1000>;
+			xlnx,name = "pmcbridge_0_rv_ram_data_ecc_ctrl_0";
+		};
+		pmcbridge_0_rv_ram_instr_ecc_ctrl_0: pmcbridge_0_rv_ram_instr_ecc_ctrl_0@4041000 {
+			compatible = "xlnx,rv-ram-instr-ecc-ctrl-11.0";
+			status = "okay";
+			xlnx,ip-name = "rv_ram_instr_ecc_ctrl";
+			reg = <0x4041000 0x1000>;
+			xlnx,name = "pmcbridge_0_rv_ram_instr_ecc_ctrl_0";
+		};
+		pmcbridge_0_slave_boot_stream_0: pmcbridge_0_slave_boot_stream_0@4050000 {
+			compatible = "xlnx,slave-boot-stream-11.0";
+			status = "okay";
+			xlnx,ip-name = "slave_boot_stream";
+			reg = <0x4050000 0x10000>;
+			xlnx,name = "pmcbridge_0_slave_boot_stream_0";
 		};
 	};
 };

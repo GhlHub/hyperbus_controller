@@ -1,1 +1,1 @@
-set(DRIVER_LIST bram;common;intc;spi;tmrctr)
+set(DRIVER_LIST bram;common;csudma;intc;ospipsv;spi;tmrctr;trngpsx)

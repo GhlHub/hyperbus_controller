@@ -261,8 +261,8 @@
                   "address_offset": "0x010",
                   "size": 32,
                   "display_name": "Interrupt Status Register",
-                  "description": "Current interrupt status bits.",
-                  "access": "read-only",
+                  "description": "Current interrupt status bits. RX_TIME_COALESCE is write-1-to-clear.",
+                  "access": "read-write",
                   "fields": {
                     "TX_EMPTY": {
                       "bit_offset": 0,
@@ -291,8 +291,8 @@
                     "RX_TIME_COALESCE": {
                       "bit_offset": 4,
                       "bit_width": 1,
-                      "description": "Receive timeout coalescing interrupt status",
-                      "access": "read-only"
+                      "description": "Receive timeout coalescing interrupt status. Write 1 to clear.",
+                      "access": "read-write"
                     }
                   }
                 },
@@ -450,5 +450,5 @@
       }
     }
   },
-  "checksum": "0da4946c"
+  "checksum": "64e3be6a"
 }

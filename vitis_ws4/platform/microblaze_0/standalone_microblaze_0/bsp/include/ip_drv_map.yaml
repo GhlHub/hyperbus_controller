@@ -16,3 +16,57 @@ hyperbus_controller_0:
 lmb_bram_if_cntlr_0:
 - lmb_bram_if_cntlr
 - bram
+pmcbridge_0_ccu_apb_0:
+- ccu_apb
+- None
+pmcbridge_0_ccu_rd_stream_0:
+- ccu_rd_stream
+- None
+pmcbridge_0_ccu_wr_stream_0:
+- ccu_wr_stream
+- None
+pmcbridge_0_plm_config_0:
+- plm_config
+- None
+pmcbridge_0_pmcl_aes_0:
+- pmcl_aes
+- None
+pmcbridge_0_pmcl_dma_0:
+- pmcl_dma
+- csudma
+pmcbridge_0_pmcl_efuse_0:
+- pmcl_efuse
+- None
+pmcbridge_0_pmcl_global_0:
+- pmcl_global
+- None
+pmcbridge_0_pmcl_ospi_0:
+- pmc_ospi
+- ospipsv
+pmcbridge_0_pmcl_puf_0:
+- pmcl_puf
+- None
+pmcbridge_0_pmcl_sha3_0:
+- pmcl_sha3
+- None
+pmcbridge_0_pmcl_slave_boot_0:
+- pmcl_slave_boot
+- None
+pmcbridge_0_pmcl_tap_0:
+- pmcl_tap
+- None
+pmcbridge_0_pmcl_trng_0:
+- pmcl_trng
+- trngpsx
+pmcbridge_0_rv_iomodule_0:
+- rv_iomodule
+- None
+pmcbridge_0_rv_ram_data_ecc_ctrl_0:
+- rv_ram_data_ecc_ctrl
+- None
+pmcbridge_0_rv_ram_instr_ecc_ctrl_0:
+- rv_ram_instr_ecc_ctrl
+- None
+pmcbridge_0_slave_boot_stream_0:
+- slave_boot_stream
+- None

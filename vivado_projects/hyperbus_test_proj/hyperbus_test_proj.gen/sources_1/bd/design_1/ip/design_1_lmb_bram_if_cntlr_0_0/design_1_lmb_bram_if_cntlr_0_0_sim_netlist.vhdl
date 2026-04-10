@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Wed Apr  8 03:41:32 2026
+-- Date        : Thu Apr  9 11:22:34 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.vhdl
@@ -96,10 +96,10 @@ begin
       INIT => X"0001"
     )
         port map (
-      I0 => LMB_ABus(1),
+      I0 => LMB_ABus(5),
       I1 => LMB_ABus(15),
       I2 => LMB_ABus(0),
-      I3 => LMB_ABus(14),
+      I3 => LMB_ABus(7),
       O => \BRAM_Addr_A[0]_INST_0_i_2_n_0\
     );
 \BRAM_Addr_A[10]_INST_0\: unisim.vcomponents.LUT5
@@ -959,10 +959,10 @@ BRAM_EN_A_INST_0: unisim.vcomponents.LUT5
       INIT => X"FFFFFFFFFFFF0001"
     )
         port map (
-      I0 => LMB_ABus(14),
+      I0 => LMB_ABus(7),
       I1 => LMB_ABus(0),
       I2 => LMB_ABus(15),
-      I3 => LMB_ABus(1),
+      I3 => LMB_ABus(5),
       I4 => \BRAM_WEN_A[0]_INST_0_i_2_n_0\,
       I5 => \more_than_one_lmb.lmb_mux_generate[1].wait_vec_reg_n_0_[1]\,
       O => lmb_select
@@ -1766,7 +1766,7 @@ entity design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr is
   attribute C_LMB_PROTOCOL : integer;
   attribute C_LMB_PROTOCOL of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is 0;
   attribute C_MASK : string;
-  attribute C_MASK of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000011000000000000110000000000000000";
+  attribute C_MASK of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000010000101000000010000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000010000000000000000000000000000000";
   attribute C_MASK2 : string;
@@ -2274,7 +2274,7 @@ architecture STRUCTURE of design_1_lmb_bram_if_cntlr_0_0 is
   attribute C_LMB_PROTOCOL : integer;
   attribute C_LMB_PROTOCOL of U0 : label is 0;
   attribute C_MASK : string;
-  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000011000000000000110000000000000000";
+  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000010000101000000010000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of U0 : label is "64'b0000000000000000000000000000000010000000000000000000000000000000";
   attribute C_MASK2 : string;

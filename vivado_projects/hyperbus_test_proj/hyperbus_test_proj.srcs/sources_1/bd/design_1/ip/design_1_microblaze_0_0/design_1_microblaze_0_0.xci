@@ -590,7 +590,7 @@
           "mode": "slave",
           "parameters": {
             "SENSITIVITY": [ { "value": "LEVEL_HIGH", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
-            "LOW_LATENCY": [ { "value": "0", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ]
+            "LOW_LATENCY": [ { "value": "0", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ]
           },
           "port_maps": {
             "ACK": [ { "physical_name": "Interrupt_Ack" } ],
@@ -922,5 +922,5 @@
       }
     }
   },
-  "checksum": "6a999466"
+  "checksum": "4cf2b27f"
 }

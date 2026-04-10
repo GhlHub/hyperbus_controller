@@ -1,0 +1,4 @@
+set(DRIVER_INSTANCES "pmcbridge_0_pmcl_dma_0@40e0000")
+set(DRIVER_PROP_0_LIST "xlnx,pmcl-dma-11.0;0x40e0000;0x1;0xffff;0xffff")
+set(DRIVER_OPTPROP_0_LIST "")
+list(APPEND TOTAL_DRIVER_PROP_LIST DRIVER_PROP_0_LIST)

@@ -57,11 +57,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports UART_0_rxd]
 set_property IOSTANDARD LVCMOS33 [get_ports UART_0_txd]
 set_property IOSTANDARD LVCMOS33 [get_ports ext_reset_in_0]
 
-# Ignore the non-functional path from the HyperBus input sampling clock pins
-# into the AXI-Lite read-data muxing/registering logic.
-set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/C}]  -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
-set_false_path -from [get_pins {design_1_i/hyperbus_controller_0/inst/u_hyperbus_phy/g_phy_ultrascale_plus.u_phy_impl/g_dq_phy[*].u_iddr_dq/CB}] -to [get_pins {design_1_i/hyperbus_controller_0/inst/u_axi_lite_frontend/s_axil_rdata_reg[*]/D}]
-
 # HyperBus DQ bus-skew limits, assuming zero board-contributed skew for now.
 # Read-side: pad to IDDRE1 capture input.
 set_bus_skew 0.050 \

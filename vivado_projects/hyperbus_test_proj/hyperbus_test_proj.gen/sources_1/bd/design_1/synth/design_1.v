@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Wed Apr  8 09:39:34 2026
+//Date        : Thu Apr  9 17:07:07 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=21,numReposBlks=20,numNonXlnxBlks=3,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=22,numReposBlks=21,numNonXlnxBlks=2,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK_IN1_D_0_clk_n,
     CLK_IN1_D_0_clk_p,
@@ -111,9 +111,11 @@ module design_1
   wire [15:12]axi_crossbar_0_M03_AXI_WSTRB;
   wire [3:3]axi_crossbar_0_M03_AXI_WVALID;
   wire [159:128]axi_crossbar_0_M04_AXI_ARADDR;
+  wire [14:12]axi_crossbar_0_M04_AXI_ARPROT;
   wire axi_crossbar_0_M04_AXI_ARREADY;
   wire [4:4]axi_crossbar_0_M04_AXI_ARVALID;
   wire [159:128]axi_crossbar_0_M04_AXI_AWADDR;
+  wire [14:12]axi_crossbar_0_M04_AXI_AWPROT;
   wire axi_crossbar_0_M04_AXI_AWREADY;
   wire [4:4]axi_crossbar_0_M04_AXI_AWVALID;
   wire [4:4]axi_crossbar_0_M04_AXI_BREADY;
@@ -127,23 +129,6 @@ module design_1
   wire axi_crossbar_0_M04_AXI_WREADY;
   wire [19:16]axi_crossbar_0_M04_AXI_WSTRB;
   wire [4:4]axi_crossbar_0_M04_AXI_WVALID;
-  wire [191:160]axi_crossbar_0_M05_AXI_ARADDR;
-  wire axi_crossbar_0_M05_AXI_ARREADY;
-  wire [5:5]axi_crossbar_0_M05_AXI_ARVALID;
-  wire [191:160]axi_crossbar_0_M05_AXI_AWADDR;
-  wire axi_crossbar_0_M05_AXI_AWREADY;
-  wire [5:5]axi_crossbar_0_M05_AXI_AWVALID;
-  wire [5:5]axi_crossbar_0_M05_AXI_BREADY;
-  wire [1:0]axi_crossbar_0_M05_AXI_BRESP;
-  wire axi_crossbar_0_M05_AXI_BVALID;
-  wire [31:0]axi_crossbar_0_M05_AXI_RDATA;
-  wire [5:5]axi_crossbar_0_M05_AXI_RREADY;
-  wire [1:0]axi_crossbar_0_M05_AXI_RRESP;
-  wire axi_crossbar_0_M05_AXI_RVALID;
-  wire [191:160]axi_crossbar_0_M05_AXI_WDATA;
-  wire axi_crossbar_0_M05_AXI_WREADY;
-  wire [23:20]axi_crossbar_0_M05_AXI_WSTRB;
-  wire [5:5]axi_crossbar_0_M05_AXI_WVALID;
   wire [31:0]axi_crossbar_1_M00_AXI_ARADDR;
   wire [1:0]axi_crossbar_1_M00_AXI_ARBURST;
   wire [3:0]axi_crossbar_1_M00_AXI_ARCACHE;
@@ -354,31 +339,81 @@ module design_1
   wire [0:0]reset_gen_peripheral_aresetn;
   wire [0:0]reset_gen_peripheral_reset;
   wire [0:0]reset_gen_peripheral_reset1;
-  wire [17:0]NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED;
-  wire [17:0]NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED;
+  wire [27:0]smartconnect_0_M00_AXI_ARADDR;
+  wire [1:0]smartconnect_0_M00_AXI_ARBURST;
+  wire [3:0]smartconnect_0_M00_AXI_ARCACHE;
+  wire [7:0]smartconnect_0_M00_AXI_ARLEN;
+  wire [0:0]smartconnect_0_M00_AXI_ARLOCK;
+  wire [2:0]smartconnect_0_M00_AXI_ARPROT;
+  wire [3:0]smartconnect_0_M00_AXI_ARQOS;
+  wire [0:0]smartconnect_0_M00_AXI_ARREADY;
+  wire [2:0]smartconnect_0_M00_AXI_ARSIZE;
+  wire smartconnect_0_M00_AXI_ARVALID;
+  wire [27:0]smartconnect_0_M00_AXI_AWADDR;
+  wire [1:0]smartconnect_0_M00_AXI_AWBURST;
+  wire [3:0]smartconnect_0_M00_AXI_AWCACHE;
+  wire [7:0]smartconnect_0_M00_AXI_AWLEN;
+  wire [0:0]smartconnect_0_M00_AXI_AWLOCK;
+  wire [2:0]smartconnect_0_M00_AXI_AWPROT;
+  wire [3:0]smartconnect_0_M00_AXI_AWQOS;
+  wire [0:0]smartconnect_0_M00_AXI_AWREADY;
+  wire [2:0]smartconnect_0_M00_AXI_AWSIZE;
+  wire smartconnect_0_M00_AXI_AWVALID;
+  wire smartconnect_0_M00_AXI_BREADY;
+  wire [1:0]smartconnect_0_M00_AXI_BRESP;
+  wire [0:0]smartconnect_0_M00_AXI_BVALID;
+  wire [31:0]smartconnect_0_M00_AXI_RDATA;
+  wire [0:0]smartconnect_0_M00_AXI_RLAST;
+  wire smartconnect_0_M00_AXI_RREADY;
+  wire [1:0]smartconnect_0_M00_AXI_RRESP;
+  wire [0:0]smartconnect_0_M00_AXI_RVALID;
+  wire [31:0]smartconnect_0_M00_AXI_WDATA;
+  wire smartconnect_0_M00_AXI_WLAST;
+  wire [0:0]smartconnect_0_M00_AXI_WREADY;
+  wire [3:0]smartconnect_0_M00_AXI_WSTRB;
+  wire smartconnect_0_M00_AXI_WVALID;
+  wire [6:0]smartconnect_0_M01_AXI_ARADDR;
+  wire smartconnect_0_M01_AXI_ARREADY;
+  wire smartconnect_0_M01_AXI_ARVALID;
+  wire [6:0]smartconnect_0_M01_AXI_AWADDR;
+  wire smartconnect_0_M01_AXI_AWREADY;
+  wire smartconnect_0_M01_AXI_AWVALID;
+  wire smartconnect_0_M01_AXI_BREADY;
+  wire [1:0]smartconnect_0_M01_AXI_BRESP;
+  wire smartconnect_0_M01_AXI_BVALID;
+  wire [31:0]smartconnect_0_M01_AXI_RDATA;
+  wire smartconnect_0_M01_AXI_RREADY;
+  wire [1:0]smartconnect_0_M01_AXI_RRESP;
+  wire smartconnect_0_M01_AXI_RVALID;
+  wire [31:0]smartconnect_0_M01_AXI_WDATA;
+  wire smartconnect_0_M01_AXI_WREADY;
+  wire [3:0]smartconnect_0_M01_AXI_WSTRB;
+  wire smartconnect_0_M01_AXI_WVALID;
+  wire [14:0]NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED;
+  wire [14:0]NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED;
 
   design_1_axi_crossbar_0_0 axi_crossbar_0
        (.aclk(axi_clk),
         .aresetn(proc_sys_reset_1_interconnect_aresetn),
-        .m_axi_araddr({axi_crossbar_0_M05_AXI_ARADDR,axi_crossbar_0_M04_AXI_ARADDR,axi_crossbar_0_M03_AXI_ARADDR,axi_crossbar_0_M02_AXI_ARADDR,axi_crossbar_0_M01_AXI_ARADDR,axi_crossbar_0_M00_AXI_ARADDR}),
-        .m_axi_arprot({axi_crossbar_0_M02_AXI_ARPROT,NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED[5:0]}),
-        .m_axi_arready({axi_crossbar_0_M05_AXI_ARREADY,axi_crossbar_0_M04_AXI_ARREADY,axi_crossbar_0_M03_AXI_ARREADY,axi_crossbar_0_M02_AXI_ARREADY,axi_crossbar_0_M01_AXI_ARREADY,axi_crossbar_0_M00_AXI_ARREADY}),
-        .m_axi_arvalid({axi_crossbar_0_M05_AXI_ARVALID,axi_crossbar_0_M04_AXI_ARVALID,axi_crossbar_0_M03_AXI_ARVALID,axi_crossbar_0_M02_AXI_ARVALID,axi_crossbar_0_M01_AXI_ARVALID,axi_crossbar_0_M00_AXI_ARVALID}),
-        .m_axi_awaddr({axi_crossbar_0_M05_AXI_AWADDR,axi_crossbar_0_M04_AXI_AWADDR,axi_crossbar_0_M03_AXI_AWADDR,axi_crossbar_0_M02_AXI_AWADDR,axi_crossbar_0_M01_AXI_AWADDR,axi_crossbar_0_M00_AXI_AWADDR}),
-        .m_axi_awprot({axi_crossbar_0_M02_AXI_AWPROT,NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED[5:0]}),
-        .m_axi_awready({axi_crossbar_0_M05_AXI_AWREADY,axi_crossbar_0_M04_AXI_AWREADY,axi_crossbar_0_M03_AXI_AWREADY,axi_crossbar_0_M02_AXI_AWREADY,axi_crossbar_0_M01_AXI_AWREADY,axi_crossbar_0_M00_AXI_AWREADY}),
-        .m_axi_awvalid({axi_crossbar_0_M05_AXI_AWVALID,axi_crossbar_0_M04_AXI_AWVALID,axi_crossbar_0_M03_AXI_AWVALID,axi_crossbar_0_M02_AXI_AWVALID,axi_crossbar_0_M01_AXI_AWVALID,axi_crossbar_0_M00_AXI_AWVALID}),
-        .m_axi_bready({axi_crossbar_0_M05_AXI_BREADY,axi_crossbar_0_M04_AXI_BREADY,axi_crossbar_0_M03_AXI_BREADY,axi_crossbar_0_M02_AXI_BREADY,axi_crossbar_0_M01_AXI_BREADY,axi_crossbar_0_M00_AXI_BREADY}),
-        .m_axi_bresp({axi_crossbar_0_M05_AXI_BRESP,axi_crossbar_0_M04_AXI_BRESP,axi_crossbar_0_M03_AXI_BRESP,axi_crossbar_0_M02_AXI_BRESP,axi_crossbar_0_M01_AXI_BRESP,axi_crossbar_0_M00_AXI_BRESP}),
-        .m_axi_bvalid({axi_crossbar_0_M05_AXI_BVALID,axi_crossbar_0_M04_AXI_BVALID,axi_crossbar_0_M03_AXI_BVALID,axi_crossbar_0_M02_AXI_BVALID,axi_crossbar_0_M01_AXI_BVALID,axi_crossbar_0_M00_AXI_BVALID}),
-        .m_axi_rdata({axi_crossbar_0_M05_AXI_RDATA,axi_crossbar_0_M04_AXI_RDATA,axi_crossbar_0_M03_AXI_RDATA,axi_crossbar_0_M02_AXI_RDATA,axi_crossbar_0_M01_AXI_RDATA,axi_crossbar_0_M00_AXI_RDATA}),
-        .m_axi_rready({axi_crossbar_0_M05_AXI_RREADY,axi_crossbar_0_M04_AXI_RREADY,axi_crossbar_0_M03_AXI_RREADY,axi_crossbar_0_M02_AXI_RREADY,axi_crossbar_0_M01_AXI_RREADY,axi_crossbar_0_M00_AXI_RREADY}),
-        .m_axi_rresp({axi_crossbar_0_M05_AXI_RRESP,axi_crossbar_0_M04_AXI_RRESP,axi_crossbar_0_M03_AXI_RRESP,axi_crossbar_0_M02_AXI_RRESP,axi_crossbar_0_M01_AXI_RRESP,axi_crossbar_0_M00_AXI_RRESP}),
-        .m_axi_rvalid({axi_crossbar_0_M05_AXI_RVALID,axi_crossbar_0_M04_AXI_RVALID,axi_crossbar_0_M03_AXI_RVALID,axi_crossbar_0_M02_AXI_RVALID,axi_crossbar_0_M01_AXI_RVALID,axi_crossbar_0_M00_AXI_RVALID}),
-        .m_axi_wdata({axi_crossbar_0_M05_AXI_WDATA,axi_crossbar_0_M04_AXI_WDATA,axi_crossbar_0_M03_AXI_WDATA,axi_crossbar_0_M02_AXI_WDATA,axi_crossbar_0_M01_AXI_WDATA,axi_crossbar_0_M00_AXI_WDATA}),
-        .m_axi_wready({axi_crossbar_0_M05_AXI_WREADY,axi_crossbar_0_M04_AXI_WREADY,axi_crossbar_0_M03_AXI_WREADY,axi_crossbar_0_M02_AXI_WREADY,axi_crossbar_0_M01_AXI_WREADY,axi_crossbar_0_M00_AXI_WREADY}),
-        .m_axi_wstrb({axi_crossbar_0_M05_AXI_WSTRB,axi_crossbar_0_M04_AXI_WSTRB,axi_crossbar_0_M03_AXI_WSTRB,axi_crossbar_0_M02_AXI_WSTRB,axi_crossbar_0_M01_AXI_WSTRB,axi_crossbar_0_M00_AXI_WSTRB}),
-        .m_axi_wvalid({axi_crossbar_0_M05_AXI_WVALID,axi_crossbar_0_M04_AXI_WVALID,axi_crossbar_0_M03_AXI_WVALID,axi_crossbar_0_M02_AXI_WVALID,axi_crossbar_0_M01_AXI_WVALID,axi_crossbar_0_M00_AXI_WVALID}),
+        .m_axi_araddr({axi_crossbar_0_M04_AXI_ARADDR,axi_crossbar_0_M03_AXI_ARADDR,axi_crossbar_0_M02_AXI_ARADDR,axi_crossbar_0_M01_AXI_ARADDR,axi_crossbar_0_M00_AXI_ARADDR}),
+        .m_axi_arprot({axi_crossbar_0_M04_AXI_ARPROT,NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED[11:9],axi_crossbar_0_M02_AXI_ARPROT,NLW_axi_crossbar_0_m_axi_arprot_UNCONNECTED[5:0]}),
+        .m_axi_arready({axi_crossbar_0_M04_AXI_ARREADY,axi_crossbar_0_M03_AXI_ARREADY,axi_crossbar_0_M02_AXI_ARREADY,axi_crossbar_0_M01_AXI_ARREADY,axi_crossbar_0_M00_AXI_ARREADY}),
+        .m_axi_arvalid({axi_crossbar_0_M04_AXI_ARVALID,axi_crossbar_0_M03_AXI_ARVALID,axi_crossbar_0_M02_AXI_ARVALID,axi_crossbar_0_M01_AXI_ARVALID,axi_crossbar_0_M00_AXI_ARVALID}),
+        .m_axi_awaddr({axi_crossbar_0_M04_AXI_AWADDR,axi_crossbar_0_M03_AXI_AWADDR,axi_crossbar_0_M02_AXI_AWADDR,axi_crossbar_0_M01_AXI_AWADDR,axi_crossbar_0_M00_AXI_AWADDR}),
+        .m_axi_awprot({axi_crossbar_0_M04_AXI_AWPROT,NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED[11:9],axi_crossbar_0_M02_AXI_AWPROT,NLW_axi_crossbar_0_m_axi_awprot_UNCONNECTED[5:0]}),
+        .m_axi_awready({axi_crossbar_0_M04_AXI_AWREADY,axi_crossbar_0_M03_AXI_AWREADY,axi_crossbar_0_M02_AXI_AWREADY,axi_crossbar_0_M01_AXI_AWREADY,axi_crossbar_0_M00_AXI_AWREADY}),
+        .m_axi_awvalid({axi_crossbar_0_M04_AXI_AWVALID,axi_crossbar_0_M03_AXI_AWVALID,axi_crossbar_0_M02_AXI_AWVALID,axi_crossbar_0_M01_AXI_AWVALID,axi_crossbar_0_M00_AXI_AWVALID}),
+        .m_axi_bready({axi_crossbar_0_M04_AXI_BREADY,axi_crossbar_0_M03_AXI_BREADY,axi_crossbar_0_M02_AXI_BREADY,axi_crossbar_0_M01_AXI_BREADY,axi_crossbar_0_M00_AXI_BREADY}),
+        .m_axi_bresp({axi_crossbar_0_M04_AXI_BRESP,axi_crossbar_0_M03_AXI_BRESP,axi_crossbar_0_M02_AXI_BRESP,axi_crossbar_0_M01_AXI_BRESP,axi_crossbar_0_M00_AXI_BRESP}),
+        .m_axi_bvalid({axi_crossbar_0_M04_AXI_BVALID,axi_crossbar_0_M03_AXI_BVALID,axi_crossbar_0_M02_AXI_BVALID,axi_crossbar_0_M01_AXI_BVALID,axi_crossbar_0_M00_AXI_BVALID}),
+        .m_axi_rdata({axi_crossbar_0_M04_AXI_RDATA,axi_crossbar_0_M03_AXI_RDATA,axi_crossbar_0_M02_AXI_RDATA,axi_crossbar_0_M01_AXI_RDATA,axi_crossbar_0_M00_AXI_RDATA}),
+        .m_axi_rready({axi_crossbar_0_M04_AXI_RREADY,axi_crossbar_0_M03_AXI_RREADY,axi_crossbar_0_M02_AXI_RREADY,axi_crossbar_0_M01_AXI_RREADY,axi_crossbar_0_M00_AXI_RREADY}),
+        .m_axi_rresp({axi_crossbar_0_M04_AXI_RRESP,axi_crossbar_0_M03_AXI_RRESP,axi_crossbar_0_M02_AXI_RRESP,axi_crossbar_0_M01_AXI_RRESP,axi_crossbar_0_M00_AXI_RRESP}),
+        .m_axi_rvalid({axi_crossbar_0_M04_AXI_RVALID,axi_crossbar_0_M03_AXI_RVALID,axi_crossbar_0_M02_AXI_RVALID,axi_crossbar_0_M01_AXI_RVALID,axi_crossbar_0_M00_AXI_RVALID}),
+        .m_axi_wdata({axi_crossbar_0_M04_AXI_WDATA,axi_crossbar_0_M03_AXI_WDATA,axi_crossbar_0_M02_AXI_WDATA,axi_crossbar_0_M01_AXI_WDATA,axi_crossbar_0_M00_AXI_WDATA}),
+        .m_axi_wready({axi_crossbar_0_M04_AXI_WREADY,axi_crossbar_0_M03_AXI_WREADY,axi_crossbar_0_M02_AXI_WREADY,axi_crossbar_0_M01_AXI_WREADY,axi_crossbar_0_M00_AXI_WREADY}),
+        .m_axi_wstrb({axi_crossbar_0_M04_AXI_WSTRB,axi_crossbar_0_M03_AXI_WSTRB,axi_crossbar_0_M02_AXI_WSTRB,axi_crossbar_0_M01_AXI_WSTRB,axi_crossbar_0_M00_AXI_WSTRB}),
+        .m_axi_wvalid({axi_crossbar_0_M04_AXI_WVALID,axi_crossbar_0_M03_AXI_WVALID,axi_crossbar_0_M02_AXI_WVALID,axi_crossbar_0_M01_AXI_WVALID,axi_crossbar_0_M00_AXI_WVALID}),
         .s_axi_araddr(microblaze_0_M_AXI_DP_ARADDR),
         .s_axi_arprot(microblaze_0_M_AXI_DP_ARPROT),
         .s_axi_arready(microblaze_0_M_AXI_DP_ARREADY),
@@ -506,24 +541,24 @@ module design_1
         .ip2intc_irpt(axi_quad_spi_0_ip2intc_irpt),
         .keyclearb(1'b0),
         .s_axi_aclk(axi_clk),
-        .s_axi_araddr(axi_crossbar_0_M04_AXI_ARADDR[134:128]),
+        .s_axi_araddr(smartconnect_0_M01_AXI_ARADDR),
         .s_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
-        .s_axi_arready(axi_crossbar_0_M04_AXI_ARREADY),
-        .s_axi_arvalid(axi_crossbar_0_M04_AXI_ARVALID),
-        .s_axi_awaddr(axi_crossbar_0_M04_AXI_AWADDR[134:128]),
-        .s_axi_awready(axi_crossbar_0_M04_AXI_AWREADY),
-        .s_axi_awvalid(axi_crossbar_0_M04_AXI_AWVALID),
-        .s_axi_bready(axi_crossbar_0_M04_AXI_BREADY),
-        .s_axi_bresp(axi_crossbar_0_M04_AXI_BRESP),
-        .s_axi_bvalid(axi_crossbar_0_M04_AXI_BVALID),
-        .s_axi_rdata(axi_crossbar_0_M04_AXI_RDATA),
-        .s_axi_rready(axi_crossbar_0_M04_AXI_RREADY),
-        .s_axi_rresp(axi_crossbar_0_M04_AXI_RRESP),
-        .s_axi_rvalid(axi_crossbar_0_M04_AXI_RVALID),
-        .s_axi_wdata(axi_crossbar_0_M04_AXI_WDATA),
-        .s_axi_wready(axi_crossbar_0_M04_AXI_WREADY),
-        .s_axi_wstrb(axi_crossbar_0_M04_AXI_WSTRB),
-        .s_axi_wvalid(axi_crossbar_0_M04_AXI_WVALID),
+        .s_axi_arready(smartconnect_0_M01_AXI_ARREADY),
+        .s_axi_arvalid(smartconnect_0_M01_AXI_ARVALID),
+        .s_axi_awaddr(smartconnect_0_M01_AXI_AWADDR),
+        .s_axi_awready(smartconnect_0_M01_AXI_AWREADY),
+        .s_axi_awvalid(smartconnect_0_M01_AXI_AWVALID),
+        .s_axi_bready(smartconnect_0_M01_AXI_BREADY),
+        .s_axi_bresp(smartconnect_0_M01_AXI_BRESP),
+        .s_axi_bvalid(smartconnect_0_M01_AXI_BVALID),
+        .s_axi_rdata(smartconnect_0_M01_AXI_RDATA),
+        .s_axi_rready(smartconnect_0_M01_AXI_RREADY),
+        .s_axi_rresp(smartconnect_0_M01_AXI_RRESP),
+        .s_axi_rvalid(smartconnect_0_M01_AXI_RVALID),
+        .s_axi_wdata(smartconnect_0_M01_AXI_WDATA),
+        .s_axi_wready(smartconnect_0_M01_AXI_WREADY),
+        .s_axi_wstrb(smartconnect_0_M01_AXI_WSTRB),
+        .s_axi_wvalid(smartconnect_0_M01_AXI_WVALID),
         .usrcclkts(1'b0),
         .usrdoneo(1'b1),
         .usrdonets(1'b0));
@@ -914,6 +949,41 @@ module design_1
         .Read_Strobe(microblaze_0_DLMB_READSTROBE),
         .Reset(reset_gen_mb_reset),
         .Write_Strobe(microblaze_0_DLMB_WRITESTROBE));
+  design_1_pmcbridge_0_0 pmcbridge_0
+       (.S_AXI_araddr(smartconnect_0_M00_AXI_ARADDR),
+        .S_AXI_arburst(smartconnect_0_M00_AXI_ARBURST),
+        .S_AXI_arcache(smartconnect_0_M00_AXI_ARCACHE),
+        .S_AXI_arlen(smartconnect_0_M00_AXI_ARLEN),
+        .S_AXI_arlock(smartconnect_0_M00_AXI_ARLOCK),
+        .S_AXI_arprot(smartconnect_0_M00_AXI_ARPROT),
+        .S_AXI_arqos(smartconnect_0_M00_AXI_ARQOS),
+        .S_AXI_arready(smartconnect_0_M00_AXI_ARREADY),
+        .S_AXI_arsize(smartconnect_0_M00_AXI_ARSIZE),
+        .S_AXI_arvalid(smartconnect_0_M00_AXI_ARVALID),
+        .S_AXI_awaddr(smartconnect_0_M00_AXI_AWADDR),
+        .S_AXI_awburst(smartconnect_0_M00_AXI_AWBURST),
+        .S_AXI_awcache(smartconnect_0_M00_AXI_AWCACHE),
+        .S_AXI_awlen(smartconnect_0_M00_AXI_AWLEN),
+        .S_AXI_awlock(smartconnect_0_M00_AXI_AWLOCK),
+        .S_AXI_awprot(smartconnect_0_M00_AXI_AWPROT),
+        .S_AXI_awqos(smartconnect_0_M00_AXI_AWQOS),
+        .S_AXI_awready(smartconnect_0_M00_AXI_AWREADY),
+        .S_AXI_awsize(smartconnect_0_M00_AXI_AWSIZE),
+        .S_AXI_awvalid(smartconnect_0_M00_AXI_AWVALID),
+        .S_AXI_bready(smartconnect_0_M00_AXI_BREADY),
+        .S_AXI_bresp(smartconnect_0_M00_AXI_BRESP),
+        .S_AXI_bvalid(smartconnect_0_M00_AXI_BVALID),
+        .S_AXI_clk(axi_clk),
+        .S_AXI_rdata(smartconnect_0_M00_AXI_RDATA),
+        .S_AXI_rlast(smartconnect_0_M00_AXI_RLAST),
+        .S_AXI_rready(smartconnect_0_M00_AXI_RREADY),
+        .S_AXI_rresp(smartconnect_0_M00_AXI_RRESP),
+        .S_AXI_rvalid(smartconnect_0_M00_AXI_RVALID),
+        .S_AXI_wdata(smartconnect_0_M00_AXI_WDATA),
+        .S_AXI_wlast(smartconnect_0_M00_AXI_WLAST),
+        .S_AXI_wready(smartconnect_0_M00_AXI_WREADY),
+        .S_AXI_wstrb(smartconnect_0_M00_AXI_WSTRB),
+        .S_AXI_wvalid(smartconnect_0_M00_AXI_WVALID));
   reset_gen_imp_1MBKAOM reset_gen
        (.axi_clk(axi_clk),
         .axi_clk_bus_struct_reset(reset_gen_bus_struct_reset),
@@ -929,26 +999,78 @@ module design_1
         .hb_phy_rx_clk_peripheral_reset(reset_gen_peripheral_reset1),
         .mb_debug_sys_rst(mb_debug_sys_rst_1),
         .mb_reset(reset_gen_mb_reset));
-  design_1_util_icape3_axil_0_0 util_icape3_axil_0
-       (.s_axi_aclk(axi_clk),
-        .s_axi_araddr(axi_crossbar_0_M05_AXI_ARADDR[167:160]),
-        .s_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
-        .s_axi_arready(axi_crossbar_0_M05_AXI_ARREADY),
-        .s_axi_arvalid(axi_crossbar_0_M05_AXI_ARVALID),
-        .s_axi_awaddr(axi_crossbar_0_M05_AXI_AWADDR[167:160]),
-        .s_axi_awready(axi_crossbar_0_M05_AXI_AWREADY),
-        .s_axi_awvalid(axi_crossbar_0_M05_AXI_AWVALID),
-        .s_axi_bready(axi_crossbar_0_M05_AXI_BREADY),
-        .s_axi_bresp(axi_crossbar_0_M05_AXI_BRESP),
-        .s_axi_bvalid(axi_crossbar_0_M05_AXI_BVALID),
-        .s_axi_rdata(axi_crossbar_0_M05_AXI_RDATA),
-        .s_axi_rready(axi_crossbar_0_M05_AXI_RREADY),
-        .s_axi_rresp(axi_crossbar_0_M05_AXI_RRESP),
-        .s_axi_rvalid(axi_crossbar_0_M05_AXI_RVALID),
-        .s_axi_wdata(axi_crossbar_0_M05_AXI_WDATA),
-        .s_axi_wready(axi_crossbar_0_M05_AXI_WREADY),
-        .s_axi_wstrb(axi_crossbar_0_M05_AXI_WSTRB),
-        .s_axi_wvalid(axi_crossbar_0_M05_AXI_WVALID));
+  design_1_smartconnect_0_0 smartconnect_0
+       (.M00_AXI_araddr(smartconnect_0_M00_AXI_ARADDR),
+        .M00_AXI_arburst(smartconnect_0_M00_AXI_ARBURST),
+        .M00_AXI_arcache(smartconnect_0_M00_AXI_ARCACHE),
+        .M00_AXI_arlen(smartconnect_0_M00_AXI_ARLEN),
+        .M00_AXI_arlock(smartconnect_0_M00_AXI_ARLOCK),
+        .M00_AXI_arprot(smartconnect_0_M00_AXI_ARPROT),
+        .M00_AXI_arqos(smartconnect_0_M00_AXI_ARQOS),
+        .M00_AXI_arready(smartconnect_0_M00_AXI_ARREADY),
+        .M00_AXI_arsize(smartconnect_0_M00_AXI_ARSIZE),
+        .M00_AXI_arvalid(smartconnect_0_M00_AXI_ARVALID),
+        .M00_AXI_awaddr(smartconnect_0_M00_AXI_AWADDR),
+        .M00_AXI_awburst(smartconnect_0_M00_AXI_AWBURST),
+        .M00_AXI_awcache(smartconnect_0_M00_AXI_AWCACHE),
+        .M00_AXI_awlen(smartconnect_0_M00_AXI_AWLEN),
+        .M00_AXI_awlock(smartconnect_0_M00_AXI_AWLOCK),
+        .M00_AXI_awprot(smartconnect_0_M00_AXI_AWPROT),
+        .M00_AXI_awqos(smartconnect_0_M00_AXI_AWQOS),
+        .M00_AXI_awready(smartconnect_0_M00_AXI_AWREADY),
+        .M00_AXI_awsize(smartconnect_0_M00_AXI_AWSIZE),
+        .M00_AXI_awvalid(smartconnect_0_M00_AXI_AWVALID),
+        .M00_AXI_bready(smartconnect_0_M00_AXI_BREADY),
+        .M00_AXI_bresp(smartconnect_0_M00_AXI_BRESP),
+        .M00_AXI_bvalid(smartconnect_0_M00_AXI_BVALID),
+        .M00_AXI_rdata(smartconnect_0_M00_AXI_RDATA),
+        .M00_AXI_rlast(smartconnect_0_M00_AXI_RLAST),
+        .M00_AXI_rready(smartconnect_0_M00_AXI_RREADY),
+        .M00_AXI_rresp(smartconnect_0_M00_AXI_RRESP),
+        .M00_AXI_rvalid(smartconnect_0_M00_AXI_RVALID),
+        .M00_AXI_wdata(smartconnect_0_M00_AXI_WDATA),
+        .M00_AXI_wlast(smartconnect_0_M00_AXI_WLAST),
+        .M00_AXI_wready(smartconnect_0_M00_AXI_WREADY),
+        .M00_AXI_wstrb(smartconnect_0_M00_AXI_WSTRB),
+        .M00_AXI_wvalid(smartconnect_0_M00_AXI_WVALID),
+        .M01_AXI_araddr(smartconnect_0_M01_AXI_ARADDR),
+        .M01_AXI_arready(smartconnect_0_M01_AXI_ARREADY),
+        .M01_AXI_arvalid(smartconnect_0_M01_AXI_ARVALID),
+        .M01_AXI_awaddr(smartconnect_0_M01_AXI_AWADDR),
+        .M01_AXI_awready(smartconnect_0_M01_AXI_AWREADY),
+        .M01_AXI_awvalid(smartconnect_0_M01_AXI_AWVALID),
+        .M01_AXI_bready(smartconnect_0_M01_AXI_BREADY),
+        .M01_AXI_bresp(smartconnect_0_M01_AXI_BRESP),
+        .M01_AXI_bvalid(smartconnect_0_M01_AXI_BVALID),
+        .M01_AXI_rdata(smartconnect_0_M01_AXI_RDATA),
+        .M01_AXI_rready(smartconnect_0_M01_AXI_RREADY),
+        .M01_AXI_rresp(smartconnect_0_M01_AXI_RRESP),
+        .M01_AXI_rvalid(smartconnect_0_M01_AXI_RVALID),
+        .M01_AXI_wdata(smartconnect_0_M01_AXI_WDATA),
+        .M01_AXI_wready(smartconnect_0_M01_AXI_WREADY),
+        .M01_AXI_wstrb(smartconnect_0_M01_AXI_WSTRB),
+        .M01_AXI_wvalid(smartconnect_0_M01_AXI_WVALID),
+        .S00_AXI_araddr(axi_crossbar_0_M04_AXI_ARADDR),
+        .S00_AXI_arprot(axi_crossbar_0_M04_AXI_ARPROT),
+        .S00_AXI_arready(axi_crossbar_0_M04_AXI_ARREADY),
+        .S00_AXI_arvalid(axi_crossbar_0_M04_AXI_ARVALID),
+        .S00_AXI_awaddr(axi_crossbar_0_M04_AXI_AWADDR),
+        .S00_AXI_awprot(axi_crossbar_0_M04_AXI_AWPROT),
+        .S00_AXI_awready(axi_crossbar_0_M04_AXI_AWREADY),
+        .S00_AXI_awvalid(axi_crossbar_0_M04_AXI_AWVALID),
+        .S00_AXI_bready(axi_crossbar_0_M04_AXI_BREADY),
+        .S00_AXI_bresp(axi_crossbar_0_M04_AXI_BRESP),
+        .S00_AXI_bvalid(axi_crossbar_0_M04_AXI_BVALID),
+        .S00_AXI_rdata(axi_crossbar_0_M04_AXI_RDATA),
+        .S00_AXI_rready(axi_crossbar_0_M04_AXI_RREADY),
+        .S00_AXI_rresp(axi_crossbar_0_M04_AXI_RRESP),
+        .S00_AXI_rvalid(axi_crossbar_0_M04_AXI_RVALID),
+        .S00_AXI_wdata(axi_crossbar_0_M04_AXI_WDATA),
+        .S00_AXI_wready(axi_crossbar_0_M04_AXI_WREADY),
+        .S00_AXI_wstrb(axi_crossbar_0_M04_AXI_WSTRB),
+        .S00_AXI_wvalid(axi_crossbar_0_M04_AXI_WVALID),
+        .aclk(axi_clk),
+        .aresetn(proc_sys_reset_1_interconnect_aresetn));
 endmodule
 
 module reset_gen_imp_1MBKAOM

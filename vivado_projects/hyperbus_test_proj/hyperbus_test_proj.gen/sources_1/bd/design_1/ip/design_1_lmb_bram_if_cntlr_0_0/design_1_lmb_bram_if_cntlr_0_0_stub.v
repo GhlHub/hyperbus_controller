@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Wed Apr  8 03:41:32 2026
+// Date        : Thu Apr  9 11:22:34 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode synth_stub
 //               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_stub.v
@@ -14,7 +14,7 @@
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* CHECK_LICENSE_TYPE = "design_1_lmb_bram_if_cntlr_0_0,lmb_bram_if_cntlr,{}" *) (* core_generation_info = "design_1_lmb_bram_if_cntlr_0_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=27,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=spartanuplus,C_HIGHADDR=0x0000000000007FFF,C_BASEADDR=0x0000000000000000,C_NUM_LMB=2,C_MASK=0x00000000c0030000,C_MASK1=0x0000000080000000,C_MASK2=0x0000000000800000,C_MASK3=0x0000000000800000,C_MASK4=0x0000000000800000,C_MASK5=0x0000000000800000,C_MASK6=0x0000000000800000,C_MASK7=0x0000000000800000,C_PROT_CFG=0xFF,C_PROT_CFG1=0xFF,C_PROT_CFG2=0xFF,C_PROT_CFG3=0xFF,C_PROT_CFG4=0xFF,C_PROT_CFG5=0xFF,C_PROT_CFG6=0xFF,C_PROT_CFG7=0xFF,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_LMB_PROTOCOL=0,C_LMB_HAS_PROT=0,C_ARBITRATION=0,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_REGISTERS=0,C_UE_FAILING_REGISTERS=0,C_ECC_STATUS_REGISTERS=0,C_ECC_ONOFF_REGISTER=0,C_ECC_ONOFF_RESET_VALUE=1,C_CE_COUNTER_WIDTH=0,C_WRITE_ACCESS=2,C_BRAM_AWIDTH=32,C_S_AXI_CTRL_ADDR_WIDTH=32,C_S_AXI_CTRL_DATA_WIDTH=32}" *) (* downgradeipidentifiedwarnings = "yes" *) 
+(* CHECK_LICENSE_TYPE = "design_1_lmb_bram_if_cntlr_0_0,lmb_bram_if_cntlr,{}" *) (* core_generation_info = "design_1_lmb_bram_if_cntlr_0_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=27,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=spartanuplus,C_HIGHADDR=0x0000000000007FFF,C_BASEADDR=0x0000000000000000,C_NUM_LMB=2,C_MASK=0x0000000085010000,C_MASK1=0x0000000080000000,C_MASK2=0x0000000000800000,C_MASK3=0x0000000000800000,C_MASK4=0x0000000000800000,C_MASK5=0x0000000000800000,C_MASK6=0x0000000000800000,C_MASK7=0x0000000000800000,C_PROT_CFG=0xFF,C_PROT_CFG1=0xFF,C_PROT_CFG2=0xFF,C_PROT_CFG3=0xFF,C_PROT_CFG4=0xFF,C_PROT_CFG5=0xFF,C_PROT_CFG6=0xFF,C_PROT_CFG7=0xFF,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_LMB_PROTOCOL=0,C_LMB_HAS_PROT=0,C_ARBITRATION=0,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_REGISTERS=0,C_UE_FAILING_REGISTERS=0,C_ECC_STATUS_REGISTERS=0,C_ECC_ONOFF_REGISTER=0,C_ECC_ONOFF_RESET_VALUE=1,C_CE_COUNTER_WIDTH=0,C_WRITE_ACCESS=2,C_BRAM_AWIDTH=32,C_S_AXI_CTRL_ADDR_WIDTH=32,C_S_AXI_CTRL_DATA_WIDTH=32}" *) (* downgradeipidentifiedwarnings = "yes" *) 
 (* x_core_info = "lmb_bram_if_cntlr,Vivado 2025.2" *) 
 module design_1_lmb_bram_if_cntlr_0_0(LMB_Clk, LMB_Rst, LMB_ABus, LMB_WriteDBus, 
   LMB_AddrStrobe, LMB_ReadStrobe, LMB_WriteStrobe, LMB_BE, Sl_DBus, Sl_Ready, Sl_Wait, Sl_UE, 

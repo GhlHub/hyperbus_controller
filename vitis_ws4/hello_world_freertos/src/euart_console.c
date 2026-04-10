@@ -7,7 +7,9 @@
 #include "xil_io.h"
 
 #define EUART_TX_BYTE_FIFO_OFFSET       0x00U
+#define EUART_TX_WORD_FIFO_OFFSET       0x04U
 #define EUART_RX_BYTE_FIFO_OFFSET       0x08U
+#define EUART_RX_WORD_FIFO_OFFSET       0x0CU
 #define EUART_INT_MASK_OFFSET           0x14U
 #define EUART_CTRL_OFFSET               0x18U
 #define EUART_BAUDRATE_CNTR_OFFSET      0x20U
@@ -26,6 +28,11 @@
 #define EUART_BAUD_RATE                 115200U
 #define EUART_FIFO_DEPTH_BYTES          1024U
 
+static unsigned int ulTxFifoOccupancyUpperBound;
+static unsigned int ulTxStagingWord;
+static unsigned int ulTxStagingCount;
+static unsigned int ulTxShadowValid;
+
 static unsigned int prvEUartReadFifoOccupancy( unsigned int ulOffset )
 {
     unsigned int ulOccupancy = Xil_In32( XPAR_E_UART_0_BASEADDR + ulOffset );
@@ -38,11 +45,75 @@ static unsigned int prvEUartReadFifoOccupancy( unsigned int ulOffset )
     return ulOccupancy;
 }
 
-static void prvEUartWaitForTxByte( void )
+static void prvEUartRefreshTxOccupancyUpperBound( void )
 {
-    while( prvEUartReadFifoOccupancy( EUART_TX_FIFO_CNT_OFFSET ) >= EUART_FIFO_DEPTH_BYTES )
+    ulTxFifoOccupancyUpperBound = prvEUartReadFifoOccupancy( EUART_TX_FIFO_CNT_OFFSET );
+    ulTxShadowValid = 1U;
+}
+
+static void prvEUartEnsureTxSpace( unsigned int ulBytesNeeded )
+{
+    if( ulBytesNeeded == 0U )
     {
+        return;
     }
+
+    if( ulTxShadowValid == 0U )
+    {
+        prvEUartRefreshTxOccupancyUpperBound();
+    }
+
+    while( ( ulTxFifoOccupancyUpperBound + ulBytesNeeded ) > EUART_FIFO_DEPTH_BYTES )
+    {
+        prvEUartRefreshTxOccupancyUpperBound();
+    }
+}
+
+static void prvEUartAccountTxWrite( unsigned int ulBytesWritten )
+{
+    ulTxFifoOccupancyUpperBound += ulBytesWritten;
+    if( ulTxFifoOccupancyUpperBound > EUART_FIFO_DEPTH_BYTES )
+    {
+        ulTxFifoOccupancyUpperBound = EUART_FIFO_DEPTH_BYTES;
+    }
+}
+
+static void prvEUartWriteTxWord( unsigned int ulWord )
+{
+    prvEUartEnsureTxSpace( 4U );
+    Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_WORD_FIFO_OFFSET, ulWord );
+    prvEUartAccountTxWrite( 4U );
+}
+
+static void prvEUartWriteTxBytes( unsigned int ulWord, unsigned int ulByteCount )
+{
+    unsigned int ulIndex;
+
+    prvEUartEnsureTxSpace( ulByteCount );
+    for( ulIndex = 0U; ulIndex < ulByteCount; ulIndex++ )
+    {
+        Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_BYTE_FIFO_OFFSET,
+                   ( ulWord >> ( ulIndex * 8U ) ) & 0xFFU );
+    }
+
+    prvEUartAccountTxWrite( ulByteCount );
+}
+
+void euart_console_flush_tx( void )
+{
+#ifdef XPAR_E_UART_0_BASEADDR
+    if( ulTxStagingCount == 4U )
+    {
+        prvEUartWriteTxWord( ulTxStagingWord );
+    }
+    else if( ulTxStagingCount != 0U )
+    {
+        prvEUartWriteTxBytes( ulTxStagingWord, ulTxStagingCount );
+    }
+
+    ulTxStagingWord = 0U;
+    ulTxStagingCount = 0U;
+#endif
 }
 
 void euart_console_init( void )
@@ -76,6 +147,10 @@ void euart_console_init( void )
         Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_INT_MASK_OFFSET, 0U );
         Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_INT_HOLDOFF_CFG_OFFSET, ulInterruptHoldoff );
         Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_CTRL_OFFSET, EUART_CTRL_TX_EN | EUART_CTRL_RX_EN );
+        ulTxFifoOccupancyUpperBound = 0U;
+        ulTxStagingWord = 0U;
+        ulTxStagingCount = 0U;
+        ulTxShadowValid = 0U;
     }
 #endif
 }
@@ -83,9 +158,17 @@ void euart_console_init( void )
 void outbyte( char c )
 {
 #ifdef XPAR_E_UART_0_BASEADDR
-    prvEUartWaitForTxByte();
-    Xil_Out32( XPAR_E_UART_0_BASEADDR + EUART_TX_BYTE_FIFO_OFFSET,
-               ( unsigned int ) ( unsigned char ) c );
+    ulTxStagingWord |= ( ( unsigned int ) ( unsigned char ) c ) << ( ulTxStagingCount * 8U );
+    ulTxStagingCount++;
+
+    if( ulTxStagingCount == 4U )
+    {
+        euart_console_flush_tx();
+    }
+    else if( ( c == '\n' ) || ( c == '\r' ) )
+    {
+        euart_console_flush_tx();
+    }
 #else
     ( void ) c;
 #endif

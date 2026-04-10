@@ -1,0 +1,4 @@
+set(DRIVER_INSTANCES "pmcbridge_0_pmcl_ospi_0@4090000")
+set(DRIVER_PROP_0_LIST "xlnx,pmc-ospi-11.0;0x4090000;0x0;0x0;0x0;0xffff;0xffff;0x0")
+set(DRIVER_OPTPROP_0_LIST "")
+list(APPEND TOTAL_DRIVER_PROP_LIST DRIVER_PROP_0_LIST)

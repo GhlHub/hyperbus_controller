@@ -76,6 +76,7 @@ After modifying controller RTL:
 - For this Spartan UltraScale+ project, the known-good bootloader image patch flow is:
   1. use `updatemem` to patch `bootloader.elf` into `design_1_wrapper.bit`, producing `design_1_wrapper_bootloader.bit`
   2. keep the Vivado-generated packaged-image flow intact by regenerating the `.pdi` from `design_1_wrapper_bootloader.bif`, which references `static_files/plm.elf` plus `design_1_wrapper_bootloader.rcdo`
+     - call `bootgen` with `-arch spartanup` for this flow
   3. flash the packaged `.pdi`, not a raw bitstream-derived `BOOT.bin`
 - When running `bootgen` on `design_1_wrapper_bootloader.bif`, invoke it from `vivado_projects/hyperbus_test_proj/hyperbus_test_proj.runs/impl_1/` or otherwise preserve those relative paths; the BIF expects `static_files/plm.elf` relative to that directory.
 - In this MicroBlaze configuration, `XPAR_MICROBLAZE_BASE_VECTORS` is `0`, so interrupt/exception vectors remain active at low memory after the bootloader jumps to an application in HyperRAM. If the loaded application uses interrupts, the bootloader handoff must install the application's vector stubs into `0x0`, `0x8`, `0x10`, and `0x20` before transfer.

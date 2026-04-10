@@ -7,11 +7,12 @@
         variant = "spartanuplus";
         model = "Microblaze";
         #size-cells = <0x1>;
+        slrcount = <0x1>;
         family = "microblaze";
         speed_grade = "2";
 
         cpus_microblaze_0: cpus_microblaze@0 {
-                phandle = <0xa>;
+                phandle = <0x1c>;
                 #cpu-mask-cells = <0x1>;
                 compatible = "cpus,cluster";
                 #address-cells = <0x1>;
@@ -19,6 +20,24 @@
                 address-map = <0x0 &lmb_bram_if_cntlr_0_memory 0x0 0x8000>,
                  <0x0 &lmb_bram_if_cntlr_0 0x0 0x8000>,
                  <0x10000 &hyperbus_controller_0 0x10000 0x10000>,
+                 <0x4020000 &pmcbridge_0_plm_config_0 0x4020000 0x10000>,
+                 <0x4040000 &pmcbridge_0_rv_iomodule_0 0x4040000 0x1000>,
+                 <0x4041000 &pmcbridge_0_rv_ram_instr_ecc_ctrl_0 0x4041000 0x1000>,
+                 <0x4042000 &pmcbridge_0_rv_ram_data_ecc_ctrl_0 0x4042000 0x1000>,
+                 <0x4050000 &pmcbridge_0_slave_boot_stream_0 0x4050000 0x10000>,
+                 <0x4060000 &pmcbridge_0_ccu_rd_stream_0 0x4060000 0x10000>,
+                 <0x4070000 &pmcbridge_0_ccu_wr_stream_0 0x4070000 0x10000>,
+                 <0x4080000 &pmcbridge_0_pmcl_puf_0 0x4080000 0x10000>,
+                 <0x4090000 &pmcbridge_0_pmcl_ospi_0 0x4090000 0x10000>,
+                 <0x40a0000 &pmcbridge_0_pmcl_global_0 0x40a0000 0x20000>,
+                 <0x40c0000 &pmcbridge_0_pmcl_tap_0 0x40c0000 0x20000>,
+                 <0x40e0000 &pmcbridge_0_pmcl_dma_0 0x40e0000 0x10000>,
+                 <0x40f0000 &pmcbridge_0_pmcl_aes_0 0x40f0000 0x10000>,
+                 <0x4100000 &pmcbridge_0_pmcl_sha3_0 0x4100000 0x10000>,
+                 <0x4110000 &pmcbridge_0_pmcl_slave_boot_0 0x4110000 0x10000>,
+                 <0x4120000 &pmcbridge_0_pmcl_trng_0 0x4120000 0x10000>,
+                 <0x4130000 &pmcbridge_0_ccu_apb_0 0x4130000 0x10000>,
+                 <0x4160000 &pmcbridge_0_pmcl_efuse_0 0x4160000 0x10000>,
                  <0x41200000 &axi_intc_0 0x41200000 0x10000>,
                  <0x41c00000 &axi_timer_0 0x41c00000 0x10000>,
                  <0x44a00000 &axi_quad_spi_0 0x44a00000 0x10000>,
@@ -27,7 +46,7 @@
                 #ranges-size-cells = <0x1>;
 
                 microblaze_0: cpu@0 {
-                        phandle = <0xb>;
+                        phandle = <0x1d>;
                         xlnx,reset-msr-dce = <0x0>;
                         model = "microblaze,11.0";
                         xlnx,addr-tag-bits = <0xa>;
@@ -178,12 +197,12 @@
         };
 
         clock: clocks {
-                phandle = <0xc>;
+                phandle = <0x1e>;
                 #address-cells = <0x1>;
                 #size-cells = <0x0>;
 
                 clk_cpu_0: clk_cpu@0 {
-                        phandle = <0xd>;
+                        phandle = <0x1f>;
                         compatible = "fixed-clock";
                         reg = <0x0>;
                         clock-frequency = <0x2faf080>;
@@ -192,7 +211,7 @@
                 };
 
                 clk_bus_0: clk_bus_0@1 {
-                        phandle = <0x9>;
+                        phandle = <0x1b>;
                         compatible = "fixed-clock";
                         reg = <0x1>;
                         clock-frequency = <0x2faf080>;
@@ -202,14 +221,14 @@
         };
 
         amba_pl: amba_pl {
-                phandle = <0x8>;
+                phandle = <0x1a>;
                 ranges;
                 compatible = "simple-bus";
                 #address-cells = <0x1>;
                 #size-cells = <0x1>;
 
                 axi_intc_0: interrupt-controller@41200000 {
-                        phandle = <0x4>;
+                        phandle = <0x16>;
                         #interrupt-cells = <0x2>;
                         xlnx,sense-of-irq-edge-type = "Rising";
                         xlnx,edk-special = "INTR_CTRL";
@@ -251,7 +270,7 @@
                 };
 
                 axi_quad_spi_0: axi_quad_spi@44a00000 {
-                        phandle = <0x6>;
+                        phandle = <0x18>;
                         interrupts = <0x2 0x0>;
                         xlnx,select-xpm = <0x0>;
                         compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
@@ -302,7 +321,7 @@
                 };
 
                 axi_timer_0: timer@41c00000 {
-                        phandle = <0x5>;
+                        phandle = <0x17>;
                         interrupts = <0x1 0x2>;
                         compatible = "xlnx,axi-timer-2.0", "xlnx,xps-timer-1.00.a";
                         xlnx,gen1-assert = <0x1>;
@@ -325,7 +344,7 @@
                 };
 
                 e_uart_0: e_uart@44a10000 {
-                        phandle = <0x7>;
+                        phandle = <0x19>;
                         interrupt-parent = <&axi_intc_0>;
                         interrupts = <0x0 0x2>;
                         xlnx,s00-axi-data-width = <0x20>;
@@ -348,7 +367,7 @@
                         xlnx,ip-name = "hyperbus_controller";
                         xlnx,axi-addr-width = <0x20>;
                         xlnx,phy-family = <0x0>;
-                        reg = <0x10000 0x10000 0x80000000 0x80000000 0x80000000 0x800000>;
+                        reg = <0x10000 0x10000 0x80000000 0x800000>;
                         xlnx,axi-id-width = <0x1>;
                         xlnx,hb-latency-default = <0x7>;
                         xlnx,edk-iptype = "PERIPHERAL";
@@ -365,7 +384,7 @@
                         xlnx,ecc-onoff-register = <0x0>;
                         xlnx,ecc-onoff-reset-value = <0x1>;
                         xlnx,s-axi-ctrl-protocol = "AXI4LITE";
-                        xlnx,mask = <0xc0010000>;
+                        xlnx,mask = <0x85010000>;
                         xlnx,mask1 = <0x80000000>;
                         xlnx,mask2 = <0x800000>;
                         xlnx,fault-inject = <0x0>;
@@ -404,6 +423,182 @@
                         xlnx,lmb-awidth = <0x20>;
                         xlnx,name = "lmb_bram_if_cntlr_0";
                 };
+
+                pmcbridge_0: pmcbridge@4160000 {
+                        phandle = <0x20>;
+                        compatible = "xlnx,pmcbridge-1.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcbridge";
+                        xlnx,is-hierarchy;
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        reg = <0x4160000 0x10000>;
+                        xlnx,name = "pmcbridge_0";
+                };
+
+                pmcbridge_0_ccu_apb_0: pmcbridge_0_ccu_apb_0@4130000 {
+                        phandle = <0x14>;
+                        compatible = "xlnx,ccu-apb-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "ccu_apb";
+                        reg = <0x4130000 0x10000>;
+                        xlnx,name = "pmcbridge_0_ccu_apb_0";
+                };
+
+                pmcbridge_0_ccu_rd_stream_0: pmcbridge_0_ccu_rd_stream_0@4060000 {
+                        phandle = <0x9>;
+                        compatible = "xlnx,ccu-rd-stream-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "ccu_rd_stream";
+                        reg = <0x4060000 0x10000>;
+                        xlnx,name = "pmcbridge_0_ccu_rd_stream_0";
+                };
+
+                pmcbridge_0_ccu_wr_stream_0: pmcbridge_0_ccu_wr_stream_0@4070000 {
+                        phandle = <0xa>;
+                        compatible = "xlnx,ccu-wr-stream-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "ccu_wr_stream";
+                        reg = <0x4070000 0x10000>;
+                        xlnx,name = "pmcbridge_0_ccu_wr_stream_0";
+                };
+
+                pmcbridge_0_plm_config_0: pmcbridge_0_plm_config_0@4020000 {
+                        phandle = <0x4>;
+                        compatible = "xlnx,plm-config-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "plm_config";
+                        reg = <0x4020000 0x10000>;
+                        xlnx,name = "pmcbridge_0_plm_config_0";
+                };
+
+                pmcbridge_0_pmcl_dma_0: pmcbridge_0_pmcl_dma_0@40e0000 {
+                        phandle = <0xf>;
+                        compatible = "xlnx,pmcl-dma-11.0", "xlnx,pmc-dma";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_dma";
+                        reg = <0x40e0000 0x10000>;
+                        xlnx,dma-type = <0x1>;
+                        xlnx,name = "pmcbridge_0_pmcl_dma_0";
+                };
+
+                pmcbridge_0_pmcl_efuse_0: pmcbridge_0_pmcl_efuse_0@4160000 {
+                        phandle = <0x15>;
+                        compatible = "xlnx,pmcl-efuse-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_efuse";
+                        reg = <0x4160000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_efuse_0";
+                };
+
+                pmcbridge_0_pmcl_global_0: pmcbridge_0_pmcl_global_0@40a0000 {
+                        phandle = <0xd>;
+                        compatible = "xlnx,pmcl-global-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_global";
+                        reg = <0x40a0000 0x20000>;
+                        xlnx,name = "pmcbridge_0_pmcl_global_0";
+                };
+
+                pmcbridge_0_pmcl_ospi_0: pmcbridge_0_pmcl_ospi_0@4090000 {
+                        phandle = <0xc>;
+                        is-stacked = <0x0>;
+                        compatible = "xlnx,pmc-ospi-11.0", "xlnx,pmc-ospi";
+                        status = "okay";
+                        xlnx,ip-name = "pmc_ospi";
+                        reg = <0x4090000 0x10000>;
+                        is-dual = <0x0>;
+                        xlnx,name = "pmcbridge_0_pmcl_ospi_0";
+                };
+
+                pmcbridge_0_pmcl_puf_0: pmcbridge_0_pmcl_puf_0@4080000 {
+                        phandle = <0xb>;
+                        compatible = "xlnx,pmcl-puf-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_puf";
+                        reg = <0x4080000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_puf_0";
+                };
+
+                pmcbridge_0_pmcl_sha3_0: pmcbridge_0_pmcl_sha3_0@4100000 {
+                        phandle = <0x11>;
+                        compatible = "xlnx,pmcl-sha3-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_sha3";
+                        reg = <0x4100000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_sha3_0";
+                };
+
+                pmcbridge_0_pmcl_slave_boot_0: pmcbridge_0_pmcl_slave_boot_0@4110000 {
+                        phandle = <0x12>;
+                        compatible = "xlnx,pmcl-slave-boot-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_slave_boot";
+                        reg = <0x4110000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_slave_boot_0";
+                };
+
+                pmcbridge_0_pmcl_tap_0: pmcbridge_0_pmcl_tap_0@40c0000 {
+                        phandle = <0xe>;
+                        compatible = "xlnx,pmcl-tap-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_tap";
+                        reg = <0x40c0000 0x20000>;
+                        xlnx,name = "pmcbridge_0_pmcl_tap_0";
+                };
+
+                pmcbridge_0_pmcl_trng_0: pmcbridge_0_pmcl_trng_0@4120000 {
+                        phandle = <0x13>;
+                        compatible = "xlnx,pmcl-trng-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_trng";
+                        reg = <0x4120000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_trng_0";
+                };
+
+                pmcbridge_0_pmcl_aes_0: pmcbridge_0_pmcl_aes_0@40f0000 {
+                        phandle = <0x10>;
+                        compatible = "xlnx,pmcl-aes-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "pmcl_aes";
+                        reg = <0x40f0000 0x10000>;
+                        xlnx,name = "pmcbridge_0_pmcl_aes_0";
+                };
+
+                pmcbridge_0_rv_iomodule_0: pmcbridge_0_rv_iomodule_0@4040000 {
+                        phandle = <0x5>;
+                        compatible = "xlnx,rv-iomodule-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "rv_iomodule";
+                        reg = <0x4040000 0x1000>;
+                        xlnx,name = "pmcbridge_0_rv_iomodule_0";
+                };
+
+                pmcbridge_0_rv_ram_data_ecc_ctrl_0: pmcbridge_0_rv_ram_data_ecc_ctrl_0@4042000 {
+                        phandle = <0x7>;
+                        compatible = "xlnx,rv-ram-data-ecc-ctrl-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "rv_ram_data_ecc_ctrl";
+                        reg = <0x4042000 0x1000>;
+                        xlnx,name = "pmcbridge_0_rv_ram_data_ecc_ctrl_0";
+                };
+
+                pmcbridge_0_rv_ram_instr_ecc_ctrl_0: pmcbridge_0_rv_ram_instr_ecc_ctrl_0@4041000 {
+                        phandle = <0x6>;
+                        compatible = "xlnx,rv-ram-instr-ecc-ctrl-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "rv_ram_instr_ecc_ctrl";
+                        reg = <0x4041000 0x1000>;
+                        xlnx,name = "pmcbridge_0_rv_ram_instr_ecc_ctrl_0";
+                };
+
+                pmcbridge_0_slave_boot_stream_0: pmcbridge_0_slave_boot_stream_0@4050000 {
+                        phandle = <0x8>;
+                        compatible = "xlnx,slave-boot-stream-11.0";
+                        status = "okay";
+                        xlnx,ip-name = "slave_boot_stream";
+                        reg = <0x4050000 0x10000>;
+                        xlnx,name = "pmcbridge_0_slave_boot_stream_0";
+                };
         };
 
         lmb_bram_if_cntlr_0_memory: memory@0 {
@@ -435,6 +630,25 @@
                 e_uart_0 = "/amba_pl/e_uart@44a10000";
                 hyperbus_controller_0 = "/amba_pl/hyperbus_controller@10000";
                 lmb_bram_if_cntlr_0 = "/amba_pl/lmb_bram_if_cntlr@0";
+                pmcbridge_0 = "/amba_pl/pmcbridge@4160000";
+                pmcbridge_0_ccu_apb_0 = "/amba_pl/pmcbridge_0_ccu_apb_0@4130000";
+                pmcbridge_0_ccu_rd_stream_0 = "/amba_pl/pmcbridge_0_ccu_rd_stream_0@4060000";
+                pmcbridge_0_ccu_wr_stream_0 = "/amba_pl/pmcbridge_0_ccu_wr_stream_0@4070000";
+                pmcbridge_0_plm_config_0 = "/amba_pl/pmcbridge_0_plm_config_0@4020000";
+                pmcbridge_0_pmcl_dma_0 = "/amba_pl/pmcbridge_0_pmcl_dma_0@40e0000";
+                pmcbridge_0_pmcl_efuse_0 = "/amba_pl/pmcbridge_0_pmcl_efuse_0@4160000";
+                pmcbridge_0_pmcl_global_0 = "/amba_pl/pmcbridge_0_pmcl_global_0@40a0000";
+                pmcbridge_0_pmcl_ospi_0 = "/amba_pl/pmcbridge_0_pmcl_ospi_0@4090000";
+                pmcbridge_0_pmcl_puf_0 = "/amba_pl/pmcbridge_0_pmcl_puf_0@4080000";
+                pmcbridge_0_pmcl_sha3_0 = "/amba_pl/pmcbridge_0_pmcl_sha3_0@4100000";
+                pmcbridge_0_pmcl_slave_boot_0 = "/amba_pl/pmcbridge_0_pmcl_slave_boot_0@4110000";
+                pmcbridge_0_pmcl_tap_0 = "/amba_pl/pmcbridge_0_pmcl_tap_0@40c0000";
+                pmcbridge_0_pmcl_trng_0 = "/amba_pl/pmcbridge_0_pmcl_trng_0@4120000";
+                pmcbridge_0_pmcl_aes_0 = "/amba_pl/pmcbridge_0_pmcl_aes_0@40f0000";
+                pmcbridge_0_rv_iomodule_0 = "/amba_pl/pmcbridge_0_rv_iomodule_0@4040000";
+                pmcbridge_0_rv_ram_data_ecc_ctrl_0 = "/amba_pl/pmcbridge_0_rv_ram_data_ecc_ctrl_0@4042000";
+                pmcbridge_0_rv_ram_instr_ecc_ctrl_0 = "/amba_pl/pmcbridge_0_rv_ram_instr_ecc_ctrl_0@4041000";
+                pmcbridge_0_slave_boot_stream_0 = "/amba_pl/pmcbridge_0_slave_boot_stream_0@4050000";
                 lmb_bram_if_cntlr_0_memory = "/memory@0";
         };
 };

@@ -8,6 +8,7 @@
 	variant = "spartanuplus";
 	model = "Microblaze";
 	#size-cells = <1>;
+	slrcount = <1>;
 	family = "microblaze";
 	speed_grade = "2";
 	lmb_bram_if_cntlr_0_memory: memory@0 {
@@ -23,9 +24,27 @@
 		spi0 = &axi_quad_spi_0;
 	};
 	cpus_microblaze_0: cpus_microblaze@0 {
-		address-map = <0x00000000 &lmb_bram_if_cntlr_0_memory 0x00000000 0x8000>, 
-			      <0x00000000 &lmb_bram_if_cntlr_0 0x00000000 0x8000>, 
-			      <0x00010000 &hyperbus_controller_0 0x00010000 0x10000>, 
+		address-map = <0x0000 &lmb_bram_if_cntlr_0_memory 0x0000 0x8000>, 
+			      <0x0000 &lmb_bram_if_cntlr_0 0x0000 0x8000>, 
+			      <0x10000 &hyperbus_controller_0 0x10000 0x10000>, 
+			      <0x4020000 &pmcbridge_0_plm_config_0 0x4020000 0x10000>, 
+			      <0x4040000 &pmcbridge_0_rv_iomodule_0 0x4040000 0x1000>, 
+			      <0x4041000 &pmcbridge_0_rv_ram_instr_ecc_ctrl_0 0x4041000 0x1000>, 
+			      <0x4042000 &pmcbridge_0_rv_ram_data_ecc_ctrl_0 0x4042000 0x1000>, 
+			      <0x4050000 &pmcbridge_0_slave_boot_stream_0 0x4050000 0x10000>, 
+			      <0x4060000 &pmcbridge_0_ccu_rd_stream_0 0x4060000 0x10000>, 
+			      <0x4070000 &pmcbridge_0_ccu_wr_stream_0 0x4070000 0x10000>, 
+			      <0x4080000 &pmcbridge_0_pmcl_puf_0 0x4080000 0x10000>, 
+			      <0x4090000 &pmcbridge_0_pmcl_ospi_0 0x4090000 0x10000>, 
+			      <0x40a0000 &pmcbridge_0_pmcl_global_0 0x40a0000 0x20000>, 
+			      <0x40c0000 &pmcbridge_0_pmcl_tap_0 0x40c0000 0x20000>, 
+			      <0x40e0000 &pmcbridge_0_pmcl_dma_0 0x40e0000 0x10000>, 
+			      <0x40f0000 &pmcbridge_0_pmcl_aes_0 0x40f0000 0x10000>, 
+			      <0x4100000 &pmcbridge_0_pmcl_sha3_0 0x4100000 0x10000>, 
+			      <0x4110000 &pmcbridge_0_pmcl_slave_boot_0 0x4110000 0x10000>, 
+			      <0x4120000 &pmcbridge_0_pmcl_trng_0 0x4120000 0x10000>, 
+			      <0x4130000 &pmcbridge_0_ccu_apb_0 0x4130000 0x10000>, 
+			      <0x4160000 &pmcbridge_0_pmcl_efuse_0 0x4160000 0x10000>, 
 			      <0x41200000 &axi_intc_0 0x41200000 0x10000>, 
 			      <0x41c00000 &axi_timer_0 0x41c00000 0x10000>, 
 			      <0x44a00000 &axi_quad_spi_0 0x44a00000 0x10000>, 
