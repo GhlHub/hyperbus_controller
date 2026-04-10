@@ -358,7 +358,7 @@ void Cli_Task( void *pvParameters )
 
     ( void ) pvParameters;
 
-    Cli_Print( "\r\nCLI ready. UART line transport hook pending.\r\n" );
+    Cli_Print( "\r\nCLI ready. UART RX/TX message queues active.\r\n" );
     Cli_PrintPrompt();
 
     for( ; ; )
