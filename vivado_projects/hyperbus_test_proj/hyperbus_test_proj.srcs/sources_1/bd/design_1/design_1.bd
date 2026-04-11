@@ -28,10 +28,8 @@
       },
       "e_uart_0": "",
       "axi_quad_spi_0": "",
-      "ila_1": "",
       "microblaze_0": "",
       "mdm_0": "",
-      "ila_0": "",
       "pmcbridge_0": "",
       "smartconnect_0": ""
     },
@@ -782,22 +780,6 @@
           }
         }
       },
-      "ila_1": {
-        "vlnv": "xilinx.com:ip:ila:6.2",
-        "ip_revision": "19",
-        "xci_name": "design_1_ila_1_0",
-        "xci_path": "ip/design_1_ila_1_0/design_1_ila_1_0.xci",
-        "inst_hier_path": "ila_1",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "C_TRIGIN_EN": {
-            "value": "false"
-          },
-          "C_TRIGOUT_EN": {
-            "value": "true"
-          }
-        }
-      },
       "microblaze_0": {
         "vlnv": "xilinx.com:ip:microblaze:11.0",
         "ip_revision": "16",
@@ -1021,31 +1003,6 @@
         "inst_hier_path": "mdm_0",
         "has_run_ip_tcl": "true"
       },
-      "ila_0": {
-        "vlnv": "xilinx.com:ip:ila:6.2",
-        "ip_revision": "19",
-        "xci_name": "design_1_ila_0_0",
-        "xci_path": "ip/design_1_ila_0_0/design_1_ila_0_0.xci",
-        "inst_hier_path": "ila_0",
-        "has_run_ip_tcl": "true",
-        "parameters": {
-          "C_EN_STRG_QUAL": {
-            "value": "0"
-          },
-          "C_INPUT_PIPE_STAGES": {
-            "value": "1"
-          },
-          "C_MONITOR_TYPE": {
-            "value": "Native"
-          },
-          "C_NUM_OF_PROBES": {
-            "value": "15"
-          },
-          "C_TRIGIN_EN": {
-            "value": "true"
-          }
-        }
-      },
       "pmcbridge_0": {
         "vlnv": "xilinx.com:ip:pmcbridge:1.0",
         "ip_revision": "0",
@@ -1234,8 +1191,7 @@
       "axi_crossbar_1_M00_AXI": {
         "interface_ports": [
           "axi_crossbar_1/M00_AXI",
-          "hyperbus_controller_0/s_axi",
-          "ila_1/SLOT_0_AXI"
+          "hyperbus_controller_0/s_axi"
         ]
       },
       "axi_intc_0_interrupt": {
@@ -1248,12 +1204,6 @@
         "interface_ports": [
           "UART_0",
           "e_uart_0/UART"
-        ]
-      },
-      "ila_1_TRIG_OUT": {
-        "interface_ports": [
-          "ila_1/TRIG_OUT",
-          "ila_0/TRIG_IN"
         ]
       },
       "lmb_bram_if_cntlr_0_BRAM_PORT": {
@@ -1335,7 +1285,6 @@
           "reset_gen/axi_clk",
           "axi_quad_spi_0/ext_spi_clk",
           "axi_quad_spi_0/s_axi_aclk",
-          "ila_1/clk",
           "microblaze_0/Clk",
           "e_uart_0/s00_axi_aclk",
           "pmcbridge_0/S_AXI_clk",
@@ -1390,7 +1339,6 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "reset_gen/hb_phy_clk",
-          "ila_0/clk",
           "hyperbus_controller_0/i_hb_clk_200"
         ]
       },
@@ -1399,96 +1347,6 @@
           "clk_wiz_0/clk_out2",
           "reset_gen/hb_phy_rx_clk",
           "hyperbus_controller_0/i_hb_clk_200_samp_90"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_o_d1": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_o_d1",
-          "ila_0/probe4"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_o_d2": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_o_d2",
-          "ila_0/probe5"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_q1_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_q1_dly",
-          "ila_0/probe0"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_dq_q2_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_dq_q2_dly",
-          "ila_0/probe1"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_hb_cs_n_q": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_hb_cs_n_q",
-          "ila_0/probe10"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_i_dq_t": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_i_dq_t",
-          "ila_0/probe8"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_i_rwds_t": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_i_rwds_t",
-          "ila_0/probe9"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_last_read_word32": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_last_read_word32",
-          "ila_0/probe13"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rd_fifo_din": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rd_fifo_din",
-          "ila_0/probe11"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rd_fifo_wr_en": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rd_fifo_wr_en",
-          "ila_0/probe12"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rd_half": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rd_half",
-          "ila_0/probe14"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_o_d1": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_o_d1",
-          "ila_0/probe6"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_o_d2": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_o_d2",
-          "ila_0/probe7"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_q1_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_q1_dly",
-          "ila_0/probe2"
-        ]
-      },
-      "hyperbus_controller_0_o_dbg_rwds_q2_dly": {
-        "ports": [
-          "hyperbus_controller_0/o_dbg_rwds_q2_dly",
-          "ila_0/probe3"
         ]
       },
       "hyperbus_controller_1_o_hb_ck_n": {

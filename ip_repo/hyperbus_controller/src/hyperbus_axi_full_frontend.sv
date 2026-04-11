@@ -25,6 +25,7 @@ module hyperbus_axi_full_frontend #(
 
     input  wire [31:0]                  i_rd_fifo_dout,
     input  wire                         i_rd_fifo_empty,
+    input  wire                         i_rd_fifo_dout_valid,
     output logic                        o_rd_fifo_rd_en,
 
     input  wire [AXI_ADDR_WIDTH-1:0]    s_axi_awaddr,
@@ -75,10 +76,12 @@ module hyperbus_axi_full_frontend #(
 
     logic rd_active;
     logic [7:0] rd_beats_left;
-    logic [31:0] rd_stage_mem [0:1];
-    logic        rd_stage_wr_ptr, rd_stage_rd_ptr;
-    logic [1:0]  rd_stage_count;
-    logic        rd_pop_cooldown;
+    logic [31:0] rd_stage_mem [0:15];
+    logic [3:0]  rd_stage_wr_ptr, rd_stage_rd_ptr;
+    logic [4:0]  rd_stage_count;
+    logic        rd_fetch_pending;
+    logic        rd_streaming;
+    logic [3:0]  rd_prefill_target;
 
     logic wr_proto_err;
     logic [1:0] bresp_q_mem [0:31];
@@ -154,15 +157,20 @@ module hyperbus_axi_full_frontend #(
             rd_cmd2_addr_q <= 32'd0;
             rd_cmd2_beats_q <= 8'd0;
             rd_cmd2_pending_q <= 1'b0;
-            rd_stage_wr_ptr <= 1'b0;
-            rd_stage_rd_ptr <= 1'b0;
-            rd_stage_count <= 2'd0;
-            rd_pop_cooldown <= 1'b0;
+            rd_stage_wr_ptr <= 4'd0;
+            rd_stage_rd_ptr <= 4'd0;
+            rd_stage_count <= 5'd0;
+            rd_fetch_pending <= 1'b0;
+            rd_streaming <= 1'b0;
+            rd_prefill_target <= 4'd0;
         end else begin
             logic bresp_push, bresp_pop;
             logic [1:0] bresp_push_data;
-            logic rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
-            logic [1:0] rd_stage_count_n;
+            logic [3:0] rd_stage_wr_ptr_n, rd_stage_rd_ptr_n;
+            logic [4:0] rd_stage_count_n;
+            logic rd_fetch_pending_n;
+            logic rd_streaming_n;
+            logic [3:0] rd_prefill_target_n;
             logic aw_accept;
             logic ar_can_accept, ar_accept;
             logic [8:0] aw_total_beats;
@@ -177,6 +185,9 @@ module hyperbus_axi_full_frontend #(
             logic [WORD_ADDR_WIDTH-1:0] ar_wrap_base;
             logic [WORD_ADDR_WIDTH-1:0] ar_words_to_boundary;
             logic [7:0] ar_beats1_calc, ar_beats2_calc;
+            logic r_fire;
+            logic [7:0] rd_beats_left_after_fire;
+            logic rd_captured_this_cycle;
 
             bresp_push = 1'b0;
             bresp_pop = 1'b0;
@@ -184,6 +195,9 @@ module hyperbus_axi_full_frontend #(
             rd_stage_wr_ptr_n = rd_stage_wr_ptr;
             rd_stage_rd_ptr_n = rd_stage_rd_ptr;
             rd_stage_count_n = rd_stage_count;
+            rd_fetch_pending_n = rd_fetch_pending;
+            rd_streaming_n = rd_streaming;
+            rd_prefill_target_n = rd_prefill_target;
             aw_accept = aw_can_accept && s_axi_awvalid;
             ar_can_accept = (!i_req_block) && (!rd_active) && (!o_aw_pending) && (!s_axi_awvalid) &&
                             (!i_cmd_fifo_prog_full) && (s_axi_arsize == 3'd2) &&
@@ -191,10 +205,15 @@ module hyperbus_axi_full_frontend #(
                              ((s_axi_arburst == 2'b10) && f_is_wrap_len_legal(s_axi_arlen))) &&
                             (s_axi_arlen <= 8'd31);
             ar_accept = ar_can_accept && s_axi_arvalid;
+            r_fire = s_axi_rvalid && s_axi_rready;
+            rd_beats_left_after_fire = rd_beats_left;
+            rd_captured_this_cycle = 1'b0;
+            if (r_fire && (rd_beats_left != 8'd0)) begin
+                rd_beats_left_after_fire = rd_beats_left - 8'd1;
+            end
 
             o_cmd_fifo_wr_en_full <= 1'b0;
             o_rd_fifo_rd_en <= 1'b0;
-            if (rd_pop_cooldown) rd_pop_cooldown <= 1'b0;
 
             // Only offer AWREADY once AWVALID is already present. This avoids
             // pre-asserting READY and accidentally handshaking AW and AR in
@@ -332,10 +351,18 @@ module hyperbus_axi_full_frontend #(
                 rd_active <= 1'b1;
                 ar_id_q <= s_axi_arid;
                 rd_beats_left <= s_axi_arlen + 8'd1;
-                rd_stage_wr_ptr_n = 1'b0;
-                rd_stage_rd_ptr_n = 1'b0;
-                rd_stage_count_n = 2'd0;
+                rd_stage_wr_ptr_n = 4'd0;
+                rd_stage_rd_ptr_n = 4'd0;
+                rd_stage_count_n = 5'd0;
+                rd_fetch_pending_n = 1'b0;
+                rd_streaming_n = 1'b0;
+                if ((s_axi_arlen + 8'd1) >= 8) begin
+                    rd_prefill_target_n = 4'd8;
+                end else begin
+                    rd_prefill_target_n = {1'b0, s_axi_arlen[2:0]} + 4'd1;
+                end
                 s_axi_rvalid <= 1'b0;
+                s_axi_rlast <= 1'b0;
             end
             if (rd_active && rd_cmd2_pending_q && !i_cmd_fifo_full) begin
                 o_cmd_fifo_din_full <= {1'b0, 1'b0, 1'b0, {rd_cmd2_addr_q, 2'b00}, rd_cmd2_beats_q, 16'h0};
@@ -343,37 +370,66 @@ module hyperbus_axi_full_frontend #(
                 rd_cmd2_pending_q <= 1'b0;
             end
 
-            // Drive AXI R channel from local staging FIFO.
-            if (!s_axi_rvalid && rd_active && (rd_stage_count_n != 2'd0)) begin
-                s_axi_rvalid <= 1'b1;
-                s_axi_rdata <= rd_stage_mem[rd_stage_rd_ptr_n];
-                s_axi_rid <= ar_id_q;
-                s_axi_rresp <= 2'b00;
-                s_axi_rlast <= (rd_beats_left == 8'd1);
-                rd_stage_rd_ptr_n = ~rd_stage_rd_ptr_n;
-                rd_stage_count_n = rd_stage_count_n - 2'd1;
-            end
+            if (!ar_accept) begin
+                // Capture returned data only when the FIFO explicitly marks it
+                // valid. In standard-read mode, each rd_en issued below produces
+                // a later dout_valid pulse carrying exactly one word.
+                if (rd_active && i_rd_fifo_dout_valid && (rd_stage_count_n < 5'd16)) begin
+                    rd_stage_mem[rd_stage_wr_ptr_n] <= i_rd_fifo_dout;
+                    rd_stage_wr_ptr_n = rd_stage_wr_ptr_n + 4'd1;
+                    rd_stage_count_n = rd_stage_count_n + 5'd1;
+                    rd_fetch_pending_n = 1'b0;
+                    rd_captured_this_cycle = 1'b1;
+                end
 
-            // Prefetch from FWFT RD FIFO into local 4-entry FF staging FIFO.
-            if (rd_active && !rd_pop_cooldown && !i_rd_fifo_empty && (rd_stage_count_n < 2'd2) &&
-                ((rd_stage_count_n + (s_axi_rvalid ? 2'd1 : 2'd0)) < rd_beats_left)) begin
-                rd_stage_mem[rd_stage_wr_ptr_n] <= i_rd_fifo_dout;
-                rd_stage_wr_ptr_n = ~rd_stage_wr_ptr_n;
-                rd_stage_count_n = rd_stage_count_n + 2'd1;
-                o_rd_fifo_rd_en <= 1'b1;
-                rd_pop_cooldown <= 1'b1;
+                if (!rd_streaming_n && rd_active && (rd_stage_count_n >= {1'b0, rd_prefill_target_n}) &&
+                    (rd_prefill_target_n != 4'd0)) begin
+                    rd_streaming_n = 1'b1;
+                end
+
+                // Drive AXI R channel from the local FIFO once the prefill target
+                // has been met. Allow the output slot to be refilled in the same
+                // cycle that the current beat is accepted.
+                if (rd_active && rd_streaming_n && (rd_stage_count_n != 5'd0) &&
+                    !((rd_stage_count == 5'd0) && rd_captured_this_cycle) &&
+                    (!s_axi_rvalid || r_fire) &&
+                    (rd_beats_left_after_fire != 8'd0)) begin
+                    s_axi_rvalid <= 1'b1;
+                    s_axi_rdata <= rd_stage_mem[rd_stage_rd_ptr_n];
+                    s_axi_rid <= ar_id_q;
+                    s_axi_rresp <= 2'b00;
+                    s_axi_rlast <= (rd_beats_left_after_fire == 8'd1);
+                    rd_stage_rd_ptr_n = rd_stage_rd_ptr_n + 4'd1;
+                    rd_stage_count_n = rd_stage_count_n - 5'd1;
+                end else if (r_fire) begin
+                    s_axi_rvalid <= 1'b0;
+                    s_axi_rlast <= 1'b0;
+                end
+
+                // Keep prefetching into the local AXI-domain FIFO. Before the
+                // burst starts, this fills the FIFO to the prefill threshold.
+                // After the burst starts, it keeps the local FIFO topped up.
+                if (rd_active && !i_rd_fifo_empty && !rd_fetch_pending_n &&
+                    (rd_stage_count_n < 5'd16) &&
+                    ((rd_stage_count_n + (s_axi_rvalid && !r_fire ? 5'd1 : 5'd0)) < rd_beats_left_after_fire)) begin
+                    o_rd_fifo_rd_en <= 1'b1;
+                    rd_fetch_pending_n = 1'b1;
+                end
             end
 
             rd_stage_wr_ptr <= rd_stage_wr_ptr_n;
             rd_stage_rd_ptr <= rd_stage_rd_ptr_n;
             rd_stage_count <= rd_stage_count_n;
+            rd_fetch_pending <= rd_fetch_pending_n;
+            rd_streaming <= rd_streaming_n;
+            rd_prefill_target <= rd_prefill_target_n;
 
-            if (s_axi_rvalid && s_axi_rready) begin
-                s_axi_rvalid <= 1'b0;
-                if (rd_beats_left != 0) rd_beats_left <= rd_beats_left - 8'd1;
-                if (rd_beats_left == 8'd1) begin
+            if (r_fire) begin
+                rd_beats_left <= rd_beats_left_after_fire;
+                if (rd_beats_left_after_fire == 8'd0) begin
                     rd_active <= 1'b0;
-                    s_axi_rlast <= 1'b0;
+                    rd_streaming <= 1'b0;
+                    rd_prefill_target <= 4'd0;
                 end
             end
         end

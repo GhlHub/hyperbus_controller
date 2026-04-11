@@ -222,6 +222,7 @@ module hyperbus_controller #(
         .i_wr_fifo_prog_full   (      wr_fifo_prog_full),
         .i_rd_fifo_dout        (           rd_fifo_dout),
         .i_rd_fifo_empty       (          rd_fifo_empty),
+        .i_rd_fifo_dout_valid  (     rd_fifo_dout_valid),
         .o_rd_fifo_rd_en       (          rd_fifo_rd_en),
         .s_axi_awaddr          (           s_axi_awaddr),
         .s_axi_awid            (             s_axi_awid),

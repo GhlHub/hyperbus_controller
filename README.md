@@ -53,6 +53,12 @@ Main RTL:
 For block responsibilities, internal data flow, clocking semantics, transaction
 sequencing, and read-path alignment, refer to `doc/theory_of_operation.md`.
 
+Current AXI-full read-path note:
+
+- the AXI side uses a 16-entry local FIFO in the AXI clock domain to prefetch
+  returned read data from the asynchronous read FIFO before asserting the AXI
+  `R` channel
+
 ## Testbench
 
 Primary testbench:

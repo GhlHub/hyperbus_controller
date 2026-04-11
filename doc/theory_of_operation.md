@@ -191,8 +191,9 @@ For reads:
 
 - an accepted AXI read request becomes a read command in the command FIFO
 - the HB engine performs the external memory read and pushes returned 32-bit data
-  beats into the read FIFO
-- the AXI side drains that FIFO and generates `RVALID`, `RDATA`, and `RLAST`
+  beats into the asynchronous read FIFO
+- the AXI side prefetches that data into a local AXI-clock read FIFO and then
+  generates `RVALID`, `RDATA`, and `RLAST`
 
 If AXI-full read and write commands arrive together, the frontend gives priority
 to writes.
@@ -224,7 +225,9 @@ important point is not the exact FIFO primitive choice but the role of each queu
 
 - command FIFO carries transaction descriptors into the HB engine
 - write FIFO carries AXI write payloads and byte strobes into the HB domain
-- read FIFO carries returned read data back to AXI
+- read FIFO carries returned read data back to the AXI domain
+- local AXI read FIFO decouples async read-data arrival from AXI `R` channel
+  return timing
 - AXI-lite response FIFO returns AXI-lite read data or completion values
 
 The FIFOs allow the frontend logic and the HB engine to make progress with only
@@ -318,11 +321,15 @@ capture alignment.
 
 Observed implementation note:
 
-- In current bench and implemented-system behavior, AXI read data return is not
-  sustained at one beat per AXI clock.
-- The AXI read path currently consumes two AXI clocks per returned data beat.
-- This is functionally acceptable for now, but it should be treated as a future
-  optimization area for AXI read throughput.
+- The AXI read path now uses a 16-entry local FIFO in the AXI clock domain.
+- Before starting the AXI `R` channel for a burst, the frontend prefills that
+  local FIFO with up to 8 words, or the full burst if fewer than 8 words are
+  required.
+- That prefill allows the beginning of a burst to return at one beat per AXI
+  clock while the local FIFO is drained and refilled in parallel from the async
+  read FIFO.
+- For longer bursts, sustained throughput still depends on how quickly the async
+  FIFO refill path can keep the local AXI-side FIFO supplied.
 
 ### Write Transactions
 

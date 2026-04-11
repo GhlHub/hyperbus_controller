@@ -310,6 +310,10 @@ void Cli_RxMsgQTask( void *pvParameters )
                         ( void ) Cli_SubmitLine( pcCurrentLine );
                         prvHistoryStoreLine( pcCurrentLine );
                     }
+                    else
+                    {
+                        Cli_PrintPrompt();
+                    }
 
                     pcCurrentLine[ 0 ] = '\0';
                     xCurrentLength = 0U;

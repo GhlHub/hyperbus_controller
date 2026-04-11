@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Thu Apr  9 17:07:07 2026
+//Date        : Fri Apr 10 14:18:39 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=22,numReposBlks=21,numNonXlnxBlks=2,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=20,numReposBlks=19,numNonXlnxBlks=2,numHierBlks=1,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK_IN1_D_0_clk_n,
     CLK_IN1_D_0_clk_p,
@@ -131,26 +131,16 @@ module design_1
   wire [4:4]axi_crossbar_0_M04_AXI_WVALID;
   wire [31:0]axi_crossbar_1_M00_AXI_ARADDR;
   wire [1:0]axi_crossbar_1_M00_AXI_ARBURST;
-  wire [3:0]axi_crossbar_1_M00_AXI_ARCACHE;
   wire [0:0]axi_crossbar_1_M00_AXI_ARID;
   wire [7:0]axi_crossbar_1_M00_AXI_ARLEN;
-  wire [0:0]axi_crossbar_1_M00_AXI_ARLOCK;
-  wire [2:0]axi_crossbar_1_M00_AXI_ARPROT;
-  wire [3:0]axi_crossbar_1_M00_AXI_ARQOS;
   wire axi_crossbar_1_M00_AXI_ARREADY;
-  wire [3:0]axi_crossbar_1_M00_AXI_ARREGION;
   wire [2:0]axi_crossbar_1_M00_AXI_ARSIZE;
   wire [0:0]axi_crossbar_1_M00_AXI_ARVALID;
   wire [31:0]axi_crossbar_1_M00_AXI_AWADDR;
   wire [1:0]axi_crossbar_1_M00_AXI_AWBURST;
-  wire [3:0]axi_crossbar_1_M00_AXI_AWCACHE;
   wire [0:0]axi_crossbar_1_M00_AXI_AWID;
   wire [7:0]axi_crossbar_1_M00_AXI_AWLEN;
-  wire [0:0]axi_crossbar_1_M00_AXI_AWLOCK;
-  wire [2:0]axi_crossbar_1_M00_AXI_AWPROT;
-  wire [3:0]axi_crossbar_1_M00_AXI_AWQOS;
   wire axi_crossbar_1_M00_AXI_AWREADY;
-  wire [3:0]axi_crossbar_1_M00_AXI_AWREGION;
   wire [2:0]axi_crossbar_1_M00_AXI_AWSIZE;
   wire [0:0]axi_crossbar_1_M00_AXI_AWVALID;
   wire [0:0]axi_crossbar_1_M00_AXI_BID;
@@ -178,24 +168,7 @@ module design_1
   wire hb_clk_gated;
   wire hb_phy_clk;
   wire hb_phy_rx_clk;
-  wire [7:0]hyperbus_controller_0_o_dbg_dq_o_d1;
-  wire [7:0]hyperbus_controller_0_o_dbg_dq_o_d2;
-  wire [7:0]hyperbus_controller_0_o_dbg_dq_q1_dly;
-  wire [7:0]hyperbus_controller_0_o_dbg_dq_q2_dly;
-  wire hyperbus_controller_0_o_dbg_hb_cs_n_q;
-  wire [7:0]hyperbus_controller_0_o_dbg_i_dq_t;
-  wire hyperbus_controller_0_o_dbg_i_rwds_t;
-  wire [31:0]hyperbus_controller_0_o_dbg_last_read_word32;
-  wire [31:0]hyperbus_controller_0_o_dbg_rd_fifo_din;
-  wire hyperbus_controller_0_o_dbg_rd_fifo_wr_en;
-  wire hyperbus_controller_0_o_dbg_rd_half;
-  wire hyperbus_controller_0_o_dbg_rwds_o_d1;
-  wire hyperbus_controller_0_o_dbg_rwds_o_d2;
-  wire hyperbus_controller_0_o_dbg_rwds_q1_dly;
-  wire hyperbus_controller_0_o_dbg_rwds_q2_dly;
   wire hyperbus_controller_1_o_hb_clk_ce;
-  wire ila_1_TRIG_OUT_ACK;
-  wire ila_1_TRIG_OUT_TRIG;
   wire [2:0]ilconcat_0_dout;
   wire [7:0]io_hb_dq_0;
   wire io_hb_rwds_0;
@@ -438,26 +411,16 @@ module design_1
         .aresetn(proc_sys_reset_1_interconnect_aresetn),
         .m_axi_araddr(axi_crossbar_1_M00_AXI_ARADDR),
         .m_axi_arburst(axi_crossbar_1_M00_AXI_ARBURST),
-        .m_axi_arcache(axi_crossbar_1_M00_AXI_ARCACHE),
         .m_axi_arid(axi_crossbar_1_M00_AXI_ARID),
         .m_axi_arlen(axi_crossbar_1_M00_AXI_ARLEN),
-        .m_axi_arlock(axi_crossbar_1_M00_AXI_ARLOCK),
-        .m_axi_arprot(axi_crossbar_1_M00_AXI_ARPROT),
-        .m_axi_arqos(axi_crossbar_1_M00_AXI_ARQOS),
         .m_axi_arready(axi_crossbar_1_M00_AXI_ARREADY),
-        .m_axi_arregion(axi_crossbar_1_M00_AXI_ARREGION),
         .m_axi_arsize(axi_crossbar_1_M00_AXI_ARSIZE),
         .m_axi_arvalid(axi_crossbar_1_M00_AXI_ARVALID),
         .m_axi_awaddr(axi_crossbar_1_M00_AXI_AWADDR),
         .m_axi_awburst(axi_crossbar_1_M00_AXI_AWBURST),
-        .m_axi_awcache(axi_crossbar_1_M00_AXI_AWCACHE),
         .m_axi_awid(axi_crossbar_1_M00_AXI_AWID),
         .m_axi_awlen(axi_crossbar_1_M00_AXI_AWLEN),
-        .m_axi_awlock(axi_crossbar_1_M00_AXI_AWLOCK),
-        .m_axi_awprot(axi_crossbar_1_M00_AXI_AWPROT),
-        .m_axi_awqos(axi_crossbar_1_M00_AXI_AWQOS),
         .m_axi_awready(axi_crossbar_1_M00_AXI_AWREADY),
-        .m_axi_awregion(axi_crossbar_1_M00_AXI_AWREGION),
         .m_axi_awsize(axi_crossbar_1_M00_AXI_AWSIZE),
         .m_axi_awvalid(axi_crossbar_1_M00_AXI_AWVALID),
         .m_axi_bid(axi_crossbar_1_M00_AXI_BID),
@@ -642,21 +605,6 @@ module design_1
         .i_ref_clk_300(clk_300m),
         .io_hb_dq(io_hb_dq_0),
         .io_hb_rwds(io_hb_rwds_0),
-        .o_dbg_dq_o_d1(hyperbus_controller_0_o_dbg_dq_o_d1),
-        .o_dbg_dq_o_d2(hyperbus_controller_0_o_dbg_dq_o_d2),
-        .o_dbg_dq_q1_dly(hyperbus_controller_0_o_dbg_dq_q1_dly),
-        .o_dbg_dq_q2_dly(hyperbus_controller_0_o_dbg_dq_q2_dly),
-        .o_dbg_hb_cs_n_q(hyperbus_controller_0_o_dbg_hb_cs_n_q),
-        .o_dbg_i_dq_t(hyperbus_controller_0_o_dbg_i_dq_t),
-        .o_dbg_i_rwds_t(hyperbus_controller_0_o_dbg_i_rwds_t),
-        .o_dbg_last_read_word32(hyperbus_controller_0_o_dbg_last_read_word32),
-        .o_dbg_rd_fifo_din(hyperbus_controller_0_o_dbg_rd_fifo_din),
-        .o_dbg_rd_fifo_wr_en(hyperbus_controller_0_o_dbg_rd_fifo_wr_en),
-        .o_dbg_rd_half(hyperbus_controller_0_o_dbg_rd_half),
-        .o_dbg_rwds_o_d1(hyperbus_controller_0_o_dbg_rwds_o_d1),
-        .o_dbg_rwds_o_d2(hyperbus_controller_0_o_dbg_rwds_o_d2),
-        .o_dbg_rwds_q1_dly(hyperbus_controller_0_o_dbg_rwds_q1_dly),
-        .o_dbg_rwds_q2_dly(hyperbus_controller_0_o_dbg_rwds_q2_dly),
         .o_hb_ck_n(o_hb_ck_n_0),
         .o_hb_ck_p(o_hb_ck_p_0),
         .o_hb_clk_ce(hyperbus_controller_1_o_hb_clk_ce),
@@ -708,73 +656,6 @@ module design_1
         .s_axil_wready(axi_crossbar_0_M01_AXI_WREADY),
         .s_axil_wstrb(axi_crossbar_0_M01_AXI_WSTRB),
         .s_axil_wvalid(axi_crossbar_0_M01_AXI_WVALID));
-  design_1_ila_0_0 ila_0
-       (.clk(hb_phy_clk),
-        .probe0(hyperbus_controller_0_o_dbg_dq_q1_dly),
-        .probe1(hyperbus_controller_0_o_dbg_dq_q2_dly),
-        .probe10(hyperbus_controller_0_o_dbg_hb_cs_n_q),
-        .probe11(hyperbus_controller_0_o_dbg_rd_fifo_din),
-        .probe12(hyperbus_controller_0_o_dbg_rd_fifo_wr_en),
-        .probe13(hyperbus_controller_0_o_dbg_last_read_word32),
-        .probe14(hyperbus_controller_0_o_dbg_rd_half),
-        .probe2(hyperbus_controller_0_o_dbg_rwds_q1_dly),
-        .probe3(hyperbus_controller_0_o_dbg_rwds_q2_dly),
-        .probe4(hyperbus_controller_0_o_dbg_dq_o_d1),
-        .probe5(hyperbus_controller_0_o_dbg_dq_o_d2),
-        .probe6(hyperbus_controller_0_o_dbg_rwds_o_d1),
-        .probe7(hyperbus_controller_0_o_dbg_rwds_o_d2),
-        .probe8(hyperbus_controller_0_o_dbg_i_dq_t),
-        .probe9(hyperbus_controller_0_o_dbg_i_rwds_t),
-        .trig_in(ila_1_TRIG_OUT_TRIG),
-        .trig_in_ack(ila_1_TRIG_OUT_ACK));
-  design_1_ila_1_0 ila_1
-       (.clk(axi_clk),
-        .probe0(axi_crossbar_1_M00_AXI_WREADY),
-        .probe1(axi_crossbar_1_M00_AXI_AWADDR),
-        .probe10(axi_crossbar_1_M00_AXI_RDATA),
-        .probe11(axi_crossbar_1_M00_AXI_AWVALID),
-        .probe12(axi_crossbar_1_M00_AXI_AWREADY),
-        .probe13(axi_crossbar_1_M00_AXI_RRESP),
-        .probe14(axi_crossbar_1_M00_AXI_WDATA),
-        .probe15(axi_crossbar_1_M00_AXI_WSTRB),
-        .probe16(axi_crossbar_1_M00_AXI_RVALID),
-        .probe17(axi_crossbar_1_M00_AXI_ARPROT),
-        .probe18(axi_crossbar_1_M00_AXI_AWPROT),
-        .probe19(axi_crossbar_1_M00_AXI_AWID),
-        .probe2(axi_crossbar_1_M00_AXI_BRESP),
-        .probe20(axi_crossbar_1_M00_AXI_BID),
-        .probe21(axi_crossbar_1_M00_AXI_AWLEN),
-        .probe22(1'b0),
-        .probe23(axi_crossbar_1_M00_AXI_AWSIZE),
-        .probe24(axi_crossbar_1_M00_AXI_AWBURST),
-        .probe25(axi_crossbar_1_M00_AXI_ARID),
-        .probe26(axi_crossbar_1_M00_AXI_AWLOCK),
-        .probe27(axi_crossbar_1_M00_AXI_ARLEN),
-        .probe28(axi_crossbar_1_M00_AXI_ARSIZE),
-        .probe29(axi_crossbar_1_M00_AXI_ARBURST),
-        .probe3(axi_crossbar_1_M00_AXI_BVALID),
-        .probe30(axi_crossbar_1_M00_AXI_ARLOCK),
-        .probe31(axi_crossbar_1_M00_AXI_ARCACHE),
-        .probe32(axi_crossbar_1_M00_AXI_AWCACHE),
-        .probe33(axi_crossbar_1_M00_AXI_ARREGION),
-        .probe34(axi_crossbar_1_M00_AXI_ARQOS),
-        .probe35(1'b0),
-        .probe36(axi_crossbar_1_M00_AXI_AWREGION),
-        .probe37(axi_crossbar_1_M00_AXI_AWQOS),
-        .probe38(axi_crossbar_1_M00_AXI_RID),
-        .probe39(1'b0),
-        .probe4(axi_crossbar_1_M00_AXI_BREADY),
-        .probe40(axi_crossbar_1_M00_AXI_RLAST),
-        .probe41(1'b0),
-        .probe42(axi_crossbar_1_M00_AXI_WLAST),
-        .probe43(1'b0),
-        .probe5(axi_crossbar_1_M00_AXI_ARADDR),
-        .probe6(axi_crossbar_1_M00_AXI_RREADY),
-        .probe7(axi_crossbar_1_M00_AXI_WVALID),
-        .probe8(axi_crossbar_1_M00_AXI_ARVALID),
-        .probe9(axi_crossbar_1_M00_AXI_ARREADY),
-        .trig_out(ila_1_TRIG_OUT_TRIG),
-        .trig_out_ack(ila_1_TRIG_OUT_ACK));
   assign ilconcat_0_dout = {axi_quad_spi_0_ip2intc_irpt, axi_timer_0_interrupt, e_uart_0_intr};
   (* BMM_INFO_ADDRESS_SPACE = "byte  0x00000000 32 > design_1 blk_mem_gen_0" *) 
   (* KEEP_HIERARCHY = "YES" *) 
