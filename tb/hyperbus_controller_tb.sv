@@ -9,7 +9,15 @@ module hyperbus_controller_tb;
 `endif
 
 `ifndef TB_SAMP_OFFSET_PS
-`define TB_SAMP_OFFSET_PS 1250
+`define TB_SAMP_OFFSET_PS -1
+`endif
+
+`ifndef TB_PHY_IO_STYLE
+`define TB_PHY_IO_STYLE 0
+`endif
+
+`ifndef TB_EXT_CLK_SHIFT_PS
+`define TB_EXT_CLK_SHIFT_PS -1
 `endif
 
     localparam int AXI_ADDR_WIDTH  = 32;
@@ -18,7 +26,19 @@ module hyperbus_controller_tb;
     localparam int AXIL_ADDR_WIDTH = 16;
     localparam int MAX_WAIT_AXI_CYCLES = 20000;
     localparam int PHY_FAMILY = `TB_PHY_FAMILY;
-    localparam time HB_SAMP_CLK_OFFSET = `TB_SAMP_OFFSET_PS * 1ps;
+    localparam int PHY_IO_STYLE = `TB_PHY_IO_STYLE;
+    localparam int PHY_IO_STYLE_IO_DELAY = 0;
+    localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
+    localparam int DEFAULT_TB_SAMP_OFFSET_PS =
+        (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 2000 : 1250;
+    localparam int DEFAULT_TB_EXT_CLK_SHIFT_PS =
+        (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 1000 : DEFAULT_TB_SAMP_OFFSET_PS;
+    localparam int TB_SAMP_OFFSET_PS_CFG =
+        (`TB_SAMP_OFFSET_PS >= 0) ? `TB_SAMP_OFFSET_PS : DEFAULT_TB_SAMP_OFFSET_PS;
+    localparam int TB_EXT_CLK_SHIFT_PS_CFG =
+        (`TB_EXT_CLK_SHIFT_PS >= 0) ? `TB_EXT_CLK_SHIFT_PS : DEFAULT_TB_EXT_CLK_SHIFT_PS;
+    localparam time HB_SAMP_CLK_OFFSET = TB_SAMP_OFFSET_PS_CFG * 1ps;
+    localparam time HB_EXT_CLK_SHIFT = TB_EXT_CLK_SHIFT_PS_CFG * 1ps;
 
 `define WAIT_AXI_COND(_cond, _msg) \
     begin \
@@ -110,6 +130,8 @@ module hyperbus_controller_tb;
     wire        hb_cs_n;
     wire        hb_ck_p;
     wire        hb_ck_n;
+    wire        hb_ck_p_mem;
+    wire        hb_ck_n_mem;
     tri         hb_rwds;
     tri [7:0]   hb_dq;
     wire        hb_reset_n;
@@ -120,6 +142,7 @@ module hyperbus_controller_tb;
         .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
         .AXI_ID_WIDTH(AXI_ID_WIDTH),
         .AXIL_ADDR_WIDTH(AXIL_ADDR_WIDTH),
+        .PHY_IO_STYLE(PHY_IO_STYLE),
         .PHY_FAMILY(PHY_FAMILY),
         .HB_LATENCY_DEFAULT(7)
     ) dut (
@@ -195,6 +218,14 @@ module hyperbus_controller_tb;
         .o_hb_reset_n(hb_reset_n)
     );
 
+    if (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) begin : g_tb_ext_clk_phase_shift
+        assign #(HB_EXT_CLK_SHIFT) hb_ck_p_mem = hb_ck_p;
+        assign #(HB_EXT_CLK_SHIFT) hb_ck_n_mem = hb_ck_n;
+    end else begin : g_tb_io_delay
+        assign hb_ck_p_mem = hb_ck_p;
+        assign hb_ck_n_mem = hb_ck_n;
+    end
+
     // Source the HyperBus forwarded-clock gate externally.
     BUFGCE u_tb_hb_ck_gating (
         .I(hb_clk_200),
@@ -214,8 +245,8 @@ module hyperbus_controller_tb;
         .DQ0(hb_dq[0]),
         .RWDS(hb_rwds),
         .CSNeg(hb_cs_n),
-        .CK(hb_ck_p),
-        .CKn(hb_ck_n),
+        .CK(hb_ck_p_mem),
+        .CKn(hb_ck_n_mem),
         .RESETNeg(hb_reset_n)
     );
 

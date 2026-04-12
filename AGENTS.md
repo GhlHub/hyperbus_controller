@@ -63,6 +63,9 @@ After modifying controller RTL:
   - `doc/pdf/` for PDFs
   - `doc/py/` for documentation helper scripts
 - The packaged IP XGUI now prefills `PHY_FAMILY` from the current Vivado project part on first open, but still allows manual override. Keep that behavior if the packaged-IP customization flow is touched.
+- In the packaged IP GUI, preserve the descriptive enum labels for the PHY options:
+  `PHY_FAMILY` uses `0 = UltraScale+`, `1 = Series7`;
+  `PHY_IO_STYLE` uses `0 = io_delay`, `1 = phased_hb_clock`.
 - Redirect explicitly configurable tool `.log` / `.jou` outputs into `logs/` when launching Vivado or similar tools from the repo.
 - Keep existing flow-local simulation artifacts such as `simulate.log`, `compile.log`, and `elaborate.log` in the directories where the checked-in scripts already generate them, unless the task explicitly asks to change that behavior.
 - The checked-in XSIM launchers now write architecture-specific outputs under `sim_m/xsim/runs/usplus/` and `sim_m/xsim/runs/7series/`; treat those as generated artifacts unless a task explicitly asks to keep or compare them.

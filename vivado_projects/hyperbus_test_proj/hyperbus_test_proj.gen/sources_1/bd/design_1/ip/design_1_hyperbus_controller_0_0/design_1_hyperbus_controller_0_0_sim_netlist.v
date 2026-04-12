@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Fri Apr 10 14:19:20 2026
+// Date        : Sun Apr 12 11:25:27 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_hyperbus_controller_0_0/design_1_hyperbus_controller_0_0_sim_netlist.v
+//               /raid/work/ghl_ip/hyperbus_ai3/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_hyperbus_controller_0_0/design_1_hyperbus_controller_0_0_sim_netlist.v
 // Design      : design_1_hyperbus_controller_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -188,6 +188,7 @@ module design_1_hyperbus_controller_0_0
   wire [7:0]o_dbg_dq_o_d2;
   wire [7:0]o_dbg_dq_q1_dly;
   wire [7:0]o_dbg_dq_q2_dly;
+  wire o_dbg_hb_cs_n_q;
   (* DRIVE = "12" *) (* IBUF_LOW_PWR *) (* SLEW = "SLOW" *) wire [7:7]\^o_dbg_i_dq_t ;
   (* DRIVE = "12" *) (* IBUF_LOW_PWR *) (* SLEW = "SLOW" *) wire o_dbg_i_rwds_t;
   wire [31:0]o_dbg_last_read_word32;
@@ -198,7 +199,7 @@ module design_1_hyperbus_controller_0_0
   wire o_dbg_rwds_o_d2;
   wire o_dbg_rwds_q1_dly;
   wire o_dbg_rwds_q2_dly;
-  (* DRIVE = "12" *) (* SLEW = "SLOW" *) wire o_hb_ck_p;
+  wire o_hb_ck_p;
   wire o_hb_clk_ce;
   wire o_hb_cs_n;
   wire o_hb_reset_n;
@@ -247,7 +248,6 @@ module design_1_hyperbus_controller_0_0
   wire [3:0]s_axil_wstrb;
   wire s_axil_wvalid;
 
-  assign o_dbg_hb_cs_n_q = o_hb_cs_n;
   assign o_dbg_i_dq_t[7] = \^o_dbg_i_dq_t [7];
   assign o_dbg_i_dq_t[6] = \^o_dbg_i_dq_t [7];
   assign o_dbg_i_dq_t[5] = \^o_dbg_i_dq_t [7];
@@ -284,6 +284,7 @@ module design_1_hyperbus_controller_0_0
         .o_dbg_dq_o_d2(o_dbg_dq_o_d2),
         .o_dbg_dq_q1_dly(o_dbg_dq_q1_dly),
         .o_dbg_dq_q2_dly(o_dbg_dq_q2_dly),
+        .o_dbg_hb_cs_n_q(o_dbg_hb_cs_n_q),
         .o_dbg_i_dq_t(\^o_dbg_i_dq_t ),
         .o_dbg_i_rwds_t(o_dbg_i_rwds_t),
         .o_dbg_last_read_word32(o_dbg_last_read_word32),
@@ -6050,47 +6051,50 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     s_axil_bresp,
     \gdvld.data_valid_std_reg ,
     \FSM_sequential_axil_state_reg[0]_0 ,
-    \axil_awaddr_q_reg[11]_0 ,
-    s_axil_araddr_9_sp_1,
-    s_axil_araddr_1_sp_1,
-    \s_axil_araddr[1]_0 ,
-    s_axil_araddr_5_sp_1,
+    s_axil_araddr_3_sp_1,
+    CNTVALUEIN,
     Q,
-    s_axil_araddr_4_sp_1,
+    \FSM_sequential_axil_state_reg[1]_0 ,
+    s_axil_araddr_7_sp_1,
+    \s_axil_araddr[7]_0 ,
     din,
     \o_cmd_fifo_din_axil_reg[58]_0 ,
-    s_axil_araddr_8_sp_1,
+    \axil_awaddr_q_reg[2]_0 ,
+    s_axil_bvalid042_out,
+    \axil_awaddr_q_reg[11]_0 ,
     \axil_awaddr_q_reg[1]_0 ,
     \axil_awaddr_q_reg[6]_0 ,
-    \s_axil_araddr[9]_0 ,
-    s_axil_araddr_14_sp_1,
+    s_axil_araddr_1_sp_1,
     s_axil_araddr_6_sp_1,
-    \delay_rst_ctrl_q_reg[3]_0 ,
-    \odly_time_value_q_reg[5]_0 ,
-    CNTVALUEIN,
-    \rwds_idly_time_value_q_reg[8]_0 ,
-    s_axil_araddr_7_sp_1,
-    \s_axil_araddr[9]_1 ,
-    \s_axil_araddr[4]_0 ,
-    s_axil_wstrb_0_sp_1,
+    s_axil_araddr_5_sp_1,
+    s_axil_araddr_2_sp_1,
+    \s_axil_araddr[6]_0 ,
+    \odly_time_value_q_reg[8]_0 ,
+    odly_inc_q_reg_0,
+    \s_axil_araddr[5]_0 ,
+    \s_axil_araddr[7]_1 ,
     timeout_status_q_reg_1,
+    s_axil_araddr_4_sp_1,
+    \odly_time_value_q_reg[5]_0 ,
+    s_axil_wstrb_0_sp_1,
+    timeout_status_q_reg_2,
     \axil_awaddr_q_reg[9]_0 ,
     dq_idly_inc,
     dq_idly_en_vtc,
     dq_idly_cntvaluein,
-    \s_axil_araddr[8]_0 ,
     s_axil_wdata_0_sp_1,
-    \s_axil_araddr[1]_1 ,
-    s_axil_araddr_2_sp_1,
-    \s_axil_araddr[6]_0 ,
-    \s_axil_araddr[2]_0 ,
-    \s_axil_araddr[7]_0 ,
-    \s_axil_araddr[2]_1 ,
-    \rwds_idly_time_value_q_reg[8]_1 ,
+    \s_axil_araddr[3]_0 ,
+    s_axil_araddr_9_sp_1,
+    \rwds_idly_time_value_q_reg[8]_0 ,
     \s_axil_araddr[6]_1 ,
+    \rwds_idly_time_value_q_reg[7]_0 ,
     \s_axil_araddr[6]_2 ,
+    \rwds_idly_time_value_q_reg[6]_0 ,
     \s_axil_araddr[6]_3 ,
     \s_axil_araddr[6]_4 ,
+    \s_axil_araddr[6]_5 ,
+    \s_axil_araddr[6]_6 ,
+    \s_axil_araddr[6]_7 ,
     o_hb_reset_n,
     wr_en,
     o_axil_rsp_fifo_rd_en_reg_0,
@@ -6100,21 +6104,19 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     i_axi_aclk,
     axil_ar_can_accept,
     s_axil_awaddr,
-    timeout_status_q_reg_2,
+    timeout_status_q_reg_3,
     hb_clk_ce_force_q_reg_0,
     s_axil_arvalid,
     full,
     s_axil_araddr,
-    \s_axil_rdata_reg[4]_0 ,
-    \s_axil_rdata_reg[0]_0 ,
     s_axil_rready,
     D,
-    \o_cmd_fifo_din_axil_reg[25]_0 ,
     axil_rsp_pop_pending_reg_1,
     data_valid,
-    \FSM_sequential_axil_state_reg[0]_1 ,
     s_axil_bready,
+    \FSM_sequential_axil_state_reg[0]_1 ,
     E,
+    \o_cmd_fifo_din_axil_reg[25]_0 ,
     s_axil_awvalid,
     s_axil_wstrb,
     s_axil_wvalid,
@@ -6124,29 +6126,33 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     s_axil_wdata,
     \s_axil_rdata_reg[24]_0 ,
     dout,
-    \s_axil_rdata_reg[6]_0 ,
-    \s_axil_rdata_reg[7]_0 ,
     \s_axil_rdata_reg[8]_0 ,
     \s_axil_rdata_reg[8]_1 ,
-    \s_axil_rdata_reg[4]_1 ,
-    \s_axil_rdata_reg[3]_0 ,
-    \s_axil_rdata_reg[3]_1 ,
-    \s_axil_rdata_reg[0]_1 ,
+    \s_axil_rdata_reg[7]_0 ,
+    \s_axil_rdata_reg[7]_1 ,
+    \s_axil_rdata_reg[6]_0 ,
+    \s_axil_rdata_reg[6]_1 ,
     \s_axil_rdata_reg[5]_0 ,
     \s_axil_rdata_reg[5]_1 ,
-    \s_axil_rdata_reg[1]_0 ,
+    \s_axil_rdata_reg[4]_0 ,
+    \s_axil_rdata_reg[3]_0 ,
+    \s_axil_rdata_reg[3]_1 ,
     \s_axil_rdata_reg[2]_0 ,
-    \s_axil_rdata[2]_i_2_0 ,
+    \s_axil_rdata_reg[1]_0 ,
+    \s_axil_rdata_reg[0]_0 ,
+    \s_axil_rdata_reg[1]_1 ,
+    \s_axil_rdata_reg[0]_1 ,
+    \s_axil_rdata_reg[2]_1 ,
+    \s_axil_rdata_reg[4]_1 ,
     o_axif_rwds_cntr,
+    idelayctrl_rdy_axi,
     CNTVALUEOUT,
-    \s_axil_rdata[0]_i_3_0 ,
-    \s_axil_rdata[1]_i_3_0 ,
-    \s_axil_rdata[7]_i_3_0 ,
-    \s_axil_rdata[6]_i_3_0 ,
+    \s_axil_rdata[2]_i_2_0 ,
     i_hb_rstn,
     o_hb_reset_n_0,
     cmd_fifo_wr_en_full,
     empty,
+    \o_cmd_fifo_din_axil_reg[58]_1 ,
     \o_cmd_fifo_din_axil_reg[1]_0 );
   output timeout_holdoff_d;
   output fifo_rst_axi_wr;
@@ -6168,47 +6174,50 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   output [0:0]s_axil_bresp;
   output \gdvld.data_valid_std_reg ;
   output \FSM_sequential_axil_state_reg[0]_0 ;
-  output \axil_awaddr_q_reg[11]_0 ;
-  output s_axil_araddr_9_sp_1;
-  output s_axil_araddr_1_sp_1;
-  output \s_axil_araddr[1]_0 ;
-  output s_axil_araddr_5_sp_1;
-  output [1:0]Q;
-  output s_axil_araddr_4_sp_1;
+  output s_axil_araddr_3_sp_1;
+  output [8:0]CNTVALUEIN;
+  output [3:0]Q;
+  output [1:0]\FSM_sequential_axil_state_reg[1]_0 ;
+  output s_axil_araddr_7_sp_1;
+  output \s_axil_araddr[7]_0 ;
   output [15:0]din;
   output [3:0]\o_cmd_fifo_din_axil_reg[58]_0 ;
-  output s_axil_araddr_8_sp_1;
+  output \axil_awaddr_q_reg[2]_0 ;
+  output s_axil_bvalid042_out;
+  output \axil_awaddr_q_reg[11]_0 ;
   output \axil_awaddr_q_reg[1]_0 ;
   output \axil_awaddr_q_reg[6]_0 ;
-  output \s_axil_araddr[9]_0 ;
-  output s_axil_araddr_14_sp_1;
+  output s_axil_araddr_1_sp_1;
   output s_axil_araddr_6_sp_1;
-  output [3:0]\delay_rst_ctrl_q_reg[3]_0 ;
-  output \odly_time_value_q_reg[5]_0 ;
-  output [8:0]CNTVALUEIN;
-  output [8:0]\rwds_idly_time_value_q_reg[8]_0 ;
-  output s_axil_araddr_7_sp_1;
-  output \s_axil_araddr[9]_1 ;
-  output \s_axil_araddr[4]_0 ;
-  output s_axil_wstrb_0_sp_1;
+  output s_axil_araddr_5_sp_1;
+  output s_axil_araddr_2_sp_1;
+  output \s_axil_araddr[6]_0 ;
+  output [8:0]\odly_time_value_q_reg[8]_0 ;
+  output odly_inc_q_reg_0;
+  output \s_axil_araddr[5]_0 ;
+  output \s_axil_araddr[7]_1 ;
   output timeout_status_q_reg_1;
+  output s_axil_araddr_4_sp_1;
+  output \odly_time_value_q_reg[5]_0 ;
+  output s_axil_wstrb_0_sp_1;
+  output timeout_status_q_reg_2;
   output \axil_awaddr_q_reg[9]_0 ;
   output [7:0]dq_idly_inc;
   output [7:0]dq_idly_en_vtc;
   output [71:0]dq_idly_cntvaluein;
-  output \s_axil_araddr[8]_0 ;
   output s_axil_wdata_0_sp_1;
-  output \s_axil_araddr[1]_1 ;
-  output s_axil_araddr_2_sp_1;
-  output \s_axil_araddr[6]_0 ;
-  output \s_axil_araddr[2]_0 ;
-  output \s_axil_araddr[7]_0 ;
-  output \s_axil_araddr[2]_1 ;
-  output \rwds_idly_time_value_q_reg[8]_1 ;
+  output \s_axil_araddr[3]_0 ;
+  output s_axil_araddr_9_sp_1;
+  output \rwds_idly_time_value_q_reg[8]_0 ;
   output \s_axil_araddr[6]_1 ;
+  output \rwds_idly_time_value_q_reg[7]_0 ;
   output \s_axil_araddr[6]_2 ;
+  output \rwds_idly_time_value_q_reg[6]_0 ;
   output \s_axil_araddr[6]_3 ;
   output \s_axil_araddr[6]_4 ;
+  output \s_axil_araddr[6]_5 ;
+  output \s_axil_araddr[6]_6 ;
+  output \s_axil_araddr[6]_7 ;
   output o_hb_reset_n;
   output wr_en;
   output o_axil_rsp_fifo_rd_en_reg_0;
@@ -6218,21 +6227,19 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   input i_axi_aclk;
   input axil_ar_can_accept;
   input [15:0]s_axil_awaddr;
-  input timeout_status_q_reg_2;
+  input timeout_status_q_reg_3;
   input hb_clk_ce_force_q_reg_0;
   input s_axil_arvalid;
   input full;
   input [15:0]s_axil_araddr;
-  input \s_axil_rdata_reg[4]_0 ;
-  input \s_axil_rdata_reg[0]_0 ;
   input s_axil_rready;
   input [2:0]D;
-  input \o_cmd_fifo_din_axil_reg[25]_0 ;
   input axil_rsp_pop_pending_reg_1;
   input data_valid;
-  input \FSM_sequential_axil_state_reg[0]_1 ;
   input s_axil_bready;
+  input \FSM_sequential_axil_state_reg[0]_1 ;
   input [0:0]E;
+  input \o_cmd_fifo_din_axil_reg[25]_0 ;
   input s_axil_awvalid;
   input [3:0]s_axil_wstrb;
   input s_axil_wvalid;
@@ -6242,29 +6249,33 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   input [31:0]s_axil_wdata;
   input [0:0]\s_axil_rdata_reg[24]_0 ;
   input [30:0]dout;
-  input \s_axil_rdata_reg[6]_0 ;
-  input \s_axil_rdata_reg[7]_0 ;
   input \s_axil_rdata_reg[8]_0 ;
   input \s_axil_rdata_reg[8]_1 ;
-  input \s_axil_rdata_reg[4]_1 ;
-  input \s_axil_rdata_reg[3]_0 ;
-  input \s_axil_rdata_reg[3]_1 ;
-  input \s_axil_rdata_reg[0]_1 ;
+  input \s_axil_rdata_reg[7]_0 ;
+  input \s_axil_rdata_reg[7]_1 ;
+  input \s_axil_rdata_reg[6]_0 ;
+  input \s_axil_rdata_reg[6]_1 ;
   input \s_axil_rdata_reg[5]_0 ;
   input \s_axil_rdata_reg[5]_1 ;
-  input \s_axil_rdata_reg[1]_0 ;
+  input \s_axil_rdata_reg[4]_0 ;
+  input \s_axil_rdata_reg[3]_0 ;
+  input \s_axil_rdata_reg[3]_1 ;
   input \s_axil_rdata_reg[2]_0 ;
-  input \s_axil_rdata[2]_i_2_0 ;
+  input \s_axil_rdata_reg[1]_0 ;
+  input \s_axil_rdata_reg[0]_0 ;
+  input \s_axil_rdata_reg[1]_1 ;
+  input \s_axil_rdata_reg[0]_1 ;
+  input \s_axil_rdata_reg[2]_1 ;
+  input \s_axil_rdata_reg[4]_1 ;
   input [4:0]o_axif_rwds_cntr;
+  input idelayctrl_rdy_axi;
   input [0:0]CNTVALUEOUT;
-  input \s_axil_rdata[0]_i_3_0 ;
-  input \s_axil_rdata[1]_i_3_0 ;
-  input \s_axil_rdata[7]_i_3_0 ;
-  input \s_axil_rdata[6]_i_3_0 ;
+  input \s_axil_rdata[2]_i_2_0 ;
   input i_hb_rstn;
   input [0:0]o_hb_reset_n_0;
   input cmd_fifo_wr_en_full;
   input empty;
+  input \o_cmd_fifo_din_axil_reg[58]_1 ;
   input \o_cmd_fifo_din_axil_reg[1]_0 ;
 
   wire [8:0]CNTVALUEIN;
@@ -6278,7 +6289,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \FSM_sequential_axil_state[1]_i_4_n_0 ;
   wire \FSM_sequential_axil_state_reg[0]_0 ;
   wire \FSM_sequential_axil_state_reg[0]_1 ;
-  wire [1:0]Q;
+  wire [1:0]\FSM_sequential_axil_state_reg[1]_0 ;
+  wire [3:0]Q;
   wire a0;
   wire [1:0]apply_wstrb32_return;
   wire aw_pending;
@@ -6288,6 +6300,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire axil_aw_seen_reg_n_0;
   wire \axil_awaddr_q_reg[11]_0 ;
   wire \axil_awaddr_q_reg[1]_0 ;
+  wire \axil_awaddr_q_reg[2]_0 ;
   wire \axil_awaddr_q_reg[6]_0 ;
   wire \axil_awaddr_q_reg[9]_0 ;
   wire \axil_awaddr_q_reg_n_0_[0] ;
@@ -6313,7 +6326,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \delay_rst_ctrl_q[3]_i_2_n_0 ;
   wire \delay_rst_ctrl_q[3]_i_4_n_0 ;
   wire \delay_rst_ctrl_q[3]_i_5_n_0 ;
-  wire [3:0]\delay_rst_ctrl_q_reg[3]_0 ;
   wire [15:0]din;
   wire [30:0]dout;
   wire [71:0]dq_idly_cntvaluein;
@@ -6350,7 +6362,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \dq_idly_inc_q[7]_i_2_n_0 ;
   wire \dq_idly_inc_q[7]_i_3_n_0 ;
   wire \dq_idly_inc_q[7]_i_4_n_0 ;
-  wire [69:13]dq_idly_time_value_q0;
+  wire [69:18]dq_idly_time_value_q0;
   wire \dq_idly_time_value_q[17]_i_1_n_0 ;
   wire \dq_idly_time_value_q[26]_i_1_n_0 ;
   wire \dq_idly_time_value_q[35]_i_1_n_0 ;
@@ -6358,16 +6370,19 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \dq_idly_time_value_q[41]_i_1_n_0 ;
   wire \dq_idly_time_value_q[42]_i_1_n_0 ;
   wire \dq_idly_time_value_q[44]_i_1_n_0 ;
+  wire \dq_idly_time_value_q[45]_i_1_n_0 ;
+  wire \dq_idly_time_value_q[46]_i_1_n_0 ;
   wire \dq_idly_time_value_q[50]_i_1_n_0 ;
   wire \dq_idly_time_value_q[51]_i_1_n_0 ;
   wire \dq_idly_time_value_q[53]_i_1_n_0 ;
   wire \dq_idly_time_value_q[54]_i_2_n_0 ;
   wire \dq_idly_time_value_q[54]_i_3_n_0 ;
-  wire \dq_idly_time_value_q[56]_i_2_n_0 ;
-  wire \dq_idly_time_value_q[56]_i_3_n_0 ;
-  wire \dq_idly_time_value_q[56]_i_4_n_0 ;
+  wire \dq_idly_time_value_q[55]_i_2_n_0 ;
+  wire \dq_idly_time_value_q[55]_i_3_n_0 ;
+  wire \dq_idly_time_value_q[55]_i_4_n_0 ;
   wire \dq_idly_time_value_q[58]_i_2_n_0 ;
   wire \dq_idly_time_value_q[62]_i_1_n_0 ;
+  wire \dq_idly_time_value_q[64]_i_2_n_0 ;
   wire \dq_idly_time_value_q[65]_i_2_n_0 ;
   wire \dq_idly_time_value_q[65]_i_3_n_0 ;
   wire \dq_idly_time_value_q[65]_i_4_n_0 ;
@@ -6405,6 +6420,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire hb_timeout_block_axi;
   wire i_axi_aclk;
   wire i_hb_rstn;
+  wire idelayctrl_rdy_axi;
   wire [4:0]o_axif_rwds_cntr;
   wire o_axil_rsp_fifo_rd_en_i_1_n_0;
   wire o_axil_rsp_fifo_rd_en_reg_0;
@@ -6418,16 +6434,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \o_cmd_fifo_din_axil[25]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[25]_i_2_n_0 ;
   wire \o_cmd_fifo_din_axil[25]_i_3_n_0 ;
+  wire \o_cmd_fifo_din_axil[25]_i_4_n_0 ;
+  wire \o_cmd_fifo_din_axil[25]_i_5_n_0 ;
   wire \o_cmd_fifo_din_axil[2]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[35]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[35]_i_2_n_0 ;
-  wire \o_cmd_fifo_din_axil[35]_i_4_n_0 ;
-  wire \o_cmd_fifo_din_axil[35]_i_5_n_0 ;
-  wire \o_cmd_fifo_din_axil[35]_i_6_n_0 ;
-  wire \o_cmd_fifo_din_axil[35]_i_7_n_0 ;
   wire \o_cmd_fifo_din_axil[3]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[4]_i_1_n_0 ;
-  wire \o_cmd_fifo_din_axil[58]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[5]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[6]_i_1_n_0 ;
   wire \o_cmd_fifo_din_axil[7]_i_1_n_0 ;
@@ -6436,6 +6449,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \o_cmd_fifo_din_axil_reg[1]_0 ;
   wire \o_cmd_fifo_din_axil_reg[25]_0 ;
   wire [3:0]\o_cmd_fifo_din_axil_reg[58]_0 ;
+  wire \o_cmd_fifo_din_axil_reg[58]_1 ;
   wire o_cmd_fifo_wr_en_axil;
   wire o_cmd_fifo_wr_en_axil2_out;
   wire \o_dq_idly_ce[0]_i_1_n_0 ;
@@ -6458,19 +6472,23 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire odly_en_vtc;
   wire odly_en_vtc_q_i_10_n_0;
   wire odly_en_vtc_q_i_11_n_0;
+  wire odly_en_vtc_q_i_12_n_0;
+  wire odly_en_vtc_q_i_13_n_0;
   wire odly_en_vtc_q_i_1_n_0;
-  wire odly_en_vtc_q_i_3_n_0;
   wire odly_en_vtc_q_i_4_n_0;
+  wire odly_en_vtc_q_i_5_n_0;
   wire odly_en_vtc_q_i_6_n_0;
   wire odly_en_vtc_q_i_7_n_0;
   wire odly_en_vtc_q_i_8_n_0;
   wire odly_en_vtc_q_i_9_n_0;
   wire odly_inc;
+  wire odly_inc_q_reg_0;
   wire \odly_time_value_q[7]_i_1_n_0 ;
   wire \odly_time_value_q[7]_i_2_n_0 ;
   wire \odly_time_value_q[8]_i_1_n_0 ;
   wire \odly_time_value_q[8]_i_2_n_0 ;
   wire \odly_time_value_q_reg[5]_0 ;
+  wire [8:0]\odly_time_value_q_reg[8]_0 ;
   wire [2:0]p_0_in;
   wire p_2_in;
   wire rwds_idly_ce;
@@ -6483,33 +6501,31 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \rwds_idly_time_value_q[7]_i_2_n_0 ;
   wire \rwds_idly_time_value_q[8]_i_1_n_0 ;
   wire \rwds_idly_time_value_q[8]_i_2_n_0 ;
-  wire [8:0]\rwds_idly_time_value_q_reg[8]_0 ;
-  wire \rwds_idly_time_value_q_reg[8]_1 ;
+  wire \rwds_idly_time_value_q_reg[6]_0 ;
+  wire \rwds_idly_time_value_q_reg[7]_0 ;
+  wire \rwds_idly_time_value_q_reg[8]_0 ;
   wire s_axi_arvalid;
   wire s_axi_awvalid;
   wire [15:0]s_axil_araddr;
-  wire \s_axil_araddr[1]_0 ;
-  wire \s_axil_araddr[1]_1 ;
-  wire \s_axil_araddr[2]_0 ;
-  wire \s_axil_araddr[2]_1 ;
-  wire \s_axil_araddr[4]_0 ;
+  wire \s_axil_araddr[3]_0 ;
+  wire \s_axil_araddr[5]_0 ;
   wire \s_axil_araddr[6]_0 ;
   wire \s_axil_araddr[6]_1 ;
   wire \s_axil_araddr[6]_2 ;
   wire \s_axil_araddr[6]_3 ;
   wire \s_axil_araddr[6]_4 ;
+  wire \s_axil_araddr[6]_5 ;
+  wire \s_axil_araddr[6]_6 ;
+  wire \s_axil_araddr[6]_7 ;
   wire \s_axil_araddr[7]_0 ;
-  wire \s_axil_araddr[8]_0 ;
-  wire \s_axil_araddr[9]_0 ;
-  wire \s_axil_araddr[9]_1 ;
-  wire s_axil_araddr_14_sn_1;
+  wire \s_axil_araddr[7]_1 ;
   wire s_axil_araddr_1_sn_1;
   wire s_axil_araddr_2_sn_1;
+  wire s_axil_araddr_3_sn_1;
   wire s_axil_araddr_4_sn_1;
   wire s_axil_araddr_5_sn_1;
   wire s_axil_araddr_6_sn_1;
   wire s_axil_araddr_7_sn_1;
-  wire s_axil_araddr_8_sn_1;
   wire s_axil_araddr_9_sn_1;
   wire s_axil_arready;
   wire s_axil_arvalid;
@@ -6519,12 +6535,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire s_axil_bready;
   wire [0:0]s_axil_bresp;
   wire \s_axil_bresp[1]_i_1_n_0 ;
-  wire \s_axil_bresp[1]_i_3_n_0 ;
   wire \s_axil_bresp[1]_i_4_n_0 ;
-  wire \s_axil_bresp[1]_i_5_n_0 ;
-  wire \s_axil_bresp[1]_i_6_n_0 ;
-  wire \s_axil_bresp[1]_i_7_n_0 ;
-  wire \s_axil_bresp[1]_i_8_n_0 ;
   wire s_axil_bvalid042_out;
   wire s_axil_bvalid_i_1_n_0;
   wire s_axil_bvalid_i_2_n_0;
@@ -6536,76 +6547,67 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \s_axil_rdata[0]_i_12_n_0 ;
   wire \s_axil_rdata[0]_i_13_n_0 ;
   wire \s_axil_rdata[0]_i_16_n_0 ;
+  wire \s_axil_rdata[0]_i_17_n_0 ;
+  wire \s_axil_rdata[0]_i_21_n_0 ;
   wire \s_axil_rdata[0]_i_2_n_0 ;
-  wire \s_axil_rdata[0]_i_3_0 ;
   wire \s_axil_rdata[0]_i_3_n_0 ;
   wire \s_axil_rdata[0]_i_7_n_0 ;
   wire \s_axil_rdata[0]_i_8_n_0 ;
+  wire \s_axil_rdata[1]_i_10_n_0 ;
   wire \s_axil_rdata[1]_i_11_n_0 ;
-  wire \s_axil_rdata[1]_i_13_n_0 ;
-  wire \s_axil_rdata[1]_i_14_n_0 ;
-  wire \s_axil_rdata[1]_i_15_n_0 ;
-  wire \s_axil_rdata[1]_i_16_n_0 ;
-  wire \s_axil_rdata[1]_i_17_n_0 ;
   wire \s_axil_rdata[1]_i_19_n_0 ;
   wire \s_axil_rdata[1]_i_2_n_0 ;
-  wire \s_axil_rdata[1]_i_3_0 ;
-  wire \s_axil_rdata[1]_i_3_n_0 ;
-  wire \s_axil_rdata[1]_i_6_n_0 ;
-  wire \s_axil_rdata[2]_i_11_n_0 ;
-  wire \s_axil_rdata[2]_i_12_n_0 ;
-  wire \s_axil_rdata[2]_i_15_n_0 ;
-  wire \s_axil_rdata[2]_i_16_n_0 ;
+  wire \s_axil_rdata[1]_i_8_n_0 ;
+  wire \s_axil_rdata[1]_i_9_n_0 ;
+  wire \s_axil_rdata[24]_i_5_n_0 ;
+  wire \s_axil_rdata[24]_i_6_n_0 ;
+  wire \s_axil_rdata[24]_i_7_n_0 ;
+  wire \s_axil_rdata[24]_i_8_n_0 ;
+  wire \s_axil_rdata[2]_i_13_n_0 ;
+  wire \s_axil_rdata[2]_i_14_n_0 ;
   wire \s_axil_rdata[2]_i_2_0 ;
   wire \s_axil_rdata[2]_i_2_n_0 ;
+  wire \s_axil_rdata[2]_i_4_n_0 ;
   wire \s_axil_rdata[2]_i_5_n_0 ;
-  wire \s_axil_rdata[2]_i_6_n_0 ;
   wire \s_axil_rdata[2]_i_7_n_0 ;
   wire \s_axil_rdata[31]_i_5_n_0 ;
   wire \s_axil_rdata[31]_i_6_n_0 ;
-  wire \s_axil_rdata[3]_i_12_n_0 ;
-  wire \s_axil_rdata[3]_i_13_n_0 ;
   wire \s_axil_rdata[3]_i_14_n_0 ;
+  wire \s_axil_rdata[3]_i_8_n_0 ;
+  wire \s_axil_rdata[3]_i_9_n_0 ;
   wire \s_axil_rdata[4]_i_10_n_0 ;
   wire \s_axil_rdata[4]_i_11_n_0 ;
   wire \s_axil_rdata[4]_i_2_n_0 ;
   wire \s_axil_rdata[4]_i_5_n_0 ;
   wire \s_axil_rdata[4]_i_6_n_0 ;
+  wire \s_axil_rdata[5]_i_11_n_0 ;
   wire \s_axil_rdata[5]_i_12_n_0 ;
   wire \s_axil_rdata[5]_i_13_n_0 ;
-  wire \s_axil_rdata[5]_i_14_n_0 ;
-  wire \s_axil_rdata[6]_i_10_n_0 ;
-  wire \s_axil_rdata[6]_i_3_0 ;
-  wire \s_axil_rdata[6]_i_3_n_0 ;
-  wire \s_axil_rdata[6]_i_7_n_0 ;
+  wire \s_axil_rdata[6]_i_8_n_0 ;
   wire \s_axil_rdata[6]_i_9_n_0 ;
-  wire \s_axil_rdata[7]_i_10_n_0 ;
-  wire \s_axil_rdata[7]_i_2_n_0 ;
-  wire \s_axil_rdata[7]_i_3_0 ;
-  wire \s_axil_rdata[7]_i_3_n_0 ;
-  wire \s_axil_rdata[7]_i_6_n_0 ;
+  wire \s_axil_rdata[7]_i_8_n_0 ;
   wire \s_axil_rdata[7]_i_9_n_0 ;
-  wire \s_axil_rdata[8]_i_11_n_0 ;
   wire \s_axil_rdata[8]_i_13_n_0 ;
+  wire \s_axil_rdata[8]_i_14_n_0 ;
   wire \s_axil_rdata[8]_i_15_n_0 ;
   wire \s_axil_rdata[8]_i_16_n_0 ;
-  wire \s_axil_rdata[8]_i_17_n_0 ;
   wire \s_axil_rdata[8]_i_18_n_0 ;
   wire \s_axil_rdata[8]_i_19_n_0 ;
-  wire \s_axil_rdata[8]_i_20_n_0 ;
-  wire \s_axil_rdata[8]_i_21_n_0 ;
-  wire \s_axil_rdata[8]_i_5_n_0 ;
+  wire \s_axil_rdata[8]_i_2_n_0 ;
+  wire \s_axil_rdata[8]_i_4_n_0 ;
+  wire \s_axil_rdata[8]_i_6_n_0 ;
+  wire \s_axil_rdata[8]_i_7_n_0 ;
   wire \s_axil_rdata_reg[0]_0 ;
   wire \s_axil_rdata_reg[0]_1 ;
   wire \s_axil_rdata_reg[0]_i_4_n_0 ;
   wire \s_axil_rdata_reg[0]_i_5_n_0 ;
   wire \s_axil_rdata_reg[1]_0 ;
-  wire \s_axil_rdata_reg[1]_i_10_n_0 ;
+  wire \s_axil_rdata_reg[1]_1 ;
+  wire \s_axil_rdata_reg[1]_i_4_n_0 ;
   wire \s_axil_rdata_reg[1]_i_5_n_0 ;
-  wire \s_axil_rdata_reg[1]_i_9_n_0 ;
   wire [0:0]\s_axil_rdata_reg[24]_0 ;
   wire \s_axil_rdata_reg[2]_0 ;
-  wire \s_axil_rdata_reg[2]_i_3_n_0 ;
+  wire \s_axil_rdata_reg[2]_1 ;
   wire \s_axil_rdata_reg[3]_0 ;
   wire \s_axil_rdata_reg[3]_1 ;
   wire \s_axil_rdata_reg[4]_0 ;
@@ -6613,11 +6615,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire \s_axil_rdata_reg[5]_0 ;
   wire \s_axil_rdata_reg[5]_1 ;
   wire \s_axil_rdata_reg[6]_0 ;
+  wire \s_axil_rdata_reg[6]_1 ;
   wire \s_axil_rdata_reg[7]_0 ;
-  wire \s_axil_rdata_reg[7]_i_5_n_0 ;
+  wire \s_axil_rdata_reg[7]_1 ;
   wire \s_axil_rdata_reg[8]_0 ;
   wire \s_axil_rdata_reg[8]_1 ;
-  wire \s_axil_rdata_reg[8]_i_12_n_0 ;
   wire s_axil_rready;
   wire s_axil_rvalid;
   wire s_axil_rvalid035_out;
@@ -6632,16 +6634,16 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   wire timeout_status_q_reg_0;
   wire timeout_status_q_reg_1;
   wire timeout_status_q_reg_2;
+  wire timeout_status_q_reg_3;
   wire wr_en;
 
-  assign s_axil_araddr_14_sp_1 = s_axil_araddr_14_sn_1;
   assign s_axil_araddr_1_sp_1 = s_axil_araddr_1_sn_1;
   assign s_axil_araddr_2_sp_1 = s_axil_araddr_2_sn_1;
+  assign s_axil_araddr_3_sp_1 = s_axil_araddr_3_sn_1;
   assign s_axil_araddr_4_sp_1 = s_axil_araddr_4_sn_1;
   assign s_axil_araddr_5_sp_1 = s_axil_araddr_5_sn_1;
   assign s_axil_araddr_6_sp_1 = s_axil_araddr_6_sn_1;
   assign s_axil_araddr_7_sp_1 = s_axil_araddr_7_sn_1;
-  assign s_axil_araddr_8_sp_1 = s_axil_araddr_8_sn_1;
   assign s_axil_araddr_9_sp_1 = s_axil_araddr_9_sn_1;
   assign s_axil_wdata_0_sp_1 = s_axil_wdata_0_sn_1;
   assign s_axil_wstrb_0_sp_1 = s_axil_wstrb_0_sn_1;
@@ -6652,29 +6654,29 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.I0(\o_cmd_fifo_din_axil_reg[25]_0 ),
         .I1(s_axil_bvalid_reg_0),
         .I2(s_axil_bready),
-        .I3(Q[1]),
-        .I4(Q[0]),
+        .I3(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I4(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .O(\FSM_sequential_axil_state[0]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h0040FFFF)) 
     \FSM_sequential_axil_state[1]_i_1 
-       (.I0(Q[0]),
+       (.I0(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I1(s_axil_rvalid),
         .I2(s_axil_rready),
-        .I3(Q[1]),
+        .I3(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .I4(D[2]),
         .O(\FSM_sequential_axil_state[1]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hEFEEEEEEEEEEEEEE)) 
+    .INIT(64'hFFFFFFFF75555555)) 
     \FSM_sequential_axil_state[1]_i_2 
        (.I0(\FSM_sequential_axil_state[1]_i_4_n_0 ),
-        .I1(\FSM_sequential_axil_state_reg[0]_1 ),
-        .I2(Q[0]),
-        .I3(Q[1]),
-        .I4(s_axil_bready),
-        .I5(s_axil_bvalid_reg_0),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [0]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I3(s_axil_bready),
+        .I4(s_axil_bvalid_reg_0),
+        .I5(\FSM_sequential_axil_state_reg[0]_1 ),
         .O(\FSM_sequential_axil_state[1]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair86" *) 
+  (* SOFT_HLUTNM = "soft_lutpair85" *) 
   LUT4 #(
     .INIT(16'h5551)) 
     \FSM_sequential_axil_state[1]_i_3 
@@ -6683,37 +6685,37 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(\FSM_sequential_axil_state_reg[0]_0 ),
         .I3(full),
         .O(\FSM_sequential_axil_state[1]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair70" *) 
+  (* SOFT_HLUTNM = "soft_lutpair75" *) 
   LUT3 #(
-    .INIT(8'h2A)) 
+    .INIT(8'h8F)) 
     \FSM_sequential_axil_state[1]_i_4 
-       (.I0(s_axil_bvalid042_out),
-        .I1(\s_axil_bresp[1]_i_3_n_0 ),
-        .I2(full),
+       (.I0(\axil_awaddr_q_reg[2]_0 ),
+        .I1(full),
+        .I2(s_axil_bvalid042_out),
         .O(\FSM_sequential_axil_state[1]_i_4_n_0 ));
   (* FSM_ENCODED_STATES = "iSTATE:11,iSTATE0:10,iSTATE1:00,iSTATE2:01" *) 
   FDSE \FSM_sequential_axil_state_reg[0] 
        (.C(i_axi_aclk),
         .CE(\FSM_sequential_axil_state[1]_i_2_n_0 ),
         .D(\FSM_sequential_axil_state[0]_i_1_n_0 ),
-        .Q(Q[0]),
+        .Q(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .S(\FSM_sequential_axil_state[1]_i_1_n_0 ));
   (* FSM_ENCODED_STATES = "iSTATE:11,iSTATE0:10,iSTATE1:00,iSTATE2:01" *) 
   FDSE \FSM_sequential_axil_state_reg[1] 
        (.C(i_axi_aclk),
         .CE(\FSM_sequential_axil_state[1]_i_2_n_0 ),
         .D(\FSM_sequential_axil_state[1]_i_3_n_0 ),
-        .Q(Q[1]),
+        .Q(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .S(\FSM_sequential_axil_state[1]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hDDD0000055500000)) 
+    .INIT(64'hD5D5D50000000000)) 
     axil_aw_seen_i_1
        (.I0(s_axil_bvalid042_out),
-        .I1(\s_axil_bresp[1]_i_3_n_0 ),
-        .I2(a0),
-        .I3(axil_aw_seen_reg_n_0),
-        .I4(D[2]),
-        .I5(full),
+        .I1(full),
+        .I2(\axil_awaddr_q_reg[2]_0 ),
+        .I3(a0),
+        .I4(axil_aw_seen_reg_n_0),
+        .I5(D[2]),
         .O(axil_aw_seen_i_1_n_0));
   FDRE axil_aw_seen_reg
        (.C(i_axi_aclk),
@@ -6829,8 +6831,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     axil_rsp_pop_pending_i_1
        (.I0(axil_rsp_pop_pending_reg_1),
         .I1(D[2]),
-        .I2(Q[1]),
-        .I3(Q[0]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I3(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I4(axil_rsp_pop_pending_reg_0),
         .I5(data_valid),
         .O(axil_rsp_pop_pending_i_1_n_0));
@@ -6850,6 +6852,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(\delay_rst_ctrl_q[3]_i_2_n_0 ),
         .I5(\axil_awaddr_q_reg[1]_0 ),
         .O(\delay_rst_ctrl_q[3]_i_1_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair83" *) 
   LUT5 #(
     .INIT(32'hFFFFFBFF)) 
     \delay_rst_ctrl_q[3]_i_2 
@@ -6859,7 +6862,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(\axil_awaddr_q_reg_n_0_[9] ),
         .I4(\axil_awaddr_q_reg_n_0_[3] ),
         .O(\delay_rst_ctrl_q[3]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair91" *) 
+  (* SOFT_HLUTNM = "soft_lutpair90" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     \delay_rst_ctrl_q[3]_i_3 
@@ -6868,7 +6871,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[0]),
         .I3(p_0_in[1]),
         .O(\axil_awaddr_q_reg[1]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair91" *) 
+  (* SOFT_HLUTNM = "soft_lutpair90" *) 
   LUT3 #(
     .INIT(8'hBA)) 
     \delay_rst_ctrl_q[3]_i_4 
@@ -6890,36 +6893,36 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.C(i_axi_aclk),
         .CE(\delay_rst_ctrl_q[3]_i_1_n_0 ),
         .D(s_axil_wdata[0]),
-        .Q(\delay_rst_ctrl_q_reg[3]_0 [0]),
+        .Q(Q[0]),
         .S(fifo_rst_axi_wr));
   FDSE \delay_rst_ctrl_q_reg[1] 
        (.C(i_axi_aclk),
         .CE(\delay_rst_ctrl_q[3]_i_1_n_0 ),
         .D(s_axil_wdata[1]),
-        .Q(\delay_rst_ctrl_q_reg[3]_0 [1]),
+        .Q(Q[1]),
         .S(fifo_rst_axi_wr));
   FDSE \delay_rst_ctrl_q_reg[2] 
        (.C(i_axi_aclk),
         .CE(\delay_rst_ctrl_q[3]_i_1_n_0 ),
         .D(s_axil_wdata[2]),
-        .Q(\delay_rst_ctrl_q_reg[3]_0 [2]),
+        .Q(Q[2]),
         .S(fifo_rst_axi_wr));
   FDRE \delay_rst_ctrl_q_reg[3] 
        (.C(i_axi_aclk),
         .CE(\delay_rst_ctrl_q[3]_i_1_n_0 ),
         .D(s_axil_wdata[3]),
-        .Q(\delay_rst_ctrl_q_reg[3]_0 [3]),
+        .Q(Q[3]),
         .R(fifo_rst_axi_wr));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_en_vtc_q[0]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[0]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[0]_i_2_n_0 ),
         .I4(dq_idly_en_vtc[0]),
         .O(\dq_idly_en_vtc_q[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair103" *) 
+  (* SOFT_HLUTNM = "soft_lutpair101" *) 
   LUT3 #(
     .INIT(8'h01)) 
     \dq_idly_en_vtc_q[0]_i_2 
@@ -6928,15 +6931,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[2]),
         .O(\dq_idly_en_vtc_q[0]_i_2_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_en_vtc_q[1]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[1]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[1]_i_2_n_0 ),
         .I4(dq_idly_en_vtc[1]),
         .O(\dq_idly_en_vtc_q[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair104" *) 
+  (* SOFT_HLUTNM = "soft_lutpair103" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \dq_idly_en_vtc_q[1]_i_2 
@@ -6944,40 +6947,40 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[0]),
         .I2(p_0_in[2]),
         .O(\dq_idly_en_vtc_q[1]_i_2_n_0 ));
-  LUT5 #(
-    .INIT(32'hBFFF8000)) 
+  LUT6 #(
+    .INIT(64'hFFFFFBFF00000800)) 
     \dq_idly_en_vtc_q[2]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[2]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
-        .I4(dq_idly_en_vtc[2]),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[2]_i_2_n_0 ),
+        .I4(p_0_in[2]),
+        .I5(dq_idly_en_vtc[2]),
         .O(\dq_idly_en_vtc_q[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair104" *) 
-  LUT3 #(
-    .INIT(8'h04)) 
+  (* SOFT_HLUTNM = "soft_lutpair73" *) 
+  LUT2 #(
+    .INIT(4'h2)) 
     \dq_idly_en_vtc_q[2]_i_2 
-       (.I0(p_0_in[0]),
-        .I1(p_0_in[1]),
-        .I2(p_0_in[2]),
+       (.I0(p_0_in[1]),
+        .I1(p_0_in[0]),
         .O(\dq_idly_en_vtc_q[2]_i_2_n_0 ));
   LUT6 #(
-    .INIT(64'hFFBFFFFF00800000)) 
+    .INIT(64'hFFFFFBFF00000800)) 
     \dq_idly_en_vtc_q[3]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[7]_i_4_n_0 ),
-        .I3(p_0_in[2]),
-        .I4(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[7]_i_4_n_0 ),
+        .I4(p_0_in[2]),
         .I5(dq_idly_en_vtc[3]),
         .O(\dq_idly_en_vtc_q[3]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_en_vtc_q[4]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[4]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[4]_i_2_n_0 ),
         .I4(dq_idly_en_vtc[4]),
         .O(\dq_idly_en_vtc_q[4]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair71" *) 
@@ -6989,15 +6992,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[0]),
         .O(\dq_idly_en_vtc_q[4]_i_2_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_en_vtc_q[5]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[5]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[5]_i_2_n_0 ),
         .I4(dq_idly_en_vtc[5]),
         .O(\dq_idly_en_vtc_q[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair96" *) 
+  (* SOFT_HLUTNM = "soft_lutpair93" *) 
   LUT3 #(
     .INIT(8'h40)) 
     \dq_idly_en_vtc_q[5]_i_2 
@@ -7006,15 +7009,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[2]),
         .O(\dq_idly_en_vtc_q[5]_i_2_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_en_vtc_q[6]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[6]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[6]_i_2_n_0 ),
         .I4(dq_idly_en_vtc[6]),
         .O(\dq_idly_en_vtc_q[6]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair103" *) 
+  (* SOFT_HLUTNM = "soft_lutpair101" *) 
   LUT3 #(
     .INIT(8'h08)) 
     \dq_idly_en_vtc_q[6]_i_2 
@@ -7023,7 +7026,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[0]),
         .O(\dq_idly_en_vtc_q[6]_i_2_n_0 ));
   LUT6 #(
-    .INIT(64'hBFFFFFFF80000000)) 
+    .INIT(64'hEFFFFFFF20000000)) 
     \dq_idly_en_vtc_q[7]_i_1 
        (.I0(\dq_idly_en_vtc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
@@ -7041,16 +7044,16 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(p_0_in[2]),
         .I4(\dq_idly_en_vtc_q[7]_i_7_n_0 ),
         .O(\dq_idly_en_vtc_q[7]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair75" *) 
+  (* SOFT_HLUTNM = "soft_lutpair76" *) 
   LUT4 #(
-    .INIT(16'h0001)) 
+    .INIT(16'hFFFE)) 
     \dq_idly_en_vtc_q[7]_i_3 
        (.I0(\axil_awaddr_q_reg_n_0_[0] ),
         .I1(p_2_in),
         .I2(\axil_awaddr_q_reg_n_0_[3] ),
         .I3(\axil_awaddr_q_reg_n_0_[2] ),
         .O(\dq_idly_en_vtc_q[7]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair73" *) 
+  (* SOFT_HLUTNM = "soft_lutpair72" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \dq_idly_en_vtc_q[7]_i_4 
@@ -7058,10 +7061,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[1]),
         .O(\dq_idly_en_vtc_q[7]_i_4_n_0 ));
   LUT2 #(
-    .INIT(4'h8)) 
+    .INIT(4'h2)) 
     \dq_idly_en_vtc_q[7]_i_5 
        (.I0(s_axil_bvalid042_out),
-        .I1(\s_axil_bresp[1]_i_6_n_0 ),
+        .I1(odly_en_vtc_q_i_10_n_0),
         .O(\dq_idly_en_vtc_q[7]_i_5_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
@@ -7132,71 +7135,72 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .Q(dq_idly_en_vtc[7]),
         .S(fifo_rst_axi_wr));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_inc_q[0]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[0]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[0]_i_2_n_0 ),
         .I4(dq_idly_inc[0]),
         .O(\dq_idly_inc_q[0]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_inc_q[1]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[1]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[1]_i_2_n_0 ),
         .I4(dq_idly_inc[1]),
         .O(\dq_idly_inc_q[1]_i_1_n_0 ));
-  LUT5 #(
-    .INIT(32'hBFFF8000)) 
+  LUT6 #(
+    .INIT(64'hFFFFFBFF00000800)) 
     \dq_idly_inc_q[2]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[2]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
-        .I4(dq_idly_inc[2]),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[2]_i_2_n_0 ),
+        .I4(p_0_in[2]),
+        .I5(dq_idly_inc[2]),
         .O(\dq_idly_inc_q[2]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hFFBFFFFF00800000)) 
+    .INIT(64'hFFFFFBFF00000800)) 
     \dq_idly_inc_q[3]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[7]_i_4_n_0 ),
-        .I3(p_0_in[2]),
-        .I4(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[7]_i_4_n_0 ),
+        .I4(p_0_in[2]),
         .I5(dq_idly_inc[3]),
         .O(\dq_idly_inc_q[3]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_inc_q[4]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[4]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[4]_i_2_n_0 ),
         .I4(dq_idly_inc[4]),
         .O(\dq_idly_inc_q[4]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_inc_q[5]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[5]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[5]_i_2_n_0 ),
         .I4(dq_idly_inc[5]),
         .O(\dq_idly_inc_q[5]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'hBFFF8000)) 
+    .INIT(32'hFBFF0800)) 
     \dq_idly_inc_q[6]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I2(\dq_idly_en_vtc_q[6]_i_2_n_0 ),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I2(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I3(\dq_idly_en_vtc_q[6]_i_2_n_0 ),
         .I4(dq_idly_inc[6]),
         .O(\dq_idly_inc_q[6]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hBFFFFFFF80000000)) 
+    .INIT(64'hEFFFFFFF20000000)) 
     \dq_idly_inc_q[7]_i_1 
        (.I0(\dq_idly_inc_q[7]_i_2_n_0 ),
         .I1(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
@@ -7290,7 +7294,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[1]),
         .I3(\dq_idly_time_value_q[71]_i_3_n_0 ),
         .O(\dq_idly_time_value_q[17]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair109" *) 
+  (* SOFT_HLUTNM = "soft_lutpair107" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \dq_idly_time_value_q[18]_i_1 
@@ -7306,14 +7310,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT6 #(
     .INIT(64'h00003300B8B8B8B8)) 
     \dq_idly_time_value_q[20]_i_1 
-       (.I0(dq_idly_time_value_q0[56]),
+       (.I0(\dq_idly_time_value_q[64]_i_2_n_0 ),
         .I1(p_0_in[1]),
         .I2(\dq_idly_time_value_q[66]_i_2_n_0 ),
         .I3(dq_idly_time_value_q0[54]),
         .I4(p_0_in[0]),
         .I5(p_0_in[2]),
         .O(dq_idly_time_value_q0[20]));
-  (* SOFT_HLUTNM = "soft_lutpair96" *) 
+  (* SOFT_HLUTNM = "soft_lutpair93" *) 
   LUT4 #(
     .INIT(16'h2F20)) 
     \dq_idly_time_value_q[21]_i_1 
@@ -7330,7 +7334,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[0]),
         .I3(\dq_idly_time_value_q[71]_i_3_n_0 ),
         .O(\dq_idly_time_value_q[26]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair95" *) 
+  (* SOFT_HLUTNM = "soft_lutpair92" *) 
   LUT4 #(
     .INIT(16'hB888)) 
     \dq_idly_time_value_q[33]_i_1 
@@ -7347,7 +7351,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[1]),
         .I3(\dq_idly_time_value_q[71]_i_3_n_0 ),
         .O(\dq_idly_time_value_q[35]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair109" *) 
+  (* SOFT_HLUTNM = "soft_lutpair107" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[38]_i_1 
@@ -7392,7 +7396,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(p_0_in[1]),
         .I4(dq_idly_time_value_q0[49]),
         .I5(p_0_in[0]),
-        .O(dq_idly_time_value_q0[13]));
+        .O(\dq_idly_time_value_q[45]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'hF0FFF00088008800)) 
     \dq_idly_time_value_q[46]_i_1 
@@ -7402,7 +7406,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(p_0_in[2]),
         .I4(\dq_idly_time_value_q[66]_i_1_n_0 ),
         .I5(p_0_in[0]),
-        .O(dq_idly_time_value_q0[14]));
+        .O(\dq_idly_time_value_q[46]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair72" *) 
   LUT5 #(
     .INIT(32'hFF00B8B8)) 
@@ -7413,15 +7417,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(dq_idly_time_value_q0[55]),
         .I4(p_0_in[1]),
         .O(dq_idly_time_value_q0[47]));
-  (* SOFT_HLUTNM = "soft_lutpair88" *) 
+  (* SOFT_HLUTNM = "soft_lutpair87" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[48]_i_1 
-       (.I0(dq_idly_time_value_q0[56]),
+       (.I0(\dq_idly_time_value_q[64]_i_2_n_0 ),
         .I1(p_0_in[1]),
         .I2(\dq_idly_time_value_q[66]_i_2_n_0 ),
         .O(dq_idly_time_value_q0[48]));
-  (* SOFT_HLUTNM = "soft_lutpair89" *) 
+  (* SOFT_HLUTNM = "soft_lutpair88" *) 
   LUT4 #(
     .INIT(16'hF088)) 
     \dq_idly_time_value_q[50]_i_1 
@@ -7477,51 +7481,43 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(p_0_in[0]),
         .I5(dq_idly_cntvaluein[0]),
         .O(\dq_idly_time_value_q[54]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair97" *) 
+  (* SOFT_HLUTNM = "soft_lutpair94" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[55]_i_1 
        (.I0(dq_idly_time_value_q0[54]),
         .I1(p_0_in[0]),
-        .I2(\dq_idly_time_value_q[56]_i_2_n_0 ),
+        .I2(\dq_idly_time_value_q[55]_i_2_n_0 ),
         .O(dq_idly_time_value_q0[55]));
-  (* SOFT_HLUTNM = "soft_lutpair111" *) 
-  LUT3 #(
-    .INIT(8'hB8)) 
-    \dq_idly_time_value_q[56]_i_1 
-       (.I0(\dq_idly_time_value_q[56]_i_2_n_0 ),
-        .I1(p_0_in[0]),
-        .I2(\dq_idly_time_value_q[65]_i_2_n_0 ),
-        .O(dq_idly_time_value_q0[56]));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
-    \dq_idly_time_value_q[56]_i_2 
+    \dq_idly_time_value_q[55]_i_2 
        (.I0(s_axil_wdata[1]),
         .I1(s_axil_wstrb[0]),
-        .I2(\dq_idly_time_value_q[56]_i_3_n_0 ),
+        .I2(\dq_idly_time_value_q[55]_i_3_n_0 ),
         .I3(p_0_in[2]),
-        .I4(\dq_idly_time_value_q[56]_i_4_n_0 ),
-        .O(\dq_idly_time_value_q[56]_i_2_n_0 ));
+        .I4(\dq_idly_time_value_q[55]_i_4_n_0 ),
+        .O(\dq_idly_time_value_q[55]_i_2_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \dq_idly_time_value_q[56]_i_3 
+    \dq_idly_time_value_q[55]_i_3 
        (.I0(dq_idly_cntvaluein[64]),
         .I1(dq_idly_cntvaluein[55]),
         .I2(p_0_in[1]),
         .I3(dq_idly_cntvaluein[46]),
         .I4(p_0_in[0]),
         .I5(dq_idly_cntvaluein[37]),
-        .O(\dq_idly_time_value_q[56]_i_3_n_0 ));
+        .O(\dq_idly_time_value_q[55]_i_3_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \dq_idly_time_value_q[56]_i_4 
+    \dq_idly_time_value_q[55]_i_4 
        (.I0(dq_idly_cntvaluein[28]),
         .I1(dq_idly_cntvaluein[19]),
         .I2(p_0_in[1]),
         .I3(dq_idly_cntvaluein[10]),
         .I4(p_0_in[0]),
         .I5(dq_idly_cntvaluein[1]),
-        .O(\dq_idly_time_value_q[56]_i_4_n_0 ));
+        .O(\dq_idly_time_value_q[55]_i_4_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair71" *) 
   LUT5 #(
     .INIT(32'h20222000)) 
@@ -7542,14 +7538,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(\dq_idly_time_value_q[66]_i_1_n_0 ),
         .I5(p_0_in[0]),
         .O(dq_idly_time_value_q0[58]));
-  (* SOFT_HLUTNM = "soft_lutpair97" *) 
+  (* SOFT_HLUTNM = "soft_lutpair94" *) 
   LUT4 #(
     .INIT(16'h2F20)) 
     \dq_idly_time_value_q[58]_i_2 
        (.I0(dq_idly_time_value_q0[54]),
         .I1(p_0_in[0]),
         .I2(p_0_in[1]),
-        .I3(dq_idly_time_value_q0[56]),
+        .I3(\dq_idly_time_value_q[64]_i_2_n_0 ),
         .O(\dq_idly_time_value_q[58]_i_2_n_0 ));
   LUT6 #(
     .INIT(64'h22222222C0CCC000)) 
@@ -7579,7 +7575,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(p_0_in[1]),
         .I3(\dq_idly_time_value_q[71]_i_3_n_0 ),
         .O(\dq_idly_time_value_q[62]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair89" *) 
+  (* SOFT_HLUTNM = "soft_lutpair88" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \dq_idly_time_value_q[62]_i_2 
@@ -7593,15 +7589,23 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.I0(dq_idly_time_value_q0[47]),
         .I1(p_0_in[2]),
         .O(dq_idly_time_value_q0[63]));
-  (* SOFT_HLUTNM = "soft_lutpair88" *) 
+  (* SOFT_HLUTNM = "soft_lutpair87" *) 
   LUT4 #(
     .INIT(16'hB800)) 
     \dq_idly_time_value_q[64]_i_1 
-       (.I0(dq_idly_time_value_q0[56]),
+       (.I0(\dq_idly_time_value_q[64]_i_2_n_0 ),
         .I1(p_0_in[1]),
         .I2(\dq_idly_time_value_q[66]_i_2_n_0 ),
         .I3(p_0_in[2]),
-        .O(dq_idly_time_value_q0[64]));
+        .O(dq_idly_time_value_q0[56]));
+  (* SOFT_HLUTNM = "soft_lutpair109" *) 
+  LUT3 #(
+    .INIT(8'hB8)) 
+    \dq_idly_time_value_q[64]_i_2 
+       (.I0(\dq_idly_time_value_q[55]_i_2_n_0 ),
+        .I1(p_0_in[0]),
+        .I2(\dq_idly_time_value_q[65]_i_2_n_0 ),
+        .O(\dq_idly_time_value_q[64]_i_2_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair73" *) 
   LUT5 #(
     .INIT(32'hB8FFB800)) 
@@ -7612,7 +7616,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(p_0_in[1]),
         .I4(\dq_idly_time_value_q[67]_i_2_n_0 ),
         .O(dq_idly_time_value_q0[49]));
-  (* SOFT_HLUTNM = "soft_lutpair82" *) 
+  (* SOFT_HLUTNM = "soft_lutpair84" *) 
   LUT5 #(
     .INIT(32'hB8BBB888)) 
     \dq_idly_time_value_q[65]_i_2 
@@ -7671,7 +7675,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(p_0_in[0]),
         .I5(dq_idly_cntvaluein[3]),
         .O(\dq_idly_time_value_q[65]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair107" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[66]_i_1 
@@ -7679,7 +7682,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[1]),
         .I2(\dq_idly_time_value_q[68]_i_2_n_0 ),
         .O(\dq_idly_time_value_q[66]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair111" *) 
+  (* SOFT_HLUTNM = "soft_lutpair109" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[66]_i_2 
@@ -7687,7 +7690,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[0]),
         .I2(\dq_idly_time_value_q[67]_i_4_n_0 ),
         .O(\dq_idly_time_value_q[66]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair95" *) 
+  (* SOFT_HLUTNM = "soft_lutpair92" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[67]_i_1 
@@ -7695,7 +7698,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[1]),
         .I2(\dq_idly_time_value_q[67]_i_3_n_0 ),
         .O(dq_idly_time_value_q0[67]));
-  (* SOFT_HLUTNM = "soft_lutpair110" *) 
+  (* SOFT_HLUTNM = "soft_lutpair108" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[67]_i_2 
@@ -7703,7 +7706,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[0]),
         .I2(\dq_idly_time_value_q[68]_i_3_n_0 ),
         .O(\dq_idly_time_value_q[67]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair108" *) 
+  (* SOFT_HLUTNM = "soft_lutpair106" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[67]_i_3 
@@ -7740,7 +7743,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(p_0_in[0]),
         .I5(dq_idly_cntvaluein[4]),
         .O(\dq_idly_time_value_q[67]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair107" *) 
+  (* SOFT_HLUTNM = "soft_lutpair103" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[68]_i_1 
@@ -7748,7 +7751,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(p_0_in[1]),
         .I2(dq_idly_time_value_q0[34]),
         .O(dq_idly_time_value_q0[32]));
-  (* SOFT_HLUTNM = "soft_lutpair110" *) 
+  (* SOFT_HLUTNM = "soft_lutpair108" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[68]_i_2 
@@ -7821,7 +7824,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.I0(dq_idly_time_value_q0[33]),
         .I1(p_0_in[2]),
         .O(dq_idly_time_value_q0[69]));
-  (* SOFT_HLUTNM = "soft_lutpair108" *) 
+  (* SOFT_HLUTNM = "soft_lutpair106" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \dq_idly_time_value_q[70]_i_1 
@@ -7875,15 +7878,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(p_0_in[2]),
         .I4(\dq_idly_time_value_q[71]_i_5_n_0 ),
         .O(dq_idly_time_value_q0[35]));
-  (* SOFT_HLUTNM = "soft_lutpair75" *) 
+  (* SOFT_HLUTNM = "soft_lutpair76" *) 
   LUT5 #(
-    .INIT(32'hFFFFFFDF)) 
+    .INIT(32'hFFFBFFFF)) 
     \dq_idly_time_value_q[71]_i_3 
-       (.I0(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
-        .I1(\axil_awaddr_q_reg_n_0_[3] ),
-        .I2(\axil_awaddr_q_reg_n_0_[2] ),
-        .I3(p_2_in),
-        .I4(\axil_awaddr_q_reg_n_0_[0] ),
+       (.I0(\axil_awaddr_q_reg_n_0_[3] ),
+        .I1(\axil_awaddr_q_reg_n_0_[2] ),
+        .I2(p_2_in),
+        .I3(\axil_awaddr_q_reg_n_0_[0] ),
+        .I4(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
         .O(\dq_idly_time_value_q[71]_i_3_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
@@ -7940,13 +7943,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[13] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[17]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[13]),
+        .D(\dq_idly_time_value_q[45]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[13]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[14] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[17]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[14]),
+        .D(\dq_idly_time_value_q[46]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[14]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[15] 
@@ -8042,7 +8045,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[29] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[35]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[13]),
+        .D(\dq_idly_time_value_q[45]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[29]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[2] 
@@ -8054,7 +8057,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[30] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[35]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[14]),
+        .D(\dq_idly_time_value_q[46]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[30]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[31] 
@@ -8120,7 +8123,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[40] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[44]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[64]),
+        .D(dq_idly_time_value_q0[56]),
         .Q(dq_idly_cntvaluein[40]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[41] 
@@ -8150,13 +8153,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[45] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[53]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[13]),
+        .D(\dq_idly_time_value_q[45]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[45]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[46] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[53]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[14]),
+        .D(\dq_idly_time_value_q[46]_i_1_n_0 ),
         .Q(dq_idly_cntvaluein[46]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[47] 
@@ -8276,7 +8279,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   FDRE \dq_idly_time_value_q_reg[64] 
        (.C(i_axi_aclk),
         .CE(\dq_idly_time_value_q[71]_i_1_n_0 ),
-        .D(dq_idly_time_value_q0[64]),
+        .D(dq_idly_time_value_q0[56]),
         .Q(dq_idly_cntvaluein[64]),
         .R(fifo_rst_axi_wr));
   FDRE \dq_idly_time_value_q_reg[65] 
@@ -8373,8 +8376,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h00000034)) 
     o_axil_rsp_fifo_rd_en_i_1
        (.I0(s_axil_bvalid_reg_0),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(empty),
         .I4(axil_rsp_pop_pending_reg_0),
         .O(o_axil_rsp_fifo_rd_en_i_1_n_0));
@@ -8465,48 +8468,60 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I5(s_axil_wstrb[3]),
         .O(\o_cmd_fifo_din_axil[1]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hA2A2A20202020202)) 
+    .INIT(64'h0000AA80AAAAAA80)) 
     \o_cmd_fifo_din_axil[25]_i_1 
        (.I0(D[2]),
-        .I1(\o_cmd_fifo_din_axil[25]_i_2_n_0 ),
-        .I2(\o_cmd_fifo_din_axil_reg[25]_0 ),
-        .I3(s_axil_araddr[1]),
-        .I4(s_axil_araddr[2]),
+        .I1(p_2_in),
+        .I2(\o_cmd_fifo_din_axil[25]_i_2_n_0 ),
+        .I3(\axil_awaddr_q_reg_n_0_[2] ),
+        .I4(\o_cmd_fifo_din_axil_reg[25]_0 ),
         .I5(\o_cmd_fifo_din_axil[25]_i_3_n_0 ),
         .O(\o_cmd_fifo_din_axil[25]_i_1_n_0 ));
-  LUT6 #(
-    .INIT(64'h0505050705050505)) 
+  LUT5 #(
+    .INIT(32'hFFFFFFFE)) 
     \o_cmd_fifo_din_axil[25]_i_2 
-       (.I0(p_2_in),
-        .I1(\axil_awaddr_q_reg_n_0_[3] ),
-        .I2(\axil_awaddr_q_reg_n_0_[2] ),
-        .I3(p_0_in[1]),
-        .I4(p_0_in[0]),
-        .I5(\s_axil_bresp[1]_i_5_n_0 ),
+       (.I0(\o_cmd_fifo_din_axil[25]_i_4_n_0 ),
+        .I1(\o_cmd_fifo_din_axil[25]_i_5_n_0 ),
+        .I2(p_0_in[2]),
+        .I3(\axil_awaddr_q_reg_n_0_[8] ),
+        .I4(\axil_awaddr_q_reg_n_0_[7] ),
         .O(\o_cmd_fifo_din_axil[25]_i_2_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFFFFFFFFFFD)) 
+    .INIT(64'h0000000000000002)) 
     \o_cmd_fifo_din_axil[25]_i_3 
-       (.I0(s_axil_araddr_7_sn_1),
-        .I1(\s_axil_araddr[9]_1 ),
-        .I2(s_axil_araddr[10]),
-        .I3(s_axil_araddr[0]),
-        .I4(s_axil_araddr[2]),
-        .I5(s_axil_araddr_5_sn_1),
+       (.I0(\s_axil_araddr[6]_0 ),
+        .I1(s_axil_araddr[2]),
+        .I2(s_axil_araddr[0]),
+        .I3(s_axil_araddr[10]),
+        .I4(s_axil_araddr_5_sn_1),
+        .I5(s_axil_araddr[3]),
         .O(\o_cmd_fifo_din_axil[25]_i_3_n_0 ));
-  LUT2 #(
-    .INIT(4'h1)) 
+  LUT6 #(
+    .INIT(64'hFFFFFFFFFFFFFFFE)) 
     \o_cmd_fifo_din_axil[25]_i_4 
-       (.I0(s_axil_araddr[7]),
-        .I1(s_axil_araddr[6]),
-        .O(s_axil_araddr_7_sn_1));
-  (* SOFT_HLUTNM = "soft_lutpair92" *) 
+       (.I0(p_0_in[1]),
+        .I1(p_0_in[0]),
+        .I2(\axil_awaddr_q_reg_n_0_[9] ),
+        .I3(\axil_awaddr_q_reg_n_0_[3] ),
+        .I4(\axil_awaddr_q_reg_n_0_[10] ),
+        .I5(\axil_awaddr_q_reg_n_0_[0] ),
+        .O(\o_cmd_fifo_din_axil[25]_i_4_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair77" *) 
+  LUT4 #(
+    .INIT(16'hFFFE)) 
+    \o_cmd_fifo_din_axil[25]_i_5 
+       (.I0(\axil_awaddr_q_reg_n_0_[13] ),
+        .I1(\axil_awaddr_q_reg_n_0_[12] ),
+        .I2(\axil_awaddr_q_reg_n_0_[15] ),
+        .I3(\axil_awaddr_q_reg_n_0_[14] ),
+        .O(\o_cmd_fifo_din_axil[25]_i_5_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair80" *) 
   LUT2 #(
     .INIT(4'hE)) 
-    \o_cmd_fifo_din_axil[25]_i_5 
-       (.I0(s_axil_araddr[9]),
-        .I1(s_axil_araddr[8]),
-        .O(\s_axil_araddr[9]_1 ));
+    \o_cmd_fifo_din_axil[25]_i_6 
+       (.I0(s_axil_araddr[5]),
+        .I1(s_axil_araddr[4]),
+        .O(s_axil_araddr_5_sn_1));
   LUT6 #(
     .INIT(64'hABA8ABA8ABA8A8A8)) 
     \o_cmd_fifo_din_axil[2]_i_1 
@@ -8518,72 +8533,24 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I5(s_axil_wstrb[3]),
         .O(\o_cmd_fifo_din_axil[2]_i_1_n_0 ));
   LUT5 #(
-    .INIT(32'h404000F0)) 
+    .INIT(32'h5555C000)) 
     \o_cmd_fifo_din_axil[35]_i_1 
        (.I0(\o_cmd_fifo_din_axil[35]_i_2_n_0 ),
-        .I1(s_axil_araddr_8_sn_1),
-        .I2(D[2]),
-        .I3(\o_cmd_fifo_din_axil[35]_i_4_n_0 ),
+        .I1(\axil_awaddr_q_reg_n_0_[11] ),
+        .I2(\axil_awaddr_q_reg[2]_0 ),
+        .I3(D[2]),
         .I4(\o_cmd_fifo_din_axil_reg[25]_0 ),
         .O(\o_cmd_fifo_din_axil[35]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFFFFEEEFFFF)) 
+    .INIT(64'hEAFFFFFFFFFFFFFF)) 
     \o_cmd_fifo_din_axil[35]_i_2 
-       (.I0(s_axil_araddr[10]),
-        .I1(s_axil_araddr[0]),
+       (.I0(\s_axil_rdata[31]_i_5_n_0 ),
+        .I1(s_axil_araddr[2]),
         .I2(s_axil_araddr[1]),
-        .I3(s_axil_araddr[2]),
-        .I4(s_axil_araddr[11]),
-        .I5(s_axil_araddr[9]),
+        .I3(s_axil_araddr[11]),
+        .I4(D[2]),
+        .I5(\s_axil_araddr[6]_0 ),
         .O(\o_cmd_fifo_din_axil[35]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000000001)) 
-    \o_cmd_fifo_din_axil[35]_i_3 
-       (.I0(s_axil_araddr[8]),
-        .I1(s_axil_araddr[7]),
-        .I2(s_axil_araddr[6]),
-        .I3(s_axil_araddr[3]),
-        .I4(s_axil_araddr[4]),
-        .I5(s_axil_araddr[5]),
-        .O(s_axil_araddr_8_sn_1));
-  (* SOFT_HLUTNM = "soft_lutpair76" *) 
-  LUT5 #(
-    .INIT(32'hFFEFFFFF)) 
-    \o_cmd_fifo_din_axil[35]_i_4 
-       (.I0(\axil_awaddr_q_reg_n_0_[0] ),
-        .I1(\axil_awaddr_q_reg_n_0_[10] ),
-        .I2(\axil_awaddr_q_reg_n_0_[11] ),
-        .I3(\o_cmd_fifo_din_axil[35]_i_5_n_0 ),
-        .I4(\o_cmd_fifo_din_axil[35]_i_6_n_0 ),
-        .O(\o_cmd_fifo_din_axil[35]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair78" *) 
-  LUT5 #(
-    .INIT(32'hFFFFFFF8)) 
-    \o_cmd_fifo_din_axil[35]_i_5 
-       (.I0(\axil_awaddr_q_reg_n_0_[2] ),
-        .I1(p_2_in),
-        .I2(p_0_in[0]),
-        .I3(p_0_in[1]),
-        .I4(\axil_awaddr_q_reg_n_0_[3] ),
-        .O(\o_cmd_fifo_din_axil[35]_i_5_n_0 ));
-  LUT5 #(
-    .INIT(32'h00000001)) 
-    \o_cmd_fifo_din_axil[35]_i_6 
-       (.I0(\o_cmd_fifo_din_axil[35]_i_7_n_0 ),
-        .I1(p_0_in[2]),
-        .I2(\axil_awaddr_q_reg_n_0_[8] ),
-        .I3(\axil_awaddr_q_reg_n_0_[7] ),
-        .I4(\axil_awaddr_q_reg_n_0_[9] ),
-        .O(\o_cmd_fifo_din_axil[35]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair77" *) 
-  LUT4 #(
-    .INIT(16'hFFFE)) 
-    \o_cmd_fifo_din_axil[35]_i_7 
-       (.I0(\axil_awaddr_q_reg_n_0_[13] ),
-        .I1(\axil_awaddr_q_reg_n_0_[12] ),
-        .I2(\axil_awaddr_q_reg_n_0_[15] ),
-        .I3(\axil_awaddr_q_reg_n_0_[14] ),
-        .O(\o_cmd_fifo_din_axil[35]_i_7_n_0 ));
   LUT6 #(
     .INIT(64'hABA8ABA8ABA8A8A8)) 
     \o_cmd_fifo_din_axil[3]_i_1 
@@ -8604,15 +8571,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(s_axil_wstrb[2]),
         .I5(s_axil_wstrb[3]),
         .O(\o_cmd_fifo_din_axil[4]_i_1_n_0 ));
-  LUT5 #(
-    .INIT(32'hFF20FFFF)) 
-    \o_cmd_fifo_din_axil[58]_i_1 
-       (.I0(\s_axil_bresp[1]_i_3_n_0 ),
-        .I1(full),
-        .I2(s_axil_bvalid042_out),
-        .I3(\o_cmd_fifo_din_axil_reg[25]_0 ),
-        .I4(D[2]),
-        .O(\o_cmd_fifo_din_axil[58]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'hABA8ABA8ABA8A8A8)) 
     \o_cmd_fifo_din_axil[5]_i_1 
@@ -8665,132 +8623,132 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .O(\o_cmd_fifo_din_axil[9]_i_1_n_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[0] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(D[0]),
         .Q(cmd_fifo_din_axil[0]),
         .R(1'b0));
   FDRE \o_cmd_fifo_din_axil_reg[10] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[10]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[10]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[11] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[11]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[11]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[12] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[12]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[12]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[13] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[13]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[13]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[14] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[14]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[14]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[15] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[15]_i_2_n_0 ),
         .Q(\o_cmd_fifo_din_axil_reg[58]_0 [0]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[1] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[1]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[1]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[25] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[25]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[25]),
         .R(1'b0));
   FDRE \o_cmd_fifo_din_axil_reg[2] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[2]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[2]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[35] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[35]_i_1_n_0 ),
         .Q(\o_cmd_fifo_din_axil_reg[58]_0 [1]),
         .R(1'b0));
   FDRE \o_cmd_fifo_din_axil_reg[3] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[3]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[3]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[4] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[4]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[4]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[57] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(D[1]),
         .Q(\o_cmd_fifo_din_axil_reg[58]_0 [2]),
         .R(1'b0));
   FDRE \o_cmd_fifo_din_axil_reg[58] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(D[2]),
         .Q(\o_cmd_fifo_din_axil_reg[58]_0 [3]),
         .R(1'b0));
   FDRE \o_cmd_fifo_din_axil_reg[5] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[5]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[5]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[6] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[6]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[6]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[7] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[7]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[7]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[8] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[8]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[8]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
   FDRE \o_cmd_fifo_din_axil_reg[9] 
        (.C(i_axi_aclk),
-        .CE(\o_cmd_fifo_din_axil[58]_i_1_n_0 ),
+        .CE(\o_cmd_fifo_din_axil_reg[58]_1 ),
         .D(\o_cmd_fifo_din_axil[9]_i_1_n_0 ),
         .Q(cmd_fifo_din_axil[9]),
         .R(\o_cmd_fifo_din_axil_reg[1]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair70" *) 
+  (* SOFT_HLUTNM = "soft_lutpair75" *) 
   LUT5 #(
-    .INIT(32'hFF002000)) 
+    .INIT(32'hAAAA0800)) 
     o_cmd_fifo_wr_en_axil_i_1
-       (.I0(\s_axil_bresp[1]_i_3_n_0 ),
-        .I1(full),
-        .I2(s_axil_bvalid042_out),
-        .I3(D[2]),
+       (.I0(D[2]),
+        .I1(\axil_awaddr_q_reg[2]_0 ),
+        .I2(full),
+        .I3(s_axil_bvalid042_out),
         .I4(\o_cmd_fifo_din_axil_reg[25]_0 ),
         .O(o_cmd_fifo_wr_en_axil2_out));
   FDRE o_cmd_fifo_wr_en_axil_reg
@@ -8800,72 +8758,72 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .Q(o_cmd_fifo_wr_en_axil),
         .R(1'b0));
   LUT6 #(
-    .INIT(64'h0100000000000000)) 
+    .INIT(64'h0001000000000000)) 
     \o_dq_idly_ce[0]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[0]),
-        .I2(p_0_in[2]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[0]),
+        .I3(p_0_in[2]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[0]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h0400000000000000)) 
+    .INIT(64'h0010000000000000)) 
     \o_dq_idly_ce[1]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[0]),
-        .I2(p_0_in[2]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[0]),
+        .I3(p_0_in[2]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[1]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h0400000000000000)) 
+    .INIT(64'h0010000000000000)) 
     \o_dq_idly_ce[2]_i_1 
-       (.I0(p_0_in[0]),
-        .I1(p_0_in[1]),
-        .I2(p_0_in[2]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[0]),
+        .I2(p_0_in[1]),
+        .I3(p_0_in[2]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[2]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h0800000000000000)) 
+    .INIT(64'h0040000000000000)) 
     \o_dq_idly_ce[3]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[0]),
-        .I2(p_0_in[2]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[0]),
+        .I3(p_0_in[2]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[3]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h0400000000000000)) 
+    .INIT(64'h0010000000000000)) 
     \o_dq_idly_ce[4]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[2]),
-        .I2(p_0_in[0]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[2]),
+        .I3(p_0_in[0]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[4]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h4000000000000000)) 
+    .INIT(64'h1000000000000000)) 
     \o_dq_idly_ce[5]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[0]),
-        .I2(p_0_in[2]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[0]),
+        .I3(p_0_in[2]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[5]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h0800000000000000)) 
+    .INIT(64'h0040000000000000)) 
     \o_dq_idly_ce[6]_i_1 
-       (.I0(p_0_in[1]),
-        .I1(p_0_in[2]),
-        .I2(p_0_in[0]),
-        .I3(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+       (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
+        .I1(p_0_in[1]),
+        .I2(p_0_in[2]),
+        .I3(p_0_in[0]),
         .I4(s_axil_wdata[2]),
         .I5(s_axil_wstrb[0]),
         .O(\o_dq_idly_ce[6]_i_1_n_0 ));
@@ -8876,7 +8834,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(\dq_idly_en_vtc_q[7]_i_5_n_0 ),
         .O(\o_dq_idly_ce[7]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'h8000000000000000)) 
+    .INIT(64'h4000000000000000)) 
     \o_dq_idly_ce[7]_i_2 
        (.I0(\dq_idly_en_vtc_q[7]_i_3_n_0 ),
         .I1(p_0_in[1]),
@@ -8936,7 +8894,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT3 #(
     .INIT(8'h04)) 
     o_hb_reset_n_INST_0
-       (.I0(\delay_rst_ctrl_q_reg[3]_0 [3]),
+       (.I0(Q[3]),
         .I1(i_hb_rstn),
         .I2(o_hb_reset_n_0),
         .O(o_hb_reset_n));
@@ -8949,14 +8907,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT6 #(
     .INIT(64'h0000000000000020)) 
     o_odly_ce_i_2
-       (.I0(odly_en_vtc_q_i_3_n_0),
-        .I1(odly_en_vtc_q_i_4_n_0),
+       (.I0(odly_en_vtc_q_i_4_n_0),
+        .I1(odly_en_vtc_q_i_5_n_0),
         .I2(\axil_awaddr_q_reg_n_0_[8] ),
         .I3(\axil_awaddr_q_reg_n_0_[7] ),
         .I4(\axil_awaddr_q_reg_n_0_[2] ),
         .I5(o_odly_ce_i_3_n_0),
         .O(o_odly_ce_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair82" *) 
+  (* SOFT_HLUTNM = "soft_lutpair84" *) 
   LUT2 #(
     .INIT(4'h7)) 
     o_odly_ce_i_3
@@ -8972,11 +8930,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT6 #(
     .INIT(64'h0000000000000040)) 
     o_rwds_idly_ce_i_1
-       (.I0(odly_en_vtc_q_i_3_n_0),
+       (.I0(odly_en_vtc_q_i_4_n_0),
         .I1(\axil_awaddr_q_reg_n_0_[7] ),
         .I2(\axil_awaddr_q_reg_n_0_[8] ),
         .I3(\axil_awaddr_q_reg_n_0_[2] ),
-        .I4(odly_en_vtc_q_i_4_n_0),
+        .I4(odly_en_vtc_q_i_5_n_0),
         .I5(o_odly_ce_i_3_n_0),
         .O(o_rwds_idly_ce_i_1_n_0));
   FDRE o_rwds_idly_ce_reg
@@ -8986,23 +8944,26 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .Q(rwds_idly_ce),
         .R(o_odly_ce_i_1_n_0));
   LUT6 #(
-    .INIT(64'h0000002000000000)) 
+    .INIT(64'h0000000000000800)) 
     odly_en_vtc_q_i_1
-       (.I0(odly_en_vtc_q_i_3_n_0),
+       (.I0(\axil_awaddr_q_reg[11]_0 ),
         .I1(odly_en_vtc_q_i_4_n_0),
-        .I2(\axil_awaddr_q_reg_n_0_[8] ),
-        .I3(\axil_awaddr_q_reg_n_0_[7] ),
-        .I4(\axil_awaddr_q_reg_n_0_[2] ),
-        .I5(\axil_awaddr_q_reg[11]_0 ),
+        .I2(odly_en_vtc_q_i_5_n_0),
+        .I3(\axil_awaddr_q_reg_n_0_[8] ),
+        .I4(\axil_awaddr_q_reg_n_0_[7] ),
+        .I5(\axil_awaddr_q_reg_n_0_[2] ),
         .O(odly_en_vtc_q_i_1_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair78" *) 
-  LUT2 #(
-    .INIT(4'h8)) 
+  LUT6 #(
+    .INIT(64'hFFFFFFFFFEFFFFFF)) 
     odly_en_vtc_q_i_10
-       (.I0(\axil_awaddr_q_reg_n_0_[2] ),
-        .I1(\axil_awaddr_q_reg_n_0_[3] ),
+       (.I0(\delay_rst_ctrl_q[3]_i_5_n_0 ),
+        .I1(\axil_awaddr_q_reg_n_0_[0] ),
+        .I2(p_2_in),
+        .I3(\axil_awaddr_q_reg_n_0_[9] ),
+        .I4(\axil_awaddr_q_reg_n_0_[8] ),
+        .I5(odly_en_vtc_q_i_13_n_0),
         .O(odly_en_vtc_q_i_10_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair100" *) 
+  (* SOFT_HLUTNM = "soft_lutpair98" *) 
   LUT3 #(
     .INIT(8'h45)) 
     odly_en_vtc_q_i_11
@@ -9010,7 +8971,22 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(\axil_awaddr_q_reg_n_0_[3] ),
         .I2(\axil_awaddr_q_reg_n_0_[9] ),
         .O(odly_en_vtc_q_i_11_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair106" *) 
+  (* SOFT_HLUTNM = "soft_lutpair83" *) 
+  LUT2 #(
+    .INIT(4'h8)) 
+    odly_en_vtc_q_i_12
+       (.I0(\axil_awaddr_q_reg_n_0_[2] ),
+        .I1(\axil_awaddr_q_reg_n_0_[3] ),
+        .O(odly_en_vtc_q_i_12_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair102" *) 
+  LUT3 #(
+    .INIT(8'hEA)) 
+    odly_en_vtc_q_i_13
+       (.I0(\axil_awaddr_q_reg_n_0_[7] ),
+        .I1(\axil_awaddr_q_reg_n_0_[3] ),
+        .I2(\axil_awaddr_q_reg_n_0_[2] ),
+        .O(odly_en_vtc_q_i_13_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair105" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     odly_en_vtc_q_i_2
@@ -9018,34 +8994,34 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(s_axil_wstrb[0]),
         .I2(odly_en_vtc),
         .O(apply_wstrb32_return[0]));
-  (* SOFT_HLUTNM = "soft_lutpair90" *) 
+  LUT6 #(
+    .INIT(64'h1110000000000000)) 
+    odly_en_vtc_q_i_3
+       (.I0(odly_en_vtc_q_i_6_n_0),
+        .I1(odly_en_vtc_q_i_7_n_0),
+        .I2(odly_en_vtc_q_i_8_n_0),
+        .I3(odly_en_vtc_q_i_9_n_0),
+        .I4(odly_en_vtc_q_i_10_n_0),
+        .I5(s_axil_bvalid042_out),
+        .O(\axil_awaddr_q_reg[11]_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair89" *) 
   LUT3 #(
     .INIT(8'h45)) 
-    odly_en_vtc_q_i_3
+    odly_en_vtc_q_i_4
        (.I0(\axil_awaddr_q_reg_n_0_[9] ),
         .I1(\axil_awaddr_q_reg_n_0_[3] ),
         .I2(p_0_in[2]),
-        .O(odly_en_vtc_q_i_3_n_0));
+        .O(odly_en_vtc_q_i_4_n_0));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFEEFE)) 
-    odly_en_vtc_q_i_4
+    odly_en_vtc_q_i_5
        (.I0(\axil_awaddr_q_reg[1]_0 ),
         .I1(\axil_awaddr_q_reg_n_0_[9] ),
         .I2(\axil_awaddr_q_reg_n_0_[0] ),
         .I3(p_2_in),
         .I4(p_0_in[0]),
         .I5(\axil_awaddr_q_reg_n_0_[3] ),
-        .O(odly_en_vtc_q_i_4_n_0));
-  LUT6 #(
-    .INIT(64'h0000000010110000)) 
-    odly_en_vtc_q_i_5
-       (.I0(odly_en_vtc_q_i_6_n_0),
-        .I1(odly_en_vtc_q_i_7_n_0),
-        .I2(odly_en_vtc_q_i_8_n_0),
-        .I3(odly_en_vtc_q_i_9_n_0),
-        .I4(s_axil_bvalid042_out),
-        .I5(\s_axil_bresp[1]_i_6_n_0 ),
-        .O(\axil_awaddr_q_reg[11]_0 ));
+        .O(odly_en_vtc_q_i_5_n_0));
   (* SOFT_HLUTNM = "soft_lutpair77" *) 
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
@@ -9057,34 +9033,34 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(\axil_awaddr_q_reg_n_0_[13] ),
         .O(odly_en_vtc_q_i_6_n_0));
   LUT6 #(
-    .INIT(64'hFFFFFFFEFFFEFFFE)) 
+    .INIT(64'hFFFFFFFFFFFFFFF8)) 
     odly_en_vtc_q_i_7
-       (.I0(\axil_awaddr_q_reg_n_0_[0] ),
-        .I1(\axil_awaddr_q_reg_n_0_[10] ),
+       (.I0(\axil_awaddr_q_reg_n_0_[9] ),
+        .I1(\axil_awaddr_q_reg_n_0_[8] ),
         .I2(p_2_in),
         .I3(p_0_in[0]),
-        .I4(\axil_awaddr_q_reg_n_0_[8] ),
-        .I5(\axil_awaddr_q_reg_n_0_[9] ),
+        .I4(\axil_awaddr_q_reg_n_0_[10] ),
+        .I5(\axil_awaddr_q_reg_n_0_[0] ),
         .O(odly_en_vtc_q_i_7_n_0));
   LUT6 #(
-    .INIT(64'h0050000000030000)) 
+    .INIT(64'h0004000000000015)) 
     odly_en_vtc_q_i_8
-       (.I0(odly_en_vtc_q_i_10_n_0),
-        .I1(\axil_awaddr_q_reg_n_0_[9] ),
-        .I2(p_0_in[2]),
-        .I3(p_0_in[1]),
-        .I4(\axil_awaddr_q_reg_n_0_[7] ),
-        .I5(\axil_awaddr_q_reg_n_0_[8] ),
-        .O(odly_en_vtc_q_i_8_n_0));
-  LUT6 #(
-    .INIT(64'hFFFBFFFFFFFFFFEA)) 
-    odly_en_vtc_q_i_9
        (.I0(p_0_in[2]),
         .I1(\axil_awaddr_q_reg_n_0_[2] ),
         .I2(\axil_awaddr_q_reg_n_0_[3] ),
         .I3(\axil_awaddr_q_reg_n_0_[7] ),
         .I4(p_0_in[1]),
         .I5(odly_en_vtc_q_i_11_n_0),
+        .O(odly_en_vtc_q_i_8_n_0));
+  LUT6 #(
+    .INIT(64'h0050000000030000)) 
+    odly_en_vtc_q_i_9
+       (.I0(odly_en_vtc_q_i_12_n_0),
+        .I1(\axil_awaddr_q_reg_n_0_[9] ),
+        .I2(p_0_in[2]),
+        .I3(p_0_in[1]),
+        .I4(\axil_awaddr_q_reg_n_0_[7] ),
+        .I5(\axil_awaddr_q_reg_n_0_[8] ),
         .O(odly_en_vtc_q_i_9_n_0));
   FDSE odly_en_vtc_q_reg
        (.C(i_axi_aclk),
@@ -9092,7 +9068,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(apply_wstrb32_return[0]),
         .Q(odly_en_vtc),
         .S(fifo_rst_axi_wr));
-  (* SOFT_HLUTNM = "soft_lutpair105" *) 
+  (* SOFT_HLUTNM = "soft_lutpair104" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     odly_inc_q_i_1
@@ -9112,14 +9088,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.I0(\axil_awaddr_q_reg[11]_0 ),
         .I1(\axil_awaddr_q_reg_n_0_[8] ),
         .I2(\axil_awaddr_q_reg_n_0_[7] ),
-        .I3(odly_en_vtc_q_i_3_n_0),
+        .I3(odly_en_vtc_q_i_4_n_0),
         .I4(\odly_time_value_q[7]_i_2_n_0 ),
         .O(\odly_time_value_q[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair102" *) 
+  (* SOFT_HLUTNM = "soft_lutpair100" *) 
   LUT3 #(
     .INIT(8'hBF)) 
     \odly_time_value_q[7]_i_2 
-       (.I0(odly_en_vtc_q_i_4_n_0),
+       (.I0(odly_en_vtc_q_i_5_n_0),
         .I1(\axil_awaddr_q_reg_n_0_[2] ),
         .I2(s_axil_wstrb[0]),
         .O(\odly_time_value_q[7]_i_2_n_0 ));
@@ -9131,7 +9107,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I2(\axil_awaddr_q_reg_n_0_[2] ),
         .I3(s_axil_wstrb[1]),
         .I4(\odly_time_value_q[8]_i_2_n_0 ),
-        .I5(CNTVALUEIN[8]),
+        .I5(\odly_time_value_q_reg[8]_0 [8]),
         .O(\odly_time_value_q[8]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFBAFFFF)) 
@@ -9139,7 +9115,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.I0(\axil_awaddr_q_reg_n_0_[9] ),
         .I1(\axil_awaddr_q_reg_n_0_[3] ),
         .I2(p_0_in[2]),
-        .I3(odly_en_vtc_q_i_4_n_0),
+        .I3(odly_en_vtc_q_i_5_n_0),
         .I4(\axil_awaddr_q_reg_n_0_[8] ),
         .I5(\axil_awaddr_q_reg_n_0_[7] ),
         .O(\odly_time_value_q[8]_i_2_n_0 ));
@@ -9147,67 +9123,67 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[0]),
-        .Q(CNTVALUEIN[0]),
+        .Q(\odly_time_value_q_reg[8]_0 [0]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[1] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[1]),
-        .Q(CNTVALUEIN[1]),
+        .Q(\odly_time_value_q_reg[8]_0 [1]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[2] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[2]),
-        .Q(CNTVALUEIN[2]),
+        .Q(\odly_time_value_q_reg[8]_0 [2]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[3] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[3]),
-        .Q(CNTVALUEIN[3]),
+        .Q(\odly_time_value_q_reg[8]_0 [3]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[4] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[4]),
-        .Q(CNTVALUEIN[4]),
+        .Q(\odly_time_value_q_reg[8]_0 [4]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[5] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[5]),
-        .Q(CNTVALUEIN[5]),
+        .Q(\odly_time_value_q_reg[8]_0 [5]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[6] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[6]),
-        .Q(CNTVALUEIN[6]),
+        .Q(\odly_time_value_q_reg[8]_0 [6]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[7] 
        (.C(i_axi_aclk),
         .CE(\odly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[7]),
-        .Q(CNTVALUEIN[7]),
+        .Q(\odly_time_value_q_reg[8]_0 [7]),
         .R(fifo_rst_axi_wr));
   FDRE \odly_time_value_q_reg[8] 
        (.C(i_axi_aclk),
         .CE(1'b1),
         .D(\odly_time_value_q[8]_i_1_n_0 ),
-        .Q(CNTVALUEIN[8]),
+        .Q(\odly_time_value_q_reg[8]_0 [8]),
         .R(fifo_rst_axi_wr));
   LUT6 #(
     .INIT(64'h0000000000002000)) 
     rwds_idly_en_vtc_q_i_1
        (.I0(\axil_awaddr_q_reg[11]_0 ),
-        .I1(odly_en_vtc_q_i_3_n_0),
+        .I1(odly_en_vtc_q_i_4_n_0),
         .I2(\axil_awaddr_q_reg_n_0_[7] ),
         .I3(\axil_awaddr_q_reg_n_0_[8] ),
         .I4(\axil_awaddr_q_reg_n_0_[2] ),
-        .I5(odly_en_vtc_q_i_4_n_0),
+        .I5(odly_en_vtc_q_i_5_n_0),
         .O(rwds_idly_en_vtc_q_i_1_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair106" *) 
+  (* SOFT_HLUTNM = "soft_lutpair105" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     rwds_idly_en_vtc_q_i_2
@@ -9221,7 +9197,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(rwds_idly_en_vtc_q_i_2_n_0),
         .Q(rwds_idly_en_vtc),
         .S(fifo_rst_axi_wr));
-  (* SOFT_HLUTNM = "soft_lutpair105" *) 
+  (* SOFT_HLUTNM = "soft_lutpair104" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     rwds_idly_inc_q_i_1
@@ -9239,29 +9215,30 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h00002000)) 
     \rwds_idly_time_value_q[7]_i_1 
        (.I0(\rwds_idly_time_value_q[7]_i_2_n_0 ),
-        .I1(odly_en_vtc_q_i_4_n_0),
+        .I1(odly_en_vtc_q_i_5_n_0),
         .I2(\axil_awaddr_q_reg_n_0_[2] ),
         .I3(s_axil_wstrb[0]),
-        .I4(odly_en_vtc_q_i_3_n_0),
+        .I4(odly_en_vtc_q_i_4_n_0),
         .O(\rwds_idly_time_value_q[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair100" *) 
+  (* SOFT_HLUTNM = "soft_lutpair98" *) 
   LUT3 #(
     .INIT(8'h80)) 
     \rwds_idly_time_value_q[7]_i_2 
-       (.I0(\axil_awaddr_q_reg_n_0_[8] ),
-        .I1(\axil_awaddr_q_reg_n_0_[7] ),
-        .I2(\axil_awaddr_q_reg[11]_0 ),
+       (.I0(\axil_awaddr_q_reg[11]_0 ),
+        .I1(\axil_awaddr_q_reg_n_0_[8] ),
+        .I2(\axil_awaddr_q_reg_n_0_[7] ),
         .O(\rwds_idly_time_value_q[7]_i_2_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFFFB00000008)) 
     \rwds_idly_time_value_q[8]_i_1 
        (.I0(s_axil_wdata[8]),
         .I1(\rwds_idly_time_value_q[7]_i_2_n_0 ),
-        .I2(odly_en_vtc_q_i_3_n_0),
+        .I2(odly_en_vtc_q_i_4_n_0),
         .I3(\rwds_idly_time_value_q[8]_i_2_n_0 ),
-        .I4(odly_en_vtc_q_i_4_n_0),
-        .I5(\rwds_idly_time_value_q_reg[8]_0 [8]),
+        .I4(odly_en_vtc_q_i_5_n_0),
+        .I5(CNTVALUEIN[8]),
         .O(\rwds_idly_time_value_q[8]_i_1_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair102" *) 
   LUT2 #(
     .INIT(4'h7)) 
     \rwds_idly_time_value_q[8]_i_2 
@@ -9272,55 +9249,55 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[0]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [0]),
+        .Q(CNTVALUEIN[0]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[1] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[1]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [1]),
+        .Q(CNTVALUEIN[1]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[2] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[2]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [2]),
+        .Q(CNTVALUEIN[2]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[3] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[3]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [3]),
+        .Q(CNTVALUEIN[3]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[4] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[4]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [4]),
+        .Q(CNTVALUEIN[4]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[5] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[5]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [5]),
+        .Q(CNTVALUEIN[5]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[6] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[6]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [6]),
+        .Q(CNTVALUEIN[6]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[7] 
        (.C(i_axi_aclk),
         .CE(\rwds_idly_time_value_q[7]_i_1_n_0 ),
         .D(s_axil_wdata[7]),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [7]),
+        .Q(CNTVALUEIN[7]),
         .R(fifo_rst_axi_wr));
   FDRE \rwds_idly_time_value_q_reg[8] 
        (.C(i_axi_aclk),
         .CE(1'b1),
         .D(\rwds_idly_time_value_q[8]_i_1_n_0 ),
-        .Q(\rwds_idly_time_value_q_reg[8]_0 [8]),
+        .Q(CNTVALUEIN[8]),
         .R(fifo_rst_axi_wr));
   LUT1 #(
     .INIT(2'h1)) 
@@ -9333,7 +9310,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(axil_ar_can_accept),
         .Q(s_axil_arready),
         .R(fifo_rst_axi_wr));
-  (* SOFT_HLUTNM = "soft_lutpair101" *) 
+  (* SOFT_HLUTNM = "soft_lutpair99" *) 
   LUT2 #(
     .INIT(4'h1)) 
     s_axil_awready_i_1
@@ -9343,8 +9320,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFFFF7)) 
     s_axil_awready_i_2
-       (.I0(Q[0]),
-        .I1(Q[1]),
+       (.I0(\FSM_sequential_axil_state_reg[1]_0 [0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .I2(hb_timeout_block_axi),
         .I3(s_axi_awvalid),
         .I4(aw_pending),
@@ -9360,12 +9337,12 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h0000D000)) 
     \s_axil_bresp[1]_i_1 
        (.I0(s_axil_bvalid042_out),
-        .I1(\s_axil_bresp[1]_i_3_n_0 ),
+        .I1(\axil_awaddr_q_reg[2]_0 ),
         .I2(s_axil_bresp),
         .I3(D[2]),
         .I4(\s_axil_bresp[1]_i_4_n_0 ),
         .O(\s_axil_bresp[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair101" *) 
+  (* SOFT_HLUTNM = "soft_lutpair99" *) 
   LUT3 #(
     .INIT(8'h20)) 
     \s_axil_bresp[1]_i_2 
@@ -9373,58 +9350,23 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(\FSM_sequential_axil_state_reg[0]_0 ),
         .I2(axil_aw_seen_reg_n_0),
         .O(s_axil_bvalid042_out));
-  LUT6 #(
-    .INIT(64'h0000000002220000)) 
+  (* SOFT_HLUTNM = "soft_lutpair100" *) 
+  LUT3 #(
+    .INIT(8'h07)) 
     \s_axil_bresp[1]_i_3 
-       (.I0(\s_axil_bresp[1]_i_5_n_0 ),
-        .I1(\s_axil_bresp[1]_i_6_n_0 ),
-        .I2(\axil_awaddr_q_reg_n_0_[2] ),
-        .I3(p_2_in),
-        .I4(\s_axil_bresp[1]_i_7_n_0 ),
-        .I5(\axil_awaddr_q_reg_n_0_[3] ),
-        .O(\s_axil_bresp[1]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair80" *) 
+       (.I0(\axil_awaddr_q_reg_n_0_[2] ),
+        .I1(p_2_in),
+        .I2(\o_cmd_fifo_din_axil[25]_i_2_n_0 ),
+        .O(\axil_awaddr_q_reg[2]_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair81" *) 
   LUT4 #(
     .INIT(16'h4000)) 
     \s_axil_bresp[1]_i_4 
-       (.I0(Q[0]),
-        .I1(Q[1]),
+       (.I0(\FSM_sequential_axil_state_reg[1]_0 [0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .I2(data_valid),
         .I3(axil_rsp_pop_pending_reg_0),
         .O(\s_axil_bresp[1]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair76" *) 
-  LUT3 #(
-    .INIT(8'h02)) 
-    \s_axil_bresp[1]_i_5 
-       (.I0(\o_cmd_fifo_din_axil[35]_i_6_n_0 ),
-        .I1(\axil_awaddr_q_reg_n_0_[0] ),
-        .I2(\axil_awaddr_q_reg_n_0_[10] ),
-        .O(\s_axil_bresp[1]_i_5_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000001000000)) 
-    \s_axil_bresp[1]_i_6 
-       (.I0(\delay_rst_ctrl_q[3]_i_5_n_0 ),
-        .I1(\axil_awaddr_q_reg_n_0_[0] ),
-        .I2(p_2_in),
-        .I3(\axil_awaddr_q_reg_n_0_[9] ),
-        .I4(\axil_awaddr_q_reg_n_0_[8] ),
-        .I5(\s_axil_bresp[1]_i_8_n_0 ),
-        .O(\s_axil_bresp[1]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair72" *) 
-  LUT2 #(
-    .INIT(4'h1)) 
-    \s_axil_bresp[1]_i_7 
-       (.I0(p_0_in[0]),
-        .I1(p_0_in[1]),
-        .O(\s_axil_bresp[1]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair102" *) 
-  LUT3 #(
-    .INIT(8'hEA)) 
-    \s_axil_bresp[1]_i_8 
-       (.I0(\axil_awaddr_q_reg_n_0_[7] ),
-        .I1(\axil_awaddr_q_reg_n_0_[3] ),
-        .I2(\axil_awaddr_q_reg_n_0_[2] ),
-        .O(\s_axil_bresp[1]_i_8_n_0 ));
   FDRE \s_axil_bresp_reg[1] 
        (.C(i_axi_aclk),
         .CE(1'b1),
@@ -9432,10 +9374,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .Q(s_axil_bresp),
         .R(1'b0));
   LUT6 #(
-    .INIT(64'h00000000FFF20000)) 
+    .INIT(64'h00000000FFF40000)) 
     s_axil_bvalid_i_1
-       (.I0(s_axil_bvalid042_out),
-        .I1(\s_axil_bresp[1]_i_3_n_0 ),
+       (.I0(\axil_awaddr_q_reg[2]_0 ),
+        .I1(s_axil_bvalid042_out),
         .I2(\s_axil_bresp[1]_i_4_n_0 ),
         .I3(s_axil_bvalid_reg_0),
         .I4(D[2]),
@@ -9445,8 +9387,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   LUT4 #(
     .INIT(16'h4000)) 
     s_axil_bvalid_i_2
-       (.I0(Q[0]),
-        .I1(Q[1]),
+       (.I0(\FSM_sequential_axil_state_reg[1]_0 [0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .I2(s_axil_bready),
         .I3(s_axil_bvalid_reg_0),
         .O(s_axil_bvalid_i_2_n_0));
@@ -9463,7 +9405,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I1(dout[0]),
         .I2(\s_axil_rdata[0]_i_2_n_0 ),
         .I3(\s_axil_rdata[0]_i_3_n_0 ),
-        .I4(\s_axil_rdata[8]_i_5_n_0 ),
+        .I4(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[0]));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
@@ -9505,71 +9447,90 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[36]),
         .O(\s_axil_rdata[0]_i_13_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair79" *) 
-  LUT5 #(
-    .INIT(32'hFEFFFEFE)) 
+  (* SOFT_HLUTNM = "soft_lutpair110" *) 
+  LUT3 #(
+    .INIT(8'h04)) 
     \s_axil_rdata[0]_i_16 
-       (.I0(s_axil_araddr[3]),
-        .I1(s_axil_araddr[4]),
-        .I2(s_axil_araddr[5]),
-        .I3(rwds_idly_en_vtc),
-        .I4(s_axil_araddr[6]),
+       (.I0(s_axil_araddr[9]),
+        .I1(s_axil_araddr[7]),
+        .I2(s_axil_araddr[8]),
         .O(\s_axil_rdata[0]_i_16_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair83" *) 
-  LUT5 #(
-    .INIT(32'h00100000)) 
-    \s_axil_rdata[0]_i_19 
-       (.I0(s_axil_araddr[8]),
-        .I1(s_axil_araddr[9]),
-        .I2(hb_clk_ce_force),
-        .I3(s_axil_araddr[6]),
-        .I4(s_axil_araddr[7]),
-        .O(\s_axil_araddr[8]_0 ));
   LUT6 #(
-    .INIT(64'hFAFAABFBFFFFABFB)) 
+    .INIT(64'h0011100000001000)) 
+    \s_axil_rdata[0]_i_17 
+       (.I0(s_axil_araddr[6]),
+        .I1(s_axil_araddr[7]),
+        .I2(\odly_time_value_q_reg[8]_0 [0]),
+        .I3(s_axil_araddr[8]),
+        .I4(s_axil_araddr[9]),
+        .I5(idelayctrl_rdy_axi),
+        .O(\s_axil_rdata[0]_i_17_n_0 ));
+  LUT6 #(
+    .INIT(64'hF5F557F7FFFF57F7)) 
     \s_axil_rdata[0]_i_2 
-       (.I0(\s_axil_araddr[1]_0 ),
+       (.I0(\s_axil_rdata[8]_i_4_n_0 ),
         .I1(\s_axil_rdata_reg[0]_i_4_n_0 ),
         .I2(s_axil_araddr[2]),
         .I3(\s_axil_rdata_reg[0]_i_5_n_0 ),
         .I4(s_axil_araddr[3]),
         .I5(\s_axil_rdata_reg[0]_0 ),
         .O(\s_axil_rdata[0]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair79" *) 
   LUT5 #(
-    .INIT(32'h08AA0808)) 
+    .INIT(32'h0000FBCB)) 
+    \s_axil_rdata[0]_i_20 
+       (.I0(timeout_status_q_reg_0),
+        .I1(s_axil_araddr[7]),
+        .I2(s_axil_araddr[8]),
+        .I3(odly_en_vtc),
+        .I4(\s_axil_rdata[0]_i_21_n_0 ),
+        .O(timeout_status_q_reg_1));
+  (* SOFT_HLUTNM = "soft_lutpair80" *) 
+  LUT5 #(
+    .INIT(32'hFEFEFFFE)) 
+    \s_axil_rdata[0]_i_21 
+       (.I0(s_axil_araddr[5]),
+        .I1(s_axil_araddr[4]),
+        .I2(s_axil_araddr[3]),
+        .I3(s_axil_araddr[6]),
+        .I4(rwds_idly_en_vtc),
+        .O(\s_axil_rdata[0]_i_21_n_0 ));
+  LUT6 #(
+    .INIT(64'h00000000AEFFAE00)) 
     \s_axil_rdata[0]_i_3 
-       (.I0(s_axil_araddr_1_sn_1),
-        .I1(\s_axil_rdata[0]_i_7_n_0 ),
+       (.I0(\s_axil_rdata[0]_i_7_n_0 ),
+        .I1(\s_axil_rdata[2]_i_4_n_0 ),
         .I2(\s_axil_rdata[0]_i_8_n_0 ),
-        .I3(\s_axil_rdata_reg[0]_1 ),
-        .I4(s_axil_araddr[2]),
+        .I3(s_axil_araddr[2]),
+        .I4(\s_axil_rdata_reg[0]_1 ),
+        .I5(s_axil_araddr_1_sn_1),
         .O(\s_axil_rdata[0]_i_3_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFFF55455045)) 
+    .INIT(64'h0000004000000000)) 
     \s_axil_rdata[0]_i_7 
-       (.I0(\s_axil_rdata[0]_i_16_n_0 ),
-        .I1(timeout_status_q_reg_0),
-        .I2(s_axil_araddr[7]),
-        .I3(s_axil_araddr[8]),
-        .I4(odly_en_vtc),
-        .I5(\s_axil_rdata[0]_i_3_0 ),
+       (.I0(s_axil_araddr[6]),
+        .I1(\s_axil_rdata[0]_i_16_n_0 ),
+        .I2(hb_clk_ce_force),
+        .I3(s_axil_araddr[4]),
+        .I4(s_axil_araddr[5]),
+        .I5(s_axil_araddr[3]),
         .O(\s_axil_rdata[0]_i_7_n_0 ));
   LUT6 #(
-    .INIT(64'hFBFBFFFFFEFEEBFB)) 
+    .INIT(64'h00000000DFDF00DF)) 
     \s_axil_rdata[0]_i_8 
-       (.I0(s_axil_araddr[2]),
-        .I1(s_axil_araddr[8]),
-        .I2(s_axil_araddr[9]),
-        .I3(\delay_rst_ctrl_q_reg[3]_0 [0]),
-        .I4(s_axil_araddr[7]),
-        .I5(s_axil_araddr[6]),
+       (.I0(\s_axil_rdata[0]_i_16_n_0 ),
+        .I1(s_axil_araddr[6]),
+        .I2(o_axif_rwds_cntr[0]),
+        .I3(CNTVALUEIN[0]),
+        .I4(\s_axil_araddr[7]_0 ),
+        .I5(\s_axil_rdata[0]_i_17_n_0 ),
         .O(\s_axil_rdata[0]_i_8_n_0 ));
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[10]_i_1 
        (.I0(dout[10]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[10]));
@@ -9577,8 +9538,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[11]_i_1 
        (.I0(dout[11]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[11]));
@@ -9586,8 +9547,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[12]_i_1 
        (.I0(dout[12]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[12]));
@@ -9595,8 +9556,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[13]_i_1 
        (.I0(dout[13]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[13]));
@@ -9604,8 +9565,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[14]_i_1 
        (.I0(dout[14]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[14]));
@@ -9613,8 +9574,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[15]_i_1 
        (.I0(dout[15]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[15]));
@@ -9622,8 +9583,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[16]_i_1 
        (.I0(dout[16]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[16]));
@@ -9631,8 +9592,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[17]_i_1 
        (.I0(dout[17]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[17]));
@@ -9640,8 +9601,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[18]_i_1 
        (.I0(dout[18]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[18]));
@@ -9649,123 +9610,114 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[19]_i_1 
        (.I0(dout[19]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[19]));
-  LUT4 #(
-    .INIT(16'h8F88)) 
+  LUT5 #(
+    .INIT(32'hFF8F8888)) 
     \s_axil_rdata[1]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[1]),
         .I2(\s_axil_rdata[1]_i_2_n_0 ),
-        .I3(\s_axil_rdata[8]_i_5_n_0 ),
+        .I3(\s_axil_rdata_reg[1]_0 ),
+        .I4(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[1]));
   LUT6 #(
-    .INIT(64'h2020000000003C0C)) 
-    \s_axil_rdata[1]_i_11 
-       (.I0(rwds_idly_inc),
-        .I1(s_axil_araddr[9]),
-        .I2(s_axil_araddr[8]),
-        .I3(odly_inc),
-        .I4(s_axil_araddr[7]),
-        .I5(s_axil_araddr[6]),
-        .O(\s_axil_rdata[1]_i_11_n_0 ));
-  LUT6 #(
-    .INIT(64'h0400040400000004)) 
-    \s_axil_rdata[1]_i_13 
-       (.I0(s_axil_araddr[9]),
-        .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[3]),
-        .I3(s_axil_araddr[5]),
-        .I4(\s_axil_rdata[1]_i_19_n_0 ),
-        .I5(\s_axil_rdata[2]_i_16_n_0 ),
-        .O(\s_axil_rdata[1]_i_13_n_0 ));
-  LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_14 
-       (.I0(dq_idly_inc[3]),
-        .I1(dq_idly_inc[2]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_inc[1]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_inc[0]),
-        .O(\s_axil_rdata[1]_i_14_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_15 
-       (.I0(dq_idly_inc[7]),
-        .I1(dq_idly_inc[6]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_inc[5]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_inc[4]),
-        .O(\s_axil_rdata[1]_i_15_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_16 
+    \s_axil_rdata[1]_i_10 
        (.I0(dq_idly_cntvaluein[28]),
         .I1(dq_idly_cntvaluein[19]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[10]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[1]),
-        .O(\s_axil_rdata[1]_i_16_n_0 ));
+        .O(\s_axil_rdata[1]_i_10_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_17 
+    \s_axil_rdata[1]_i_11 
        (.I0(dq_idly_cntvaluein[64]),
         .I1(dq_idly_cntvaluein[55]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[46]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[37]),
-        .O(\s_axil_rdata[1]_i_17_n_0 ));
+        .O(\s_axil_rdata[1]_i_11_n_0 ));
   LUT6 #(
-    .INIT(64'h77CCCFFF77FFCFFF)) 
-    \s_axil_rdata[1]_i_19 
-       (.I0(\rwds_idly_time_value_q_reg[8]_0 [1]),
+    .INIT(64'h0000000011111511)) 
+    \s_axil_rdata[1]_i_15 
+       (.I0(s_axil_araddr[3]),
         .I1(s_axil_araddr[6]),
-        .I2(CNTVALUEIN[1]),
-        .I3(s_axil_araddr[8]),
+        .I2(\s_axil_rdata[8]_i_14_n_0 ),
+        .I3(CNTVALUEIN[1]),
+        .I4(s_axil_araddr[9]),
+        .I5(\s_axil_rdata[1]_i_19_n_0 ),
+        .O(s_axil_araddr_3_sn_1));
+  (* SOFT_HLUTNM = "soft_lutpair110" *) 
+  LUT3 #(
+    .INIT(8'hBF)) 
+    \s_axil_rdata[1]_i_16 
+       (.I0(s_axil_araddr[9]),
+        .I1(s_axil_araddr[8]),
+        .I2(s_axil_araddr[7]),
+        .O(s_axil_araddr_9_sn_1));
+  LUT6 #(
+    .INIT(64'h00C0032000000320)) 
+    \s_axil_rdata[1]_i_18 
+       (.I0(odly_inc),
+        .I1(s_axil_araddr[7]),
+        .I2(s_axil_araddr[8]),
+        .I3(s_axil_araddr[9]),
+        .I4(s_axil_araddr[6]),
+        .I5(rwds_idly_inc),
+        .O(odly_inc_q_reg_0));
+  LUT6 #(
+    .INIT(64'h00000000FFF3FF5F)) 
+    \s_axil_rdata[1]_i_19 
+       (.I0(\odly_time_value_q_reg[8]_0 [1]),
+        .I1(o_axif_rwds_cntr[1]),
+        .I2(s_axil_araddr[8]),
+        .I3(s_axil_araddr[9]),
         .I4(s_axil_araddr[7]),
-        .I5(o_axif_rwds_cntr[0]),
+        .I5(s_axil_araddr[6]),
         .O(\s_axil_rdata[1]_i_19_n_0 ));
   LUT6 #(
-    .INIT(64'h7444774474777777)) 
+    .INIT(64'hF5F557F7FFFF57F7)) 
     \s_axil_rdata[1]_i_2 
-       (.I0(\s_axil_rdata[1]_i_3_n_0 ),
-        .I1(\s_axil_araddr[1]_0 ),
+       (.I0(\s_axil_rdata[8]_i_4_n_0 ),
+        .I1(\s_axil_rdata_reg[1]_i_4_n_0 ),
         .I2(s_axil_araddr[2]),
-        .I3(s_axil_araddr[3]),
-        .I4(\s_axil_rdata_reg[1]_0 ),
-        .I5(\s_axil_rdata_reg[1]_i_5_n_0 ),
+        .I3(\s_axil_rdata_reg[1]_i_5_n_0 ),
+        .I4(s_axil_araddr[3]),
+        .I5(\s_axil_rdata_reg[1]_1 ),
         .O(\s_axil_rdata[1]_i_2_n_0 ));
-  LUT4 #(
-    .INIT(16'h00A2)) 
-    \s_axil_rdata[1]_i_3 
-       (.I0(\s_axil_rdata[1]_i_6_n_0 ),
-        .I1(s_axil_araddr[9]),
-        .I2(\delay_rst_ctrl_q_reg[3]_0 [1]),
-        .I3(\s_axil_rdata[8]_i_13_n_0 ),
-        .O(\s_axil_rdata[1]_i_3_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFFF11100010)) 
-    \s_axil_rdata[1]_i_6 
-       (.I0(s_axil_araddr[5]),
-        .I1(s_axil_araddr[2]),
-        .I2(\s_axil_rdata[1]_i_11_n_0 ),
-        .I3(s_axil_araddr[3]),
-        .I4(\s_axil_rdata[1]_i_3_0 ),
-        .I5(\s_axil_rdata[1]_i_13_n_0 ),
-        .O(\s_axil_rdata[1]_i_6_n_0 ));
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[1]_i_8 
+       (.I0(dq_idly_inc[3]),
+        .I1(dq_idly_inc[2]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_inc[1]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_inc[0]),
+        .O(\s_axil_rdata[1]_i_8_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[1]_i_9 
+       (.I0(dq_idly_inc[7]),
+        .I1(dq_idly_inc[6]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_inc[5]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_inc[4]),
+        .O(\s_axil_rdata[1]_i_9_n_0 ));
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[20]_i_1 
        (.I0(dout[20]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[20]));
@@ -9773,8 +9725,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[21]_i_1 
        (.I0(dout[21]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[21]));
@@ -9782,8 +9734,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[22]_i_1 
        (.I0(dout[22]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[22]));
@@ -9791,51 +9743,76 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[23]_i_1 
        (.I0(dout[23]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[23]));
-  LUT6 #(
-    .INIT(64'hFFFFFFFFFFFFFFFE)) 
-    \s_axil_rdata[24]_i_2 
-       (.I0(s_axil_araddr[14]),
-        .I1(s_axil_araddr[15]),
-        .I2(s_axil_araddr[12]),
-        .I3(s_axil_araddr[13]),
-        .I4(s_axil_araddr[11]),
-        .I5(s_axil_araddr[10]),
-        .O(s_axil_araddr_14_sn_1));
-  (* SOFT_HLUTNM = "soft_lutpair98" *) 
-  LUT2 #(
-    .INIT(4'h7)) 
-    \s_axil_rdata[24]_i_3 
-       (.I0(s_axil_araddr[2]),
-        .I1(s_axil_araddr[5]),
-        .O(s_axil_araddr_2_sn_1));
-  (* SOFT_HLUTNM = "soft_lutpair93" *) 
+  (* SOFT_HLUTNM = "soft_lutpair121" *) 
   LUT2 #(
     .INIT(4'hE)) 
+    \s_axil_rdata[24]_i_2 
+       (.I0(\s_axil_rdata[24]_i_5_n_0 ),
+        .I1(\s_axil_rdata[24]_i_6_n_0 ),
+        .O(s_axil_araddr_1_sn_1));
+  (* SOFT_HLUTNM = "soft_lutpair86" *) 
+  LUT4 #(
+    .INIT(16'h0001)) 
+    \s_axil_rdata[24]_i_3 
+       (.I0(s_axil_araddr[6]),
+        .I1(s_axil_araddr[7]),
+        .I2(s_axil_araddr[8]),
+        .I3(s_axil_araddr[9]),
+        .O(\s_axil_araddr[6]_0 ));
+  LUT3 #(
+    .INIT(8'hBF)) 
     \s_axil_rdata[24]_i_4 
-       (.I0(s_axil_araddr[1]),
-        .I1(s_axil_araddr[0]),
-        .O(\s_axil_araddr[1]_1 ));
-  LUT6 #(
-    .INIT(64'h0000000000000001)) 
+       (.I0(s_axil_araddr[3]),
+        .I1(s_axil_araddr[5]),
+        .I2(s_axil_araddr[2]),
+        .O(\s_axil_araddr[3]_0 ));
+  LUT5 #(
+    .INIT(32'hFFFFFFFD)) 
     \s_axil_rdata[24]_i_5 
-       (.I0(s_axil_araddr[4]),
-        .I1(s_axil_araddr[3]),
-        .I2(s_axil_araddr[7]),
+       (.I0(\s_axil_rdata[31]_i_6_n_0 ),
+        .I1(s_axil_araddr[1]),
+        .I2(s_axil_araddr[11]),
+        .I3(s_axil_araddr[10]),
+        .I4(s_axil_araddr[0]),
+        .O(\s_axil_rdata[24]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000008000800080)) 
+    \s_axil_rdata[24]_i_6 
+       (.I0(\s_axil_rdata[24]_i_7_n_0 ),
+        .I1(s_axil_araddr[9]),
+        .I2(s_axil_araddr[8]),
+        .I3(s_axil_araddr[7]),
+        .I4(s_axil_araddr[3]),
+        .I5(s_axil_araddr[2]),
+        .O(\s_axil_rdata[24]_i_6_n_0 ));
+  LUT6 #(
+    .INIT(64'h1FFFFFFFFFFFFFFF)) 
+    \s_axil_rdata[24]_i_7 
+       (.I0(\s_axil_rdata[24]_i_8_n_0 ),
+        .I1(s_axil_araddr[1]),
+        .I2(s_axil_araddr[5]),
         .I3(s_axil_araddr[6]),
-        .I4(s_axil_araddr[9]),
-        .I5(s_axil_araddr[8]),
-        .O(\s_axil_araddr[4]_0 ));
+        .I4(s_axil_araddr[3]),
+        .I5(s_axil_araddr[4]),
+        .O(\s_axil_rdata[24]_i_7_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair95" *) 
+  LUT2 #(
+    .INIT(4'hE)) 
+    \s_axil_rdata[24]_i_8 
+       (.I0(s_axil_araddr[2]),
+        .I1(s_axil_araddr[0]),
+        .O(\s_axil_rdata[24]_i_8_n_0 ));
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[25]_i_1 
        (.I0(dout[24]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[25]));
@@ -9843,8 +9820,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[26]_i_1 
        (.I0(dout[25]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[26]));
@@ -9852,8 +9829,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[27]_i_1 
        (.I0(dout[26]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[27]));
@@ -9861,8 +9838,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[28]_i_1 
        (.I0(dout[27]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[28]));
@@ -9870,158 +9847,129 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
     .INIT(32'h20000000)) 
     \s_axil_rdata[29]_i_1 
        (.I0(dout[28]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[29]));
   LUT6 #(
-    .INIT(64'hFFFFFFFF00800000)) 
+    .INIT(64'h8FFF8F8F88888888)) 
     \s_axil_rdata[2]_i_1 
-       (.I0(data_valid),
-        .I1(axil_rsp_pop_pending_reg_0),
-        .I2(Q[0]),
-        .I3(Q[1]),
-        .I4(dout[2]),
-        .I5(\s_axil_rdata[2]_i_2_n_0 ),
+       (.I0(\gdvld.data_valid_std_reg ),
+        .I1(dout[2]),
+        .I2(\s_axil_rdata[2]_i_2_n_0 ),
+        .I3(\s_axil_rdata_reg[2]_0 ),
+        .I4(\s_axil_rdata[8]_i_4_n_0 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[2]));
   LUT6 #(
-    .INIT(64'h0000000400000000)) 
-    \s_axil_rdata[2]_i_11 
-       (.I0(s_axil_araddr[8]),
-        .I1(s_axil_araddr_7_sn_1),
-        .I2(s_axil_araddr[2]),
-        .I3(s_axil_araddr[5]),
-        .I4(s_axil_araddr[3]),
-        .I5(s_axil_araddr[9]),
-        .O(\s_axil_rdata[2]_i_11_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000E20000)) 
-    \s_axil_rdata[2]_i_12 
-       (.I0(\s_axil_rdata[2]_i_15_n_0 ),
-        .I1(s_axil_araddr[5]),
-        .I2(\s_axil_rdata[2]_i_16_n_0 ),
-        .I3(s_axil_araddr[9]),
-        .I4(s_axil_araddr[2]),
-        .I5(s_axil_araddr[3]),
-        .O(\s_axil_rdata[2]_i_12_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair84" *) 
-  LUT5 #(
-    .INIT(32'hEAEEEEEE)) 
-    \s_axil_rdata[2]_i_14 
-       (.I0(s_axil_araddr[2]),
-        .I1(s_axil_araddr[6]),
-        .I2(s_axil_araddr[9]),
-        .I3(s_axil_araddr[8]),
-        .I4(s_axil_araddr[7]),
-        .O(\s_axil_araddr[2]_0 ));
-  LUT6 #(
-    .INIT(64'h8833300088003000)) 
-    \s_axil_rdata[2]_i_15 
-       (.I0(\rwds_idly_time_value_q_reg[8]_0 [2]),
-        .I1(s_axil_araddr[6]),
-        .I2(CNTVALUEIN[2]),
-        .I3(s_axil_araddr[8]),
-        .I4(s_axil_araddr[7]),
-        .I5(o_axif_rwds_cntr[1]),
-        .O(\s_axil_rdata[2]_i_15_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair83" *) 
-  LUT3 #(
-    .INIT(8'h01)) 
-    \s_axil_rdata[2]_i_16 
-       (.I0(s_axil_araddr[6]),
-        .I1(s_axil_araddr[7]),
-        .I2(s_axil_araddr[8]),
-        .O(\s_axil_rdata[2]_i_16_n_0 ));
-  LUT6 #(
-    .INIT(64'hAAAAAA800000AA80)) 
-    \s_axil_rdata[2]_i_2 
-       (.I0(\s_axil_rdata[8]_i_5_n_0 ),
-        .I1(\s_axil_rdata_reg[2]_i_3_n_0 ),
-        .I2(s_axil_araddr[2]),
-        .I3(\s_axil_rdata_reg[2]_0 ),
-        .I4(\s_axil_araddr[1]_0 ),
-        .I5(\s_axil_rdata[2]_i_5_n_0 ),
-        .O(\s_axil_rdata[2]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'h00000000FEFE00FE)) 
-    \s_axil_rdata[2]_i_5 
-       (.I0(\s_axil_rdata[2]_i_2_0 ),
-        .I1(\s_axil_rdata[2]_i_11_n_0 ),
-        .I2(\s_axil_rdata[2]_i_12_n_0 ),
-        .I3(s_axil_araddr[9]),
-        .I4(\delay_rst_ctrl_q_reg[3]_0 [2]),
-        .I5(\s_axil_rdata[8]_i_13_n_0 ),
-        .O(\s_axil_rdata[2]_i_5_n_0 ));
-  LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[2]_i_6 
+    \s_axil_rdata[2]_i_13 
        (.I0(dq_idly_cntvaluein[29]),
         .I1(dq_idly_cntvaluein[20]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[11]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[2]),
-        .O(\s_axil_rdata[2]_i_6_n_0 ));
+        .O(\s_axil_rdata[2]_i_13_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[2]_i_7 
+    \s_axil_rdata[2]_i_14 
        (.I0(dq_idly_cntvaluein[65]),
         .I1(dq_idly_cntvaluein[56]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[47]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[38]),
+        .O(\s_axil_rdata[2]_i_14_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFFFBAABBBBFBAA)) 
+    \s_axil_rdata[2]_i_2 
+       (.I0(s_axil_araddr_1_sn_1),
+        .I1(\s_axil_rdata[2]_i_4_n_0 ),
+        .I2(\s_axil_rdata[2]_i_5_n_0 ),
+        .I3(\s_axil_rdata_reg[2]_1 ),
+        .I4(s_axil_araddr[2]),
+        .I5(\s_axil_rdata[2]_i_7_n_0 ),
+        .O(\s_axil_rdata[2]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair78" *) 
+  LUT3 #(
+    .INIT(8'h01)) 
+    \s_axil_rdata[2]_i_4 
+       (.I0(s_axil_araddr[3]),
+        .I1(s_axil_araddr[4]),
+        .I2(s_axil_araddr[5]),
+        .O(\s_axil_rdata[2]_i_4_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair70" *) 
+  LUT5 #(
+    .INIT(32'hFFFFFFDF)) 
+    \s_axil_rdata[2]_i_5 
+       (.I0(s_axil_araddr[9]),
+        .I1(s_axil_araddr[8]),
+        .I2(Q[2]),
+        .I3(s_axil_araddr[6]),
+        .I4(s_axil_araddr[7]),
+        .O(\s_axil_rdata[2]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'hF7FFFFFFF7FF0000)) 
+    \s_axil_rdata[2]_i_7 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[8]),
+        .I2(s_axil_araddr[9]),
+        .I3(CNTVALUEIN[2]),
+        .I4(s_axil_araddr[6]),
+        .I5(\s_axil_rdata[2]_i_2_0 ),
         .O(\s_axil_rdata[2]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair81" *) 
+  (* SOFT_HLUTNM = "soft_lutpair82" *) 
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[30]_i_1 
        (.I0(dout[29]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[30]));
-  (* SOFT_HLUTNM = "soft_lutpair80" *) 
+  (* SOFT_HLUTNM = "soft_lutpair81" *) 
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[31]_i_2 
        (.I0(dout[30]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[31]));
-  (* SOFT_HLUTNM = "soft_lutpair92" *) 
-  LUT4 #(
-    .INIT(16'h0002)) 
+  LUT5 #(
+    .INIT(32'hFF8FFFFF)) 
     \s_axil_rdata[31]_i_3 
-       (.I0(s_axil_araddr_8_sn_1),
-        .I1(s_axil_araddr[9]),
-        .I2(\s_axil_rdata[31]_i_5_n_0 ),
-        .I3(\s_axil_rdata[31]_i_6_n_0 ),
-        .O(\s_axil_araddr[9]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair81" *) 
+       (.I0(s_axil_araddr[2]),
+        .I1(s_axil_araddr[1]),
+        .I2(\s_axil_araddr[6]_0 ),
+        .I3(\s_axil_rdata[31]_i_5_n_0 ),
+        .I4(\s_axil_rdata[31]_i_6_n_0 ),
+        .O(s_axil_araddr_2_sn_1));
+  (* SOFT_HLUTNM = "soft_lutpair82" *) 
   LUT4 #(
     .INIT(16'h0080)) 
     \s_axil_rdata[31]_i_4 
        (.I0(data_valid),
         .I1(axil_rsp_pop_pending_reg_0),
-        .I2(Q[0]),
-        .I3(Q[1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
+        .I3(\FSM_sequential_axil_state_reg[1]_0 [1]),
         .O(\gdvld.data_valid_std_reg ));
-  (* SOFT_HLUTNM = "soft_lutpair93" *) 
-  LUT4 #(
-    .INIT(16'hFFF8)) 
+  (* SOFT_HLUTNM = "soft_lutpair78" *) 
+  LUT5 #(
+    .INIT(32'hFFFFFFFE)) 
     \s_axil_rdata[31]_i_5 
-       (.I0(s_axil_araddr[2]),
-        .I1(s_axil_araddr[1]),
-        .I2(s_axil_araddr[0]),
-        .I3(s_axil_araddr[10]),
+       (.I0(s_axil_araddr[0]),
+        .I1(s_axil_araddr[3]),
+        .I2(s_axil_araddr[4]),
+        .I3(s_axil_araddr[5]),
+        .I4(s_axil_araddr[10]),
         .O(\s_axil_rdata[31]_i_5_n_0 ));
   LUT4 #(
-    .INIT(16'hFFFE)) 
+    .INIT(16'h0001)) 
     \s_axil_rdata[31]_i_6 
        (.I0(s_axil_araddr[13]),
         .I1(s_axil_araddr[12]),
@@ -10029,80 +9977,71 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(s_axil_araddr[14]),
         .O(\s_axil_rdata[31]_i_6_n_0 ));
   LUT6 #(
-    .INIT(64'h8F8F8FFF88888888)) 
+    .INIT(64'hFFFF88F888888888)) 
     \s_axil_rdata[3]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[3]),
-        .I2(\s_axil_rdata_reg[3]_0 ),
-        .I3(\s_axil_rdata_reg[3]_1 ),
-        .I4(\s_axil_araddr[1]_0 ),
-        .I5(\s_axil_rdata[8]_i_5_n_0 ),
+        .I2(\s_axil_rdata[8]_i_4_n_0 ),
+        .I3(\s_axil_rdata_reg[3]_0 ),
+        .I4(\s_axil_rdata_reg[3]_1 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[3]));
-  (* SOFT_HLUTNM = "soft_lutpair85" *) 
-  LUT5 #(
-    .INIT(32'hFDCFFDFF)) 
-    \s_axil_rdata[3]_i_12 
+  LUT6 #(
+    .INIT(64'h0000000000002E22)) 
+    \s_axil_rdata[3]_i_11 
+       (.I0(\s_axil_rdata[3]_i_14_n_0 ),
+        .I1(s_axil_araddr[5]),
+        .I2(s_axil_araddr[8]),
+        .I3(\s_axil_araddr[7]_1 ),
+        .I4(s_axil_araddr[3]),
+        .I5(s_axil_araddr[9]),
+        .O(\s_axil_araddr[5]_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair97" *) 
+  LUT2 #(
+    .INIT(4'h1)) 
+    \s_axil_rdata[3]_i_13 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[6]),
+        .O(\s_axil_araddr[7]_1 ));
+  LUT6 #(
+    .INIT(64'h8833300088003000)) 
+    \s_axil_rdata[3]_i_14 
        (.I0(CNTVALUEIN[3]),
-        .I1(s_axil_araddr[9]),
-        .I2(s_axil_araddr[7]),
+        .I1(s_axil_araddr[6]),
+        .I2(\odly_time_value_q_reg[8]_0 [3]),
         .I3(s_axil_araddr[8]),
-        .I4(o_axif_rwds_cntr[2]),
-        .O(\s_axil_rdata[3]_i_12_n_0 ));
+        .I4(s_axil_araddr[7]),
+        .I5(o_axif_rwds_cntr[2]),
+        .O(\s_axil_rdata[3]_i_14_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[3]_i_13 
+    \s_axil_rdata[3]_i_8 
        (.I0(dq_idly_cntvaluein[30]),
         .I1(dq_idly_cntvaluein[21]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[12]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[3]),
-        .O(\s_axil_rdata[3]_i_13_n_0 ));
+        .O(\s_axil_rdata[3]_i_8_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[3]_i_14 
+    \s_axil_rdata[3]_i_9 
        (.I0(dq_idly_cntvaluein[66]),
         .I1(dq_idly_cntvaluein[57]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[48]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[39]),
-        .O(\s_axil_rdata[3]_i_14_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair99" *) 
-  LUT3 #(
-    .INIT(8'hEF)) 
-    \s_axil_rdata[3]_i_15 
-       (.I0(s_axil_araddr[4]),
-        .I1(s_axil_araddr[5]),
-        .I2(s_axil_araddr[3]),
-        .O(s_axil_araddr_4_sn_1));
+        .O(\s_axil_rdata[3]_i_9_n_0 ));
   LUT6 #(
-    .INIT(64'hF7FFFFFFF7FF0000)) 
-    \s_axil_rdata[3]_i_5 
-       (.I0(s_axil_araddr[7]),
-        .I1(s_axil_araddr[8]),
-        .I2(s_axil_araddr[9]),
-        .I3(\rwds_idly_time_value_q_reg[8]_0 [3]),
-        .I4(s_axil_araddr[6]),
-        .I5(\s_axil_rdata[3]_i_12_n_0 ),
-        .O(\s_axil_araddr[7]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair79" *) 
-  LUT3 #(
-    .INIT(8'hFE)) 
-    \s_axil_rdata[3]_i_6 
-       (.I0(s_axil_araddr[5]),
-        .I1(s_axil_araddr[4]),
-        .I2(s_axil_araddr[3]),
-        .O(s_axil_araddr_5_sn_1));
-  LUT6 #(
-    .INIT(64'h8F8F8FFF88888888)) 
+    .INIT(64'h8FFF8F8F88888888)) 
     \s_axil_rdata[4]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[4]),
         .I2(\s_axil_rdata[4]_i_2_n_0 ),
-        .I3(\s_axil_rdata_reg[4]_1 ),
-        .I4(\s_axil_araddr[1]_0 ),
-        .I5(\s_axil_rdata[8]_i_5_n_0 ),
+        .I3(\s_axil_rdata_reg[4]_0 ),
+        .I4(\s_axil_rdata[8]_i_4_n_0 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[4]));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
@@ -10125,350 +10064,310 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I5(dq_idly_cntvaluein[40]),
         .O(\s_axil_rdata[4]_i_11_n_0 ));
   LUT6 #(
-    .INIT(64'hBABABA10FFFFFFFF)) 
+    .INIT(64'hEFEEEFEEEFEEAAAA)) 
     \s_axil_rdata[4]_i_2 
-       (.I0(s_axil_araddr[6]),
-        .I1(\s_axil_rdata_reg[4]_0 ),
-        .I2(\s_axil_rdata[4]_i_5_n_0 ),
-        .I3(s_axil_araddr_9_sn_1),
-        .I4(\s_axil_rdata[4]_i_6_n_0 ),
-        .I5(s_axil_araddr_1_sn_1),
+       (.I0(s_axil_araddr_1_sn_1),
+        .I1(s_axil_araddr[6]),
+        .I2(\s_axil_rdata_reg[4]_1 ),
+        .I3(\s_axil_rdata[4]_i_5_n_0 ),
+        .I4(\s_axil_araddr[7]_0 ),
+        .I5(\s_axil_rdata[4]_i_6_n_0 ),
         .O(\s_axil_rdata[4]_i_2_n_0 ));
   LUT6 #(
     .INIT(64'hFFFAFBFFFFFFFBFF)) 
     \s_axil_rdata[4]_i_5 
-       (.I0(\s_axil_rdata[5]_i_14_n_0 ),
-        .I1(CNTVALUEIN[4]),
+       (.I0(\s_axil_rdata[5]_i_13_n_0 ),
+        .I1(\odly_time_value_q_reg[8]_0 [4]),
         .I2(s_axil_araddr[9]),
         .I3(s_axil_araddr[8]),
         .I4(s_axil_araddr[7]),
         .I5(o_axif_rwds_cntr[3]),
         .O(\s_axil_rdata[4]_i_5_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFC7FFFFFFF7)) 
+    .INIT(64'hFFFDFCFFFFFDFFFF)) 
     \s_axil_rdata[4]_i_6 
-       (.I0(\rwds_idly_time_value_q_reg[8]_0 [4]),
-        .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[3]),
-        .I3(s_axil_araddr[5]),
-        .I4(s_axil_araddr[4]),
+       (.I0(CNTVALUEIN[4]),
+        .I1(s_axil_araddr[4]),
+        .I2(s_axil_araddr[5]),
+        .I3(s_axil_araddr[3]),
+        .I4(s_axil_araddr[2]),
         .I5(CNTVALUEOUT),
         .O(\s_axil_rdata[4]_i_6_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFF888F88888888)) 
+    .INIT(64'hFFFF88F888888888)) 
     \s_axil_rdata[5]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[5]),
-        .I2(\s_axil_rdata_reg[5]_0 ),
-        .I3(\s_axil_araddr[1]_0 ),
+        .I2(\s_axil_rdata[8]_i_4_n_0 ),
+        .I3(\s_axil_rdata_reg[5]_0 ),
         .I4(\s_axil_rdata_reg[5]_1 ),
-        .I5(\s_axil_rdata[8]_i_5_n_0 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[5]));
-  (* SOFT_HLUTNM = "soft_lutpair84" *) 
-  LUT3 #(
-    .INIT(8'hBF)) 
-    \s_axil_rdata[5]_i_10 
-       (.I0(s_axil_araddr[9]),
-        .I1(s_axil_araddr[8]),
-        .I2(s_axil_araddr[7]),
-        .O(s_axil_araddr_9_sn_1));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[5]_i_12 
+    \s_axil_rdata[5]_i_11 
        (.I0(dq_idly_cntvaluein[32]),
         .I1(dq_idly_cntvaluein[23]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[14]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[5]),
-        .O(\s_axil_rdata[5]_i_12_n_0 ));
+        .O(\s_axil_rdata[5]_i_11_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[5]_i_13 
+    \s_axil_rdata[5]_i_12 
        (.I0(dq_idly_cntvaluein[68]),
         .I1(dq_idly_cntvaluein[59]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[50]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[41]),
+        .O(\s_axil_rdata[5]_i_12_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair91" *) 
+  LUT4 #(
+    .INIT(16'hFFEF)) 
+    \s_axil_rdata[5]_i_13 
+       (.I0(s_axil_araddr[4]),
+        .I1(s_axil_araddr[5]),
+        .I2(s_axil_araddr[2]),
+        .I3(s_axil_araddr[3]),
         .O(\s_axil_rdata[5]_i_13_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair87" *) 
+  (* SOFT_HLUTNM = "soft_lutpair91" *) 
   LUT4 #(
-    .INIT(16'hFEFF)) 
+    .INIT(16'hFFEF)) 
     \s_axil_rdata[5]_i_14 
-       (.I0(s_axil_araddr[3]),
-        .I1(s_axil_araddr[4]),
-        .I2(s_axil_araddr[5]),
+       (.I0(s_axil_araddr[4]),
+        .I1(s_axil_araddr[5]),
+        .I2(s_axil_araddr[3]),
         .I3(s_axil_araddr[2]),
-        .O(\s_axil_rdata[5]_i_14_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair87" *) 
-  LUT4 #(
-    .INIT(16'hFFFB)) 
-    \s_axil_rdata[5]_i_15 
-       (.I0(s_axil_araddr[2]),
-        .I1(s_axil_araddr[3]),
-        .I2(s_axil_araddr[5]),
-        .I3(s_axil_araddr[4]),
-        .O(\s_axil_araddr[2]_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair94" *) 
-  LUT4 #(
-    .INIT(16'h0002)) 
-    \s_axil_rdata[5]_i_7 
-       (.I0(\s_axil_rdata[8]_i_11_n_0 ),
-        .I1(s_axil_araddr[1]),
-        .I2(s_axil_araddr[0]),
-        .I3(s_axil_araddr_14_sn_1),
-        .O(s_axil_araddr_1_sn_1));
+        .O(s_axil_araddr_4_sn_1));
   LUT6 #(
     .INIT(64'h0005040000000400)) 
-    \s_axil_rdata[5]_i_8 
-       (.I0(\s_axil_rdata[5]_i_14_n_0 ),
-        .I1(CNTVALUEIN[5]),
+    \s_axil_rdata[5]_i_7 
+       (.I0(\s_axil_rdata[5]_i_13_n_0 ),
+        .I1(\odly_time_value_q_reg[8]_0 [5]),
         .I2(s_axil_araddr[9]),
         .I3(s_axil_araddr[8]),
         .I4(s_axil_araddr[7]),
         .I5(o_axif_rwds_cntr[4]),
         .O(\odly_time_value_q_reg[5]_0 ));
-  LUT5 #(
-    .INIT(32'h888F8888)) 
+  (* SOFT_HLUTNM = "soft_lutpair86" *) 
+  LUT4 #(
+    .INIT(16'hF7FF)) 
+    \s_axil_rdata[5]_i_9 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[8]),
+        .I2(s_axil_araddr[9]),
+        .I3(s_axil_araddr[6]),
+        .O(\s_axil_araddr[7]_0 ));
+  LUT6 #(
+    .INIT(64'hFFFF88F888888888)) 
     \s_axil_rdata[6]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[6]),
-        .I2(\s_axil_rdata_reg[6]_0 ),
-        .I3(\s_axil_rdata[6]_i_3_n_0 ),
-        .I4(\s_axil_rdata[8]_i_5_n_0 ),
+        .I2(\s_axil_rdata[8]_i_4_n_0 ),
+        .I3(\s_axil_rdata_reg[6]_0 ),
+        .I4(\s_axil_rdata_reg[6]_1 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
         .O(s_axil_rdata1_in[6]));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[6]_i_10 
-       (.I0(dq_idly_cntvaluein[69]),
-        .I1(dq_idly_cntvaluein[60]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_cntvaluein[51]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_cntvaluein[42]),
-        .O(\s_axil_rdata[6]_i_10_n_0 ));
-  LUT6 #(
-    .INIT(64'hAAAAAA80AAAAAAAA)) 
-    \s_axil_rdata[6]_i_3 
-       (.I0(\s_axil_araddr[1]_0 ),
-        .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[3]),
-        .I3(s_axil_araddr_14_sn_1),
-        .I4(\s_axil_rdata[6]_i_7_n_0 ),
-        .I5(s_axil_araddr_6_sn_1),
-        .O(\s_axil_rdata[6]_i_3_n_0 ));
-  LUT5 #(
-    .INIT(32'h00001FDF)) 
+  (* SOFT_HLUTNM = "soft_lutpair97" *) 
+  LUT4 #(
+    .INIT(16'h8C80)) 
     \s_axil_rdata[6]_i_7 
        (.I0(CNTVALUEIN[6]),
-        .I1(s_axil_araddr[6]),
-        .I2(s_axil_araddr[2]),
-        .I3(\rwds_idly_time_value_q_reg[8]_0 [6]),
-        .I4(\s_axil_rdata[6]_i_3_0 ),
-        .O(\s_axil_rdata[6]_i_7_n_0 ));
+        .I1(s_axil_araddr[2]),
+        .I2(s_axil_araddr[6]),
+        .I3(\odly_time_value_q_reg[8]_0 [6]),
+        .O(\rwds_idly_time_value_q_reg[6]_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[6]_i_9 
+    \s_axil_rdata[6]_i_8 
        (.I0(dq_idly_cntvaluein[33]),
         .I1(dq_idly_cntvaluein[24]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[15]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[6]),
+        .O(\s_axil_rdata[6]_i_8_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[6]_i_9 
+       (.I0(dq_idly_cntvaluein[69]),
+        .I1(dq_idly_cntvaluein[60]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_cntvaluein[51]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_cntvaluein[42]),
         .O(\s_axil_rdata[6]_i_9_n_0 ));
-  LUT4 #(
-    .INIT(16'h8F88)) 
+  LUT6 #(
+    .INIT(64'hFFFF88F888888888)) 
     \s_axil_rdata[7]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[7]),
-        .I2(\s_axil_rdata[7]_i_2_n_0 ),
-        .I3(\s_axil_rdata[8]_i_5_n_0 ),
-        .O(s_axil_rdata1_in[7]));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[7]_i_10 
-       (.I0(dq_idly_cntvaluein[70]),
-        .I1(dq_idly_cntvaluein[61]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_cntvaluein[52]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_cntvaluein[43]),
-        .O(\s_axil_rdata[7]_i_10_n_0 ));
-  LUT6 #(
-    .INIT(64'h4444477747774777)) 
-    \s_axil_rdata[7]_i_2 
-       (.I0(\s_axil_rdata[7]_i_3_n_0 ),
-        .I1(\s_axil_araddr[1]_0 ),
-        .I2(s_axil_araddr[3]),
+        .I2(\s_axil_rdata[8]_i_4_n_0 ),
         .I3(\s_axil_rdata_reg[7]_0 ),
-        .I4(s_axil_araddr[2]),
-        .I5(\s_axil_rdata_reg[7]_i_5_n_0 ),
-        .O(\s_axil_rdata[7]_i_2_n_0 ));
-  LUT5 #(
-    .INIT(32'h00020202)) 
-    \s_axil_rdata[7]_i_3 
-       (.I0(s_axil_araddr_6_sn_1),
-        .I1(\s_axil_rdata[7]_i_6_n_0 ),
-        .I2(s_axil_araddr_14_sn_1),
-        .I3(s_axil_araddr[3]),
-        .I4(s_axil_araddr[2]),
-        .O(\s_axil_rdata[7]_i_3_n_0 ));
-  LUT5 #(
-    .INIT(32'h00001FDF)) 
-    \s_axil_rdata[7]_i_6 
+        .I4(\s_axil_rdata_reg[7]_1 ),
+        .I5(\s_axil_rdata[8]_i_2_n_0 ),
+        .O(s_axil_rdata1_in[7]));
+  (* SOFT_HLUTNM = "soft_lutpair96" *) 
+  LUT4 #(
+    .INIT(16'h8C80)) 
+    \s_axil_rdata[7]_i_7 
        (.I0(CNTVALUEIN[7]),
-        .I1(s_axil_araddr[6]),
-        .I2(s_axil_araddr[2]),
-        .I3(\rwds_idly_time_value_q_reg[8]_0 [7]),
-        .I4(\s_axil_rdata[7]_i_3_0 ),
-        .O(\s_axil_rdata[7]_i_6_n_0 ));
+        .I1(s_axil_araddr[2]),
+        .I2(s_axil_araddr[6]),
+        .I3(\odly_time_value_q_reg[8]_0 [7]),
+        .O(\rwds_idly_time_value_q_reg[7]_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[7]_i_9 
+    \s_axil_rdata[7]_i_8 
        (.I0(dq_idly_cntvaluein[34]),
         .I1(dq_idly_cntvaluein[25]),
         .I2(s_axil_araddr[5]),
         .I3(dq_idly_cntvaluein[16]),
         .I4(s_axil_araddr[4]),
         .I5(dq_idly_cntvaluein[7]),
+        .O(\s_axil_rdata[7]_i_8_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[7]_i_9 
+       (.I0(dq_idly_cntvaluein[70]),
+        .I1(dq_idly_cntvaluein[61]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_cntvaluein[52]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_cntvaluein[43]),
         .O(\s_axil_rdata[7]_i_9_n_0 ));
   LUT6 #(
-    .INIT(64'h8F8F8FFF88888888)) 
+    .INIT(64'hF8F8F8F888F88888)) 
     \s_axil_rdata[8]_i_1 
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(dout[8]),
-        .I2(\s_axil_rdata_reg[8]_0 ),
-        .I3(\s_axil_rdata_reg[8]_1 ),
-        .I4(\s_axil_araddr[1]_0 ),
-        .I5(\s_axil_rdata[8]_i_5_n_0 ),
+        .I2(\s_axil_rdata[8]_i_2_n_0 ),
+        .I3(\s_axil_rdata_reg[8]_0 ),
+        .I4(\s_axil_rdata[8]_i_4_n_0 ),
+        .I5(\s_axil_rdata_reg[8]_1 ),
         .O(s_axil_rdata1_in[8]));
-  LUT6 #(
-    .INIT(64'hFFFFFFBFFFBFFFBF)) 
-    \s_axil_rdata[8]_i_11 
-       (.I0(\s_axil_rdata[8]_i_18_n_0 ),
-        .I1(s_axil_araddr[9]),
-        .I2(s_axil_araddr[8]),
-        .I3(s_axil_araddr[7]),
-        .I4(s_axil_araddr[3]),
-        .I5(s_axil_araddr[2]),
-        .O(\s_axil_rdata[8]_i_11_n_0 ));
-  LUT4 #(
-    .INIT(16'hFFFE)) 
-    \s_axil_rdata[8]_i_13 
-       (.I0(s_axil_araddr[4]),
-        .I1(s_axil_araddr[1]),
-        .I2(s_axil_araddr[0]),
-        .I3(s_axil_araddr_14_sn_1),
-        .O(\s_axil_rdata[8]_i_13_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair98" *) 
+  (* SOFT_HLUTNM = "soft_lutpair95" *) 
   LUT4 #(
     .INIT(16'h8C80)) 
-    \s_axil_rdata[8]_i_14 
-       (.I0(\rwds_idly_time_value_q_reg[8]_0 [8]),
+    \s_axil_rdata[8]_i_11 
+       (.I0(CNTVALUEIN[8]),
         .I1(s_axil_araddr[2]),
         .I2(s_axil_araddr[6]),
-        .I3(CNTVALUEIN[8]),
-        .O(\rwds_idly_time_value_q_reg[8]_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair85" *) 
-  LUT3 #(
-    .INIT(8'hFB)) 
-    \s_axil_rdata[8]_i_15 
-       (.I0(s_axil_araddr[7]),
-        .I1(s_axil_araddr[8]),
-        .I2(s_axil_araddr[9]),
-        .O(\s_axil_rdata[8]_i_15_n_0 ));
+        .I3(\odly_time_value_q_reg[8]_0 [8]),
+        .O(\rwds_idly_time_value_q_reg[8]_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[8]_i_16 
-       (.I0(dq_idly_cntvaluein[35]),
-        .I1(dq_idly_cntvaluein[26]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_cntvaluein[17]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_cntvaluein[8]),
-        .O(\s_axil_rdata[8]_i_16_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[8]_i_17 
-       (.I0(dq_idly_cntvaluein[71]),
-        .I1(dq_idly_cntvaluein[62]),
-        .I2(s_axil_araddr[5]),
-        .I3(dq_idly_cntvaluein[53]),
-        .I4(s_axil_araddr[4]),
-        .I5(dq_idly_cntvaluein[44]),
-        .O(\s_axil_rdata[8]_i_17_n_0 ));
-  LUT6 #(
-    .INIT(64'h00000000FE000000)) 
-    \s_axil_rdata[8]_i_18 
-       (.I0(s_axil_araddr[1]),
-        .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[0]),
-        .I3(s_axil_araddr[5]),
-        .I4(s_axil_araddr[4]),
-        .I5(\s_axil_rdata[8]_i_21_n_0 ),
-        .O(\s_axil_rdata[8]_i_18_n_0 ));
+    .INIT(64'h0001000100000001)) 
+    \s_axil_rdata[8]_i_12 
+       (.I0(s_axil_araddr_1_sn_1),
+        .I1(s_axil_araddr_7_sn_1),
+        .I2(\s_axil_rdata[8]_i_18_n_0 ),
+        .I3(s_axil_araddr_5_sn_1),
+        .I4(\s_axil_rdata[8]_i_19_n_0 ),
+        .I5(s_axil_araddr[6]),
+        .O(s_axil_araddr_6_sn_1));
   LUT6 #(
     .INIT(64'hFFFFF8F8FFF0FABF)) 
-    \s_axil_rdata[8]_i_19 
+    \s_axil_rdata[8]_i_13 
        (.I0(s_axil_araddr[3]),
         .I1(s_axil_araddr[2]),
         .I2(s_axil_araddr[5]),
         .I3(s_axil_araddr[9]),
         .I4(s_axil_araddr[7]),
         .I5(s_axil_araddr[8]),
-        .O(\s_axil_rdata[8]_i_19_n_0 ));
-  LUT5 #(
-    .INIT(32'hFFFFD5FF)) 
-    \s_axil_rdata[8]_i_20 
-       (.I0(s_axil_araddr[7]),
-        .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[3]),
-        .I3(s_axil_araddr[8]),
-        .I4(s_axil_araddr[5]),
-        .O(\s_axil_rdata[8]_i_20_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair99" *) 
+        .O(\s_axil_rdata[8]_i_13_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair79" *) 
   LUT2 #(
     .INIT(4'h7)) 
-    \s_axil_rdata[8]_i_21 
-       (.I0(s_axil_araddr[3]),
-        .I1(s_axil_araddr[6]),
-        .O(\s_axil_rdata[8]_i_21_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair94" *) 
+    \s_axil_rdata[8]_i_14 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[8]),
+        .O(\s_axil_rdata[8]_i_14_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[8]_i_15 
+       (.I0(dq_idly_cntvaluein[35]),
+        .I1(dq_idly_cntvaluein[26]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_cntvaluein[17]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_cntvaluein[8]),
+        .O(\s_axil_rdata[8]_i_15_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \s_axil_rdata[8]_i_16 
+       (.I0(dq_idly_cntvaluein[71]),
+        .I1(dq_idly_cntvaluein[62]),
+        .I2(s_axil_araddr[5]),
+        .I3(dq_idly_cntvaluein[53]),
+        .I4(s_axil_araddr[4]),
+        .I5(dq_idly_cntvaluein[44]),
+        .O(\s_axil_rdata[8]_i_16_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair70" *) 
   LUT4 #(
-    .INIT(16'hFFFE)) 
-    \s_axil_rdata[8]_i_4 
-       (.I0(s_axil_araddr[1]),
-        .I1(s_axil_araddr[0]),
-        .I2(s_axil_araddr_14_sn_1),
-        .I3(\s_axil_rdata[8]_i_11_n_0 ),
-        .O(\s_axil_araddr[1]_0 ));
+    .INIT(16'hF700)) 
+    \s_axil_rdata[8]_i_17 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[8]),
+        .I2(s_axil_araddr[9]),
+        .I3(s_axil_araddr[6]),
+        .O(s_axil_araddr_7_sn_1));
+  (* SOFT_HLUTNM = "soft_lutpair96" *) 
+  LUT2 #(
+    .INIT(4'h8)) 
+    \s_axil_rdata[8]_i_18 
+       (.I0(s_axil_araddr[2]),
+        .I1(s_axil_araddr[3]),
+        .O(\s_axil_rdata[8]_i_18_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair111" *) 
+  LUT3 #(
+    .INIT(8'hFB)) 
+    \s_axil_rdata[8]_i_19 
+       (.I0(s_axil_araddr[7]),
+        .I1(s_axil_araddr[8]),
+        .I2(s_axil_araddr[9]),
+        .O(\s_axil_rdata[8]_i_19_n_0 ));
   LUT6 #(
-    .INIT(64'h1111111111151515)) 
-    \s_axil_rdata[8]_i_5 
+    .INIT(64'h4444444444454444)) 
+    \s_axil_rdata[8]_i_2 
        (.I0(\gdvld.data_valid_std_reg ),
-        .I1(\s_axil_araddr[1]_0 ),
-        .I2(\s_axil_rdata_reg[8]_i_12_n_0 ),
-        .I3(s_axil_araddr[9]),
-        .I4(s_axil_araddr[8]),
-        .I5(\s_axil_rdata[8]_i_13_n_0 ),
-        .O(\s_axil_rdata[8]_i_5_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000000035)) 
-    \s_axil_rdata[8]_i_7 
-       (.I0(\s_axil_rdata[8]_i_15_n_0 ),
-        .I1(s_axil_araddr_9_sn_1),
-        .I2(s_axil_araddr[6]),
+        .I1(\s_axil_rdata[8]_i_4_n_0 ),
+        .I2(\s_axil_rdata[8]_i_6_n_0 ),
         .I3(s_axil_araddr[4]),
-        .I4(s_axil_araddr[5]),
-        .I5(\s_axil_araddr[1]_1 ),
-        .O(s_axil_araddr_6_sn_1));
+        .I4(\s_axil_rdata[8]_i_7_n_0 ),
+        .I5(\s_axil_rdata[24]_i_5_n_0 ),
+        .O(\s_axil_rdata[8]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair121" *) 
+  LUT2 #(
+    .INIT(4'h2)) 
+    \s_axil_rdata[8]_i_4 
+       (.I0(\s_axil_rdata[24]_i_6_n_0 ),
+        .I1(\s_axil_rdata[24]_i_5_n_0 ),
+        .O(\s_axil_rdata[8]_i_4_n_0 ));
+  LUT6 #(
+    .INIT(64'hFAFAFACAFACAFACA)) 
+    \s_axil_rdata[8]_i_6 
+       (.I0(\s_axil_rdata[8]_i_13_n_0 ),
+        .I1(\s_axil_rdata[8]_i_14_n_0 ),
+        .I2(s_axil_araddr[6]),
+        .I3(s_axil_araddr[5]),
+        .I4(s_axil_araddr[3]),
+        .I5(s_axil_araddr[2]),
+        .O(\s_axil_rdata[8]_i_6_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair111" *) 
+  LUT2 #(
+    .INIT(4'h7)) 
+    \s_axil_rdata[8]_i_7 
+       (.I0(s_axil_araddr[9]),
+        .I1(s_axil_araddr[8]),
+        .O(\s_axil_rdata[8]_i_7_n_0 ));
   LUT5 #(
     .INIT(32'h20000000)) 
     \s_axil_rdata[9]_i_1 
        (.I0(dout[9]),
-        .I1(Q[1]),
-        .I2(Q[0]),
+        .I1(\FSM_sequential_axil_state_reg[1]_0 [1]),
+        .I2(\FSM_sequential_axil_state_reg[1]_0 [0]),
         .I3(axil_rsp_pop_pending_reg_0),
         .I4(data_valid),
         .O(s_axil_rdata1_in[9]));
@@ -10554,20 +10453,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[1]),
         .Q(s_axil_rdata[1]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[1]_i_10 
-       (.I0(\s_axil_rdata[1]_i_16_n_0 ),
-        .I1(\s_axil_rdata[1]_i_17_n_0 ),
-        .O(\s_axil_rdata_reg[1]_i_10_n_0 ),
+  MUXF7 \s_axil_rdata_reg[1]_i_4 
+       (.I0(\s_axil_rdata[1]_i_8_n_0 ),
+        .I1(\s_axil_rdata[1]_i_9_n_0 ),
+        .O(\s_axil_rdata_reg[1]_i_4_n_0 ),
         .S(s_axil_araddr[6]));
-  MUXF8 \s_axil_rdata_reg[1]_i_5 
-       (.I0(\s_axil_rdata_reg[1]_i_9_n_0 ),
-        .I1(\s_axil_rdata_reg[1]_i_10_n_0 ),
+  MUXF7 \s_axil_rdata_reg[1]_i_5 
+       (.I0(\s_axil_rdata[1]_i_10_n_0 ),
+        .I1(\s_axil_rdata[1]_i_11_n_0 ),
         .O(\s_axil_rdata_reg[1]_i_5_n_0 ),
-        .S(s_axil_araddr[2]));
-  MUXF7 \s_axil_rdata_reg[1]_i_9 
-       (.I0(\s_axil_rdata[1]_i_14_n_0 ),
-        .I1(\s_axil_rdata[1]_i_15_n_0 ),
-        .O(\s_axil_rdata_reg[1]_i_9_n_0 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[20] 
        (.C(i_axi_aclk),
@@ -10635,10 +10529,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[2]),
         .Q(s_axil_rdata[2]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[2]_i_3 
-       (.I0(\s_axil_rdata[2]_i_6_n_0 ),
-        .I1(\s_axil_rdata[2]_i_7_n_0 ),
-        .O(\s_axil_rdata_reg[2]_i_3_n_0 ),
+  MUXF7 \s_axil_rdata_reg[2]_i_8 
+       (.I0(\s_axil_rdata[2]_i_13_n_0 ),
+        .I1(\s_axil_rdata[2]_i_14_n_0 ),
+        .O(\s_axil_araddr[6]_7 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[30] 
        (.C(i_axi_aclk),
@@ -10658,10 +10552,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[3]),
         .Q(s_axil_rdata[3]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[3]_i_7 
-       (.I0(\s_axil_rdata[3]_i_13_n_0 ),
-        .I1(\s_axil_rdata[3]_i_14_n_0 ),
-        .O(\s_axil_araddr[6]_4 ),
+  MUXF7 \s_axil_rdata_reg[3]_i_4 
+       (.I0(\s_axil_rdata[3]_i_8_n_0 ),
+        .I1(\s_axil_rdata[3]_i_9_n_0 ),
+        .O(\s_axil_araddr[6]_6 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[4] 
        (.C(i_axi_aclk),
@@ -10672,7 +10566,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
   MUXF7 \s_axil_rdata_reg[4]_i_7 
        (.I0(\s_axil_rdata[4]_i_10_n_0 ),
         .I1(\s_axil_rdata[4]_i_11_n_0 ),
-        .O(\s_axil_araddr[6]_3 ),
+        .O(\s_axil_araddr[6]_5 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[5] 
        (.C(i_axi_aclk),
@@ -10680,10 +10574,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[5]),
         .Q(s_axil_rdata[5]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[5]_i_4 
-       (.I0(\s_axil_rdata[5]_i_12_n_0 ),
-        .I1(\s_axil_rdata[5]_i_13_n_0 ),
-        .O(\s_axil_araddr[6]_2 ),
+  MUXF7 \s_axil_rdata_reg[5]_i_6 
+       (.I0(\s_axil_rdata[5]_i_11_n_0 ),
+        .I1(\s_axil_rdata[5]_i_12_n_0 ),
+        .O(\s_axil_araddr[6]_4 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[6] 
        (.C(i_axi_aclk),
@@ -10692,9 +10586,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .Q(s_axil_rdata[6]),
         .R(fifo_rst_axi_wr));
   MUXF7 \s_axil_rdata_reg[6]_i_6 
-       (.I0(\s_axil_rdata[6]_i_9_n_0 ),
-        .I1(\s_axil_rdata[6]_i_10_n_0 ),
-        .O(\s_axil_araddr[6]_1 ),
+       (.I0(\s_axil_rdata[6]_i_8_n_0 ),
+        .I1(\s_axil_rdata[6]_i_9_n_0 ),
+        .O(\s_axil_araddr[6]_3 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[7] 
        (.C(i_axi_aclk),
@@ -10702,10 +10596,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[7]),
         .Q(s_axil_rdata[7]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[7]_i_5 
-       (.I0(\s_axil_rdata[7]_i_9_n_0 ),
-        .I1(\s_axil_rdata[7]_i_10_n_0 ),
-        .O(\s_axil_rdata_reg[7]_i_5_n_0 ),
+  MUXF7 \s_axil_rdata_reg[7]_i_6 
+       (.I0(\s_axil_rdata[7]_i_8_n_0 ),
+        .I1(\s_axil_rdata[7]_i_9_n_0 ),
+        .O(\s_axil_araddr[6]_2 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[8] 
        (.C(i_axi_aclk),
@@ -10713,15 +10607,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(s_axil_rdata1_in[8]),
         .Q(s_axil_rdata[8]),
         .R(fifo_rst_axi_wr));
-  MUXF7 \s_axil_rdata_reg[8]_i_12 
-       (.I0(\s_axil_rdata[8]_i_19_n_0 ),
-        .I1(\s_axil_rdata[8]_i_20_n_0 ),
-        .O(\s_axil_rdata_reg[8]_i_12_n_0 ),
-        .S(s_axil_araddr[6]));
   MUXF7 \s_axil_rdata_reg[8]_i_8 
-       (.I0(\s_axil_rdata[8]_i_16_n_0 ),
-        .I1(\s_axil_rdata[8]_i_17_n_0 ),
-        .O(\s_axil_araddr[6]_0 ),
+       (.I0(\s_axil_rdata[8]_i_15_n_0 ),
+        .I1(\s_axil_rdata[8]_i_16_n_0 ),
+        .O(\s_axil_araddr[6]_1 ),
         .S(s_axil_araddr[6]));
   FDRE \s_axil_rdata_reg[9] 
        (.C(i_axi_aclk),
@@ -10738,7 +10627,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(s_axil_rvalid035_out),
         .I4(\FSM_sequential_axil_state[1]_i_1_n_0 ),
         .O(s_axil_rvalid_i_1_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair86" *) 
+  (* SOFT_HLUTNM = "soft_lutpair85" *) 
   LUT3 #(
     .INIT(8'h02)) 
     s_axil_rvalid_i_2
@@ -10770,11 +10659,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .D(hb_timeout_block_axi),
         .Q(timeout_holdoff_d),
         .R(fifo_rst_axi_wr));
-  (* SOFT_HLUTNM = "soft_lutpair90" *) 
+  (* SOFT_HLUTNM = "soft_lutpair89" *) 
   LUT4 #(
     .INIT(16'hFFAE)) 
     timeout_status_q_i_2
-       (.I0(odly_en_vtc_q_i_4_n_0),
+       (.I0(odly_en_vtc_q_i_5_n_0),
         .I1(p_0_in[2]),
         .I2(\axil_awaddr_q_reg_n_0_[3] ),
         .I3(\axil_awaddr_q_reg_n_0_[9] ),
@@ -10788,11 +10677,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend
         .I3(\axil_awaddr_q_reg_n_0_[2] ),
         .I4(\axil_awaddr_q_reg_n_0_[7] ),
         .I5(\axil_awaddr_q_reg_n_0_[8] ),
-        .O(timeout_status_q_reg_1));
+        .O(timeout_status_q_reg_2));
   FDRE timeout_status_q_reg
        (.C(i_axi_aclk),
         .CE(1'b1),
-        .D(timeout_status_q_reg_2),
+        .D(timeout_status_q_reg_3),
         .Q(timeout_status_q_reg_0),
         .R(fifo_rst_axi_wr));
   LUT2 #(
@@ -10918,20 +10807,20 @@ endmodule
 (* ORIG_REF_NAME = "hyperbus_controller" *) 
 module design_1_hyperbus_controller_0_0_hyperbus_controller
    (s_axil_rvalid,
-    s_axil_bvalid_reg,
     s_axi_bvalid_reg,
     s_axi_wready,
     o_dbg_rd_fifo_wr_en,
     o_dbg_rd_fifo_din,
+    s_axil_bvalid_reg,
     s_axil_awready,
     s_axil_wready,
     s_axil_arready,
     s_axil_rdata,
     s_axil_bresp,
+    o_hb_ck_p,
     o_dbg_dq_o_d1,
     o_dbg_dq_o_d2,
     o_dbg_i_dq_t,
-    o_hb_ck_p,
     o_dbg_rwds_o_d1,
     o_dbg_rwds_o_d2,
     o_dbg_i_rwds_t,
@@ -10940,8 +10829,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     o_dbg_last_read_word32,
     o_dbg_dq_q1_dly,
     o_dbg_dq_q2_dly,
-    rd_half_reg,
     o_hb_cs_n,
+    rd_half_reg,
+    o_dbg_hb_cs_n_q,
     s_axi_awready,
     s_axi_bresp,
     s_axi_bid,
@@ -10977,9 +10867,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     s_axil_wvalid,
     s_axi_awvalid,
     s_axi_arvalid,
+    i_ref_clk_300,
     i_hb_clk_200_samp_90,
     i_iddre1_rst,
-    i_ref_clk_300,
     i_hb_clk_200_gated,
     i_hb_rstn,
     s_axi_awburst,
@@ -10990,20 +10880,20 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     s_axi_arsize,
     s_axi_arid);
   output s_axil_rvalid;
-  output s_axil_bvalid_reg;
   output s_axi_bvalid_reg;
   output s_axi_wready;
   output o_dbg_rd_fifo_wr_en;
   output [31:0]o_dbg_rd_fifo_din;
+  output s_axil_bvalid_reg;
   output s_axil_awready;
   output s_axil_wready;
   output s_axil_arready;
   output [31:0]s_axil_rdata;
   output [0:0]s_axil_bresp;
+  output o_hb_ck_p;
   output [7:0]o_dbg_dq_o_d1;
   output [7:0]o_dbg_dq_o_d2;
   output [0:0]o_dbg_i_dq_t;
-  output o_hb_ck_p;
   output o_dbg_rwds_o_d1;
   output o_dbg_rwds_o_d2;
   output o_dbg_i_rwds_t;
@@ -11012,8 +10902,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   output [31:0]o_dbg_last_read_word32;
   output [7:0]o_dbg_dq_q1_dly;
   output [7:0]o_dbg_dq_q2_dly;
-  output rd_half_reg;
   output o_hb_cs_n;
+  output rd_half_reg;
+  output o_dbg_hb_cs_n_q;
   output s_axi_awready;
   output [0:0]s_axi_bresp;
   output [0:0]s_axi_bid;
@@ -11049,9 +10940,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   input s_axil_wvalid;
   input s_axi_awvalid;
   input s_axi_arvalid;
+  input i_ref_clk_300;
   input i_hb_clk_200_samp_90;
   input i_iddre1_rst;
-  input i_ref_clk_300;
   input i_hb_clk_200_gated;
   input i_hb_rstn;
   input [1:0]s_axi_awburst;
@@ -11064,7 +10955,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
 
   wire \FSM_sequential_axil_state[1]_i_5_n_0 ;
   wire aw_pending;
-  wire [5:1]axif_rwds_cntr;
+  wire [5:0]axif_rwds_cntr;
   wire axil_ar_can_accept;
   wire [31:0]axil_rsp_fifo_din;
   wire [31:0]axil_rsp_fifo_dout;
@@ -11102,6 +10993,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire hb_clk_ce;
   wire hb_clk_ce_force;
   wire hb_clk_ce_force_q_i_1_n_0;
+  wire hb_cs_n_dbg_q_i_1_n_0;
+  wire hb_cs_n_pad_q;
   wire [5:0]hb_reset_pulse_cnt;
   wire hb_reset_pulse_cnt0;
   wire \hb_reset_pulse_cnt[0]_i_1_n_0 ;
@@ -11128,6 +11021,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire i_iddre1_rst;
   wire i_idelayctrl_rst;
   wire i_ref_clk_300;
+  wire idelayctrl_rdy_axi;
   wire idelayctrl_rst_req;
   wire [43:16]in127;
   wire [7:0]io_hb_dq;
@@ -11138,6 +11032,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire [7:0]o_dbg_dq_o_d2;
   wire [7:0]o_dbg_dq_q1_dly;
   wire [7:0]o_dbg_dq_q2_dly;
+  wire o_dbg_hb_cs_n_q;
   wire [0:0]o_dbg_i_dq_t;
   wire o_dbg_i_rwds_t;
   wire [31:0]o_dbg_last_read_word32;
@@ -11151,13 +11046,12 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire o_hb_clk_ce;
   wire o_hb_clk_ce_i_1_n_0;
   wire o_hb_cs_n;
-  wire o_hb_cs_n_q_i_2_n_0;
   wire o_hb_reset_n;
   wire o_hb_reset_n_INST_0_i_1_n_0;
   wire odelay_rst_req;
   wire odly_ce;
   wire [8:0]odly_cntvaluein;
-  wire [3:1]odly_cntvalueout;
+  wire [2:2]odly_cntvalueout;
   wire odly_en_vtc;
   wire odly_inc;
   wire p_44_in;
@@ -11171,7 +11065,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire rwds_idelay_rst_req;
   wire rwds_idly_ce;
   wire [8:0]rwds_idly_cntvaluein;
-  wire [4:4]rwds_idly_cntvalueout;
+  wire [4:2]rwds_idly_cntvalueout;
   wire rwds_idly_en_vtc;
   wire rwds_idly_inc;
   wire rwds_q1;
@@ -11210,6 +11104,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire s_axil_awvalid;
   wire s_axil_bready;
   wire [0:0]s_axil_bresp;
+  wire s_axil_bvalid042_out;
   wire s_axil_bvalid_reg;
   wire [31:0]s_axil_rdata;
   wire [24:24]s_axil_rdata1_in;
@@ -11262,9 +11157,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_axi_full_frontend_n_7;
   wire u_axi_lite_frontend_n_13;
   wire u_axi_lite_frontend_n_14;
-  wire u_axi_lite_frontend_n_171;
-  wire u_axi_lite_frontend_n_172;
-  wire u_axi_lite_frontend_n_173;
   wire u_axi_lite_frontend_n_174;
   wire u_axi_lite_frontend_n_175;
   wire u_axi_lite_frontend_n_176;
@@ -11276,21 +11168,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_axi_lite_frontend_n_181;
   wire u_axi_lite_frontend_n_182;
   wire u_axi_lite_frontend_n_183;
+  wire u_axi_lite_frontend_n_184;
+  wire u_axi_lite_frontend_n_185;
+  wire u_axi_lite_frontend_n_186;
   wire u_axi_lite_frontend_n_19;
   wire u_axi_lite_frontend_n_20;
-  wire u_axi_lite_frontend_n_21;
-  wire u_axi_lite_frontend_n_22;
-  wire u_axi_lite_frontend_n_23;
-  wire u_axi_lite_frontend_n_24;
-  wire u_axi_lite_frontend_n_27;
-  wire u_axi_lite_frontend_n_28;
-  wire u_axi_lite_frontend_n_29;
-  wire u_axi_lite_frontend_n_30;
-  wire u_axi_lite_frontend_n_31;
-  wire u_axi_lite_frontend_n_32;
-  wire u_axi_lite_frontend_n_33;
-  wire u_axi_lite_frontend_n_34;
-  wire u_axi_lite_frontend_n_35;
   wire u_axi_lite_frontend_n_36;
   wire u_axi_lite_frontend_n_37;
   wire u_axi_lite_frontend_n_38;
@@ -11299,6 +11181,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_axi_lite_frontend_n_41;
   wire u_axi_lite_frontend_n_42;
   wire u_axi_lite_frontend_n_43;
+  wire u_axi_lite_frontend_n_44;
+  wire u_axi_lite_frontend_n_45;
+  wire u_axi_lite_frontend_n_46;
+  wire u_axi_lite_frontend_n_47;
   wire u_axi_lite_frontend_n_48;
   wire u_axi_lite_frontend_n_49;
   wire u_axi_lite_frontend_n_50;
@@ -11306,19 +11192,30 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_axi_lite_frontend_n_52;
   wire u_axi_lite_frontend_n_53;
   wire u_axi_lite_frontend_n_58;
+  wire u_axi_lite_frontend_n_60;
+  wire u_axi_lite_frontend_n_61;
+  wire u_axi_lite_frontend_n_62;
+  wire u_axi_lite_frontend_n_63;
+  wire u_axi_lite_frontend_n_64;
+  wire u_axi_lite_frontend_n_65;
+  wire u_axi_lite_frontend_n_66;
+  wire u_axi_lite_frontend_n_67;
   wire u_axi_lite_frontend_n_77;
   wire u_axi_lite_frontend_n_78;
   wire u_axi_lite_frontend_n_79;
   wire u_axi_lite_frontend_n_80;
   wire u_axi_lite_frontend_n_81;
   wire u_axi_lite_frontend_n_82;
+  wire u_axi_lite_frontend_n_83;
+  wire u_axi_lite_frontend_n_84;
+  wire u_axi_lite_frontend_n_85;
   wire u_fifo_bank_n_140;
   wire u_fifo_bank_n_141;
   wire u_fifo_bank_n_142;
   wire u_fifo_bank_n_143;
-  wire u_fifo_bank_n_146;
+  wire u_fifo_bank_n_144;
   wire u_fifo_bank_n_147;
-  wire u_fifo_bank_n_176;
+  wire u_fifo_bank_n_148;
   wire u_fifo_bank_n_177;
   wire u_fifo_bank_n_178;
   wire u_fifo_bank_n_179;
@@ -11329,39 +11226,34 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_fifo_bank_n_184;
   wire u_fifo_bank_n_185;
   wire u_fifo_bank_n_186;
-  wire u_hb_engine_n_14;
-  wire u_hb_engine_n_15;
-  wire u_hb_engine_n_16;
+  wire u_fifo_bank_n_187;
+  wire u_hb_engine_n_10;
   wire u_hb_engine_n_17;
+  wire u_hb_engine_n_18;
   wire u_hb_engine_n_19;
   wire u_hb_engine_n_20;
-  wire u_hb_engine_n_21;
+  wire u_hb_engine_n_22;
+  wire u_hb_engine_n_23;
   wire u_hb_engine_n_24;
-  wire u_hb_engine_n_33;
-  wire u_hb_engine_n_34;
-  wire u_hb_engine_n_35;
-  wire u_hb_engine_n_36;
   wire u_hb_engine_n_37;
   wire u_hb_engine_n_38;
-  wire u_hb_engine_n_44;
-  wire u_hb_engine_n_45;
-  wire u_hb_engine_n_46;
+  wire u_hb_engine_n_39;
+  wire u_hb_engine_n_40;
+  wire u_hb_engine_n_41;
+  wire u_hb_engine_n_42;
   wire u_hb_engine_n_48;
-  wire u_hb_engine_n_49;
   wire u_hb_engine_n_50;
   wire u_hb_engine_n_51;
   wire u_hb_engine_n_52;
   wire u_hb_engine_n_53;
   wire u_hb_engine_n_54;
-  wire u_hb_engine_n_70;
+  wire u_hb_engine_n_55;
   wire u_hb_engine_n_72;
   wire u_hb_engine_n_73;
   wire u_hb_engine_n_74;
   wire u_hb_engine_n_75;
   wire u_hb_engine_n_76;
   wire u_hb_engine_n_77;
-  wire u_hb_engine_n_78;
-  wire u_hyperbus_phy_n_22;
   wire u_hyperbus_phy_n_23;
   wire u_hyperbus_phy_n_24;
   wire u_hyperbus_phy_n_25;
@@ -11379,14 +11271,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   wire u_hyperbus_phy_n_37;
   wire u_hyperbus_phy_n_38;
   wire u_hyperbus_phy_n_39;
-  wire u_hyperbus_phy_n_40;
   wire [35:0]wr_fifo_dout;
   wire wr_fifo_rd_en;
   wire wr_fifo_wr_en;
   wire wrbuf_high_half;
   wire wrbuf_high_half_i_1_n_0;
 
-  (* SOFT_HLUTNM = "soft_lutpair338" *) 
+  (* SOFT_HLUTNM = "soft_lutpair340" *) 
   LUT4 #(
     .INIT(16'hFF10)) 
     \FSM_sequential_axil_state[1]_i_5 
@@ -11408,37 +11299,44 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
   LUT6 #(
     .INIT(64'hF0F0F0F03530F0F0)) 
     cmd_loaded_i_1
-       (.I0(u_fifo_bank_n_146),
+       (.I0(u_fifo_bank_n_147),
         .I1(hb_state035_out),
-        .I2(u_hb_engine_n_16),
+        .I2(u_hb_engine_n_19),
         .I3(cmd_fifo_dout_valid),
-        .I4(u_hb_engine_n_76),
-        .I5(u_hb_engine_n_48),
+        .I4(u_hb_engine_n_75),
+        .I5(u_hb_engine_n_50),
         .O(cmd_loaded_i_1_n_0));
   LUT6 #(
     .INIT(64'hFFFFFFFB00000008)) 
     hb_clk_ce_force_q_i_1
        (.I0(s_axil_wdata[0]),
-        .I1(u_axi_lite_frontend_n_20),
-        .I2(u_axi_lite_frontend_n_82),
-        .I3(u_axi_lite_frontend_n_80),
-        .I4(u_axi_lite_frontend_n_49),
+        .I1(u_axi_lite_frontend_n_60),
+        .I2(u_axi_lite_frontend_n_85),
+        .I3(u_axi_lite_frontend_n_83),
+        .I4(u_axi_lite_frontend_n_61),
         .I5(hb_clk_ce_force),
         .O(hb_clk_ce_force_q_i_1_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair343" *) 
+  LUT3 #(
+    .INIT(8'hB8)) 
+    hb_cs_n_dbg_q_i_1
+       (.I0(hb_cs_n_pad_q),
+        .I1(u_hb_engine_n_10),
+        .I2(o_dbg_hb_cs_n_q),
+        .O(hb_cs_n_dbg_q_i_1_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair345" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \hb_reset_pulse_cnt[0]_i_1 
        (.I0(hb_reset_pulse_cnt[0]),
         .O(\hb_reset_pulse_cnt[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair343" *) 
+  (* SOFT_HLUTNM = "soft_lutpair345" *) 
   LUT2 #(
     .INIT(4'h9)) 
     \hb_reset_pulse_cnt[1]_i_1 
        (.I0(hb_reset_pulse_cnt[1]),
         .I1(hb_reset_pulse_cnt[0]),
         .O(\hb_reset_pulse_cnt[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair339" *) 
+  (* SOFT_HLUTNM = "soft_lutpair341" *) 
   LUT4 #(
     .INIT(16'hFFE1)) 
     \hb_reset_pulse_cnt[2]_i_1 
@@ -11447,7 +11345,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I2(hb_reset_pulse_cnt[2]),
         .I3(hb_timeout_pulse_hb),
         .O(\hb_reset_pulse_cnt[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair339" *) 
+  (* SOFT_HLUTNM = "soft_lutpair341" *) 
   LUT5 #(
     .INIT(32'hFFFFFE01)) 
     \hb_reset_pulse_cnt[3]_i_1 
@@ -11457,7 +11355,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I3(hb_reset_pulse_cnt[3]),
         .I4(hb_timeout_pulse_hb),
         .O(\hb_reset_pulse_cnt[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair340" *) 
+  (* SOFT_HLUTNM = "soft_lutpair342" *) 
   LUT5 #(
     .INIT(32'hAAAAAAA9)) 
     \hb_reset_pulse_cnt[4]_i_2 
@@ -11480,7 +11378,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I1(hb_reset_pulse_cnt[5]),
         .I2(hb_timeout_pulse_hb),
         .O(\hb_reset_pulse_cnt[5]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair340" *) 
+  (* SOFT_HLUTNM = "soft_lutpair342" *) 
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
     \hb_reset_pulse_cnt[5]_i_3 
@@ -11495,13 +11393,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .CE(o_hb_reset_n_INST_0_i_1_n_0),
         .D(\hb_reset_pulse_cnt[0]_i_1_n_0 ),
         .Q(hb_reset_pulse_cnt[0]),
-        .R(u_hb_engine_n_78));
+        .R(u_hb_engine_n_77));
   FDRE \hb_reset_pulse_cnt_reg[1] 
        (.C(i_hb_clk_200),
         .CE(o_hb_reset_n_INST_0_i_1_n_0),
         .D(\hb_reset_pulse_cnt[1]_i_1_n_0 ),
         .Q(hb_reset_pulse_cnt[1]),
-        .R(u_hb_engine_n_78));
+        .R(u_hb_engine_n_77));
   FDRE \hb_reset_pulse_cnt_reg[2] 
        (.C(i_hb_clk_200),
         .CE(\hb_reset_pulse_cnt[5]_i_1_n_0 ),
@@ -11519,7 +11417,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .CE(o_hb_reset_n_INST_0_i_1_n_0),
         .D(\hb_reset_pulse_cnt[4]_i_2_n_0 ),
         .Q(hb_reset_pulse_cnt[4]),
-        .R(u_hb_engine_n_78));
+        .R(u_hb_engine_n_77));
   FDRE \hb_reset_pulse_cnt_reg[5] 
        (.C(i_hb_clk_200),
         .CE(\hb_reset_pulse_cnt[5]_i_1_n_0 ),
@@ -11543,41 +11441,31 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     last_read_half_i_1
        (.I0(base_latency),
         .I1(u_hb_engine_n_73),
-        .I2(u_hb_engine_n_36),
+        .I2(u_hb_engine_n_40),
         .I3(p_44_in),
-        .I4(u_hb_engine_n_35),
-        .I5(u_hb_engine_n_20),
+        .I4(u_hb_engine_n_39),
+        .I5(u_hb_engine_n_23),
         .O(last_read_half_i_1_n_0));
   LUT6 #(
     .INIT(64'h404040FF40404000)) 
     latency_2x_i_1
        (.I0(hb_state[4]),
-        .I1(u_hb_engine_n_33),
+        .I1(u_hb_engine_n_37),
         .I2(rwds_q1),
-        .I3(u_hb_engine_n_77),
+        .I3(u_hb_engine_n_76),
         .I4(base_latency),
-        .I5(u_hb_engine_n_17),
+        .I5(u_hb_engine_n_20),
         .O(latency_2x_i_1_n_0));
   LUT6 #(
     .INIT(64'h808080FF80808000)) 
     o_hb_clk_ce_i_1
        (.I0(hb_state[0]),
-        .I1(u_hb_engine_n_49),
+        .I1(u_hb_engine_n_51),
         .I2(hb_state[1]),
         .I3(u_hb_engine_n_74),
         .I4(u_hb_engine_n_72),
         .I5(hb_clk_ce),
         .O(o_hb_clk_ce_i_1_n_0));
-  LUT6 #(
-    .INIT(64'hFFAEFFFFFFAE0000)) 
-    o_hb_cs_n_q_i_2
-       (.I0(u_hb_engine_n_46),
-        .I1(u_hb_engine_n_52),
-        .I2(u_hb_engine_n_48),
-        .I3(u_hb_engine_n_70),
-        .I4(u_hb_engine_n_75),
-        .I5(o_hb_cs_n),
-        .O(o_hb_cs_n_q_i_2_n_0));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFFFFE)) 
     o_hb_reset_n_INST_0_i_1
@@ -11592,20 +11480,20 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     .INIT(64'h3330333300800080)) 
     rd_half_i_1
        (.I0(p_44_in),
-        .I1(u_hb_engine_n_35),
+        .I1(u_hb_engine_n_39),
         .I2(hb_state[3]),
         .I3(hb_state[4]),
-        .I4(u_hb_engine_n_45),
+        .I4(u_hb_engine_n_48),
         .I5(rd_half_reg),
         .O(rd_half_i_1_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair338" *) 
+  (* SOFT_HLUTNM = "soft_lutpair340" *) 
   LUT5 #(
-    .INIT(32'hFFFF0004)) 
+    .INIT(32'hFFFF0200)) 
     \s_axil_rdata[31]_i_1 
-       (.I0(u_axi_lite_frontend_n_51),
-        .I1(s_axil_arvalid),
-        .I2(u_axi_lite_frontend_n_19),
-        .I3(cmd_fifo_full),
+       (.I0(s_axil_arvalid),
+        .I1(u_axi_lite_frontend_n_19),
+        .I2(cmd_fifo_full),
+        .I3(u_axi_lite_frontend_n_66),
         .I4(u_axi_lite_frontend_n_18),
         .O(\s_axil_rdata[31]_i_1_n_0 ));
   LUT6 #(
@@ -11613,25 +11501,25 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
     timeout_status_q_i_1
        (.I0(timeout_holdoff_d),
         .I1(hb_timeout_block_axi),
-        .I2(u_axi_lite_frontend_n_50),
-        .I3(u_axi_lite_frontend_n_81),
-        .I4(u_axi_lite_frontend_n_20),
+        .I2(u_axi_lite_frontend_n_62),
+        .I3(u_axi_lite_frontend_n_84),
+        .I4(u_axi_lite_frontend_n_60),
         .I5(u_axi_lite_frontend_n_14),
         .O(timeout_status_q_i_1_n_0));
   LUT6 #(
     .INIT(64'hDDDD5555C8880000)) 
     timeout_tripped_cur_i_1
-       (.I0(u_hb_engine_n_54),
-        .I1(u_hb_engine_n_50),
-        .I2(u_hb_engine_n_34),
-        .I3(u_hb_engine_n_33),
-        .I4(u_hb_engine_n_36),
-        .I5(u_hb_engine_n_21),
+       (.I0(u_hb_engine_n_55),
+        .I1(u_hb_engine_n_52),
+        .I2(u_hb_engine_n_38),
+        .I3(u_hb_engine_n_37),
+        .I4(u_hb_engine_n_40),
+        .I5(u_hb_engine_n_24),
         .O(timeout_tripped_cur_i_1_n_0));
   design_1_hyperbus_controller_0_0_hyperbus_axi_full_frontend u_axi_full_frontend
        (.E(wr_fifo_wr_en),
         .aw_pending(aw_pending),
-        .\aw_wrap_base_q_reg[0]_0 (u_fifo_bank_n_184),
+        .\aw_wrap_base_q_reg[0]_0 (u_fifo_bank_n_185),
         .cmd_fifo_wr_en_full(cmd_fifo_wr_en_full),
         .data_valid(rd_fifo_dout_valid),
         .din({u_axi_full_frontend_n_11,u_axi_full_frontend_n_12,u_axi_full_frontend_n_13,u_axi_full_frontend_n_14,u_axi_full_frontend_n_15,u_axi_full_frontend_n_16,u_axi_full_frontend_n_17,u_axi_full_frontend_n_18,u_axi_full_frontend_n_19,u_axi_full_frontend_n_20,u_axi_full_frontend_n_21,u_axi_full_frontend_n_22,u_axi_full_frontend_n_23,u_axi_full_frontend_n_24,u_axi_full_frontend_n_25,u_axi_full_frontend_n_26,u_axi_full_frontend_n_27,u_axi_full_frontend_n_28,u_axi_full_frontend_n_29,u_axi_full_frontend_n_30,u_axi_full_frontend_n_31,u_axi_full_frontend_n_32,u_axi_full_frontend_n_33,u_axi_full_frontend_n_34,u_axi_full_frontend_n_35,u_axi_full_frontend_n_36,u_axi_full_frontend_n_37,u_axi_full_frontend_n_38,u_axi_full_frontend_n_39,u_axi_full_frontend_n_40,u_axi_full_frontend_n_41,u_axi_full_frontend_n_42,u_axi_full_frontend_n_43,u_axi_full_frontend_n_44,u_axi_full_frontend_n_45,u_axi_full_frontend_n_46}),
@@ -11652,7 +11540,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .s_axi_arid(s_axi_arid),
         .s_axi_arlen(s_axi_arlen),
         .s_axi_arready(s_axi_arready),
-        .s_axi_arready_reg_0(u_fifo_bank_n_185),
+        .s_axi_arready_reg_0(u_fifo_bank_n_186),
         .s_axi_arsize(s_axi_arsize[2]),
         .s_axi_awaddr(s_axi_awaddr),
         .s_axi_awburst(s_axi_awburst),
@@ -11665,7 +11553,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .s_axi_bresp(s_axi_bresp),
         .s_axi_bvalid_reg_0(s_axi_bvalid_reg),
         .s_axi_rdata(s_axi_rdata),
-        .\s_axi_rdata[31]_i_17_0 (u_fifo_bank_n_186),
+        .\s_axi_rdata[31]_i_17_0 (u_fifo_bank_n_187),
         .s_axi_rid(s_axi_rid),
         .s_axi_rlast(s_axi_rlast),
         .s_axi_rready(s_axi_rready),
@@ -11674,25 +11562,26 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .s_axi_wready_reg_0(s_axi_wready),
         .s_axi_wvalid(s_axi_wvalid));
   design_1_hyperbus_controller_0_0_hyperbus_axi_lite_frontend u_axi_lite_frontend
-       (.CNTVALUEIN(odly_cntvaluein),
-        .CNTVALUEOUT(rwds_idly_cntvalueout),
-        .D({i_axi_aresetn,u_fifo_bank_n_142,u_fifo_bank_n_143}),
+       (.CNTVALUEIN(rwds_idly_cntvaluein),
+        .CNTVALUEOUT(rwds_idly_cntvalueout[4]),
+        .D({i_axi_aresetn,u_fifo_bank_n_143,u_fifo_bank_n_144}),
         .E(\s_axil_rdata[31]_i_1_n_0 ),
         .\FSM_sequential_axil_state_reg[0]_0 (u_axi_lite_frontend_n_19),
         .\FSM_sequential_axil_state_reg[0]_1 (\FSM_sequential_axil_state[1]_i_5_n_0 ),
-        .Q(axil_state),
+        .\FSM_sequential_axil_state_reg[1]_0 (axil_state),
+        .Q({hb_reset_req,rwds_idelay_rst_req,odelay_rst_req,idelayctrl_rst_req}),
         .aw_pending(aw_pending),
         .axil_ar_can_accept(axil_ar_can_accept),
-        .\axil_awaddr_q_reg[11]_0 (u_axi_lite_frontend_n_20),
-        .\axil_awaddr_q_reg[1]_0 (u_axi_lite_frontend_n_49),
-        .\axil_awaddr_q_reg[6]_0 (u_axi_lite_frontend_n_50),
-        .\axil_awaddr_q_reg[9]_0 (u_axi_lite_frontend_n_82),
+        .\axil_awaddr_q_reg[11]_0 (u_axi_lite_frontend_n_60),
+        .\axil_awaddr_q_reg[1]_0 (u_axi_lite_frontend_n_61),
+        .\axil_awaddr_q_reg[2]_0 (u_axi_lite_frontend_n_58),
+        .\axil_awaddr_q_reg[6]_0 (u_axi_lite_frontend_n_62),
+        .\axil_awaddr_q_reg[9]_0 (u_axi_lite_frontend_n_85),
         .axil_rsp_pop_pending_reg_0(u_axi_lite_frontend_n_13),
         .axil_rsp_pop_pending_reg_1(axil_rsp_pop_pending_i_2_n_0),
         .cmd_fifo_wr_en_full(cmd_fifo_wr_en_full),
         .data_valid(axil_rsp_fifo_dout_valid),
-        .\delay_rst_ctrl_q_reg[3]_0 ({hb_reset_req,rwds_idelay_rst_req,odelay_rst_req,idelayctrl_rst_req}),
-        .din({u_axi_lite_frontend_n_28,u_axi_lite_frontend_n_29,u_axi_lite_frontend_n_30,u_axi_lite_frontend_n_31,u_axi_lite_frontend_n_32,u_axi_lite_frontend_n_33,u_axi_lite_frontend_n_34,u_axi_lite_frontend_n_35,u_axi_lite_frontend_n_36,u_axi_lite_frontend_n_37,u_axi_lite_frontend_n_38,u_axi_lite_frontend_n_39,u_axi_lite_frontend_n_40,u_axi_lite_frontend_n_41,u_axi_lite_frontend_n_42,u_axi_lite_frontend_n_43}),
+        .din({u_axi_lite_frontend_n_38,u_axi_lite_frontend_n_39,u_axi_lite_frontend_n_40,u_axi_lite_frontend_n_41,u_axi_lite_frontend_n_42,u_axi_lite_frontend_n_43,u_axi_lite_frontend_n_44,u_axi_lite_frontend_n_45,u_axi_lite_frontend_n_46,u_axi_lite_frontend_n_47,u_axi_lite_frontend_n_48,u_axi_lite_frontend_n_49,u_axi_lite_frontend_n_50,u_axi_lite_frontend_n_51,u_axi_lite_frontend_n_52,u_axi_lite_frontend_n_53}),
         .dout({axil_rsp_fifo_dout[31:25],axil_rsp_fifo_dout[23:0]}),
         .dq_idly_cntvaluein(dq_idly_cntvaluein),
         .dq_idly_en_vtc(dq_idly_en_vtc),
@@ -11706,11 +11595,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .hb_timeout_block_axi(hb_timeout_block_axi),
         .i_axi_aclk(i_axi_aclk),
         .i_hb_rstn(i_hb_rstn),
-        .o_axif_rwds_cntr(axif_rwds_cntr),
+        .idelayctrl_rdy_axi(idelayctrl_rdy_axi),
+        .o_axif_rwds_cntr({axif_rwds_cntr[5:3],axif_rwds_cntr[1:0]}),
         .o_axil_rsp_fifo_rd_en_reg_0(axil_rsp_fifo_rd_en),
         .\o_cmd_fifo_din_axil_reg[1]_0 (u_fifo_bank_n_140),
         .\o_cmd_fifo_din_axil_reg[25]_0 (u_fifo_bank_n_141),
         .\o_cmd_fifo_din_axil_reg[58]_0 ({cmd_fifo_din_axil[58:57],cmd_fifo_din_axil[35],cmd_fifo_din_axil[15]}),
+        .\o_cmd_fifo_din_axil_reg[58]_1 (u_fifo_bank_n_142),
         .o_cmd_fifo_wr_en_axil(cmd_fifo_wr_en_axil),
         .\o_dq_idly_ce_reg[7]_0 (dq_idly_ce),
         .o_hb_reset_n(o_hb_reset_n),
@@ -11718,38 +11609,38 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .odly_ce(odly_ce),
         .odly_en_vtc(odly_en_vtc),
         .odly_inc(odly_inc),
-        .\odly_time_value_q_reg[5]_0 (u_axi_lite_frontend_n_58),
+        .odly_inc_q_reg_0(u_axi_lite_frontend_n_77),
+        .\odly_time_value_q_reg[5]_0 (u_axi_lite_frontend_n_82),
+        .\odly_time_value_q_reg[8]_0 (odly_cntvaluein),
         .rwds_idly_ce(rwds_idly_ce),
         .rwds_idly_en_vtc(rwds_idly_en_vtc),
         .rwds_idly_inc(rwds_idly_inc),
-        .\rwds_idly_time_value_q_reg[8]_0 (rwds_idly_cntvaluein),
-        .\rwds_idly_time_value_q_reg[8]_1 (u_axi_lite_frontend_n_179),
+        .\rwds_idly_time_value_q_reg[6]_0 (u_axi_lite_frontend_n_181),
+        .\rwds_idly_time_value_q_reg[7]_0 (u_axi_lite_frontend_n_179),
+        .\rwds_idly_time_value_q_reg[8]_0 (u_axi_lite_frontend_n_177),
         .s_axi_arvalid(s_axi_arvalid),
         .s_axi_awvalid(s_axi_awvalid),
         .s_axil_araddr(s_axil_araddr),
-        .\s_axil_araddr[1]_0 (u_axi_lite_frontend_n_23),
-        .\s_axil_araddr[1]_1 (u_axi_lite_frontend_n_173),
-        .\s_axil_araddr[2]_0 (u_axi_lite_frontend_n_176),
-        .\s_axil_araddr[2]_1 (u_axi_lite_frontend_n_178),
-        .\s_axil_araddr[4]_0 (u_axi_lite_frontend_n_79),
-        .\s_axil_araddr[6]_0 (u_axi_lite_frontend_n_175),
-        .\s_axil_araddr[6]_1 (u_axi_lite_frontend_n_180),
-        .\s_axil_araddr[6]_2 (u_axi_lite_frontend_n_181),
+        .\s_axil_araddr[3]_0 (u_axi_lite_frontend_n_175),
+        .\s_axil_araddr[5]_0 (u_axi_lite_frontend_n_78),
+        .\s_axil_araddr[6]_0 (u_axi_lite_frontend_n_67),
+        .\s_axil_araddr[6]_1 (u_axi_lite_frontend_n_178),
+        .\s_axil_araddr[6]_2 (u_axi_lite_frontend_n_180),
         .\s_axil_araddr[6]_3 (u_axi_lite_frontend_n_182),
         .\s_axil_araddr[6]_4 (u_axi_lite_frontend_n_183),
-        .\s_axil_araddr[7]_0 (u_axi_lite_frontend_n_177),
-        .\s_axil_araddr[8]_0 (u_axi_lite_frontend_n_171),
-        .\s_axil_araddr[9]_0 (u_axi_lite_frontend_n_51),
-        .\s_axil_araddr[9]_1 (u_axi_lite_frontend_n_78),
-        .s_axil_araddr_14_sp_1(u_axi_lite_frontend_n_52),
-        .s_axil_araddr_1_sp_1(u_axi_lite_frontend_n_22),
-        .s_axil_araddr_2_sp_1(u_axi_lite_frontend_n_174),
-        .s_axil_araddr_4_sp_1(u_axi_lite_frontend_n_27),
-        .s_axil_araddr_5_sp_1(u_axi_lite_frontend_n_24),
-        .s_axil_araddr_6_sp_1(u_axi_lite_frontend_n_53),
-        .s_axil_araddr_7_sp_1(u_axi_lite_frontend_n_77),
-        .s_axil_araddr_8_sp_1(u_axi_lite_frontend_n_48),
-        .s_axil_araddr_9_sp_1(u_axi_lite_frontend_n_21),
+        .\s_axil_araddr[6]_5 (u_axi_lite_frontend_n_184),
+        .\s_axil_araddr[6]_6 (u_axi_lite_frontend_n_185),
+        .\s_axil_araddr[6]_7 (u_axi_lite_frontend_n_186),
+        .\s_axil_araddr[7]_0 (u_axi_lite_frontend_n_37),
+        .\s_axil_araddr[7]_1 (u_axi_lite_frontend_n_79),
+        .s_axil_araddr_1_sp_1(u_axi_lite_frontend_n_63),
+        .s_axil_araddr_2_sp_1(u_axi_lite_frontend_n_66),
+        .s_axil_araddr_3_sp_1(u_axi_lite_frontend_n_20),
+        .s_axil_araddr_4_sp_1(u_axi_lite_frontend_n_81),
+        .s_axil_araddr_5_sp_1(u_axi_lite_frontend_n_65),
+        .s_axil_araddr_6_sp_1(u_axi_lite_frontend_n_64),
+        .s_axil_araddr_7_sp_1(u_axi_lite_frontend_n_36),
+        .s_axil_araddr_9_sp_1(u_axi_lite_frontend_n_176),
         .s_axil_arready(s_axil_arready),
         .s_axil_arvalid(s_axil_arvalid),
         .s_axil_awaddr(s_axil_awaddr),
@@ -11757,40 +11648,42 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .s_axil_awvalid(s_axil_awvalid),
         .s_axil_bready(s_axil_bready),
         .s_axil_bresp(s_axil_bresp),
+        .s_axil_bvalid042_out(s_axil_bvalid042_out),
         .s_axil_bvalid_reg_0(s_axil_bvalid_reg),
         .s_axil_rdata(s_axil_rdata),
-        .\s_axil_rdata[0]_i_3_0 (u_hyperbus_phy_n_35),
-        .\s_axil_rdata[1]_i_3_0 (u_hyperbus_phy_n_30),
-        .\s_axil_rdata[2]_i_2_0 (u_hb_engine_n_37),
-        .\s_axil_rdata[6]_i_3_0 (u_hyperbus_phy_n_24),
-        .\s_axil_rdata[7]_i_3_0 (u_hyperbus_phy_n_23),
-        .\s_axil_rdata_reg[0]_0 (u_hyperbus_phy_n_40),
-        .\s_axil_rdata_reg[0]_1 (u_hyperbus_phy_n_28),
-        .\s_axil_rdata_reg[1]_0 (u_hyperbus_phy_n_39),
+        .\s_axil_rdata[2]_i_2_0 (u_hb_engine_n_42),
+        .\s_axil_rdata_reg[0]_0 (u_hyperbus_phy_n_39),
+        .\s_axil_rdata_reg[0]_1 (u_hyperbus_phy_n_29),
+        .\s_axil_rdata_reg[1]_0 (u_hyperbus_phy_n_23),
+        .\s_axil_rdata_reg[1]_1 (u_hyperbus_phy_n_38),
         .\s_axil_rdata_reg[24]_0 (s_axil_rdata1_in),
-        .\s_axil_rdata_reg[2]_0 (u_hyperbus_phy_n_31),
-        .\s_axil_rdata_reg[3]_0 (u_hyperbus_phy_n_22),
-        .\s_axil_rdata_reg[3]_1 (u_hyperbus_phy_n_38),
-        .\s_axil_rdata_reg[4]_0 (u_hyperbus_phy_n_34),
-        .\s_axil_rdata_reg[4]_1 (u_hyperbus_phy_n_32),
-        .\s_axil_rdata_reg[5]_0 (u_hyperbus_phy_n_37),
-        .\s_axil_rdata_reg[5]_1 (u_hyperbus_phy_n_26),
-        .\s_axil_rdata_reg[6]_0 (u_hyperbus_phy_n_27),
-        .\s_axil_rdata_reg[7]_0 (u_hyperbus_phy_n_36),
-        .\s_axil_rdata_reg[8]_0 (u_hyperbus_phy_n_25),
-        .\s_axil_rdata_reg[8]_1 (u_hyperbus_phy_n_33),
+        .\s_axil_rdata_reg[2]_0 (u_hyperbus_phy_n_37),
+        .\s_axil_rdata_reg[2]_1 (u_hb_engine_n_41),
+        .\s_axil_rdata_reg[3]_0 (u_hyperbus_phy_n_36),
+        .\s_axil_rdata_reg[3]_1 (u_hyperbus_phy_n_28),
+        .\s_axil_rdata_reg[4]_0 (u_hyperbus_phy_n_35),
+        .\s_axil_rdata_reg[4]_1 (u_hyperbus_phy_n_30),
+        .\s_axil_rdata_reg[5]_0 (u_hyperbus_phy_n_34),
+        .\s_axil_rdata_reg[5]_1 (u_hyperbus_phy_n_24),
+        .\s_axil_rdata_reg[6]_0 (u_hyperbus_phy_n_33),
+        .\s_axil_rdata_reg[6]_1 (u_hyperbus_phy_n_25),
+        .\s_axil_rdata_reg[7]_0 (u_hyperbus_phy_n_32),
+        .\s_axil_rdata_reg[7]_1 (u_hyperbus_phy_n_26),
+        .\s_axil_rdata_reg[8]_0 (u_hyperbus_phy_n_31),
+        .\s_axil_rdata_reg[8]_1 (u_hyperbus_phy_n_27),
         .s_axil_rready(s_axil_rready),
         .s_axil_rvalid(s_axil_rvalid),
         .s_axil_wdata(s_axil_wdata),
-        .s_axil_wdata_0_sp_1(u_axi_lite_frontend_n_172),
+        .s_axil_wdata_0_sp_1(u_axi_lite_frontend_n_174),
         .s_axil_wready(s_axil_wready),
         .s_axil_wstrb(s_axil_wstrb),
-        .s_axil_wstrb_0_sp_1(u_axi_lite_frontend_n_80),
+        .s_axil_wstrb_0_sp_1(u_axi_lite_frontend_n_83),
         .s_axil_wvalid(s_axil_wvalid),
         .timeout_holdoff_d(timeout_holdoff_d),
         .timeout_status_q_reg_0(u_axi_lite_frontend_n_14),
-        .timeout_status_q_reg_1(u_axi_lite_frontend_n_81),
-        .timeout_status_q_reg_2(timeout_status_q_i_1_n_0),
+        .timeout_status_q_reg_1(u_axi_lite_frontend_n_80),
+        .timeout_status_q_reg_2(u_axi_lite_frontend_n_84),
+        .timeout_status_q_reg_3(timeout_status_q_i_1_n_0),
         .wr_en(cmd_fifo_wr_en));
   LUT2 #(
     .INIT(4'h8)) 
@@ -11798,7 +11691,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
        (.I0(cmd_fifo_wr_en_axil),
         .I1(cmd_fifo_din_axil[58]),
         .O(cmd_fifo_din[58]));
-  (* SOFT_HLUTNM = "soft_lutpair342" *) 
+  (* SOFT_HLUTNM = "soft_lutpair344" *) 
   LUT3 #(
     .INIT(8'hAC)) 
     u_cmd_fifo_i_24
@@ -11806,7 +11699,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I1(cmd_fifo_din_full[35]),
         .I2(cmd_fifo_wr_en_axil),
         .O(cmd_fifo_din[35]));
-  (* SOFT_HLUTNM = "soft_lutpair342" *) 
+  (* SOFT_HLUTNM = "soft_lutpair344" *) 
   LUT3 #(
     .INIT(8'hAC)) 
     u_cmd_fifo_i_3
@@ -11814,7 +11707,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I1(cmd_fifo_din_full[57]),
         .I2(cmd_fifo_wr_en_axil),
         .O(cmd_fifo_din[57]));
-  (* SOFT_HLUTNM = "soft_lutpair341" *) 
+  (* SOFT_HLUTNM = "soft_lutpair343" *) 
   LUT3 #(
     .INIT(8'hAC)) 
     u_cmd_fifo_i_42
@@ -11822,7 +11715,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I1(cmd_fifo_din_full[16]),
         .I2(cmd_fifo_wr_en_axil),
         .O(cmd_fifo_din[16]));
-  (* SOFT_HLUTNM = "soft_lutpair341" *) 
+  (* SOFT_HLUTNM = "soft_lutpair343" *) 
   LUT3 #(
     .INIT(8'hAC)) 
     u_cmd_fifo_i_43
@@ -11831,29 +11724,29 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .I2(cmd_fifo_wr_en_axil),
         .O(cmd_fifo_din[15]));
   design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx u_fifo_bank
-       (.D({u_fifo_bank_n_142,u_fifo_bank_n_143}),
+       (.D({u_fifo_bank_n_143,u_fifo_bank_n_144}),
         .E(wr_fifo_wr_en),
         .Q(axil_rsp_fifo_din),
         .SR(hb_reset_pulse_cnt0),
         .aw_pending(aw_pending),
         .axil_ar_can_accept(axil_ar_can_accept),
-        .\ca_shift_reg[16] (u_hb_engine_n_33),
+        .\ca_shift_reg[16] (u_hb_engine_n_37),
         .\ca_shift_reg[16]_0 (hb_state[1]),
         .\ca_shift_reg[43] ({in127[43:32],in127[18:16]}),
         .\count_value_i_reg[0] (axil_rsp_fifo_wr_en),
         .\count_value_i_reg[5] (axil_rsp_fifo_rd_en),
         .\count_value_i_reg[8] (rd_fifo_rd_en),
         .data_valid(cmd_fifo_dout_valid),
-        .din({cmd_fifo_din[58:57],u_axi_full_frontend_n_11,u_axi_full_frontend_n_12,u_axi_full_frontend_n_13,u_axi_full_frontend_n_14,u_axi_full_frontend_n_15,u_axi_full_frontend_n_16,u_axi_full_frontend_n_17,u_axi_full_frontend_n_18,u_axi_full_frontend_n_19,u_axi_full_frontend_n_20,u_axi_full_frontend_n_21,u_axi_full_frontend_n_22,u_axi_full_frontend_n_23,u_axi_full_frontend_n_24,u_axi_full_frontend_n_25,u_axi_full_frontend_n_26,u_axi_full_frontend_n_27,u_axi_full_frontend_n_28,u_axi_full_frontend_n_29,u_axi_full_frontend_n_30,cmd_fifo_din[35],u_axi_full_frontend_n_31,u_axi_full_frontend_n_32,u_axi_full_frontend_n_33,u_axi_full_frontend_n_34,u_axi_full_frontend_n_35,u_axi_full_frontend_n_36,u_axi_full_frontend_n_37,u_axi_full_frontend_n_38,u_axi_full_frontend_n_39,u_axi_lite_frontend_n_28,u_axi_full_frontend_n_40,u_axi_full_frontend_n_41,u_axi_full_frontend_n_42,u_axi_full_frontend_n_43,u_axi_full_frontend_n_44,u_axi_full_frontend_n_45,u_axi_full_frontend_n_46,cmd_fifo_din[16:15],u_axi_lite_frontend_n_29,u_axi_lite_frontend_n_30,u_axi_lite_frontend_n_31,u_axi_lite_frontend_n_32,u_axi_lite_frontend_n_33,u_axi_lite_frontend_n_34,u_axi_lite_frontend_n_35,u_axi_lite_frontend_n_36,u_axi_lite_frontend_n_37,u_axi_lite_frontend_n_38,u_axi_lite_frontend_n_39,u_axi_lite_frontend_n_40,u_axi_lite_frontend_n_41,u_axi_lite_frontend_n_42,u_axi_lite_frontend_n_43}),
+        .din({cmd_fifo_din[58:57],u_axi_full_frontend_n_11,u_axi_full_frontend_n_12,u_axi_full_frontend_n_13,u_axi_full_frontend_n_14,u_axi_full_frontend_n_15,u_axi_full_frontend_n_16,u_axi_full_frontend_n_17,u_axi_full_frontend_n_18,u_axi_full_frontend_n_19,u_axi_full_frontend_n_20,u_axi_full_frontend_n_21,u_axi_full_frontend_n_22,u_axi_full_frontend_n_23,u_axi_full_frontend_n_24,u_axi_full_frontend_n_25,u_axi_full_frontend_n_26,u_axi_full_frontend_n_27,u_axi_full_frontend_n_28,u_axi_full_frontend_n_29,u_axi_full_frontend_n_30,cmd_fifo_din[35],u_axi_full_frontend_n_31,u_axi_full_frontend_n_32,u_axi_full_frontend_n_33,u_axi_full_frontend_n_34,u_axi_full_frontend_n_35,u_axi_full_frontend_n_36,u_axi_full_frontend_n_37,u_axi_full_frontend_n_38,u_axi_full_frontend_n_39,u_axi_lite_frontend_n_38,u_axi_full_frontend_n_40,u_axi_full_frontend_n_41,u_axi_full_frontend_n_42,u_axi_full_frontend_n_43,u_axi_full_frontend_n_44,u_axi_full_frontend_n_45,u_axi_full_frontend_n_46,cmd_fifo_din[16:15],u_axi_lite_frontend_n_39,u_axi_lite_frontend_n_40,u_axi_lite_frontend_n_41,u_axi_lite_frontend_n_42,u_axi_lite_frontend_n_43,u_axi_lite_frontend_n_44,u_axi_lite_frontend_n_45,u_axi_lite_frontend_n_46,u_axi_lite_frontend_n_47,u_axi_lite_frontend_n_48,u_axi_lite_frontend_n_49,u_axi_lite_frontend_n_50,u_axi_lite_frontend_n_51,u_axi_lite_frontend_n_52,u_axi_lite_frontend_n_53}),
         .dout({cmd_fifo_dout[58:55],cmd_fifo_dout[27:25],cmd_fifo_dout[23:0]}),
         .empty(cmd_fifo_empty),
         .fifo_rst_axi_wr(fifo_rst_axi_wr),
         .full(cmd_fifo_full),
         .\gdvld.data_valid_std_reg (rd_fifo_dout_valid),
         .\gdvld.data_valid_std_reg_0 (axil_rsp_fifo_dout_valid),
-        .\gdvld.data_valid_std_reg_1 (u_fifo_bank_n_186),
+        .\gdvld.data_valid_std_reg_1 (u_fifo_bank_n_187),
         .\gen_pf_ic_rc.gpf_ic.prog_full_i_reg (rd_fifo_prog_full),
-        .\gen_pf_ic_rc.gpf_ic.prog_full_i_reg_0 (u_fifo_bank_n_146),
+        .\gen_pf_ic_rc.gpf_ic.prog_full_i_reg_0 (u_fifo_bank_n_147),
         .\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg (axil_rsp_fifo_full),
         .\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 (u_fifo_bank_n_141),
         .\gen_pf_ic_rc.ram_empty_i_reg (rd_fifo_empty),
@@ -11861,26 +11754,28 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .\gen_wr_a.gen_word_narrow.mem_reg (wr_fifo_dout),
         .\gen_wr_a.gen_word_narrow.mem_reg_0 (rd_fifo_dout),
         .\gen_wr_a.gen_word_narrow.mem_reg_1 ({axil_rsp_fifo_dout[31:25],axil_rsp_fifo_dout[23:0]}),
-        .\gen_wr_a.gen_word_narrow.mem_reg_10 (u_fifo_bank_n_181),
-        .\gen_wr_a.gen_word_narrow.mem_reg_11 (u_fifo_bank_n_182),
-        .\gen_wr_a.gen_word_narrow.mem_reg_12 (u_fifo_bank_n_183),
+        .\gen_wr_a.gen_word_narrow.mem_reg_10 (u_fifo_bank_n_182),
+        .\gen_wr_a.gen_word_narrow.mem_reg_11 (u_fifo_bank_n_183),
+        .\gen_wr_a.gen_word_narrow.mem_reg_12 (u_fifo_bank_n_184),
         .\gen_wr_a.gen_word_narrow.mem_reg_13 (din),
         .\gen_wr_a.gen_word_narrow.mem_reg_2 (s_axil_rdata1_in),
-        .\gen_wr_a.gen_word_narrow.mem_reg_3 (u_fifo_bank_n_147),
+        .\gen_wr_a.gen_word_narrow.mem_reg_3 (u_fifo_bank_n_148),
         .\gen_wr_a.gen_word_narrow.mem_reg_4 (ca_shift0_in),
-        .\gen_wr_a.gen_word_narrow.mem_reg_5 (u_fifo_bank_n_176),
-        .\gen_wr_a.gen_word_narrow.mem_reg_6 (u_fifo_bank_n_177),
-        .\gen_wr_a.gen_word_narrow.mem_reg_7 (u_fifo_bank_n_178),
-        .\gen_wr_a.gen_word_narrow.mem_reg_8 (u_fifo_bank_n_179),
-        .\gen_wr_a.gen_word_narrow.mem_reg_9 (u_fifo_bank_n_180),
+        .\gen_wr_a.gen_word_narrow.mem_reg_5 (u_fifo_bank_n_177),
+        .\gen_wr_a.gen_word_narrow.mem_reg_6 (u_fifo_bank_n_178),
+        .\gen_wr_a.gen_word_narrow.mem_reg_7 (u_fifo_bank_n_179),
+        .\gen_wr_a.gen_word_narrow.mem_reg_8 (u_fifo_bank_n_180),
+        .\gen_wr_a.gen_word_narrow.mem_reg_9 (u_fifo_bank_n_181),
         .hb_timeout_block_axi(hb_timeout_block_axi),
-        .hb_timeout_block_axi_reg(u_fifo_bank_n_185),
+        .hb_timeout_block_axi_reg(u_fifo_bank_n_186),
         .i_axi_aclk(i_axi_aclk),
         .i_axi_aresetn(i_axi_aresetn),
         .i_axi_aresetn_0(u_fifo_bank_n_140),
+        .i_axi_aresetn_1(u_fifo_bank_n_142),
         .i_hb_clk_200(i_hb_clk_200),
-        .\o_cmd_fifo_din_axil_reg[0] (u_axi_lite_frontend_n_172),
-        .\o_cmd_fifo_din_axil_reg[0]_0 (u_axi_lite_frontend_n_51),
+        .\o_cmd_fifo_din_axil_reg[0] (u_axi_lite_frontend_n_174),
+        .\o_cmd_fifo_din_axil_reg[0]_0 (u_axi_lite_frontend_n_66),
+        .\o_cmd_fifo_din_axil_reg[58] (u_axi_lite_frontend_n_58),
         .o_dbg_rd_fifo_din(o_dbg_rd_fifo_din),
         .o_dbg_rd_fifo_wr_en(o_dbg_rd_fifo_wr_en),
         .prog_full(cmd_fifo_prog_full),
@@ -11889,77 +11784,76 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .s_axi_arvalid(s_axi_arvalid),
         .s_axi_awlen(s_axi_awlen[7:5]),
         .s_axi_awsize(s_axi_awsize),
-        .s_axi_awsize_2_sp_1(u_fifo_bank_n_184),
+        .s_axi_awsize_2_sp_1(u_fifo_bank_n_185),
         .s_axi_awvalid(s_axi_awvalid),
         .\s_axi_rdata[31]_i_20 (u_axi_full_frontend_n_7),
-        .s_axil_araddr(s_axil_araddr[1]),
+        .s_axil_araddr({s_axil_araddr[4],s_axil_araddr[1]}),
         .s_axil_arready_reg(u_axi_lite_frontend_n_19),
         .s_axil_arvalid(s_axil_arvalid),
-        .\s_axil_rdata_reg[24] (u_axi_lite_frontend_n_52),
-        .\s_axil_rdata_reg[24]_0 (u_axi_lite_frontend_n_174),
-        .\s_axil_rdata_reg[24]_1 (u_axi_lite_frontend_n_173),
+        .s_axil_bvalid042_out(s_axil_bvalid042_out),
+        .\s_axil_rdata_reg[24] (u_axi_lite_frontend_n_63),
+        .\s_axil_rdata_reg[24]_0 (u_axi_lite_frontend_n_67),
+        .\s_axil_rdata_reg[24]_1 (u_axi_lite_frontend_n_175),
         .\s_axil_rdata_reg[24]_2 (u_axi_lite_frontend_n_18),
-        .\s_axil_rdata_reg[24]_3 (u_axi_lite_frontend_n_79),
         .wr_en(cmd_fifo_wr_en),
         .wr_fifo_rd_en(wr_fifo_rd_en));
   design_1_hyperbus_controller_0_0_hyperbus_hb_engine u_hb_engine
-       (.CNTVALUEOUT({odly_cntvalueout[3],odly_cntvalueout[1]}),
+       (.CNTVALUEOUT(odly_cntvalueout),
         .D(ca_shift0_in),
-        .E(u_hb_engine_n_15),
-        .\FSM_sequential_hb_state_reg[0]_0 (u_hb_engine_n_34),
-        .\FSM_sequential_hb_state_reg[0]_1 (u_hb_engine_n_51),
+        .E(u_hb_engine_n_18),
+        .\FSM_sequential_hb_state_reg[0]_0 (u_hb_engine_n_38),
+        .\FSM_sequential_hb_state_reg[0]_1 (u_hb_engine_n_53),
         .\FSM_sequential_hb_state_reg[0]_2 (u_hb_engine_n_72),
         .\FSM_sequential_hb_state_reg[0]_3 (u_hb_engine_n_74),
-        .\FSM_sequential_hb_state_reg[1]_0 (u_hb_engine_n_35),
-        .\FSM_sequential_hb_state_reg[1]_1 (u_hb_engine_n_73),
-        .\FSM_sequential_hb_state_reg[1]_2 (u_hb_engine_n_75),
-        .\FSM_sequential_hb_state_reg[2]_rep_0 (u_hb_engine_n_33),
-        .\FSM_sequential_hb_state_reg[2]_rep__0_0 (u_hb_engine_n_48),
-        .\FSM_sequential_hb_state_reg[2]_rep__0_1 (u_hb_engine_n_53),
+        .\FSM_sequential_hb_state_reg[1]_0 (u_hb_engine_n_10),
+        .\FSM_sequential_hb_state_reg[1]_1 (u_hb_engine_n_39),
+        .\FSM_sequential_hb_state_reg[1]_2 (u_hb_engine_n_73),
+        .\FSM_sequential_hb_state_reg[2]_rep_0 (u_hb_engine_n_37),
+        .\FSM_sequential_hb_state_reg[2]_rep__0_0 (u_hb_engine_n_50),
+        .\FSM_sequential_hb_state_reg[2]_rep__0_1 (u_hb_engine_n_54),
         .\FSM_sequential_hb_state_reg[2]_rep__0_2 (rd_fifo_prog_full),
-        .\FSM_sequential_hb_state_reg[3]_0 (u_hb_engine_n_36),
-        .\FSM_sequential_hb_state_reg[3]_1 (u_hb_engine_n_49),
-        .\FSM_sequential_hb_state_reg[3]_2 (u_hb_engine_n_70),
+        .\FSM_sequential_hb_state_reg[3]_0 (u_hb_engine_n_40),
+        .\FSM_sequential_hb_state_reg[3]_1 (u_hb_engine_n_51),
         .\FSM_sequential_hb_state_reg[4]_0 ({hb_state[4:3],hb_state[1:0]}),
-        .\FSM_sequential_hb_state_reg[4]_1 (u_hb_engine_n_52),
-        .\FSM_sequential_hb_state_reg[4]_2 (u_hb_engine_n_54),
-        .\FSM_sequential_hb_state_reg[4]_3 (u_hb_engine_n_76),
-        .Q({axil_rwds_cntr[5:4],axil_rwds_cntr[0]}),
+        .\FSM_sequential_hb_state_reg[4]_1 (u_hb_engine_n_55),
+        .\FSM_sequential_hb_state_reg[4]_2 (u_hb_engine_n_75),
+        .Q({axil_rwds_cntr[5:3],axil_rwds_cntr[1:0]}),
         .SR(hb_reset_pulse_cnt0),
         .base_latency(base_latency),
-        .\ca_cycle_reg[2]_0 (u_hb_engine_n_77),
+        .\ca_cycle_reg[2]_0 (u_hb_engine_n_76),
         .\ca_shift_reg[27]_0 ({in127[43:32],in127[18:16]}),
-        .cmd_loaded_reg_0(u_hb_engine_n_16),
-        .cmd_loaded_reg_1(u_hb_engine_n_45),
+        .cmd_loaded_reg_0(u_hb_engine_n_19),
+        .cmd_loaded_reg_1(u_hb_engine_n_48),
         .cmd_loaded_reg_2(cmd_loaded_i_1_n_0),
         .data_valid(cmd_fifo_dout_valid),
         .dout({cmd_fifo_dout[58:55],cmd_fifo_dout[27:25],cmd_fifo_dout[23:0]}),
         .dq_q1(dq_q1),
         .dq_q2(dq_q2),
         .empty(cmd_fifo_empty),
-        .\gen_wr_a.gen_word_narrow.mem_reg (u_hb_engine_n_46),
         .hb_clk_ce(hb_clk_ce),
         .hb_clk_ce_force(hb_clk_ce_force),
+        .hb_cs_n_dbg_q_reg_0(hb_cs_n_dbg_q_i_1_n_0),
+        .hb_cs_n_pad_q(hb_cs_n_pad_q),
+        .hb_cs_n_pad_q_reg_0(u_fifo_bank_n_148),
         .hb_state035_out(hb_state035_out),
         .hb_timeout_holdoff_hb(hb_timeout_holdoff_hb),
         .hb_timeout_pulse_hb(hb_timeout_pulse_hb),
         .i_hb_clk_200(i_hb_clk_200),
         .i_hb_rstn(i_hb_rstn),
-        .last_read_half_reg_0(u_hb_engine_n_20),
+        .last_read_half_reg_0(u_hb_engine_n_23),
         .last_read_half_reg_1(last_read_half_i_1_n_0),
-        .latency_2x_reg_0(u_hb_engine_n_17),
+        .latency_2x_reg_0(u_hb_engine_n_20),
         .latency_2x_reg_1(latency_2x_i_1_n_0),
-        .\o_axif_rwds_cntr_reg[0]_0 (u_hb_engine_n_38),
-        .\o_axif_rwds_cntr_reg[5]_0 (axif_rwds_cntr),
+        .\o_axif_rwds_cntr_reg[2]_0 (u_hb_engine_n_42),
+        .\o_axif_rwds_cntr_reg[5]_0 ({axif_rwds_cntr[5:3],axif_rwds_cntr[1:0]}),
         .\o_axil_rsp_fifo_din_reg[0]_0 (axil_rsp_fifo_full),
         .\o_axil_rsp_fifo_din_reg[31]_0 (axil_rsp_fifo_din),
         .o_axil_rsp_fifo_wr_en_reg_0(axil_rsp_fifo_wr_en),
-        .\o_axil_rwds_cntr_reg[1]_0 (u_hb_engine_n_44),
-        .\o_axil_rwds_cntr_reg[2]_0 (u_hb_engine_n_37),
         .o_dbg_dq_o_d1(o_dbg_dq_o_d1),
         .o_dbg_dq_o_d2(o_dbg_dq_o_d2),
         .o_dbg_dq_q1_dly(o_dbg_dq_q1_dly),
         .o_dbg_dq_q2_dly(o_dbg_dq_q2_dly),
+        .o_dbg_hb_cs_n_q(o_dbg_hb_cs_n_q),
         .o_dbg_i_rwds_t(o_dbg_i_rwds_t),
         .o_dbg_last_read_word32(o_dbg_last_read_word32),
         .o_dbg_rd_fifo_din(o_dbg_rd_fifo_din),
@@ -11972,42 +11866,40 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .o_hb_clk_ce(o_hb_clk_ce),
         .o_hb_clk_ce_reg_0(o_hb_clk_ce_i_1_n_0),
         .o_hb_cs_n(o_hb_cs_n),
-        .o_hb_cs_n_q_reg_0(o_hb_cs_n_q_i_2_n_0),
-        .o_hb_cs_n_q_reg_1(u_fifo_bank_n_147),
-        .o_timeout_pulse_hb_reg_0(u_hb_engine_n_78),
+        .o_timeout_pulse_hb_reg_0(u_hb_engine_n_77),
         .p_44_in(p_44_in),
         .rd_en(cmd_fifo_rd_en),
         .rd_half_reg_0(rd_half_reg),
         .rd_half_reg_1(rd_half_i_1_n_0),
-        .\rwds_edges_needed_reg[2]_0 (u_fifo_bank_n_183),
-        .\rwds_edges_needed_reg[3]_0 (u_fifo_bank_n_182),
-        .\rwds_edges_needed_reg[4]_0 (u_fifo_bank_n_181),
-        .\rwds_edges_needed_reg[5]_0 (u_fifo_bank_n_180),
-        .\rwds_edges_needed_reg[6]_0 (u_fifo_bank_n_179),
-        .\rwds_edges_needed_reg[7]_0 (u_fifo_bank_n_178),
-        .\rwds_edges_needed_reg[8]_0 (u_fifo_bank_n_177),
-        .\rwds_edges_needed_reg[9]_0 (u_fifo_bank_n_176),
+        .\rwds_edges_needed_reg[2]_0 (u_fifo_bank_n_184),
+        .\rwds_edges_needed_reg[3]_0 (u_fifo_bank_n_183),
+        .\rwds_edges_needed_reg[4]_0 (u_fifo_bank_n_182),
+        .\rwds_edges_needed_reg[5]_0 (u_fifo_bank_n_181),
+        .\rwds_edges_needed_reg[6]_0 (u_fifo_bank_n_180),
+        .\rwds_edges_needed_reg[7]_0 (u_fifo_bank_n_179),
+        .\rwds_edges_needed_reg[8]_0 (u_fifo_bank_n_178),
+        .\rwds_edges_needed_reg[9]_0 (u_fifo_bank_n_177),
         .rwds_q1(rwds_q1),
         .rwds_q2(rwds_q2),
-        .\rwds_timeout_cnt_reg[2]_0 (u_hb_engine_n_50),
-        .s_axil_araddr(s_axil_araddr[9:6]),
-        .\s_axil_araddr[6] (u_hb_engine_n_24),
-        .\s_axil_rdata[0]_i_18 (rwds_idly_cntvaluein[0]),
-        .\s_axil_rdata[2]_i_5 (u_axi_lite_frontend_n_78),
-        .\s_axil_rdata[2]_i_5_0 (u_hyperbus_phy_n_29),
-        .\s_axil_rdata[2]_i_5_1 (u_axi_lite_frontend_n_176),
-        .timeout_tripped_cur_reg_0(u_hb_engine_n_21),
+        .\rwds_timeout_cnt_reg[2]_0 (u_hb_engine_n_52),
+        .s_axil_araddr({s_axil_araddr[9:6],s_axil_araddr[3]}),
+        .s_axil_araddr_3_sp_1(u_hb_engine_n_41),
+        .\s_axil_rdata[2]_i_2 (u_axi_lite_frontend_n_65),
+        .\s_axil_rdata[2]_i_2_0 (rwds_idly_cntvalueout[2]),
+        .\s_axil_rdata[2]_i_2_1 (u_axi_lite_frontend_n_36),
+        .\s_axil_rdata[2]_i_7 (odly_cntvaluein[2]),
+        .timeout_tripped_cur_reg_0(u_hb_engine_n_24),
         .timeout_tripped_cur_reg_1(timeout_tripped_cur_i_1_n_0),
         .wr_fifo_rd_en(wr_fifo_rd_en),
         .wrbuf_high_half(wrbuf_high_half),
-        .wrbuf_high_half_reg_0(u_hb_engine_n_19),
+        .wrbuf_high_half_reg_0(u_hb_engine_n_22),
         .wrbuf_high_half_reg_1(wrbuf_high_half_i_1_n_0),
         .\wrbuf_strb_reg[3]_0 (wr_fifo_dout),
-        .wrbuf_valid_reg_0(u_hb_engine_n_14));
+        .wrbuf_valid_reg_0(u_hb_engine_n_17));
   design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx u_hyperbus_phy
-       (.CNTVALUEIN(odly_cntvaluein),
-        .CNTVALUEOUT({odly_cntvalueout[3],odly_cntvalueout[1]}),
-        .Q({axil_rwds_cntr[5:4],axil_rwds_cntr[0]}),
+       (.CNTVALUEIN(rwds_idly_cntvaluein),
+        .CNTVALUEOUT(odly_cntvalueout),
+        .Q({hb_reset_req,rwds_idelay_rst_req,odelay_rst_req,idelayctrl_rst_req}),
         .SR(hb_reset_pulse_cnt0),
         .dq_idly_cntvaluein(dq_idly_cntvaluein),
         .dq_idly_en_vtc(dq_idly_en_vtc),
@@ -12016,7 +11908,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .dq_q2(dq_q2),
         .fifo_rst_axi_wr(fifo_rst_axi_wr),
         .\g_dq_phy[0].u_iobuf_dq (o_dbg_i_dq_t),
-        .\g_dq_phy[7].u_idelay_dq (dq_idly_ce),
+        .\g_io_delay.g_dq_idelay[7].u_idelay_dq (dq_idly_ce),
+        .\g_io_delay.u_idelay_rwds ({rwds_idly_cntvalueout[4],rwds_idly_cntvalueout[2]}),
+        .\g_io_delay.u_odelay_hb_ck_p (u_hyperbus_phy_n_27),
+        .\g_io_delay.u_odelay_hb_ck_p_0 (u_hyperbus_phy_n_30),
+        .\g_io_delay.u_odelay_hb_ck_p_1 (odly_cntvaluein),
         .i_axi_aclk(i_axi_aclk),
         .i_hb_clk_200(i_hb_clk_200),
         .i_hb_clk_200_gated(i_hb_clk_200_gated),
@@ -12024,6 +11920,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .i_iddre1_rst(i_iddre1_rst),
         .i_idelayctrl_rst(i_idelayctrl_rst),
         .i_ref_clk_300(i_ref_clk_300),
+        .idelayctrl_rdy_axi(idelayctrl_rdy_axi),
         .io_hb_dq(io_hb_dq),
         .io_hb_rwds(io_hb_rwds),
         .o_dbg_dq_o_d1(o_dbg_dq_o_d1),
@@ -12041,60 +11938,53 @@ module design_1_hyperbus_controller_0_0_hyperbus_controller
         .rwds_q1(rwds_q1),
         .rwds_q2(rwds_q2),
         .s_axil_araddr(s_axil_araddr[9:2]),
-        .\s_axil_araddr[2]_0 (u_hyperbus_phy_n_32),
-        .\s_axil_araddr[2]_1 (u_hyperbus_phy_n_33),
+        .\s_axil_araddr[2]_0 (u_hyperbus_phy_n_35),
+        .\s_axil_araddr[2]_1 (u_hyperbus_phy_n_36),
         .\s_axil_araddr[2]_2 (u_hyperbus_phy_n_37),
-        .\s_axil_araddr[2]_3 (u_hyperbus_phy_n_38),
-        .\s_axil_araddr[3]_0 (u_hyperbus_phy_n_27),
-        .\s_axil_araddr[3]_1 (u_hyperbus_phy_n_31),
-        .\s_axil_araddr[6]_0 (u_hyperbus_phy_n_36),
-        .\s_axil_araddr[6]_1 (u_hyperbus_phy_n_39),
-        .\s_axil_araddr[6]_2 (u_hyperbus_phy_n_40),
-        .s_axil_araddr_2_sp_1(u_hyperbus_phy_n_22),
+        .\s_axil_araddr[3]_0 (u_hyperbus_phy_n_26),
+        .\s_axil_araddr[6]_0 (u_hyperbus_phy_n_29),
+        .\s_axil_araddr[6]_1 (u_hyperbus_phy_n_32),
+        .\s_axil_araddr[6]_2 (u_hyperbus_phy_n_33),
+        .\s_axil_araddr[6]_3 (u_hyperbus_phy_n_34),
+        .\s_axil_araddr[6]_4 (u_hyperbus_phy_n_38),
+        .\s_axil_araddr[6]_5 (u_hyperbus_phy_n_39),
+        .\s_axil_araddr[9] (u_hyperbus_phy_n_28),
+        .s_axil_araddr_2_sp_1(u_hyperbus_phy_n_31),
         .s_axil_araddr_3_sp_1(u_hyperbus_phy_n_25),
-        .s_axil_araddr_4_sp_1(u_hyperbus_phy_n_28),
-        .s_axil_araddr_5_sp_1(u_hyperbus_phy_n_29),
-        .s_axil_araddr_6_sp_1(u_hyperbus_phy_n_26),
-        .s_axil_araddr_7_sp_1(u_hyperbus_phy_n_35),
-        .\s_axil_rdata[0]_i_3 (u_axi_lite_frontend_n_79),
-        .\s_axil_rdata[0]_i_3_0 (u_axi_lite_frontend_n_171),
-        .\s_axil_rdata[0]_i_9 (u_axi_lite_frontend_n_77),
-        .\s_axil_rdata[0]_i_9_0 (u_hb_engine_n_38),
-        .\s_axil_rdata[1]_i_6 (u_hb_engine_n_44),
-        .\s_axil_rdata[3]_i_2 ({hb_reset_req,rwds_idelay_rst_req,odelay_rst_req,idelayctrl_rst_req}),
-        .\s_axil_rdata[3]_i_2_0 (u_hb_engine_n_24),
-        .\s_axil_rdata[3]_i_2_1 (u_axi_lite_frontend_n_48),
-        .\s_axil_rdata[3]_i_4 (u_axi_lite_frontend_n_27),
-        .\s_axil_rdata[4]_i_2 (u_axi_lite_frontend_n_178),
-        .\s_axil_rdata[8]_i_2 (u_axi_lite_frontend_n_179),
-        .\s_axil_rdata_reg[3] (u_axi_lite_frontend_n_177),
-        .\s_axil_rdata_reg[3]_0 (u_axi_lite_frontend_n_24),
-        .\s_axil_rdata_reg[3]_1 (u_axi_lite_frontend_n_183),
-        .\s_axil_rdata_reg[4] (u_axi_lite_frontend_n_182),
-        .\s_axil_rdata_reg[5] (u_axi_lite_frontend_n_22),
-        .\s_axil_rdata_reg[5]_0 (u_axi_lite_frontend_n_58),
-        .\s_axil_rdata_reg[5]_1 (u_axi_lite_frontend_n_21),
-        .\s_axil_rdata_reg[5]_2 (u_axi_lite_frontend_n_181),
-        .\s_axil_rdata_reg[6] (u_axi_lite_frontend_n_23),
-        .\s_axil_rdata_reg[6]_0 (u_axi_lite_frontend_n_180),
-        .\s_axil_rdata_reg[8] (u_axi_lite_frontend_n_52),
-        .\s_axil_rdata_reg[8]_0 (u_axi_lite_frontend_n_53),
-        .\s_axil_rdata_reg[8]_1 (u_axi_lite_frontend_n_175),
-        .u_idelay_rwds(rwds_idly_cntvalueout),
-        .u_idelay_rwds_0(u_hyperbus_phy_n_30),
-        .u_idelay_rwds_1(rwds_idly_cntvaluein),
-        .u_odelay_hb_ck_p(u_hyperbus_phy_n_23),
-        .u_odelay_hb_ck_p_0(u_hyperbus_phy_n_24),
-        .u_odelay_hb_ck_p_1(u_hyperbus_phy_n_34));
+        .s_axil_araddr_4_sp_1(u_hyperbus_phy_n_23),
+        .s_axil_araddr_6_sp_1(u_hyperbus_phy_n_24),
+        .\s_axil_rdata[0]_i_9 (u_axi_lite_frontend_n_80),
+        .\s_axil_rdata[1]_i_3 (u_axi_lite_frontend_n_20),
+        .\s_axil_rdata[3]_i_10 (u_axi_lite_frontend_n_36),
+        .\s_axil_rdata[3]_i_3 (u_axi_lite_frontend_n_78),
+        .\s_axil_rdata[4]_i_2 (u_axi_lite_frontend_n_81),
+        .\s_axil_rdata[5]_i_3 ({axil_rwds_cntr[5:3],axil_rwds_cntr[1:0]}),
+        .\s_axil_rdata_reg[1]_i_7 (u_axi_lite_frontend_n_176),
+        .\s_axil_rdata_reg[1]_i_7_0 (u_axi_lite_frontend_n_77),
+        .\s_axil_rdata_reg[2] (u_axi_lite_frontend_n_186),
+        .\s_axil_rdata_reg[3] (u_axi_lite_frontend_n_63),
+        .\s_axil_rdata_reg[3]_0 (u_axi_lite_frontend_n_185),
+        .\s_axil_rdata_reg[3]_i_7 (u_axi_lite_frontend_n_79),
+        .\s_axil_rdata_reg[4] (u_axi_lite_frontend_n_184),
+        .\s_axil_rdata_reg[5] (u_axi_lite_frontend_n_82),
+        .\s_axil_rdata_reg[5]_0 (u_axi_lite_frontend_n_37),
+        .\s_axil_rdata_reg[5]_1 (u_axi_lite_frontend_n_183),
+        .\s_axil_rdata_reg[6] (u_axi_lite_frontend_n_181),
+        .\s_axil_rdata_reg[6]_0 (u_axi_lite_frontend_n_182),
+        .\s_axil_rdata_reg[7] (u_axi_lite_frontend_n_179),
+        .\s_axil_rdata_reg[7]_0 (u_axi_lite_frontend_n_180),
+        .\s_axil_rdata_reg[8] (u_axi_lite_frontend_n_64),
+        .\s_axil_rdata_reg[8]_0 (u_axi_lite_frontend_n_177),
+        .\s_axil_rdata_reg[8]_1 (u_axi_lite_frontend_n_178));
   LUT6 #(
     .INIT(64'hAAAAFBFFAAAA0800)) 
     wrbuf_high_half_i_1
        (.I0(wrbuf_high_half),
-        .I1(u_hb_engine_n_14),
-        .I2(u_hb_engine_n_53),
-        .I3(u_hb_engine_n_51),
-        .I4(u_hb_engine_n_15),
-        .I5(u_hb_engine_n_19),
+        .I1(u_hb_engine_n_17),
+        .I2(u_hb_engine_n_54),
+        .I3(u_hb_engine_n_53),
+        .I4(u_hb_engine_n_18),
+        .I5(u_hb_engine_n_22),
         .O(wrbuf_high_half_i_1_n_0));
 endmodule
 
@@ -12116,6 +12006,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
     \gdvld.data_valid_std_reg_0 ,
     i_axi_aresetn_0,
     \gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ,
+    i_axi_aresetn_1,
     D,
     axil_ar_can_accept,
     \gen_wr_a.gen_word_narrow.mem_reg_2 ,
@@ -12150,8 +12041,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
     Q,
     \count_value_i_reg[5] ,
     i_axi_aresetn,
-    \o_cmd_fifo_din_axil_reg[0] ,
+    s_axil_bvalid042_out,
+    \o_cmd_fifo_din_axil_reg[58] ,
     s_axil_araddr,
+    \o_cmd_fifo_din_axil_reg[0] ,
     s_axil_arready_reg,
     s_axil_arvalid,
     \o_cmd_fifo_din_axil_reg[0]_0 ,
@@ -12159,7 +12052,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
     \s_axil_rdata_reg[24]_0 ,
     \s_axil_rdata_reg[24]_1 ,
     \s_axil_rdata_reg[24]_2 ,
-    \s_axil_rdata_reg[24]_3 ,
     \ca_shift_reg[43] ,
     \ca_shift_reg[16] ,
     \ca_shift_reg[16]_0 ,
@@ -12187,6 +12079,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   output \gdvld.data_valid_std_reg_0 ;
   output i_axi_aresetn_0;
   output \gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ;
+  output i_axi_aresetn_1;
   output [1:0]D;
   output axil_ar_can_accept;
   output [0:0]\gen_wr_a.gen_word_narrow.mem_reg_2 ;
@@ -12221,8 +12114,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   input [31:0]Q;
   input \count_value_i_reg[5] ;
   input i_axi_aresetn;
+  input s_axil_bvalid042_out;
+  input \o_cmd_fifo_din_axil_reg[58] ;
+  input [1:0]s_axil_araddr;
   input \o_cmd_fifo_din_axil_reg[0] ;
-  input [0:0]s_axil_araddr;
   input s_axil_arready_reg;
   input s_axil_arvalid;
   input \o_cmd_fifo_din_axil_reg[0]_0 ;
@@ -12230,7 +12125,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   input \s_axil_rdata_reg[24]_0 ;
   input \s_axil_rdata_reg[24]_1 ;
   input \s_axil_rdata_reg[24]_2 ;
-  input \s_axil_rdata_reg[24]_3 ;
   input [14:0]\ca_shift_reg[43] ;
   input \ca_shift_reg[16] ;
   input [0:0]\ca_shift_reg[16]_0 ;
@@ -12292,9 +12186,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   wire i_axi_aclk;
   wire i_axi_aresetn;
   wire i_axi_aresetn_0;
+  wire i_axi_aresetn_1;
   wire i_hb_clk_200;
   wire \o_cmd_fifo_din_axil_reg[0] ;
   wire \o_cmd_fifo_din_axil_reg[0]_0 ;
+  wire \o_cmd_fifo_din_axil_reg[58] ;
   wire [31:0]o_dbg_rd_fifo_din;
   wire o_dbg_rd_fifo_wr_en;
   wire prog_full;
@@ -12308,14 +12204,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   wire s_axi_awsize_2_sn_1;
   wire s_axi_awvalid;
   wire \s_axi_rdata[31]_i_20 ;
-  wire [0:0]s_axil_araddr;
+  wire [1:0]s_axil_araddr;
   wire s_axil_arready_reg;
   wire s_axil_arvalid;
+  wire s_axil_bvalid042_out;
   wire \s_axil_rdata_reg[24] ;
   wire \s_axil_rdata_reg[24]_0 ;
   wire \s_axil_rdata_reg[24]_1 ;
   wire \s_axil_rdata_reg[24]_2 ;
-  wire \s_axil_rdata_reg[24]_3 ;
   wire u_wr_fifo_n_51;
   wire u_wr_fifo_n_65;
   wire wr_en;
@@ -12373,9 +12269,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
   wire [8:0]NLW_u_wr_fifo_wr_data_count_UNCONNECTED;
 
   assign s_axi_awsize_2_sp_1 = s_axi_awsize_2_sn_1;
-  (* SOFT_HLUTNM = "soft_lutpair221" *) 
+  (* SOFT_HLUTNM = "soft_lutpair223" *) 
   LUT4 #(
-    .INIT(16'h1000)) 
+    .INIT(16'h0010)) 
     \FSM_sequential_axil_state[0]_i_2 
        (.I0(full),
         .I1(s_axil_arready_reg),
@@ -12649,7 +12545,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
         .I4(\ca_shift_reg[16] ),
         .I5(\ca_shift_reg[16]_0 ),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_4 [27]));
-  (* SOFT_HLUTNM = "soft_lutpair222" *) 
+  (* SOFT_HLUTNM = "soft_lutpair224" *) 
   LUT3 #(
     .INIT(8'hFD)) 
     cmd_loaded_i_2
@@ -12657,85 +12553,96 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
         .I1(dout[29]),
         .I2(dout[30]),
         .O(\gen_pf_ic_rc.gpf_ic.prog_full_i_reg_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair220" *) 
-  LUT4 #(
-    .INIT(16'hC808)) 
-    \o_cmd_fifo_din_axil[0]_i_1 
-       (.I0(\o_cmd_fifo_din_axil_reg[0] ),
-        .I1(i_axi_aresetn),
-        .I2(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
-        .I3(s_axil_araddr),
-        .O(D[0]));
-  (* SOFT_HLUTNM = "soft_lutpair220" *) 
+  (* SOFT_HLUTNM = "soft_lutpair224" *) 
   LUT2 #(
     .INIT(4'hB)) 
-    \o_cmd_fifo_din_axil[15]_i_1 
-       (.I0(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
+    hb_cs_n_pad_q_i_5
+       (.I0(dout[29]),
+        .I1(\gen_pf_ic_rc.gpf_ic.prog_full_i_reg ),
+        .O(\gen_wr_a.gen_word_narrow.mem_reg_3 ));
+  (* SOFT_HLUTNM = "soft_lutpair222" *) 
+  LUT4 #(
+    .INIT(16'h8C80)) 
+    \o_cmd_fifo_din_axil[0]_i_1 
+       (.I0(s_axil_araddr[0]),
         .I1(i_axi_aresetn),
+        .I2(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
+        .I3(\o_cmd_fifo_din_axil_reg[0] ),
+        .O(D[0]));
+  (* SOFT_HLUTNM = "soft_lutpair221" *) 
+  LUT2 #(
+    .INIT(4'hD)) 
+    \o_cmd_fifo_din_axil[15]_i_1 
+       (.I0(i_axi_aresetn),
+        .I1(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
         .O(i_axi_aresetn_0));
+  (* SOFT_HLUTNM = "soft_lutpair222" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \o_cmd_fifo_din_axil[57]_i_1 
        (.I0(i_axi_aresetn),
         .I1(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
         .O(D[1]));
-  (* SOFT_HLUTNM = "soft_lutpair222" *) 
-  LUT2 #(
-    .INIT(4'hB)) 
-    o_hb_cs_n_q_i_8
-       (.I0(dout[29]),
-        .I1(\gen_pf_ic_rc.gpf_ic.prog_full_i_reg ),
-        .O(\gen_wr_a.gen_word_narrow.mem_reg_3 ));
-  (* SOFT_HLUTNM = "soft_lutpair226" *) 
+  (* SOFT_HLUTNM = "soft_lutpair221" *) 
+  LUT5 #(
+    .INIT(32'hDDFDDDDD)) 
+    \o_cmd_fifo_din_axil[58]_i_1 
+       (.I0(i_axi_aresetn),
+        .I1(\gen_pf_ic_rc.ngen_full_rst_val.ram_full_i_reg_0 ),
+        .I2(s_axil_bvalid042_out),
+        .I3(full),
+        .I4(\o_cmd_fifo_din_axil_reg[58] ),
+        .O(i_axi_aresetn_1));
+  (* SOFT_HLUTNM = "soft_lutpair228" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[2]_i_1 
        (.I0(dout[16]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_12 ));
-  (* SOFT_HLUTNM = "soft_lutpair226" *) 
+  (* SOFT_HLUTNM = "soft_lutpair228" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[3]_i_1 
        (.I0(dout[17]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_11 ));
-  (* SOFT_HLUTNM = "soft_lutpair225" *) 
+  (* SOFT_HLUTNM = "soft_lutpair227" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[4]_i_1 
        (.I0(dout[18]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_10 ));
-  (* SOFT_HLUTNM = "soft_lutpair225" *) 
+  (* SOFT_HLUTNM = "soft_lutpair227" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[5]_i_1 
        (.I0(dout[19]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_9 ));
-  (* SOFT_HLUTNM = "soft_lutpair224" *) 
+  (* SOFT_HLUTNM = "soft_lutpair226" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[6]_i_1 
        (.I0(dout[20]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_8 ));
-  (* SOFT_HLUTNM = "soft_lutpair224" *) 
+  (* SOFT_HLUTNM = "soft_lutpair226" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[7]_i_1 
        (.I0(dout[21]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_7 ));
-  (* SOFT_HLUTNM = "soft_lutpair223" *) 
+  (* SOFT_HLUTNM = "soft_lutpair225" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[8]_i_1 
        (.I0(dout[22]),
         .I1(dout[30]),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_6 ));
-  (* SOFT_HLUTNM = "soft_lutpair223" *) 
+  (* SOFT_HLUTNM = "soft_lutpair225" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_needed[9]_i_1 
@@ -12775,7 +12682,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
        (.I0(\gdvld.data_valid_std_reg ),
         .I1(\s_axi_rdata[31]_i_20 ),
         .O(\gdvld.data_valid_std_reg_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair221" *) 
+  (* SOFT_HLUTNM = "soft_lutpair223" *) 
   LUT2 #(
     .INIT(4'h1)) 
     s_axil_arready_i_1
@@ -12783,14 +12690,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_fifo_bank_xilinx
         .I1(s_axil_arready_reg),
         .O(axil_ar_can_accept));
   LUT6 #(
-    .INIT(64'hAAAA0003AAAA0000)) 
+    .INIT(64'hAAAAAAAA00000300)) 
     \s_axil_rdata[24]_i_1 
        (.I0(axil_rsp_fifo_dout),
-        .I1(\s_axil_rdata_reg[24] ),
-        .I2(\s_axil_rdata_reg[24]_0 ),
-        .I3(\s_axil_rdata_reg[24]_1 ),
-        .I4(\s_axil_rdata_reg[24]_2 ),
-        .I5(\s_axil_rdata_reg[24]_3 ),
+        .I1(s_axil_araddr[1]),
+        .I2(\s_axil_rdata_reg[24] ),
+        .I3(\s_axil_rdata_reg[24]_0 ),
+        .I4(\s_axil_rdata_reg[24]_1 ),
+        .I5(\s_axil_rdata_reg[24]_2 ),
         .O(\gen_wr_a.gen_word_narrow.mem_reg_2 ));
   (* CASCADE_HEIGHT = "0" *) 
   (* CDC_SYNC_STAGES = "2" *) 
@@ -13025,6 +12932,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     o_axil_rsp_fifo_wr_en_reg_0,
     hb_timeout_pulse_hb,
     hb_timeout_holdoff_hb,
+    o_hb_cs_n,
+    \FSM_sequential_hb_state_reg[1]_0 ,
+    hb_cs_n_pad_q,
     \o_dq_t_reg[7]_0 ,
     o_dbg_i_rwds_t,
     o_dbg_rwds_o_d1,
@@ -13039,37 +12949,31 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     last_read_half_reg_0,
     timeout_tripped_cur_reg_0,
     hb_clk_ce,
-    o_hb_cs_n,
-    \s_axil_araddr[6] ,
+    o_dbg_hb_cs_n_q,
     Q,
     \FSM_sequential_hb_state_reg[4]_0 ,
     p_44_in,
     \FSM_sequential_hb_state_reg[2]_rep_0 ,
     \FSM_sequential_hb_state_reg[0]_0 ,
-    \FSM_sequential_hb_state_reg[1]_0 ,
+    \FSM_sequential_hb_state_reg[1]_1 ,
     \FSM_sequential_hb_state_reg[3]_0 ,
-    \o_axil_rwds_cntr_reg[2]_0 ,
-    \o_axif_rwds_cntr_reg[0]_0 ,
+    s_axil_araddr_3_sp_1,
+    \o_axif_rwds_cntr_reg[2]_0 ,
     \o_axif_rwds_cntr_reg[5]_0 ,
-    \o_axil_rwds_cntr_reg[1]_0 ,
     cmd_loaded_reg_1,
-    \gen_wr_a.gen_word_narrow.mem_reg ,
     hb_state035_out,
     \FSM_sequential_hb_state_reg[2]_rep__0_0 ,
     \FSM_sequential_hb_state_reg[3]_1 ,
     \rwds_timeout_cnt_reg[2]_0 ,
     \FSM_sequential_hb_state_reg[0]_1 ,
-    \FSM_sequential_hb_state_reg[4]_1 ,
     \FSM_sequential_hb_state_reg[2]_rep__0_1 ,
-    \FSM_sequential_hb_state_reg[4]_2 ,
+    \FSM_sequential_hb_state_reg[4]_1 ,
     \ca_shift_reg[27]_0 ,
-    \FSM_sequential_hb_state_reg[3]_2 ,
     wrbuf_high_half,
     \FSM_sequential_hb_state_reg[0]_2 ,
-    \FSM_sequential_hb_state_reg[1]_1 ,
-    \FSM_sequential_hb_state_reg[0]_3 ,
     \FSM_sequential_hb_state_reg[1]_2 ,
-    \FSM_sequential_hb_state_reg[4]_3 ,
+    \FSM_sequential_hb_state_reg[0]_3 ,
+    \FSM_sequential_hb_state_reg[4]_2 ,
     \ca_cycle_reg[2]_0 ,
     o_timeout_pulse_hb_reg_0,
     o_hb_clk_ce,
@@ -13099,15 +13003,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     last_read_half_reg_1,
     timeout_tripped_cur_reg_1,
     o_hb_clk_ce_reg_0,
-    o_hb_cs_n_q_reg_0,
+    hb_cs_n_dbg_q_reg_0,
     s_axil_araddr,
     CNTVALUEOUT,
-    \s_axil_rdata[2]_i_5 ,
-    \s_axil_rdata[2]_i_5_0 ,
-    \s_axil_rdata[2]_i_5_1 ,
-    \s_axil_rdata[0]_i_18 ,
+    \s_axil_rdata[2]_i_2 ,
+    \s_axil_rdata[2]_i_2_0 ,
+    \s_axil_rdata[2]_i_2_1 ,
+    \s_axil_rdata[2]_i_7 ,
     data_valid,
-    o_hb_cs_n_q_reg_1,
+    hb_cs_n_pad_q_reg_0,
     \FSM_sequential_hb_state_reg[2]_rep__0_2 ,
     \o_axil_rsp_fifo_din_reg[0]_0 ,
     i_hb_rstn,
@@ -13126,6 +13030,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   output o_axil_rsp_fifo_wr_en_reg_0;
   output hb_timeout_pulse_hb;
   output hb_timeout_holdoff_hb;
+  output o_hb_cs_n;
+  output \FSM_sequential_hb_state_reg[1]_0 ;
+  output hb_cs_n_pad_q;
   output \o_dq_t_reg[7]_0 ;
   output o_dbg_i_rwds_t;
   output o_dbg_rwds_o_d1;
@@ -13140,37 +13047,31 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   output last_read_half_reg_0;
   output timeout_tripped_cur_reg_0;
   output hb_clk_ce;
-  output o_hb_cs_n;
-  output \s_axil_araddr[6] ;
-  output [2:0]Q;
+  output o_dbg_hb_cs_n_q;
+  output [4:0]Q;
   output [3:0]\FSM_sequential_hb_state_reg[4]_0 ;
   output p_44_in;
   output \FSM_sequential_hb_state_reg[2]_rep_0 ;
   output \FSM_sequential_hb_state_reg[0]_0 ;
-  output \FSM_sequential_hb_state_reg[1]_0 ;
+  output \FSM_sequential_hb_state_reg[1]_1 ;
   output \FSM_sequential_hb_state_reg[3]_0 ;
-  output \o_axil_rwds_cntr_reg[2]_0 ;
-  output \o_axif_rwds_cntr_reg[0]_0 ;
+  output s_axil_araddr_3_sp_1;
+  output \o_axif_rwds_cntr_reg[2]_0 ;
   output [4:0]\o_axif_rwds_cntr_reg[5]_0 ;
-  output \o_axil_rwds_cntr_reg[1]_0 ;
   output cmd_loaded_reg_1;
-  output \gen_wr_a.gen_word_narrow.mem_reg ;
   output hb_state035_out;
   output \FSM_sequential_hb_state_reg[2]_rep__0_0 ;
   output \FSM_sequential_hb_state_reg[3]_1 ;
   output \rwds_timeout_cnt_reg[2]_0 ;
   output \FSM_sequential_hb_state_reg[0]_1 ;
-  output \FSM_sequential_hb_state_reg[4]_1 ;
   output \FSM_sequential_hb_state_reg[2]_rep__0_1 ;
-  output \FSM_sequential_hb_state_reg[4]_2 ;
+  output \FSM_sequential_hb_state_reg[4]_1 ;
   output [14:0]\ca_shift_reg[27]_0 ;
-  output \FSM_sequential_hb_state_reg[3]_2 ;
   output wrbuf_high_half;
   output \FSM_sequential_hb_state_reg[0]_2 ;
-  output \FSM_sequential_hb_state_reg[1]_1 ;
-  output \FSM_sequential_hb_state_reg[0]_3 ;
   output \FSM_sequential_hb_state_reg[1]_2 ;
-  output \FSM_sequential_hb_state_reg[4]_3 ;
+  output \FSM_sequential_hb_state_reg[0]_3 ;
+  output \FSM_sequential_hb_state_reg[4]_2 ;
   output \ca_cycle_reg[2]_0 ;
   output [0:0]o_timeout_pulse_hb_reg_0;
   output o_hb_clk_ce;
@@ -13200,15 +13101,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   input last_read_half_reg_1;
   input timeout_tripped_cur_reg_1;
   input o_hb_clk_ce_reg_0;
-  input o_hb_cs_n_q_reg_0;
-  input [3:0]s_axil_araddr;
-  input [1:0]CNTVALUEOUT;
-  input \s_axil_rdata[2]_i_5 ;
-  input \s_axil_rdata[2]_i_5_0 ;
-  input \s_axil_rdata[2]_i_5_1 ;
-  input [0:0]\s_axil_rdata[0]_i_18 ;
+  input hb_cs_n_dbg_q_reg_0;
+  input [4:0]s_axil_araddr;
+  input [0:0]CNTVALUEOUT;
+  input \s_axil_rdata[2]_i_2 ;
+  input [0:0]\s_axil_rdata[2]_i_2_0 ;
+  input \s_axil_rdata[2]_i_2_1 ;
+  input [0:0]\s_axil_rdata[2]_i_7 ;
   input data_valid;
-  input o_hb_cs_n_q_reg_1;
+  input hb_cs_n_pad_q_reg_0;
   input \FSM_sequential_hb_state_reg[2]_rep__0_2 ;
   input \o_axil_rsp_fifo_din_reg[0]_0 ;
   input i_hb_rstn;
@@ -13219,7 +13120,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   input [7:0]dq_q2;
   input hb_clk_ce_force;
 
-  wire [1:0]CNTVALUEOUT;
+  wire [0:0]CNTVALUEOUT;
   wire [27:0]D;
   wire [0:0]E;
   wire \FSM_sequential_hb_state[0]_i_2_n_0 ;
@@ -13292,11 +13193,9 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \FSM_sequential_hb_state_reg[2]_rep__0_n_0 ;
   wire \FSM_sequential_hb_state_reg[3]_0 ;
   wire \FSM_sequential_hb_state_reg[3]_1 ;
-  wire \FSM_sequential_hb_state_reg[3]_2 ;
   wire [3:0]\FSM_sequential_hb_state_reg[4]_0 ;
   wire \FSM_sequential_hb_state_reg[4]_1 ;
   wire \FSM_sequential_hb_state_reg[4]_2 ;
-  wire \FSM_sequential_hb_state_reg[4]_3 ;
   wire \FSM_sequential_hb_state_reg[4]_i_11_n_3 ;
   wire \FSM_sequential_hb_state_reg[4]_i_11_n_4 ;
   wire \FSM_sequential_hb_state_reg[4]_i_11_n_5 ;
@@ -13306,10 +13205,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \FSM_sequential_hb_state_reg[4]_i_30_n_5 ;
   wire \FSM_sequential_hb_state_reg[4]_i_30_n_6 ;
   wire \FSM_sequential_hb_state_reg[4]_i_30_n_7 ;
-  wire [2:0]Q;
+  wire [4:0]Q;
   wire [0:0]SR;
-  wire [0:0]axif_rwds_cntr;
-  wire [3:1]axil_rwds_cntr;
+  wire [2:2]axif_rwds_cntr;
+  wire [2:2]axil_rwds_cntr;
   wire [0:0]base_latency;
   wire [2:0]ca_cycle;
   wire \ca_cycle[2]_i_1_n_0 ;
@@ -13360,9 +13259,12 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire [7:0]dq_q1;
   wire [7:0]dq_q2;
   wire empty;
-  wire \gen_wr_a.gen_word_narrow.mem_reg ;
   wire hb_clk_ce;
   wire hb_clk_ce_force;
+  wire hb_cs_n_dbg_q_reg_0;
+  wire hb_cs_n_pad_q;
+  wire hb_cs_n_pad_q_i_4_n_0;
+  wire hb_cs_n_pad_q_reg_0;
   wire [2:2]hb_state;
   wire hb_state035_out;
   wire hb_state130_in;
@@ -13421,7 +13323,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \latency_left[7]_i_7_n_0 ;
   wire \latency_left[7]_i_8_n_0 ;
   wire \latency_left[7]_i_9_n_0 ;
-  wire \o_axif_rwds_cntr_reg[0]_0 ;
+  wire \o_axif_rwds_cntr_reg[2]_0 ;
   wire [4:0]\o_axif_rwds_cntr_reg[5]_0 ;
   wire [31:0]o_axil_rsp_fifo_din1_in;
   wire \o_axil_rsp_fifo_din[31]_i_1_n_0 ;
@@ -13434,13 +13336,12 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire o_axil_rsp_fifo_wr_en_i_4_n_0;
   wire o_axil_rsp_fifo_wr_en_reg_0;
   wire \o_axil_rwds_cntr[5]_i_1_n_0 ;
-  wire \o_axil_rwds_cntr_reg[1]_0 ;
-  wire \o_axil_rwds_cntr_reg[2]_0 ;
   wire o_cmd_fifo_rd_en_i_1_n_0;
   wire [7:0]o_dbg_dq_o_d1;
   wire [7:0]o_dbg_dq_o_d2;
   wire [7:0]o_dbg_dq_q1_dly;
   wire [7:0]o_dbg_dq_q2_dly;
+  wire o_dbg_hb_cs_n_q;
   wire o_dbg_i_rwds_t;
   wire [31:0]o_dbg_last_read_word32;
   wire [31:0]o_dbg_rd_fifo_din;
@@ -13511,8 +13412,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire o_hb_clk_ce;
   wire o_hb_clk_ce_reg_0;
   wire o_hb_cs_n;
-  wire o_hb_cs_n_q_reg_0;
-  wire o_hb_cs_n_q_reg_1;
   wire \o_last_read_word32[31]_i_1_n_0 ;
   wire \o_rd_fifo_din[0]_i_1_n_0 ;
   wire \o_rd_fifo_din[10]_i_1_n_0 ;
@@ -13672,12 +13571,13 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \rwds_timeout_cnt_reg_n_0_[2] ;
   wire \rwds_timeout_cnt_reg_n_0_[3] ;
   wire \rwds_timeout_cnt_reg_n_0_[4] ;
-  wire [3:0]s_axil_araddr;
-  wire \s_axil_araddr[6] ;
-  wire [0:0]\s_axil_rdata[0]_i_18 ;
-  wire \s_axil_rdata[2]_i_5 ;
-  wire \s_axil_rdata[2]_i_5_0 ;
-  wire \s_axil_rdata[2]_i_5_1 ;
+  wire [4:0]s_axil_araddr;
+  wire s_axil_araddr_3_sn_1;
+  wire \s_axil_rdata[2]_i_11_n_0 ;
+  wire \s_axil_rdata[2]_i_2 ;
+  wire [0:0]\s_axil_rdata[2]_i_2_0 ;
+  wire \s_axil_rdata[2]_i_2_1 ;
+  wire [0:0]\s_axil_rdata[2]_i_7 ;
   wire [2:0]term_hold_cnt;
   wire \term_hold_cnt[2]_i_1_n_0 ;
   wire \term_hold_cnt[2]_i_3_n_0 ;
@@ -13749,6 +13649,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \timeout_holdoff_cnt[7]_i_1_n_0 ;
   wire \timeout_holdoff_cnt[7]_i_2_n_0 ;
   wire \timeout_holdoff_cnt[7]_i_3_n_0 ;
+  wire \timeout_holdoff_cnt[7]_i_4_n_0 ;
   wire timeout_tripped_cur_i_3_n_0;
   wire timeout_tripped_cur_reg_0;
   wire timeout_tripped_cur_reg_1;
@@ -13778,15 +13679,16 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire \wr_rwds_wait_cnt[1]_i_4_n_0 ;
   wire \wr_rwds_wait_cnt[1]_i_5_n_0 ;
   wire \wr_rwds_wait_cnt[1]_i_6_n_0 ;
+  wire \wr_rwds_wait_cnt[1]_i_7_n_0 ;
   wire \wr_rwds_wait_cnt_reg_n_0_[0] ;
   wire \wr_rwds_wait_cnt_reg_n_0_[1] ;
   wire [7:0]wr_words_reqd;
   wire \wr_words_reqd[5]_i_2_n_0 ;
   wire \wr_words_reqd[7]_i_1_n_0 ;
-  wire \wr_words_reqd[7]_i_3_n_0 ;
   wire \wr_words_reqd[7]_i_4_n_0 ;
   wire \wr_words_reqd[7]_i_5_n_0 ;
   wire \wr_words_reqd[7]_i_6_n_0 ;
+  wire \wr_words_reqd[7]_i_7_n_0 ;
   wire \wr_words_reqd_reg_n_0_[0] ;
   wire \wr_words_reqd_reg_n_0_[1] ;
   wire \wr_words_reqd_reg_n_0_[2] ;
@@ -13970,6 +13872,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   wire [7:4]\NLW_timeout_full_beats_left_reg[0]_i_3_CO_UNCONNECTED ;
   wire [7:0]\NLW_timeout_full_beats_left_reg[0]_i_3_O_UNCONNECTED ;
 
+  assign s_axil_araddr_3_sp_1 = s_axil_araddr_3_sn_1;
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFF8880)) 
     \FSM_sequential_hb_state[0]_i_1 
@@ -14000,7 +13903,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I5(\FSM_sequential_hb_state[0]_i_4_n_0 ),
         .O(\FSM_sequential_hb_state[0]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair282" *) 
+  (* SOFT_HLUTNM = "soft_lutpair284" *) 
   LUT5 #(
     .INIT(32'h00040404)) 
     \FSM_sequential_hb_state[0]_i_4 
@@ -14030,7 +13933,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\cur_axi_beats_reg_n_0_[4] ),
         .I5(wrnext_valid_reg_n_0),
         .O(\FSM_sequential_hb_state[0]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair303" *) 
+  (* SOFT_HLUTNM = "soft_lutpair304" *) 
   LUT4 #(
     .INIT(16'h0004)) 
     \FSM_sequential_hb_state[0]_i_7 
@@ -14046,7 +13949,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(hb_state150_out),
         .I2(\FSM_sequential_hb_state[1]_i_2_n_0 ),
         .I3(\FSM_sequential_hb_state[1]_i_3_n_0 ),
-        .I4(\FSM_sequential_hb_state_reg[4]_3 ),
+        .I4(\FSM_sequential_hb_state_reg[4]_2 ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(hb_state__0[1]));
   LUT6 #(
@@ -14069,14 +13972,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(\FSM_sequential_hb_state[1]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair302" *) 
+  (* SOFT_HLUTNM = "soft_lutpair303" *) 
   LUT3 #(
     .INIT(8'h10)) 
     \FSM_sequential_hb_state[1]_i_4 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
-        .O(\FSM_sequential_hb_state_reg[4]_3 ));
+        .O(\FSM_sequential_hb_state_reg[4]_2 ));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFF444)) 
     \FSM_sequential_hb_state[2]_i_1 
@@ -14087,14 +13990,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state[2]_i_5_n_0 ),
         .I5(\FSM_sequential_hb_state[2]_i_6_n_0 ),
         .O(hb_state__0[2]));
-  (* SOFT_HLUTNM = "soft_lutpair333" *) 
+  (* SOFT_HLUTNM = "soft_lutpair338" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \FSM_sequential_hb_state[2]_i_2 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .O(\FSM_sequential_hb_state[2]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair282" *) 
+  (* SOFT_HLUTNM = "soft_lutpair284" *) 
   LUT3 #(
     .INIT(8'hF8)) 
     \FSM_sequential_hb_state[2]_i_3 
@@ -14102,7 +14005,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(cur_is_write),
         .I2(cur_src_axil_reg_n_0),
         .O(\FSM_sequential_hb_state[2]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair292" *) 
+  (* SOFT_HLUTNM = "soft_lutpair294" *) 
   LUT4 #(
     .INIT(16'h0010)) 
     \FSM_sequential_hb_state[2]_i_4 
@@ -14118,7 +14021,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[3]_0 ),
         .I2(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I3(hb_state150_out),
-        .I4(\FSM_sequential_hb_state_reg[4]_3 ),
+        .I4(\FSM_sequential_hb_state_reg[4]_2 ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(\FSM_sequential_hb_state[2]_i_5_n_0 ));
   LUT6 #(
@@ -14161,7 +14064,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state[3]_i_5_n_0 ),
         .I5(\FSM_sequential_hb_state[3]_i_6_n_0 ),
         .O(hb_state__0[3]));
-  (* SOFT_HLUTNM = "soft_lutpair287" *) 
+  (* SOFT_HLUTNM = "soft_lutpair289" *) 
   LUT4 #(
     .INIT(16'h1030)) 
     \FSM_sequential_hb_state[3]_i_2 
@@ -14170,14 +14073,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I3(hb_state245_in),
         .O(\FSM_sequential_hb_state_reg[0]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair307" *) 
+  (* SOFT_HLUTNM = "soft_lutpair308" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \FSM_sequential_hb_state[3]_i_3 
        (.I0(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(\FSM_sequential_hb_state_reg[2]_rep__0_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair335" *) 
+  (* SOFT_HLUTNM = "soft_lutpair336" *) 
   LUT3 #(
     .INIT(8'hE0)) 
     \FSM_sequential_hb_state[3]_i_4 
@@ -14185,7 +14088,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\wr_rwds_wait_cnt_reg_n_0_[0] ),
         .I2(cur_is_write),
         .O(hb_state150_out));
-  (* SOFT_HLUTNM = "soft_lutpair239" *) 
+  (* SOFT_HLUTNM = "soft_lutpair240" *) 
   LUT5 #(
     .INIT(32'h02000000)) 
     \FSM_sequential_hb_state[3]_i_5 
@@ -14235,7 +14138,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\term_hold_cnt_reg_n_0_[1] ),
         .I5(\term_hold_cnt_reg_n_0_[0] ),
         .O(\FSM_sequential_hb_state[4]_i_10_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair301" *) 
+  (* SOFT_HLUTNM = "soft_lutpair302" *) 
   LUT4 #(
     .INIT(16'hEF00)) 
     \FSM_sequential_hb_state[4]_i_12 
@@ -14254,7 +14157,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_9_n_0 ),
         .I5(\FSM_sequential_hb_state[4]_i_28_n_0 ),
         .O(\FSM_sequential_hb_state[4]_i_13_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair305" *) 
+  (* SOFT_HLUTNM = "soft_lutpair306" *) 
   LUT3 #(
     .INIT(8'h01)) 
     \FSM_sequential_hb_state[4]_i_14 
@@ -14312,7 +14215,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(rwds_edges_needed[3]),
         .I5(rwds_edges_needed[2]),
         .O(\FSM_sequential_hb_state[4]_i_19_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair243" *) 
+  (* SOFT_HLUTNM = "soft_lutpair245" *) 
   LUT5 #(
     .INIT(32'h080C08C8)) 
     \FSM_sequential_hb_state[4]_i_2 
@@ -14394,7 +14297,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I3(\latency_left[3]_i_3_n_0 ),
         .I4(\FSM_sequential_hb_state_reg[2]_rep_0 ),
-        .I5(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I5(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .O(\FSM_sequential_hb_state[4]_i_27_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFF0040)) 
@@ -14426,7 +14329,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed[7]_i_3_n_0 ),
         .I5(\FSM_sequential_hb_state[4]_i_10_n_0 ),
         .O(\FSM_sequential_hb_state[4]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair234" *) 
+  (* SOFT_HLUTNM = "soft_lutpair236" *) 
   LUT5 #(
     .INIT(32'h00050030)) 
     \FSM_sequential_hb_state[4]_i_31 
@@ -14515,7 +14418,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\o_dq_o_d1[7]_i_5_n_0 ),
         .I5(rwds_edges_needed[7]),
         .O(\FSM_sequential_hb_state[4]_i_39_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair242" *) 
+  (* SOFT_HLUTNM = "soft_lutpair244" *) 
   LUT5 #(
     .INIT(32'h00400000)) 
     \FSM_sequential_hb_state[4]_i_4 
@@ -14554,7 +14457,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(words_done[0]),
         .I4(rwds_edges_needed[1]),
         .O(\FSM_sequential_hb_state[4]_i_42_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair253" *) 
+  (* SOFT_HLUTNM = "soft_lutpair255" *) 
   LUT4 #(
     .INIT(16'h7FFF)) 
     \FSM_sequential_hb_state[4]_i_43 
@@ -14563,14 +14466,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(words_done[1]),
         .I3(words_done[3]),
         .O(\FSM_sequential_hb_state[4]_i_43_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair308" *) 
+  (* SOFT_HLUTNM = "soft_lutpair309" *) 
   LUT2 #(
     .INIT(4'h7)) 
     \FSM_sequential_hb_state[4]_i_44 
        (.I0(words_done[0]),
         .I1(words_done[1]),
         .O(\FSM_sequential_hb_state[4]_i_44_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair287" *) 
+  (* SOFT_HLUTNM = "soft_lutpair289" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \FSM_sequential_hb_state[4]_i_5 
@@ -14587,7 +14490,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rwds_timeout_cnt_reg_n_0_[4] ),
         .I5(\rwds_timeout_cnt_reg_n_0_[3] ),
         .O(\rwds_timeout_cnt_reg[2]_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair242" *) 
+  (* SOFT_HLUTNM = "soft_lutpair244" *) 
   LUT4 #(
     .INIT(16'h0400)) 
     \FSM_sequential_hb_state[4]_i_7 
@@ -14684,7 +14587,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .DI({1'b0,1'b0,1'b0,\FSM_sequential_hb_state[4]_i_33_n_0 ,\FSM_sequential_hb_state[4]_i_34_n_0 ,\FSM_sequential_hb_state[4]_i_35_n_0 ,\FSM_sequential_hb_state[4]_i_36_n_0 ,\FSM_sequential_hb_state[4]_i_37_n_0 }),
         .O(\NLW_FSM_sequential_hb_state_reg[4]_i_30_O_UNCONNECTED [7:0]),
         .S({1'b0,1'b0,1'b0,\FSM_sequential_hb_state[4]_i_38_n_0 ,\FSM_sequential_hb_state[4]_i_39_n_0 ,\FSM_sequential_hb_state[4]_i_40_n_0 ,\FSM_sequential_hb_state[4]_i_41_n_0 ,\FSM_sequential_hb_state[4]_i_42_n_0 }));
-  (* SOFT_HLUTNM = "soft_lutpair302" *) 
+  (* SOFT_HLUTNM = "soft_lutpair303" *) 
   LUT4 #(
     .INIT(16'h00A3)) 
     \ca_cycle[0]_i_1 
@@ -14693,7 +14596,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .O(ca_cycle[0]));
-  (* SOFT_HLUTNM = "soft_lutpair263" *) 
+  (* SOFT_HLUTNM = "soft_lutpair265" *) 
   LUT4 #(
     .INIT(16'h0220)) 
     \ca_cycle[1]_i_1 
@@ -14712,7 +14615,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\ca_cycle[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair263" *) 
+  (* SOFT_HLUTNM = "soft_lutpair265" *) 
   LUT5 #(
     .INIT(32'h00007800)) 
     \ca_cycle[2]_i_2 
@@ -14740,7 +14643,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(ca_cycle[2]),
         .Q(\ca_cycle_reg_n_0_[2] ),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair289" *) 
+  (* SOFT_HLUTNM = "soft_lutpair291" *) 
   LUT4 #(
     .INIT(16'h1000)) 
     \ca_shift[0]_i_1 
@@ -14749,7 +14652,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(dout[30]),
         .I3(dout[24]),
         .O(ca_shift0_in[0]));
-  (* SOFT_HLUTNM = "soft_lutpair289" *) 
+  (* SOFT_HLUTNM = "soft_lutpair291" *) 
   LUT3 #(
     .INIT(8'h02)) 
     \ca_shift[1]_i_1 
@@ -14757,7 +14660,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I2(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(ca_shift0_in[1]));
-  (* SOFT_HLUTNM = "soft_lutpair290" *) 
+  (* SOFT_HLUTNM = "soft_lutpair292" *) 
   LUT3 #(
     .INIT(8'h02)) 
     \ca_shift[2]_i_1 
@@ -14774,7 +14677,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I4(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(ca_shift0_in[44]));
-  (* SOFT_HLUTNM = "soft_lutpair291" *) 
+  (* SOFT_HLUTNM = "soft_lutpair293" *) 
   LUT3 #(
     .INIT(8'hAB)) 
     \ca_shift[45]_i_1 
@@ -14782,7 +14685,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I2(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(ca_shift0_in[45]));
-  (* SOFT_HLUTNM = "soft_lutpair290" *) 
+  (* SOFT_HLUTNM = "soft_lutpair292" *) 
   LUT4 #(
     .INIT(16'hABA8)) 
     \ca_shift[46]_i_1 
@@ -14801,7 +14704,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed[7]_i_3_n_0 ),
         .I5(i_hb_rstn),
         .O(\ca_shift[47]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair291" *) 
+  (* SOFT_HLUTNM = "soft_lutpair293" *) 
   LUT4 #(
     .INIT(16'hA8AB)) 
     \ca_shift[47]_i_2 
@@ -15020,7 +14923,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(ca_shift0_in[47]),
         .Q(in25[7]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair301" *) 
+  (* SOFT_HLUTNM = "soft_lutpair302" *) 
   LUT4 #(
     .INIT(16'hFD00)) 
     cmd_loaded_i_3
@@ -15035,7 +14938,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(cmd_loaded_reg_2),
         .Q(cmd_loaded_reg_0),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair300" *) 
+  (* SOFT_HLUTNM = "soft_lutpair301" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \cs_preclk_cnt[0]_i_1 
@@ -15053,7 +14956,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[2]_rep__0_1 ),
         .I5(base_latency),
         .O(\cs_preclk_cnt[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair300" *) 
+  (* SOFT_HLUTNM = "soft_lutpair301" *) 
   LUT4 #(
     .INIT(16'h0090)) 
     \cs_preclk_cnt[1]_i_2 
@@ -15062,7 +14965,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .O(cs_preclk_cnt[1]));
-  (* SOFT_HLUTNM = "soft_lutpair249" *) 
+  (* SOFT_HLUTNM = "soft_lutpair251" *) 
   LUT2 #(
     .INIT(4'h1)) 
     \cs_preclk_cnt[1]_i_3 
@@ -15345,6 +15248,54 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(dq_q2[7]),
         .Q(o_dbg_dq_q2_dly[7]),
         .R(SR));
+  (* equivalent_register_removal = "no" *) 
+  FDSE hb_cs_n_dbg_q_reg
+       (.C(i_hb_clk_200),
+        .CE(1'b1),
+        .D(hb_cs_n_dbg_q_reg_0),
+        .Q(o_dbg_hb_cs_n_q),
+        .S(SR));
+  LUT1 #(
+    .INIT(2'h1)) 
+    hb_cs_n_pad_q_i_1
+       (.I0(i_hb_rstn),
+        .O(SR));
+  LUT5 #(
+    .INIT(32'h0101D30B)) 
+    hb_cs_n_pad_q_i_2
+       (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
+        .I1(hb_state),
+        .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
+        .I3(\FSM_sequential_hb_state_reg[4]_0 [0]),
+        .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
+        .O(\FSM_sequential_hb_state_reg[1]_0 ));
+  LUT6 #(
+    .INIT(64'hAAAAAAAAAAAAAEAB)) 
+    hb_cs_n_pad_q_i_3
+       (.I0(hb_cs_n_pad_q_i_4_n_0),
+        .I1(\FSM_sequential_hb_state_reg[4]_0 [0]),
+        .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
+        .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
+        .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
+        .I5(hb_state),
+        .O(hb_cs_n_pad_q));
+  LUT6 #(
+    .INIT(64'h1111000300000000)) 
+    hb_cs_n_pad_q_i_4
+       (.I0(hb_state035_out),
+        .I1(\FSM_sequential_hb_state_reg[2]_rep__0_0 ),
+        .I2(dout[30]),
+        .I3(hb_cs_n_pad_q_reg_0),
+        .I4(\rd_beats_pushed[7]_i_3_n_0 ),
+        .I5(\FSM_sequential_hb_state_reg[3]_1 ),
+        .O(hb_cs_n_pad_q_i_4_n_0));
+  (* IOB = "TRUE" *) 
+  FDSE hb_cs_n_pad_q_reg
+       (.C(i_hb_clk_200),
+        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .D(hb_cs_n_pad_q),
+        .Q(o_hb_cs_n),
+        .S(SR));
   LUT2 #(
     .INIT(4'hB)) 
     \hb_reset_pulse_cnt[4]_i_1 
@@ -15361,7 +15312,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     .INIT(8'h0E)) 
     \last_read_pack[15]_i_1 
        (.I0(\o_axil_rwds_cntr[5]_i_1_n_0 ),
-        .I1(\FSM_sequential_hb_state_reg[1]_0 ),
+        .I1(\FSM_sequential_hb_state_reg[1]_1 ),
         .I2(last_read_half_reg_0),
         .O(\last_read_pack[15]_i_1_n_0 ));
   FDRE \last_read_pack_reg[0] 
@@ -15535,7 +15486,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(latency_left[2]),
         .I5(\latency_left[3]_i_5_n_0 ),
         .O(\latency_left[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair317" *) 
+  (* SOFT_HLUTNM = "soft_lutpair318" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \latency_left[2]_i_2 
@@ -15571,7 +15522,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\latency_left[3]_i_7_n_0 ),
         .I4(latency_left[6]),
         .O(\latency_left[3]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair317" *) 
+  (* SOFT_HLUTNM = "soft_lutpair318" *) 
   LUT3 #(
     .INIT(8'hFE)) 
     \latency_left[3]_i_4 
@@ -15579,7 +15530,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(latency_left[0]),
         .I2(latency_left[2]),
         .O(\latency_left[3]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair238" *) 
+  (* SOFT_HLUTNM = "soft_lutpair237" *) 
   LUT5 #(
     .INIT(32'h01200000)) 
     \latency_left[3]_i_5 
@@ -15589,7 +15540,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(\latency_left[3]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair227" *) 
+  (* SOFT_HLUTNM = "soft_lutpair229" *) 
   LUT5 #(
     .INIT(32'hBFFFFFFF)) 
     \latency_left[3]_i_6 
@@ -15599,7 +15550,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(cur_is_reg),
         .I4(cur_is_write),
         .O(\latency_left[3]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair262" *) 
+  (* SOFT_HLUTNM = "soft_lutpair264" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     \latency_left[3]_i_7 
@@ -15625,7 +15576,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\latency_left[7]_i_10_n_0 ),
         .I2(latency_left[5]),
         .O(\latency_left[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair237" *) 
+  (* SOFT_HLUTNM = "soft_lutpair239" *) 
   LUT4 #(
     .INIT(16'hE100)) 
     \latency_left[6]_i_1 
@@ -15654,7 +15605,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I5(\latency_left[3]_i_3_n_0 ),
         .O(\latency_left[7]_i_10_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair237" *) 
+  (* SOFT_HLUTNM = "soft_lutpair239" *) 
   LUT5 #(
     .INIT(32'hFE000100)) 
     \latency_left[7]_i_2 
@@ -15664,11 +15615,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\latency_left[7]_i_10_n_0 ),
         .I4(latency_left[7]),
         .O(\latency_left[7]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair293" *) 
+  (* SOFT_HLUTNM = "soft_lutpair305" *) 
   LUT4 #(
     .INIT(16'h040E)) 
     \latency_left[7]_i_3 
-       (.I0(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+       (.I0(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
@@ -15680,7 +15631,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I4(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+        .I4(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .I5(\latency_left[3]_i_3_n_0 ),
         .O(\latency_left[7]_i_4_n_0 ));
   LUT6 #(
@@ -15691,37 +15642,37 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I3(cur_is_write),
         .I4(cur_is_reg),
-        .I5(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I5(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .O(\latency_left[7]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair304" *) 
+  (* SOFT_HLUTNM = "soft_lutpair305" *) 
   LUT4 #(
     .INIT(16'h3014)) 
     \latency_left[7]_i_6 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .I3(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+        .I3(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\latency_left[7]_i_6_n_0 ));
   LUT6 #(
     .INIT(64'h0000000004440000)) 
     \latency_left[7]_i_7 
-       (.I0(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
-        .I1(\FSM_sequential_hb_state_reg[4]_1 ),
+       (.I0(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
+        .I1(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
         .I2(cur_is_write),
         .I3(cur_is_reg),
         .I4(i_hb_rstn),
         .I5(\o_dq_o_d1[7]_i_6_n_0 ),
         .O(\latency_left[7]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair292" *) 
+  (* SOFT_HLUTNM = "soft_lutpair235" *) 
   LUT4 #(
     .INIT(16'h0001)) 
     \latency_left[7]_i_8 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I3(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+        .I3(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\latency_left[7]_i_8_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair262" *) 
+  (* SOFT_HLUTNM = "soft_lutpair264" *) 
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
     \latency_left[7]_i_9 
@@ -15782,40 +15733,40 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   LUT1 #(
     .INIT(2'h1)) 
     \o_axif_rwds_cntr[0]_i_1 
-       (.I0(axif_rwds_cntr),
+       (.I0(\o_axif_rwds_cntr_reg[5]_0 [0]),
         .O(p_0_in[0]));
-  (* SOFT_HLUTNM = "soft_lutpair312" *) 
+  (* SOFT_HLUTNM = "soft_lutpair313" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \o_axif_rwds_cntr[1]_i_1 
-       (.I0(axif_rwds_cntr),
-        .I1(\o_axif_rwds_cntr_reg[5]_0 [0]),
+       (.I0(\o_axif_rwds_cntr_reg[5]_0 [0]),
+        .I1(\o_axif_rwds_cntr_reg[5]_0 [1]),
         .O(p_0_in[1]));
-  (* SOFT_HLUTNM = "soft_lutpair312" *) 
+  (* SOFT_HLUTNM = "soft_lutpair313" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \o_axif_rwds_cntr[2]_i_1 
-       (.I0(axif_rwds_cntr),
-        .I1(\o_axif_rwds_cntr_reg[5]_0 [0]),
-        .I2(\o_axif_rwds_cntr_reg[5]_0 [1]),
+       (.I0(\o_axif_rwds_cntr_reg[5]_0 [0]),
+        .I1(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .I2(axif_rwds_cntr),
         .O(p_0_in[2]));
-  (* SOFT_HLUTNM = "soft_lutpair260" *) 
+  (* SOFT_HLUTNM = "soft_lutpair262" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \o_axif_rwds_cntr[3]_i_1 
-       (.I0(\o_axif_rwds_cntr_reg[5]_0 [1]),
-        .I1(\o_axif_rwds_cntr_reg[5]_0 [0]),
-        .I2(axif_rwds_cntr),
+       (.I0(axif_rwds_cntr),
+        .I1(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .I2(\o_axif_rwds_cntr_reg[5]_0 [0]),
         .I3(\o_axif_rwds_cntr_reg[5]_0 [2]),
         .O(p_0_in[3]));
-  (* SOFT_HLUTNM = "soft_lutpair260" *) 
+  (* SOFT_HLUTNM = "soft_lutpair262" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \o_axif_rwds_cntr[4]_i_1 
        (.I0(\o_axif_rwds_cntr_reg[5]_0 [2]),
-        .I1(axif_rwds_cntr),
-        .I2(\o_axif_rwds_cntr_reg[5]_0 [0]),
-        .I3(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .I1(\o_axif_rwds_cntr_reg[5]_0 [0]),
+        .I2(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .I3(axif_rwds_cntr),
         .I4(\o_axif_rwds_cntr_reg[5]_0 [3]),
         .O(p_0_in[4]));
   LUT6 #(
@@ -15827,54 +15778,54 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
-        .O(\FSM_sequential_hb_state_reg[1]_0 ));
+        .O(\FSM_sequential_hb_state_reg[1]_1 ));
   LUT6 #(
     .INIT(64'h7FFFFFFF80000000)) 
     \o_axif_rwds_cntr[5]_i_2 
        (.I0(\o_axif_rwds_cntr_reg[5]_0 [3]),
-        .I1(\o_axif_rwds_cntr_reg[5]_0 [1]),
-        .I2(\o_axif_rwds_cntr_reg[5]_0 [0]),
-        .I3(axif_rwds_cntr),
+        .I1(axif_rwds_cntr),
+        .I2(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .I3(\o_axif_rwds_cntr_reg[5]_0 [0]),
         .I4(\o_axif_rwds_cntr_reg[5]_0 [2]),
         .I5(\o_axif_rwds_cntr_reg[5]_0 [4]),
         .O(p_0_in[5]));
   FDRE \o_axif_rwds_cntr_reg[0] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[0]),
-        .Q(axif_rwds_cntr),
+        .Q(\o_axif_rwds_cntr_reg[5]_0 [0]),
         .R(SR));
   FDRE \o_axif_rwds_cntr_reg[1] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[1]),
-        .Q(\o_axif_rwds_cntr_reg[5]_0 [0]),
+        .Q(\o_axif_rwds_cntr_reg[5]_0 [1]),
         .R(SR));
   FDRE \o_axif_rwds_cntr_reg[2] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[2]),
-        .Q(\o_axif_rwds_cntr_reg[5]_0 [1]),
+        .Q(axif_rwds_cntr),
         .R(SR));
   FDRE \o_axif_rwds_cntr_reg[3] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[3]),
         .Q(\o_axif_rwds_cntr_reg[5]_0 [2]),
         .R(SR));
   FDRE \o_axif_rwds_cntr_reg[4] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[4]),
         .Q(\o_axif_rwds_cntr_reg[5]_0 [3]),
         .R(SR));
   FDRE \o_axif_rwds_cntr_reg[5] 
        (.C(i_hb_clk_200),
-        .CE(\FSM_sequential_hb_state_reg[1]_0 ),
+        .CE(\FSM_sequential_hb_state_reg[1]_1 ),
         .D(p_0_in[5]),
         .Q(\o_axif_rwds_cntr_reg[5]_0 [4]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair266" *) 
+  (* SOFT_HLUTNM = "soft_lutpair268" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[0]_i_1 
@@ -15884,7 +15835,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[0]));
-  (* SOFT_HLUTNM = "soft_lutpair276" *) 
+  (* SOFT_HLUTNM = "soft_lutpair278" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[10]_i_1 
@@ -15894,7 +15845,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[10]));
-  (* SOFT_HLUTNM = "soft_lutpair277" *) 
+  (* SOFT_HLUTNM = "soft_lutpair279" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[11]_i_1 
@@ -15904,7 +15855,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[11]));
-  (* SOFT_HLUTNM = "soft_lutpair278" *) 
+  (* SOFT_HLUTNM = "soft_lutpair280" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[12]_i_1 
@@ -15914,7 +15865,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[12]));
-  (* SOFT_HLUTNM = "soft_lutpair279" *) 
+  (* SOFT_HLUTNM = "soft_lutpair281" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[13]_i_1 
@@ -15924,7 +15875,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[13]));
-  (* SOFT_HLUTNM = "soft_lutpair280" *) 
+  (* SOFT_HLUTNM = "soft_lutpair282" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[14]_i_1 
@@ -15934,7 +15885,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[14]));
-  (* SOFT_HLUTNM = "soft_lutpair281" *) 
+  (* SOFT_HLUTNM = "soft_lutpair283" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[15]_i_1 
@@ -15944,7 +15895,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[15]));
-  (* SOFT_HLUTNM = "soft_lutpair266" *) 
+  (* SOFT_HLUTNM = "soft_lutpair268" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[16]_i_1 
@@ -15954,7 +15905,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[16]));
-  (* SOFT_HLUTNM = "soft_lutpair267" *) 
+  (* SOFT_HLUTNM = "soft_lutpair269" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[17]_i_1 
@@ -15964,7 +15915,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[17]));
-  (* SOFT_HLUTNM = "soft_lutpair268" *) 
+  (* SOFT_HLUTNM = "soft_lutpair270" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[18]_i_1 
@@ -15974,7 +15925,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[18]));
-  (* SOFT_HLUTNM = "soft_lutpair269" *) 
+  (* SOFT_HLUTNM = "soft_lutpair271" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[19]_i_1 
@@ -15984,7 +15935,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[19]));
-  (* SOFT_HLUTNM = "soft_lutpair267" *) 
+  (* SOFT_HLUTNM = "soft_lutpair269" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[1]_i_1 
@@ -15994,7 +15945,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[1]));
-  (* SOFT_HLUTNM = "soft_lutpair270" *) 
+  (* SOFT_HLUTNM = "soft_lutpair272" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[20]_i_1 
@@ -16004,7 +15955,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[20]));
-  (* SOFT_HLUTNM = "soft_lutpair271" *) 
+  (* SOFT_HLUTNM = "soft_lutpair273" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[21]_i_1 
@@ -16014,7 +15965,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[21]));
-  (* SOFT_HLUTNM = "soft_lutpair272" *) 
+  (* SOFT_HLUTNM = "soft_lutpair274" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[22]_i_1 
@@ -16024,7 +15975,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[22]));
-  (* SOFT_HLUTNM = "soft_lutpair273" *) 
+  (* SOFT_HLUTNM = "soft_lutpair275" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[23]_i_1 
@@ -16034,7 +15985,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[23]));
-  (* SOFT_HLUTNM = "soft_lutpair274" *) 
+  (* SOFT_HLUTNM = "soft_lutpair276" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[24]_i_1 
@@ -16044,7 +15995,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[24]));
-  (* SOFT_HLUTNM = "soft_lutpair275" *) 
+  (* SOFT_HLUTNM = "soft_lutpair277" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[25]_i_1 
@@ -16054,7 +16005,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[25]));
-  (* SOFT_HLUTNM = "soft_lutpair276" *) 
+  (* SOFT_HLUTNM = "soft_lutpair278" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[26]_i_1 
@@ -16064,7 +16015,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[26]));
-  (* SOFT_HLUTNM = "soft_lutpair277" *) 
+  (* SOFT_HLUTNM = "soft_lutpair279" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[27]_i_1 
@@ -16074,7 +16025,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[27]));
-  (* SOFT_HLUTNM = "soft_lutpair278" *) 
+  (* SOFT_HLUTNM = "soft_lutpair280" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[28]_i_1 
@@ -16084,7 +16035,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[28]));
-  (* SOFT_HLUTNM = "soft_lutpair279" *) 
+  (* SOFT_HLUTNM = "soft_lutpair281" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[29]_i_1 
@@ -16094,7 +16045,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[29]));
-  (* SOFT_HLUTNM = "soft_lutpair268" *) 
+  (* SOFT_HLUTNM = "soft_lutpair270" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[2]_i_1 
@@ -16104,7 +16055,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[2]));
-  (* SOFT_HLUTNM = "soft_lutpair280" *) 
+  (* SOFT_HLUTNM = "soft_lutpair282" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[30]_i_1 
@@ -16124,7 +16075,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep__0_0 ),
         .O(\o_axil_rsp_fifo_din[31]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair281" *) 
+  (* SOFT_HLUTNM = "soft_lutpair283" *) 
   LUT5 #(
     .INIT(32'h00FF00A8)) 
     \o_axil_rsp_fifo_din[31]_i_2 
@@ -16134,14 +16085,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[31]));
-  (* SOFT_HLUTNM = "soft_lutpair337" *) 
+  (* SOFT_HLUTNM = "soft_lutpair339" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \o_axil_rsp_fifo_din[31]_i_3 
        (.I0(cur_src_axil_reg_n_0),
         .I1(cur_is_write),
         .O(\o_axil_rsp_fifo_din[31]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair269" *) 
+  (* SOFT_HLUTNM = "soft_lutpair271" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[3]_i_1 
@@ -16151,7 +16102,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[3]));
-  (* SOFT_HLUTNM = "soft_lutpair270" *) 
+  (* SOFT_HLUTNM = "soft_lutpair272" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[4]_i_1 
@@ -16161,7 +16112,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[4]));
-  (* SOFT_HLUTNM = "soft_lutpair271" *) 
+  (* SOFT_HLUTNM = "soft_lutpair273" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[5]_i_1 
@@ -16171,7 +16122,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[5]));
-  (* SOFT_HLUTNM = "soft_lutpair272" *) 
+  (* SOFT_HLUTNM = "soft_lutpair274" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[6]_i_1 
@@ -16181,7 +16132,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[6]));
-  (* SOFT_HLUTNM = "soft_lutpair273" *) 
+  (* SOFT_HLUTNM = "soft_lutpair275" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[7]_i_1 
@@ -16191,7 +16142,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[7]));
-  (* SOFT_HLUTNM = "soft_lutpair274" *) 
+  (* SOFT_HLUTNM = "soft_lutpair276" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[8]_i_1 
@@ -16201,7 +16152,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(o_axil_rsp_fifo_din1_in[8]));
-  (* SOFT_HLUTNM = "soft_lutpair275" *) 
+  (* SOFT_HLUTNM = "soft_lutpair277" *) 
   LUT5 #(
     .INIT(32'h00FF00A2)) 
     \o_axil_rsp_fifo_din[9]_i_1 
@@ -16423,7 +16374,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(cur_is_write),
         .I5(cur_src_axil_reg_n_0),
         .O(o_axil_rsp_fifo_wr_en_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair243" *) 
+  (* SOFT_HLUTNM = "soft_lutpair245" *) 
   LUT4 #(
     .INIT(16'h0006)) 
     o_axil_rsp_fifo_wr_en_i_3
@@ -16453,39 +16404,39 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     \o_axil_rwds_cntr[0]_i_1 
        (.I0(Q[0]),
         .O(p_0_in__0[0]));
-  (* SOFT_HLUTNM = "soft_lutpair313" *) 
+  (* SOFT_HLUTNM = "soft_lutpair314" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \o_axil_rwds_cntr[1]_i_1 
        (.I0(Q[0]),
-        .I1(axil_rwds_cntr[1]),
+        .I1(Q[1]),
         .O(p_0_in__0[1]));
-  (* SOFT_HLUTNM = "soft_lutpair313" *) 
+  (* SOFT_HLUTNM = "soft_lutpair314" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \o_axil_rwds_cntr[2]_i_1 
        (.I0(Q[0]),
-        .I1(axil_rwds_cntr[1]),
-        .I2(axil_rwds_cntr[2]),
+        .I1(Q[1]),
+        .I2(axil_rwds_cntr),
         .O(p_0_in__0[2]));
-  (* SOFT_HLUTNM = "soft_lutpair261" *) 
+  (* SOFT_HLUTNM = "soft_lutpair263" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \o_axil_rwds_cntr[3]_i_1 
-       (.I0(axil_rwds_cntr[2]),
-        .I1(axil_rwds_cntr[1]),
+       (.I0(axil_rwds_cntr),
+        .I1(Q[1]),
         .I2(Q[0]),
-        .I3(axil_rwds_cntr[3]),
+        .I3(Q[2]),
         .O(p_0_in__0[3]));
-  (* SOFT_HLUTNM = "soft_lutpair261" *) 
+  (* SOFT_HLUTNM = "soft_lutpair263" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \o_axil_rwds_cntr[4]_i_1 
-       (.I0(axil_rwds_cntr[3]),
+       (.I0(Q[2]),
         .I1(Q[0]),
-        .I2(axil_rwds_cntr[1]),
-        .I3(axil_rwds_cntr[2]),
-        .I4(Q[1]),
+        .I2(Q[1]),
+        .I3(axil_rwds_cntr),
+        .I4(Q[3]),
         .O(p_0_in__0[4]));
   LUT6 #(
     .INIT(64'h0000010000000000)) 
@@ -16500,12 +16451,12 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   LUT6 #(
     .INIT(64'h7FFFFFFF80000000)) 
     \o_axil_rwds_cntr[5]_i_2 
-       (.I0(Q[1]),
-        .I1(axil_rwds_cntr[2]),
-        .I2(axil_rwds_cntr[1]),
+       (.I0(Q[3]),
+        .I1(axil_rwds_cntr),
+        .I2(Q[1]),
         .I3(Q[0]),
-        .I4(axil_rwds_cntr[3]),
-        .I5(Q[2]),
+        .I4(Q[2]),
+        .I5(Q[4]),
         .O(p_0_in__0[5]));
   FDRE \o_axil_rwds_cntr_reg[0] 
        (.C(i_hb_clk_200),
@@ -16517,31 +16468,31 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.C(i_hb_clk_200),
         .CE(\o_axil_rwds_cntr[5]_i_1_n_0 ),
         .D(p_0_in__0[1]),
-        .Q(axil_rwds_cntr[1]),
+        .Q(Q[1]),
         .R(SR));
   FDRE \o_axil_rwds_cntr_reg[2] 
        (.C(i_hb_clk_200),
         .CE(\o_axil_rwds_cntr[5]_i_1_n_0 ),
         .D(p_0_in__0[2]),
-        .Q(axil_rwds_cntr[2]),
+        .Q(axil_rwds_cntr),
         .R(SR));
   FDRE \o_axil_rwds_cntr_reg[3] 
        (.C(i_hb_clk_200),
         .CE(\o_axil_rwds_cntr[5]_i_1_n_0 ),
         .D(p_0_in__0[3]),
-        .Q(axil_rwds_cntr[3]),
+        .Q(Q[2]),
         .R(SR));
   FDRE \o_axil_rwds_cntr_reg[4] 
        (.C(i_hb_clk_200),
         .CE(\o_axil_rwds_cntr[5]_i_1_n_0 ),
         .D(p_0_in__0[4]),
-        .Q(Q[1]),
+        .Q(Q[3]),
         .R(SR));
   FDRE \o_axil_rwds_cntr_reg[5] 
        (.C(i_hb_clk_200),
         .CE(\o_axil_rwds_cntr[5]_i_1_n_0 ),
         .D(p_0_in__0[5]),
-        .Q(Q[2]),
+        .Q(Q[4]),
         .R(SR));
   LUT6 #(
     .INIT(64'h0000000000000001)) 
@@ -16778,7 +16729,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[2]_rep_0 ),
-        .I3(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I3(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .I4(cur_is_reg),
         .I5(cur_is_write),
         .O(\o_dq_o_d1[7]_i_10_n_0 ));
@@ -16799,7 +16750,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\o_dq_o_d1[7]_i_10_n_0 ),
         .I5(\cur_wdata_reg_n_0_[15] ),
         .O(\o_dq_o_d1[7]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair239" *) 
+  (* SOFT_HLUTNM = "soft_lutpair240" *) 
   LUT5 #(
     .INIT(32'h00040002)) 
     \o_dq_o_d1[7]_i_3 
@@ -16809,7 +16760,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(\o_dq_o_d1[7]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair307" *) 
+  (* SOFT_HLUTNM = "soft_lutpair308" *) 
   LUT3 #(
     .INIT(8'h08)) 
     \o_dq_o_d1[7]_i_4 
@@ -16817,7 +16768,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I2(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\o_dq_o_d1[7]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair294" *) 
+  (* SOFT_HLUTNM = "soft_lutpair295" *) 
   LUT4 #(
     .INIT(16'hBBAB)) 
     \o_dq_o_d1[7]_i_5 
@@ -16826,7 +16777,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(o_wr_fifo_rd_en_reg_i_2_n_4),
         .I3(wrnext_valid_reg_n_0),
         .O(\o_dq_o_d1[7]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair336" *) 
+  (* SOFT_HLUTNM = "soft_lutpair337" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \o_dq_o_d1[7]_i_6 
@@ -16856,7 +16807,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     .INIT(64'h000000000000DFFF)) 
     \o_dq_o_d1[7]_i_9 
        (.I0(\FSM_sequential_hb_state_reg[2]_rep_0 ),
-        .I1(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I1(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .I2(cur_is_reg),
         .I3(cur_is_write),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
@@ -16925,7 +16876,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     \o_dq_o_d2[0]_i_2 
        (.I0(wrbuf_high_half_reg_0),
         .I1(\FSM_sequential_hb_state_reg[3]_0 ),
-        .I2(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I2(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I3(\o_dq_o_d1[7]_i_11_n_0 ),
         .I4(\wrbuf_reg_n_0_[24] ),
         .O(\o_dq_o_d2[0]_i_2_n_0 ));
@@ -16937,7 +16888,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(wrbuf_high_half_reg_0),
         .I3(in32[0]),
         .I4(\FSM_sequential_hb_state_reg[3]_0 ),
-        .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\o_dq_o_d2[0]_i_3_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFEEEFEEEFEEE)) 
@@ -16954,7 +16905,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     \o_dq_o_d2[1]_i_2 
        (.I0(wrbuf_high_half_reg_0),
         .I1(\FSM_sequential_hb_state_reg[3]_0 ),
-        .I2(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I2(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I3(\o_dq_o_d1[7]_i_11_n_0 ),
         .I4(\wrbuf_reg_n_0_[25] ),
         .O(\o_dq_o_d2[1]_i_2_n_0 ));
@@ -16966,7 +16917,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(wrbuf_high_half_reg_0),
         .I3(in32[1]),
         .I4(\FSM_sequential_hb_state_reg[3]_0 ),
-        .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\o_dq_o_d2[1]_i_3_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFEEEFEEEFEEE)) 
@@ -17246,67 +17197,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(o_hb_clk_ce_reg_0),
         .Q(hb_clk_ce),
         .R(SR));
-  LUT1 #(
-    .INIT(2'h1)) 
-    o_hb_cs_n_q_i_1
-       (.I0(i_hb_rstn),
-        .O(SR));
-  LUT6 #(
-    .INIT(64'h1111000300000000)) 
-    o_hb_cs_n_q_i_3
-       (.I0(hb_state035_out),
-        .I1(\FSM_sequential_hb_state_reg[2]_rep__0_0 ),
-        .I2(dout[30]),
-        .I3(o_hb_cs_n_q_reg_1),
-        .I4(\rd_beats_pushed[7]_i_3_n_0 ),
-        .I5(\FSM_sequential_hb_state_reg[3]_1 ),
-        .O(\gen_wr_a.gen_word_narrow.mem_reg ));
-  (* SOFT_HLUTNM = "soft_lutpair306" *) 
-  LUT3 #(
-    .INIT(8'h01)) 
-    o_hb_cs_n_q_i_4
-       (.I0(\FSM_sequential_hb_state_reg[4]_0 [3]),
-        .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
-        .O(\FSM_sequential_hb_state_reg[4]_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair305" *) 
-  LUT2 #(
-    .INIT(4'hE)) 
-    o_hb_cs_n_q_i_5
-       (.I0(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
-        .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .O(\FSM_sequential_hb_state_reg[2]_rep__0_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair235" *) 
-  LUT5 #(
-    .INIT(32'h01000000)) 
-    o_hb_cs_n_q_i_6
-       (.I0(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .I1(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
-        .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
-        .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
-        .O(\FSM_sequential_hb_state_reg[3]_2 ));
-  (* SOFT_HLUTNM = "soft_lutpair235" *) 
-  LUT5 #(
-    .INIT(32'h0101D30B)) 
-    o_hb_cs_n_q_i_7
-       (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I1(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
-        .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .I3(\FSM_sequential_hb_state_reg[4]_0 [0]),
-        .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
-        .O(\FSM_sequential_hb_state_reg[1]_2 ));
-  FDSE o_hb_cs_n_q_reg
-       (.C(i_hb_clk_200),
-        .CE(1'b1),
-        .D(o_hb_cs_n_q_reg_0),
-        .Q(o_hb_cs_n),
-        .S(SR));
   LUT3 #(
     .INIT(8'hE0)) 
     \o_last_read_word32[31]_i_1 
        (.I0(\o_axil_rwds_cntr[5]_i_1_n_0 ),
-        .I1(\FSM_sequential_hb_state_reg[1]_0 ),
+        .I1(\FSM_sequential_hb_state_reg[1]_1 ),
         .I2(last_read_half_reg_0),
         .O(\o_last_read_word32[31]_i_1_n_0 ));
   FDRE \o_last_read_word32_reg[0] 
@@ -17501,7 +17396,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(last_read_pack[9]),
         .Q(o_dbg_last_read_word32[9]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair316" *) 
+  (* SOFT_HLUTNM = "soft_lutpair319" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[0]_i_1 
@@ -17509,7 +17404,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[0]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair322" *) 
+  (* SOFT_HLUTNM = "soft_lutpair324" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[10]_i_1 
@@ -17517,7 +17412,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[10]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[10]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair323" *) 
+  (* SOFT_HLUTNM = "soft_lutpair324" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[11]_i_1 
@@ -17525,7 +17420,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[11]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[11]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair323" *) 
+  (* SOFT_HLUTNM = "soft_lutpair325" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[12]_i_1 
@@ -17533,7 +17428,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[12]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[12]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair324" *) 
+  (* SOFT_HLUTNM = "soft_lutpair325" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[13]_i_1 
@@ -17541,7 +17436,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[13]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[13]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair324" *) 
+  (* SOFT_HLUTNM = "soft_lutpair326" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[14]_i_1 
@@ -17549,7 +17444,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[14]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[14]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair325" *) 
+  (* SOFT_HLUTNM = "soft_lutpair326" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[15]_i_1 
@@ -17557,7 +17452,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[15]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[15]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair325" *) 
+  (* SOFT_HLUTNM = "soft_lutpair327" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[16]_i_1 
@@ -17565,7 +17460,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[0]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[16]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair326" *) 
+  (* SOFT_HLUTNM = "soft_lutpair327" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[17]_i_1 
@@ -17573,7 +17468,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[1]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[17]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair326" *) 
+  (* SOFT_HLUTNM = "soft_lutpair328" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[18]_i_1 
@@ -17581,7 +17476,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[2]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[18]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair327" *) 
+  (* SOFT_HLUTNM = "soft_lutpair328" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[19]_i_1 
@@ -17589,7 +17484,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[3]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[19]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair318" *) 
+  (* SOFT_HLUTNM = "soft_lutpair319" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[1]_i_1 
@@ -17597,7 +17492,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[1]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair327" *) 
+  (* SOFT_HLUTNM = "soft_lutpair329" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[20]_i_1 
@@ -17605,7 +17500,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[4]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[20]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair328" *) 
+  (* SOFT_HLUTNM = "soft_lutpair329" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[21]_i_1 
@@ -17613,7 +17508,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[5]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[21]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair328" *) 
+  (* SOFT_HLUTNM = "soft_lutpair330" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[22]_i_1 
@@ -17621,7 +17516,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[6]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[22]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair329" *) 
+  (* SOFT_HLUTNM = "soft_lutpair330" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[23]_i_1 
@@ -17629,7 +17524,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q1[7]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[23]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair329" *) 
+  (* SOFT_HLUTNM = "soft_lutpair331" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[24]_i_1 
@@ -17637,7 +17532,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[0]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[24]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair330" *) 
+  (* SOFT_HLUTNM = "soft_lutpair331" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[25]_i_1 
@@ -17645,7 +17540,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[1]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[25]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair330" *) 
+  (* SOFT_HLUTNM = "soft_lutpair332" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[26]_i_1 
@@ -17653,7 +17548,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[2]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[26]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair331" *) 
+  (* SOFT_HLUTNM = "soft_lutpair332" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[27]_i_1 
@@ -17661,7 +17556,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[3]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[27]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair331" *) 
+  (* SOFT_HLUTNM = "soft_lutpair333" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[28]_i_1 
@@ -17669,7 +17564,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[4]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[28]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair332" *) 
+  (* SOFT_HLUTNM = "soft_lutpair333" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[29]_i_1 
@@ -17677,7 +17572,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[5]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[29]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair318" *) 
+  (* SOFT_HLUTNM = "soft_lutpair320" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[2]_i_1 
@@ -17685,7 +17580,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[2]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair332" *) 
+  (* SOFT_HLUTNM = "soft_lutpair334" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[30]_i_1 
@@ -17703,7 +17598,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(p_44_in),
         .I5(rd_half_reg_0),
         .O(\o_rd_fifo_din[31]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair333" *) 
+  (* SOFT_HLUTNM = "soft_lutpair334" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[31]_i_2 
@@ -17711,7 +17606,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(dq_q2[7]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[31]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair314" *) 
+  (* SOFT_HLUTNM = "soft_lutpair315" *) 
   LUT3 #(
     .INIT(8'h40)) 
     \o_rd_fifo_din[31]_i_3 
@@ -17736,7 +17631,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(o_dbg_rwds_q2_dly),
         .I2(o_dbg_rwds_q1_dly),
         .O(p_44_in));
-  (* SOFT_HLUTNM = "soft_lutpair319" *) 
+  (* SOFT_HLUTNM = "soft_lutpair320" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[3]_i_1 
@@ -17744,7 +17639,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[3]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair319" *) 
+  (* SOFT_HLUTNM = "soft_lutpair321" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[4]_i_1 
@@ -17752,7 +17647,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[4]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair320" *) 
+  (* SOFT_HLUTNM = "soft_lutpair321" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[5]_i_1 
@@ -17760,7 +17655,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[5]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair320" *) 
+  (* SOFT_HLUTNM = "soft_lutpair322" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[6]_i_1 
@@ -17768,7 +17663,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[6]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[6]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair321" *) 
+  (* SOFT_HLUTNM = "soft_lutpair322" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[7]_i_1 
@@ -17776,7 +17671,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[7]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair321" *) 
+  (* SOFT_HLUTNM = "soft_lutpair323" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[8]_i_1 
@@ -17784,7 +17679,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(in95[8]),
         .I2(\o_rd_fifo_din[31]_i_4_n_0 ),
         .O(\o_rd_fifo_din[8]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair322" *) 
+  (* SOFT_HLUTNM = "soft_lutpair323" *) 
   LUT3 #(
     .INIT(8'hF4)) 
     \o_rd_fifo_din[9]_i_1 
@@ -18015,7 +17910,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I2(hb_state152_out),
-        .I3(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I3(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .I4(\o_dq_o_d1[7]_i_5_n_0 ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(o_rwds_o_d1_i_3_n_0));
@@ -18044,14 +17939,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\o_dq_o_d1[7]_i_11_n_0 ),
         .I4(o_rwds_o_d1_i_9_n_0),
         .O(o_rwds_o_d1_i_6_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair337" *) 
+  (* SOFT_HLUTNM = "soft_lutpair339" *) 
   LUT2 #(
     .INIT(4'h8)) 
     o_rwds_o_d1_i_7
        (.I0(cur_is_write),
         .I1(cur_is_reg),
         .O(hb_state152_out));
-  (* SOFT_HLUTNM = "soft_lutpair304" *) 
+  (* SOFT_HLUTNM = "soft_lutpair316" *) 
   LUT3 #(
     .INIT(8'h04)) 
     o_rwds_o_d1_i_8
@@ -18059,7 +17954,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(o_rwds_o_d1_i_8_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair251" *) 
+  (* SOFT_HLUTNM = "soft_lutpair253" *) 
   LUT5 #(
     .INIT(32'hABAAA8AA)) 
     o_rwds_o_d1_i_9
@@ -18094,7 +17989,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\o_dq_o_d1[7]_i_11_n_0 ),
         .I4(o_rwds_o_d2_i_3_n_0),
         .O(o_rwds_o_d2_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair250" *) 
+  (* SOFT_HLUTNM = "soft_lutpair252" *) 
   LUT5 #(
     .INIT(32'hABAAA8AA)) 
     o_rwds_o_d2_i_3
@@ -18130,7 +18025,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(o_rwds_t_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair335" *) 
+  (* SOFT_HLUTNM = "soft_lutpair336" *) 
   LUT3 #(
     .INIT(8'hEF)) 
     o_rwds_t_i_3
@@ -18163,7 +18058,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     .INIT(64'hFF00800080008000)) 
     o_timeout_pulse_hb_i_1
        (.I0(\FSM_sequential_hb_state_reg[0]_0 ),
-        .I1(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+        .I1(hb_state),
         .I2(\FSM_sequential_hb_state_reg[3]_0 ),
         .I3(\rwds_timeout_cnt_reg[2]_0 ),
         .I4(o_timeout_pulse_hb_i_2_n_0),
@@ -18239,7 +18134,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.I0(hb_state239_in),
         .I1(p_40_in),
         .O(o_timeout_pulse_hb_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair232" *) 
+  (* SOFT_HLUTNM = "soft_lutpair234" *) 
   LUT5 #(
     .INIT(32'h00000004)) 
     o_timeout_pulse_hb_i_3
@@ -18313,14 +18208,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .DI({1'b0,1'b0,in65__0,o_timeout_pulse_hb_i_6_n_0,o_timeout_pulse_hb_i_7_n_0,o_timeout_pulse_hb_i_8_n_0,o_timeout_pulse_hb_i_9_n_0,o_timeout_pulse_hb_i_10_n_0}),
         .O(NLW_o_timeout_pulse_hb_reg_i_4_O_UNCONNECTED[7:0]),
         .S({1'b0,1'b0,o_timeout_pulse_hb_i_11_n_0,o_timeout_pulse_hb_i_12_n_0,o_timeout_pulse_hb_i_13_n_0,o_timeout_pulse_hb_i_14_n_0,o_timeout_pulse_hb_i_15_n_0,o_timeout_pulse_hb_i_16_n_0}));
-  (* SOFT_HLUTNM = "soft_lutpair240" *) 
+  (* SOFT_HLUTNM = "soft_lutpair241" *) 
   LUT5 #(
     .INIT(32'h04FF0000)) 
     o_wr_fifo_rd_en_i_1
        (.I0(wrnext_valid_reg_n_0),
         .I1(o_wr_fifo_rd_en_reg_i_2_n_4),
         .I2(cur_src_axil_reg_n_0),
-        .I3(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I3(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I4(o_wr_fifo_rd_en_i_3_n_0),
         .O(o_wr_fifo_rd_en_i_1_n_0));
   LUT4 #(
@@ -18411,7 +18306,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .DI({1'b0,1'b0,1'b0,1'b0,o_wr_fifo_rd_en_i_4_n_0,o_wr_fifo_rd_en_i_5_n_0,o_wr_fifo_rd_en_i_6_n_0,o_wr_fifo_rd_en_i_7_n_0}),
         .O(NLW_o_wr_fifo_rd_en_reg_i_2_O_UNCONNECTED[7:0]),
         .S({1'b0,1'b0,1'b0,1'b0,o_wr_fifo_rd_en_i_8_n_0,o_wr_fifo_rd_en_i_9_n_0,o_wr_fifo_rd_en_i_10_n_0,o_wr_fifo_rd_en_i_11_n_0}));
-  (* SOFT_HLUTNM = "soft_lutpair283" *) 
+  (* SOFT_HLUTNM = "soft_lutpair285" *) 
   LUT4 #(
     .INIT(16'h2888)) 
     \rd_beats_pushed[0]_i_1 
@@ -18420,7 +18315,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(rd_half_reg_0),
         .I3(p_44_in),
         .O(rd_beats_pushed[0]));
-  (* SOFT_HLUTNM = "soft_lutpair283" *) 
+  (* SOFT_HLUTNM = "soft_lutpair285" *) 
   LUT5 #(
     .INIT(32'h28888888)) 
     \rd_beats_pushed[1]_i_1 
@@ -18440,7 +18335,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(p_44_in),
         .I5(\rd_beats_pushed_reg_n_0_[1] ),
         .O(rd_beats_pushed[2]));
-  (* SOFT_HLUTNM = "soft_lutpair311" *) 
+  (* SOFT_HLUTNM = "soft_lutpair312" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \rd_beats_pushed[3]_i_1 
@@ -18457,7 +18352,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed_reg_n_0_[1] ),
         .I5(\rd_beats_pushed_reg_n_0_[3] ),
         .O(in112[3]));
-  (* SOFT_HLUTNM = "soft_lutpair298" *) 
+  (* SOFT_HLUTNM = "soft_lutpair299" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \rd_beats_pushed[4]_i_1 
@@ -18474,14 +18369,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed_reg_n_0_[3] ),
         .I5(\rd_beats_pushed_reg_n_0_[4] ),
         .O(in112[4]));
-  (* SOFT_HLUTNM = "soft_lutpair257" *) 
+  (* SOFT_HLUTNM = "soft_lutpair259" *) 
   LUT2 #(
     .INIT(4'h7)) 
     \rd_beats_pushed[4]_i_3 
        (.I0(rd_half_reg_0),
         .I1(p_44_in),
         .O(\rd_beats_pushed[4]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair228" *) 
+  (* SOFT_HLUTNM = "soft_lutpair230" *) 
   LUT4 #(
     .INIT(16'h7800)) 
     \rd_beats_pushed[5]_i_1 
@@ -18490,7 +18385,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\rd_beats_pushed_reg_n_0_[5] ),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(rd_beats_pushed[5]));
-  (* SOFT_HLUTNM = "soft_lutpair228" *) 
+  (* SOFT_HLUTNM = "soft_lutpair230" *) 
   LUT5 #(
     .INIT(32'h7F800000)) 
     \rd_beats_pushed[6]_i_1 
@@ -18520,7 +18415,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed_reg_n_0_[7] ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(rd_beats_pushed[7]));
-  (* SOFT_HLUTNM = "soft_lutpair288" *) 
+  (* SOFT_HLUTNM = "soft_lutpair290" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \rd_beats_pushed[7]_i_3 
@@ -18585,7 +18480,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(rd_beats_pushed[7]),
         .Q(\rd_beats_pushed_reg_n_0_[7] ),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair231" *) 
+  (* SOFT_HLUTNM = "soft_lutpair233" *) 
   LUT5 #(
     .INIT(32'h00000040)) 
     rd_half_i_2
@@ -18707,7 +18602,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(dq_q2[1]),
         .Q(in95[9]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair254" *) 
+  (* SOFT_HLUTNM = "soft_lutpair256" *) 
   LUT4 #(
     .INIT(16'h5553)) 
     \read_strobe_gate_cnt[0]_i_1 
@@ -18716,7 +18611,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(\read_strobe_gate_cnt[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair254" *) 
+  (* SOFT_HLUTNM = "soft_lutpair256" *) 
   LUT5 #(
     .INIT(32'hFD0101FD)) 
     \read_strobe_gate_cnt[1]_i_1 
@@ -18756,7 +18651,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(read_strobe_gate_cnt[4]),
         .I5(\read_strobe_gate_cnt[7]_i_7_n_0 ),
         .O(\read_strobe_gate_cnt[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair258" *) 
+  (* SOFT_HLUTNM = "soft_lutpair260" *) 
   LUT5 #(
     .INIT(32'hE1E1E100)) 
     \read_strobe_gate_cnt[5]_i_1 
@@ -18783,7 +18678,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\read_strobe_gate_cnt[7]_i_4_n_0 ),
         .I2(\read_strobe_gate_cnt[7]_i_5_n_0 ),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I4(\FSM_sequential_hb_state_reg[4]_3 ),
+        .I4(\FSM_sequential_hb_state_reg[4]_2 ),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\read_strobe_gate_cnt[7]_i_1_n_0 ));
   LUT6 #(
@@ -18799,14 +18694,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   LUT6 #(
     .INIT(64'h0000000000040404)) 
     \read_strobe_gate_cnt[7]_i_3 
-       (.I0(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+       (.I0(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .I1(\FSM_sequential_hb_state_reg[3]_1 ),
         .I2(\o_dq_o_d1[7]_i_6_n_0 ),
         .I3(cur_is_reg),
         .I4(cur_is_write),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(\read_strobe_gate_cnt[7]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair306" *) 
+  (* SOFT_HLUTNM = "soft_lutpair307" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \read_strobe_gate_cnt[7]_i_4 
@@ -18831,7 +18726,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(read_strobe_gate_cnt[1]),
         .I3(read_strobe_gate_cnt[3]),
         .O(\read_strobe_gate_cnt[7]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair258" *) 
+  (* SOFT_HLUTNM = "soft_lutpair260" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \read_strobe_gate_cnt[7]_i_7 
@@ -18979,14 +18874,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(rwds_edges_seen[8]),
         .I4(rwds_edges_seen[10]),
         .O(\rwds_edges_seen[10]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair285" *) 
+  (* SOFT_HLUTNM = "soft_lutpair287" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_edges_seen[10]_i_4 
        (.I0(p_44_in),
         .I1(\o_axil_rsp_fifo_din_reg[0]_0 ),
         .O(p_40_in));
-  (* SOFT_HLUTNM = "soft_lutpair285" *) 
+  (* SOFT_HLUTNM = "soft_lutpair287" *) 
   LUT5 #(
     .INIT(32'h73008C00)) 
     \rwds_edges_seen[1]_i_1 
@@ -19006,7 +18901,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair298" *) 
+  (* SOFT_HLUTNM = "soft_lutpair299" *) 
   LUT4 #(
     .INIT(16'hA0C0)) 
     \rwds_edges_seen[3]_i_1 
@@ -19015,7 +18910,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair286" *) 
+  (* SOFT_HLUTNM = "soft_lutpair288" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \rwds_edges_seen[3]_i_2 
@@ -19024,7 +18919,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(rwds_edges_seen[1]),
         .I3(rwds_edges_seen[3]),
         .O(in64__0[3]));
-  (* SOFT_HLUTNM = "soft_lutpair286" *) 
+  (* SOFT_HLUTNM = "soft_lutpair288" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \rwds_edges_seen[3]_i_3 
@@ -19043,7 +18938,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair259" *) 
+  (* SOFT_HLUTNM = "soft_lutpair261" *) 
   LUT3 #(
     .INIT(8'h7F)) 
     \rwds_edges_seen[4]_i_2 
@@ -19051,7 +18946,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(rwds_edges_seen[2]),
         .I2(rwds_edges_seen[3]),
         .O(\rwds_edges_seen[4]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair297" *) 
+  (* SOFT_HLUTNM = "soft_lutpair298" *) 
   LUT4 #(
     .INIT(16'hA0C0)) 
     \rwds_edges_seen[5]_i_1 
@@ -19090,7 +18985,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[6]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair259" *) 
+  (* SOFT_HLUTNM = "soft_lutpair261" *) 
   LUT5 #(
     .INIT(32'h80000000)) 
     \rwds_edges_seen[6]_i_2 
@@ -19130,14 +19025,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[8]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair230" *) 
+  (* SOFT_HLUTNM = "soft_lutpair232" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \rwds_edges_seen[8]_i_2 
        (.I0(\rwds_edges_seen[7]_i_2_n_0 ),
         .I1(rwds_edges_seen[7]),
         .O(\rwds_edges_seen[8]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair296" *) 
+  (* SOFT_HLUTNM = "soft_lutpair297" *) 
   LUT4 #(
     .INIT(16'hA0C0)) 
     \rwds_edges_seen[9]_i_1 
@@ -19146,7 +19041,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .O(\rwds_edges_seen[9]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair230" *) 
+  (* SOFT_HLUTNM = "soft_lutpair232" *) 
   LUT5 #(
     .INIT(32'hF7FF0800)) 
     \rwds_edges_seen[9]_i_2 
@@ -19237,14 +19132,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(rwds_q2),
         .Q(o_dbg_rwds_q2_dly),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair309" *) 
+  (* SOFT_HLUTNM = "soft_lutpair310" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \rwds_timeout_cnt[0]_i_1 
        (.I0(\rwds_timeout_cnt[4]_i_4_n_0 ),
         .I1(\rwds_timeout_cnt_reg_n_0_[0] ),
         .O(rwds_timeout_cnt[0]));
-  (* SOFT_HLUTNM = "soft_lutpair309" *) 
+  (* SOFT_HLUTNM = "soft_lutpair310" *) 
   LUT3 #(
     .INIT(8'h28)) 
     \rwds_timeout_cnt[1]_i_1 
@@ -19252,7 +19147,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\rwds_timeout_cnt_reg_n_0_[0] ),
         .I2(\rwds_timeout_cnt_reg_n_0_[1] ),
         .O(rwds_timeout_cnt[1]));
-  (* SOFT_HLUTNM = "soft_lutpair255" *) 
+  (* SOFT_HLUTNM = "soft_lutpair257" *) 
   LUT4 #(
     .INIT(16'h2A80)) 
     \rwds_timeout_cnt[2]_i_1 
@@ -19261,7 +19156,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\rwds_timeout_cnt_reg_n_0_[1] ),
         .I3(\rwds_timeout_cnt_reg_n_0_[2] ),
         .O(rwds_timeout_cnt[2]));
-  (* SOFT_HLUTNM = "soft_lutpair255" *) 
+  (* SOFT_HLUTNM = "soft_lutpair257" *) 
   LUT5 #(
     .INIT(32'h2AAA8000)) 
     \rwds_timeout_cnt[3]_i_1 
@@ -19291,7 +19186,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rwds_timeout_cnt_reg_n_0_[2] ),
         .I5(\rwds_timeout_cnt_reg_n_0_[4] ),
         .O(rwds_timeout_cnt[4]));
-  (* SOFT_HLUTNM = "soft_lutpair238" *) 
+  (* SOFT_HLUTNM = "soft_lutpair242" *) 
   LUT5 #(
     .INIT(32'h04000004)) 
     \rwds_timeout_cnt[4]_i_3 
@@ -19341,45 +19236,35 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .Q(\rwds_timeout_cnt_reg_n_0_[4] ),
         .R(SR));
   LUT6 #(
-    .INIT(64'hFFFF3FFFF0F0D0D0)) 
-    \s_axil_rdata[0]_i_21 
+    .INIT(64'h5555510555555155)) 
+    \s_axil_rdata[2]_i_11 
+       (.I0(s_axil_araddr[1]),
+        .I1(axil_rwds_cntr),
+        .I2(s_axil_araddr[3]),
+        .I3(s_axil_araddr[2]),
+        .I4(s_axil_araddr[4]),
+        .I5(CNTVALUEOUT),
+        .O(\s_axil_rdata[2]_i_11_n_0 ));
+  LUT5 #(
+    .INIT(32'hFFC7FFF7)) 
+    \s_axil_rdata[2]_i_12 
        (.I0(axif_rwds_cntr),
         .I1(s_axil_araddr[2]),
-        .I2(s_axil_araddr[1]),
-        .I3(\s_axil_rdata[0]_i_18 ),
-        .I4(s_axil_araddr[3]),
-        .I5(s_axil_araddr[0]),
-        .O(\o_axif_rwds_cntr_reg[0]_0 ));
-  LUT5 #(
-    .INIT(32'h00003088)) 
-    \s_axil_rdata[1]_i_18 
-       (.I0(axil_rwds_cntr[1]),
-        .I1(s_axil_araddr[1]),
-        .I2(CNTVALUEOUT[0]),
-        .I3(s_axil_araddr[2]),
-        .I4(s_axil_araddr[3]),
-        .O(\o_axil_rwds_cntr_reg[1]_0 ));
+        .I2(s_axil_araddr[3]),
+        .I3(s_axil_araddr[4]),
+        .I4(\s_axil_rdata[2]_i_7 ),
+        .O(\o_axif_rwds_cntr_reg[2]_0 ));
   LUT6 #(
-    .INIT(64'h00000000FF2F0000)) 
-    \s_axil_rdata[2]_i_10 
-       (.I0(axil_rwds_cntr[2]),
-        .I1(\s_axil_rdata[2]_i_5 ),
-        .I2(s_axil_araddr[1]),
-        .I3(s_axil_araddr[0]),
-        .I4(\s_axil_rdata[2]_i_5_0 ),
-        .I5(\s_axil_rdata[2]_i_5_1 ),
-        .O(\o_axil_rwds_cntr_reg[2]_0 ));
-  LUT6 #(
-    .INIT(64'h5555510555555155)) 
-    \s_axil_rdata[3]_i_11 
-       (.I0(s_axil_araddr[0]),
-        .I1(axil_rwds_cntr[3]),
-        .I2(s_axil_araddr[2]),
-        .I3(s_axil_araddr[1]),
-        .I4(s_axil_araddr[3]),
-        .I5(CNTVALUEOUT[1]),
-        .O(\s_axil_araddr[6] ));
-  (* SOFT_HLUTNM = "soft_lutpair233" *) 
+    .INIT(64'hFFFFFFFFFBFFFBFB)) 
+    \s_axil_rdata[2]_i_6 
+       (.I0(\s_axil_rdata[2]_i_11_n_0 ),
+        .I1(s_axil_araddr[0]),
+        .I2(\s_axil_rdata[2]_i_2 ),
+        .I3(\s_axil_rdata[2]_i_2_0 ),
+        .I4(s_axil_araddr[1]),
+        .I5(\s_axil_rdata[2]_i_2_1 ),
+        .O(s_axil_araddr_3_sn_1));
+  (* SOFT_HLUTNM = "soft_lutpair235" *) 
   LUT5 #(
     .INIT(32'h00000007)) 
     \term_hold_cnt[0]_i_1 
@@ -19406,7 +19291,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\term_hold_cnt[2]_i_4_n_0 ),
         .I2(\o_dq_o_d1[7]_i_6_n_0 ),
         .I3(\timeout_full_beats_left[7]_i_4_n_0 ),
-        .I4(\wr_words_reqd[7]_i_4_n_0 ),
+        .I4(\wr_words_reqd[7]_i_5_n_0 ),
         .I5(\term_hold_cnt[2]_i_5_n_0 ),
         .O(\term_hold_cnt[2]_i_1_n_0 ));
   LUT6 #(
@@ -19439,7 +19324,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\term_hold_cnt[2]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair236" *) 
+  (* SOFT_HLUTNM = "soft_lutpair238" *) 
   LUT4 #(
     .INIT(16'h0100)) 
     \term_hold_cnt[2]_i_5 
@@ -19458,7 +19343,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I5(\term_hold_cnt[2]_i_8_n_0 ),
         .O(\term_hold_cnt[2]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair233" *) 
+  (* SOFT_HLUTNM = "soft_lutpair242" *) 
   LUT4 #(
     .INIT(16'h0100)) 
     \term_hold_cnt[2]_i_7 
@@ -19533,7 +19418,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed_reg_n_0_[2] ),
         .I5(\rd_beats_pushed_reg_n_0_[3] ),
         .O(\timeout_full_beats_left[0]_i_12_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair256" *) 
+  (* SOFT_HLUTNM = "soft_lutpair258" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \timeout_full_beats_left[0]_i_2 
@@ -19615,7 +19500,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(rd_half_reg_0),
         .I3(p_44_in),
         .O(\timeout_full_beats_left[1]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair257" *) 
+  (* SOFT_HLUTNM = "soft_lutpair259" *) 
   LUT5 #(
     .INIT(32'h6AAA9555)) 
     \timeout_full_beats_left[1]_i_3 
@@ -19635,7 +19520,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_7_n_0 ),
         .I5(\timeout_full_beats_left[2]_i_4_n_0 ),
         .O(\timeout_full_beats_left[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair334" *) 
+  (* SOFT_HLUTNM = "soft_lutpair335" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \timeout_full_beats_left[2]_i_2 
@@ -19672,7 +19557,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_7_n_0 ),
         .I5(\timeout_full_beats_left[3]_i_4_n_0 ),
         .O(\timeout_full_beats_left[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair334" *) 
+  (* SOFT_HLUTNM = "soft_lutpair335" *) 
   LUT3 #(
     .INIT(8'hFE)) 
     \timeout_full_beats_left[3]_i_2 
@@ -19680,7 +19565,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(timeout_full_beats_left[0]),
         .I2(timeout_full_beats_left[2]),
         .O(\timeout_full_beats_left[3]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair303" *) 
+  (* SOFT_HLUTNM = "soft_lutpair304" *) 
   LUT2 #(
     .INIT(4'h9)) 
     \timeout_full_beats_left[3]_i_3 
@@ -19694,7 +19579,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\cur_axi_beats_reg_n_0_[2] ),
         .I2(\timeout_full_beats_left[2]_i_4_n_0 ),
         .O(\timeout_full_beats_left[3]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair256" *) 
+  (* SOFT_HLUTNM = "soft_lutpair258" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \timeout_full_beats_left[3]_i_5 
@@ -19714,7 +19599,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_7_n_0 ),
         .I5(\timeout_full_beats_left[4]_i_4_n_0 ),
         .O(\timeout_full_beats_left[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair265" *) 
+  (* SOFT_HLUTNM = "soft_lutpair267" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     \timeout_full_beats_left[4]_i_2 
@@ -19723,14 +19608,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(timeout_full_beats_left[1]),
         .I3(timeout_full_beats_left[3]),
         .O(\timeout_full_beats_left[4]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair310" *) 
+  (* SOFT_HLUTNM = "soft_lutpair311" *) 
   LUT2 #(
     .INIT(4'h9)) 
     \timeout_full_beats_left[4]_i_3 
        (.I0(in112[4]),
         .I1(\cur_axi_beats_reg_n_0_[4] ),
         .O(\timeout_full_beats_left[4]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair311" *) 
+  (* SOFT_HLUTNM = "soft_lutpair312" *) 
   LUT3 #(
     .INIT(8'hB2)) 
     \timeout_full_beats_left[4]_i_4 
@@ -19748,7 +19633,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_7_n_0 ),
         .I5(\timeout_full_beats_left[5]_i_4_n_0 ),
         .O(\timeout_full_beats_left[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair265" *) 
+  (* SOFT_HLUTNM = "soft_lutpair267" *) 
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
     \timeout_full_beats_left[5]_i_2 
@@ -19758,7 +19643,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(timeout_full_beats_left[2]),
         .I4(timeout_full_beats_left[4]),
         .O(\timeout_full_beats_left[5]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair229" *) 
+  (* SOFT_HLUTNM = "soft_lutpair231" *) 
   LUT4 #(
     .INIT(16'h7887)) 
     \timeout_full_beats_left[5]_i_3 
@@ -19767,7 +19652,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\rd_beats_pushed_reg_n_0_[5] ),
         .I3(\cur_axi_beats_reg_n_0_[5] ),
         .O(\timeout_full_beats_left[5]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair310" *) 
+  (* SOFT_HLUTNM = "soft_lutpair311" *) 
   LUT3 #(
     .INIT(8'hD4)) 
     \timeout_full_beats_left[5]_i_4 
@@ -19804,7 +19689,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\rd_beats_pushed_reg_n_0_[6] ),
         .I4(\cur_axi_beats_reg_n_0_[6] ),
         .O(\timeout_full_beats_left[6]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair229" *) 
+  (* SOFT_HLUTNM = "soft_lutpair231" *) 
   LUT5 #(
     .INIT(32'hFF878700)) 
     \timeout_full_beats_left[6]_i_4 
@@ -19844,14 +19729,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[7]_i_9_n_0 ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .O(\timeout_full_beats_left[7]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair297" *) 
+  (* SOFT_HLUTNM = "soft_lutpair298" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \timeout_full_beats_left[7]_i_4 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(\timeout_full_beats_left[7]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair264" *) 
+  (* SOFT_HLUTNM = "soft_lutpair266" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     \timeout_full_beats_left[7]_i_5 
@@ -19870,7 +19755,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\rd_beats_pushed_reg_n_0_[7] ),
         .I5(\cur_axi_beats_reg_n_0_[7] ),
         .O(\timeout_full_beats_left[7]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair316" *) 
+  (* SOFT_HLUTNM = "soft_lutpair317" *) 
   LUT3 #(
     .INIT(8'h40)) 
     \timeout_full_beats_left[7]_i_7 
@@ -19888,7 +19773,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\timeout_full_beats_left[6]_i_4_n_0 ),
         .I5(\cur_axi_beats_reg_n_0_[6] ),
         .O(\timeout_full_beats_left[7]_i_8_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair264" *) 
+  (* SOFT_HLUTNM = "soft_lutpair266" *) 
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
     \timeout_full_beats_left[7]_i_9 
@@ -19954,7 +19839,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(\timeout_full_beats_left[7]_i_2_n_0 ),
         .Q(timeout_full_beats_left[7]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair244" *) 
+  (* SOFT_HLUTNM = "soft_lutpair246" *) 
   LUT4 #(
     .INIT(16'h007F)) 
     \timeout_holdoff_cnt[0]_i_1 
@@ -19963,7 +19848,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(timeout_holdoff_cnt[0]),
         .O(\timeout_holdoff_cnt[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair244" *) 
+  (* SOFT_HLUTNM = "soft_lutpair246" *) 
   LUT5 #(
     .INIT(32'h09999999)) 
     \timeout_holdoff_cnt[1]_i_1 
@@ -19983,7 +19868,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(timeout_holdoff_cnt[0]),
         .I5(timeout_holdoff_cnt[1]),
         .O(\timeout_holdoff_cnt[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair245" *) 
+  (* SOFT_HLUTNM = "soft_lutpair247" *) 
   LUT5 #(
     .INIT(32'hDDDDDDD7)) 
     \timeout_holdoff_cnt[3]_i_1 
@@ -20003,7 +19888,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(timeout_holdoff_cnt[1]),
         .I5(timeout_holdoff_cnt[3]),
         .O(\timeout_holdoff_cnt[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair246" *) 
+  (* SOFT_HLUTNM = "soft_lutpair248" *) 
   LUT3 #(
     .INIT(8'h7F)) 
     \timeout_holdoff_cnt[4]_i_2 
@@ -20021,7 +19906,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I5(timeout_tripped_cur_reg_0),
         .O(\timeout_holdoff_cnt[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair245" *) 
+  (* SOFT_HLUTNM = "soft_lutpair247" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     \timeout_holdoff_cnt[5]_i_2 
@@ -20030,7 +19915,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(timeout_holdoff_cnt[1]),
         .I3(timeout_holdoff_cnt[3]),
         .O(\timeout_holdoff_cnt[5]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair246" *) 
+  (* SOFT_HLUTNM = "soft_lutpair248" *) 
   LUT5 #(
     .INIT(32'hFF8080FF)) 
     \timeout_holdoff_cnt[6]_i_1 
@@ -20038,7 +19923,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I2(timeout_tripped_cur_reg_0),
         .I3(timeout_holdoff_cnt[6]),
-        .I4(\timeout_holdoff_cnt[7]_i_3_n_0 ),
+        .I4(\timeout_holdoff_cnt[7]_i_4_n_0 ),
         .O(\timeout_holdoff_cnt[6]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFE00FE00FE00)) 
@@ -20048,28 +19933,38 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\latency_left[7]_i_8_n_0 ),
         .I3(o_timeout_holdoff_active_i_1_n_0),
         .I4(timeout_tripped_cur_reg_0),
-        .I5(\FSM_sequential_hb_state_reg[3]_2 ),
+        .I5(\timeout_holdoff_cnt[7]_i_3_n_0 ),
         .O(\timeout_holdoff_cnt[7]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'h0EEEEEEE01111111)) 
     \timeout_holdoff_cnt[7]_i_2 
-       (.I0(\timeout_holdoff_cnt[7]_i_3_n_0 ),
+       (.I0(\timeout_holdoff_cnt[7]_i_4_n_0 ),
         .I1(timeout_holdoff_cnt[6]),
         .I2(timeout_tripped_cur_reg_0),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I5(timeout_holdoff_cnt[7]),
         .O(\timeout_holdoff_cnt[7]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair237" *) 
+  LUT5 #(
+    .INIT(32'h01000000)) 
+    \timeout_holdoff_cnt[7]_i_3 
+       (.I0(\FSM_sequential_hb_state_reg[4]_0 [2]),
+        .I1(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I2(\FSM_sequential_hb_state_reg[4]_0 [1]),
+        .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
+        .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
+        .O(\timeout_holdoff_cnt[7]_i_3_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFFFFE)) 
-    \timeout_holdoff_cnt[7]_i_3 
+    \timeout_holdoff_cnt[7]_i_4 
        (.I0(timeout_holdoff_cnt[4]),
         .I1(timeout_holdoff_cnt[2]),
         .I2(timeout_holdoff_cnt[0]),
         .I3(timeout_holdoff_cnt[1]),
         .I4(timeout_holdoff_cnt[3]),
         .I5(timeout_holdoff_cnt[5]),
-        .O(\timeout_holdoff_cnt[7]_i_3_n_0 ));
+        .O(\timeout_holdoff_cnt[7]_i_4_n_0 ));
   FDRE \timeout_holdoff_cnt_reg[0] 
        (.C(i_hb_clk_200),
         .CE(\timeout_holdoff_cnt[7]_i_1_n_0 ),
@@ -20127,8 +20022,8 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\rwds_timeout_cnt_reg[2]_0 ),
         .I4(timeout_tripped_cur_i_3_n_0),
         .I5(o_timeout_pulse_hb_i_2_n_0),
-        .O(\FSM_sequential_hb_state_reg[4]_2 ));
-  (* SOFT_HLUTNM = "soft_lutpair232" *) 
+        .O(\FSM_sequential_hb_state_reg[4]_1 ));
+  (* SOFT_HLUTNM = "soft_lutpair234" *) 
   LUT5 #(
     .INIT(32'h00000004)) 
     timeout_tripped_cur_i_3
@@ -20144,7 +20039,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(timeout_tripped_cur_reg_1),
         .Q(timeout_tripped_cur_reg_0),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair252" *) 
+  (* SOFT_HLUTNM = "soft_lutpair254" *) 
   LUT5 #(
     .INIT(32'h39330000)) 
     \words_done[0]_i_1 
@@ -20194,7 +20089,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(words_done[4]),
         .I5(\words_done[4]_i_4_n_0 ),
         .O(\words_done[4]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair296" *) 
+  (* SOFT_HLUTNM = "soft_lutpair297" *) 
   LUT3 #(
     .INIT(8'hB0)) 
     \words_done[4]_i_2 
@@ -20202,7 +20097,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[2]_rep_0 ),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(\words_done[4]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair308" *) 
+  (* SOFT_HLUTNM = "soft_lutpair309" *) 
   LUT3 #(
     .INIT(8'h7F)) 
     \words_done[4]_i_3 
@@ -20210,7 +20105,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(words_done[0]),
         .I2(words_done[2]),
         .O(\words_done[4]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair252" *) 
+  (* SOFT_HLUTNM = "soft_lutpair254" *) 
   LUT3 #(
     .INIT(8'h40)) 
     \words_done[4]_i_4 
@@ -20228,7 +20123,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(words_done[5]),
         .O(\words_done[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair253" *) 
+  (* SOFT_HLUTNM = "soft_lutpair255" *) 
   LUT5 #(
     .INIT(32'h80000000)) 
     \words_done[5]_i_2 
@@ -20268,7 +20163,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(words_done[7]),
         .O(\words_done[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair295" *) 
+  (* SOFT_HLUTNM = "soft_lutpair296" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \words_done[7]_i_2 
@@ -20305,7 +20200,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[3]_0 ),
         .I5(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(\words_done[8]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair241" *) 
+  (* SOFT_HLUTNM = "soft_lutpair243" *) 
   LUT5 #(
     .INIT(32'h00000008)) 
     \words_done[8]_i_4 
@@ -20315,7 +20210,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(\words_done[8]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair295" *) 
+  (* SOFT_HLUTNM = "soft_lutpair296" *) 
   LUT4 #(
     .INIT(16'hDF20)) 
     \words_done[8]_i_5 
@@ -20378,7 +20273,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(\words_done[8]_i_2_n_0 ),
         .Q(words_done[8]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair314" *) 
+  (* SOFT_HLUTNM = "soft_lutpair315" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \wr_rwds_wait_cnt[0]_i_1 
@@ -20391,52 +20286,60 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     \wr_rwds_wait_cnt[1]_i_1 
        (.I0(base_latency),
         .I1(\o_dq_o_d1[7]_i_6_n_0 ),
-        .I2(\FSM_sequential_hb_state_reg[4]_1 ),
-        .I3(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I2(\wr_rwds_wait_cnt[1]_i_3_n_0 ),
+        .I3(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
         .I4(hb_state150_out),
-        .I5(\wr_rwds_wait_cnt[1]_i_4_n_0 ),
+        .I5(\wr_rwds_wait_cnt[1]_i_5_n_0 ),
         .O(\wr_rwds_wait_cnt[1]_i_1_n_0 ));
   LUT6 #(
     .INIT(64'h8282FF8282828282)) 
     \wr_rwds_wait_cnt[1]_i_2 
-       (.I0(\wr_rwds_wait_cnt[1]_i_5_n_0 ),
+       (.I0(\wr_rwds_wait_cnt[1]_i_6_n_0 ),
         .I1(\wr_rwds_wait_cnt_reg_n_0_[1] ),
         .I2(\wr_rwds_wait_cnt_reg_n_0_[0] ),
         .I3(cur_is_write),
         .I4(cur_is_reg),
-        .I5(\wr_rwds_wait_cnt[1]_i_6_n_0 ),
+        .I5(\wr_rwds_wait_cnt[1]_i_7_n_0 ),
         .O(wr_rwds_wait_cnt[1]));
-  (* SOFT_HLUTNM = "soft_lutpair227" *) 
+  (* SOFT_HLUTNM = "soft_lutpair307" *) 
+  LUT3 #(
+    .INIT(8'h01)) 
+    \wr_rwds_wait_cnt[1]_i_3 
+       (.I0(\FSM_sequential_hb_state_reg[4]_0 [3]),
+        .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
+        .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
+        .O(\wr_rwds_wait_cnt[1]_i_3_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair229" *) 
   LUT3 #(
     .INIT(8'hF7)) 
-    \wr_rwds_wait_cnt[1]_i_3 
+    \wr_rwds_wait_cnt[1]_i_4 
        (.I0(\ca_cycle_reg_n_0_[0] ),
         .I1(\ca_cycle_reg_n_0_[1] ),
         .I2(\ca_cycle_reg_n_0_[2] ),
-        .O(\wr_rwds_wait_cnt[1]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair241" *) 
+        .O(\wr_rwds_wait_cnt[1]_i_4_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair243" *) 
   LUT5 #(
     .INIT(32'h00000400)) 
-    \wr_rwds_wait_cnt[1]_i_4 
+    \wr_rwds_wait_cnt[1]_i_5 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I4(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
-        .O(\wr_rwds_wait_cnt[1]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair336" *) 
-  LUT2 #(
-    .INIT(4'h2)) 
-    \wr_rwds_wait_cnt[1]_i_5 
-       (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
-        .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .O(\wr_rwds_wait_cnt[1]_i_5_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair337" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \wr_rwds_wait_cnt[1]_i_6 
-       (.I0(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+       (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .O(\wr_rwds_wait_cnt[1]_i_6_n_0 ));
+  LUT2 #(
+    .INIT(4'h2)) 
+    \wr_rwds_wait_cnt[1]_i_7 
+       (.I0(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
+        .O(\wr_rwds_wait_cnt[1]_i_7_n_0 ));
   FDRE \wr_rwds_wait_cnt_reg[0] 
        (.C(i_hb_clk_200),
         .CE(\wr_rwds_wait_cnt[1]_i_1_n_0 ),
@@ -20449,7 +20352,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(wr_rwds_wait_cnt[1]),
         .Q(\wr_rwds_wait_cnt_reg_n_0_[1] ),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair315" *) 
+  (* SOFT_HLUTNM = "soft_lutpair316" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \wr_words_reqd[0]_i_1 
@@ -20457,7 +20360,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I2(\wr_words_reqd_reg_n_0_[0] ),
         .O(wr_words_reqd[0]));
-  (* SOFT_HLUTNM = "soft_lutpair247" *) 
+  (* SOFT_HLUTNM = "soft_lutpair249" *) 
   LUT4 #(
     .INIT(16'h0220)) 
     \wr_words_reqd[1]_i_1 
@@ -20466,7 +20369,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\wr_words_reqd_reg_n_0_[0] ),
         .I3(\wr_words_reqd_reg_n_0_[1] ),
         .O(wr_words_reqd[1]));
-  (* SOFT_HLUTNM = "soft_lutpair247" *) 
+  (* SOFT_HLUTNM = "soft_lutpair249" *) 
   LUT5 #(
     .INIT(32'h02222000)) 
     \wr_words_reqd[2]_i_1 
@@ -20512,11 +20415,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.I0(\wr_words_reqd_reg_n_0_[0] ),
         .I1(\wr_words_reqd_reg_n_0_[1] ),
         .O(\wr_words_reqd[5]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair248" *) 
+  (* SOFT_HLUTNM = "soft_lutpair250" *) 
   LUT4 #(
     .INIT(16'h2010)) 
     \wr_words_reqd[6]_i_1 
-       (.I0(\wr_words_reqd[7]_i_6_n_0 ),
+       (.I0(\wr_words_reqd[7]_i_7_n_0 ),
         .I1(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\wr_words_reqd_reg_n_0_[6] ),
@@ -20527,59 +20430,66 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I1(\FSM_sequential_hb_state_reg[2]_rep__0_0 ),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .I3(\wr_words_reqd[7]_i_3_n_0 ),
-        .I4(\wr_words_reqd[7]_i_4_n_0 ),
-        .I5(\wr_words_reqd[7]_i_5_n_0 ),
+        .I3(\wr_words_reqd[7]_i_4_n_0 ),
+        .I4(\wr_words_reqd[7]_i_5_n_0 ),
+        .I5(\wr_words_reqd[7]_i_6_n_0 ),
         .O(\wr_words_reqd[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair248" *) 
+  (* SOFT_HLUTNM = "soft_lutpair250" *) 
   LUT5 #(
     .INIT(32'h0B000400)) 
     \wr_words_reqd[7]_i_2 
-       (.I0(\wr_words_reqd[7]_i_6_n_0 ),
+       (.I0(\wr_words_reqd[7]_i_7_n_0 ),
         .I1(\wr_words_reqd_reg_n_0_[6] ),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I4(\wr_words_reqd_reg_n_0_[7] ),
         .O(wr_words_reqd[7]));
+  (* SOFT_HLUTNM = "soft_lutpair306" *) 
+  LUT2 #(
+    .INIT(4'hE)) 
+    \wr_words_reqd[7]_i_3 
+       (.I0(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
+        .I1(\FSM_sequential_hb_state_reg[4]_0 [1]),
+        .O(\FSM_sequential_hb_state_reg[2]_rep__0_0 ));
   LUT6 #(
     .INIT(64'h0000000000000020)) 
-    \wr_words_reqd[7]_i_3 
+    \wr_words_reqd[7]_i_4 
        (.I0(o_wr_fifo_rd_en_reg_i_2_n_4),
         .I1(wrnext_valid_reg_n_0),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I4(cur_src_axil_reg_n_0),
         .I5(\o_dq_o_d1[7]_i_6_n_0 ),
-        .O(\wr_words_reqd[7]_i_3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair288" *) 
+        .O(\wr_words_reqd[7]_i_4_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair290" *) 
   LUT4 #(
     .INIT(16'h0F04)) 
-    \wr_words_reqd[7]_i_4 
+    \wr_words_reqd[7]_i_5 
        (.I0(cmd_loaded_reg_0),
         .I1(data_valid),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
-        .O(\wr_words_reqd[7]_i_4_n_0 ));
+        .O(\wr_words_reqd[7]_i_5_n_0 ));
   LUT6 #(
     .INIT(64'h4000440040004000)) 
-    \wr_words_reqd[7]_i_5 
+    \wr_words_reqd[7]_i_6 
        (.I0(\FSM_sequential_hb_state_reg[2]_rep__0_1 ),
         .I1(o_wr_fifo_rd_en0),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I4(wr_fifo_rd_en),
         .I5(cur_is_write),
-        .O(\wr_words_reqd[7]_i_5_n_0 ));
+        .O(\wr_words_reqd[7]_i_6_n_0 ));
   LUT6 #(
     .INIT(64'h7FFFFFFFFFFFFFFF)) 
-    \wr_words_reqd[7]_i_6 
+    \wr_words_reqd[7]_i_7 
        (.I0(\wr_words_reqd_reg_n_0_[2] ),
         .I1(\wr_words_reqd_reg_n_0_[0] ),
         .I2(\wr_words_reqd_reg_n_0_[1] ),
         .I3(\wr_words_reqd_reg_n_0_[3] ),
         .I4(\wr_words_reqd_reg_n_0_[4] ),
         .I5(\wr_words_reqd_reg_n_0_[5] ),
-        .O(\wr_words_reqd[7]_i_6_n_0 ));
+        .O(\wr_words_reqd[7]_i_7_n_0 ));
   FDRE \wr_words_reqd_reg[0] 
        (.C(i_hb_clk_200),
         .CE(\wr_words_reqd[7]_i_1_n_0 ),
@@ -21302,7 +21212,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .I5(wrbuf_high_half_i_4_n_0),
         .O(wrbuf_high_half));
-  (* SOFT_HLUTNM = "soft_lutpair315" *) 
+  (* SOFT_HLUTNM = "soft_lutpair317" *) 
   LUT3 #(
     .INIT(8'h08)) 
     wrbuf_high_half_i_3
@@ -21320,7 +21230,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(wrbuf_valid_reg_0),
         .I5(wrbuf_high_half_reg_0),
         .O(wrbuf_high_half_i_4_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair240" *) 
+  (* SOFT_HLUTNM = "soft_lutpair241" *) 
   LUT2 #(
     .INIT(4'h2)) 
     wrbuf_high_half_i_5
@@ -21589,7 +21499,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
     .INIT(64'h00E000E000EE00E0)) 
     \wrbuf_strb[3]_i_1 
        (.I0(\wrbuf_strb[3]_i_3_n_0 ),
-        .I1(\wr_words_reqd[7]_i_5_n_0 ),
+        .I1(\wr_words_reqd[7]_i_6_n_0 ),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(data_valid),
@@ -21605,7 +21515,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\wrbuf_strb[3]_i_6_n_0 ),
         .I5(\wrbuf_strb_reg_n_0_[3] ),
         .O(wrbuf_strb[3]));
-  (* SOFT_HLUTNM = "soft_lutpair236" *) 
+  (* SOFT_HLUTNM = "soft_lutpair238" *) 
   LUT5 #(
     .INIT(32'h0100000C)) 
     \wrbuf_strb[3]_i_3 
@@ -21634,14 +21544,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I4(wrbuf_valid_reg_0),
         .O(\wrbuf_strb[3]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair284" *) 
+  (* SOFT_HLUTNM = "soft_lutpair286" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \wrbuf_strb[3]_i_6 
        (.I0(wrbuf_valid_reg_0),
         .I1(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\wrbuf_strb[3]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair284" *) 
+  (* SOFT_HLUTNM = "soft_lutpair286" *) 
   LUT5 #(
     .INIT(32'h80000000)) 
     \wrbuf_strb[3]_i_7 
@@ -21692,7 +21602,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(wrbuf_valid_reg_0),
         .I2(wrnext_valid_reg_n_0),
         .I3(o_wr_fifo_rd_en_reg_i_2_n_4),
-        .I4(\FSM_sequential_hb_state_reg[2]_rep_0 ),
+        .I4(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I5(\FSM_sequential_hb_state_reg[3]_0 ),
         .O(wrbuf_valid));
   FDRE wrbuf_valid_reg
@@ -21944,7 +21854,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
   LUT6 #(
     .INIT(64'hFFABABAB00000000)) 
     \wrnext[31]_i_1 
-       (.I0(\FSM_sequential_hb_state_reg[1]_1 ),
+       (.I0(\FSM_sequential_hb_state_reg[1]_2 ),
         .I1(cur_src_axil_reg_n_0),
         .I2(\wrnext[31]_i_4_n_0 ),
         .I3(\wrnext[31]_i_5_n_0 ),
@@ -21961,15 +21871,15 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I5(wrnext[31]),
         .O(\wrnext[31]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair231" *) 
+  (* SOFT_HLUTNM = "soft_lutpair233" *) 
   LUT3 #(
     .INIT(8'h01)) 
     \wrnext[31]_i_3 
        (.I0(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I1(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .I2(\FSM_sequential_hb_state_reg[4]_0 [0]),
-        .O(\FSM_sequential_hb_state_reg[1]_1 ));
-  (* SOFT_HLUTNM = "soft_lutpair234" *) 
+        .O(\FSM_sequential_hb_state_reg[1]_2 ));
+  (* SOFT_HLUTNM = "soft_lutpair236" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \wrnext[31]_i_4 
@@ -21986,14 +21896,14 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\wrnext[31]_i_8_n_0 ),
         .I5(\FSM_sequential_hb_state_reg[2]_rep__0_n_0 ),
         .O(\wrnext[31]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair251" *) 
+  (* SOFT_HLUTNM = "soft_lutpair253" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \wrnext[31]_i_6 
        (.I0(o_wr_fifo_rd_en_reg_i_2_n_4),
         .I1(wrnext_valid_reg_n_0),
         .O(\wrnext[31]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair293" *) 
+  (* SOFT_HLUTNM = "soft_lutpair294" *) 
   LUT4 #(
     .INIT(16'h0600)) 
     \wrnext[31]_i_7 
@@ -22002,7 +21912,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(\wrnext[31]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair299" *) 
+  (* SOFT_HLUTNM = "soft_lutpair300" *) 
   LUT3 #(
     .INIT(8'h04)) 
     \wrnext[31]_i_8 
@@ -22272,7 +22182,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .D(\wrnext[9]_i_1_n_0 ),
         .Q(wrnext[9]),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair249" *) 
+  (* SOFT_HLUTNM = "soft_lutpair251" *) 
   LUT5 #(
     .INIT(32'h00CA0000)) 
     \wrnext_strb[0]_i_1 
@@ -22308,7 +22218,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(o_wr_fifo_rd_en0),
         .I3(wrnext_valid_reg_n_0),
         .I4(\wrnext_strb[3]_i_4_n_0 ),
-        .I5(\wr_words_reqd[7]_i_4_n_0 ),
+        .I5(\wr_words_reqd[7]_i_5_n_0 ),
         .O(\wrnext_strb[3]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h00CA0000)) 
@@ -22319,7 +22229,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I3(\FSM_sequential_hb_state_reg[4]_0 [3]),
         .I4(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .O(wrnext_strb[3]));
-  (* SOFT_HLUTNM = "soft_lutpair250" *) 
+  (* SOFT_HLUTNM = "soft_lutpair252" *) 
   LUT3 #(
     .INIT(8'h70)) 
     \wrnext_strb[3]_i_3 
@@ -22327,7 +22237,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I1(wrnext_valid_reg_n_0),
         .I2(o_wr_fifo_rd_en_reg_i_2_n_4),
         .O(o_wr_fifo_rd_en0));
-  (* SOFT_HLUTNM = "soft_lutpair299" *) 
+  (* SOFT_HLUTNM = "soft_lutpair300" *) 
   LUT4 #(
     .INIT(16'hF020)) 
     \wrnext_strb[3]_i_4 
@@ -22336,7 +22246,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I2(\FSM_sequential_hb_state_reg[4]_0 [2]),
         .I3(\FSM_sequential_hb_state_reg[4]_0 [0]),
         .O(\wrnext_strb[3]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair294" *) 
+  (* SOFT_HLUTNM = "soft_lutpair295" *) 
   LUT4 #(
     .INIT(16'h08FF)) 
     \wrnext_strb[3]_i_5 
@@ -22379,6 +22289,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_hb_engine
         .I4(\FSM_sequential_hb_state_reg[4]_0 [1]),
         .I5(wrnext_valid_i_3_n_0),
         .O(wrnext_valid));
+  (* SOFT_HLUTNM = "soft_lutpair338" *) 
   LUT2 #(
     .INIT(4'hB)) 
     wrnext_valid_i_2
@@ -22405,172 +22316,168 @@ endmodule
 
 (* ORIG_REF_NAME = "hyperbus_phy_xilinx" *) 
 module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
-   (dq_q1,
-    dq_q2,
+   (o_hb_ck_p,
     CNTVALUEOUT,
-    o_hb_ck_p,
-    u_idelay_rwds,
+    \g_io_delay.u_idelay_rwds ,
+    dq_q1,
+    dq_q2,
     rwds_q1,
     rwds_q2,
-    s_axil_araddr_2_sp_1,
-    u_odelay_hb_ck_p,
-    u_odelay_hb_ck_p_0,
-    s_axil_araddr_3_sp_1,
-    s_axil_araddr_6_sp_1,
-    \s_axil_araddr[3]_0 ,
+    idelayctrl_rdy_axi,
     s_axil_araddr_4_sp_1,
-    s_axil_araddr_5_sp_1,
-    u_idelay_rwds_0,
-    \s_axil_araddr[3]_1 ,
-    \s_axil_araddr[2]_0 ,
-    \s_axil_araddr[2]_1 ,
-    u_odelay_hb_ck_p_1,
-    s_axil_araddr_7_sp_1,
+    s_axil_araddr_6_sp_1,
+    s_axil_araddr_3_sp_1,
+    \s_axil_araddr[3]_0 ,
+    \g_io_delay.u_odelay_hb_ck_p ,
+    \s_axil_araddr[9] ,
     \s_axil_araddr[6]_0 ,
-    \s_axil_araddr[2]_2 ,
-    \s_axil_araddr[2]_3 ,
+    \g_io_delay.u_odelay_hb_ck_p_0 ,
+    s_axil_araddr_2_sp_1,
     \s_axil_araddr[6]_1 ,
     \s_axil_araddr[6]_2 ,
+    \s_axil_araddr[6]_3 ,
+    \s_axil_araddr[2]_0 ,
+    \s_axil_araddr[2]_1 ,
+    \s_axil_araddr[2]_2 ,
+    \s_axil_araddr[6]_4 ,
+    \s_axil_araddr[6]_5 ,
     io_hb_dq,
     io_hb_rwds,
+    \g_io_delay.g_dq_idelay[7].u_idelay_dq ,
+    i_axi_aclk,
+    dq_idly_en_vtc,
+    dq_idly_inc,
+    Q,
+    dq_idly_cntvaluein,
+    i_ref_clk_300,
+    odly_ce,
+    odly_en_vtc,
+    odly_inc,
+    \g_io_delay.u_odelay_hb_ck_p_1 ,
+    rwds_idly_ce,
+    rwds_idly_en_vtc,
+    rwds_idly_inc,
+    CNTVALUEIN,
     i_hb_clk_200,
     o_dbg_dq_o_d1,
     o_dbg_dq_o_d2,
     SR,
-    \g_dq_phy[0].u_iobuf_dq ,
-    \g_dq_phy[7].u_idelay_dq ,
-    i_axi_aclk,
-    dq_idly_en_vtc,
-    dq_idly_inc,
-    \s_axil_rdata[3]_i_2 ,
-    dq_idly_cntvaluein,
     i_hb_clk_200_samp_90,
     i_iddre1_rst,
-    i_ref_clk_300,
+    \g_dq_phy[0].u_iobuf_dq ,
     i_hb_clk_200_gated,
-    odly_ce,
-    odly_en_vtc,
-    odly_inc,
-    CNTVALUEIN,
     o_dbg_rwds_o_d1,
     o_dbg_rwds_o_d2,
     o_dbg_i_rwds_t,
-    rwds_idly_ce,
-    rwds_idly_en_vtc,
-    rwds_idly_inc,
-    u_idelay_rwds_1,
     fifo_rst_axi_wr,
     i_idelayctrl_rst,
     s_axil_araddr,
     \s_axil_rdata_reg[3] ,
-    \s_axil_rdata_reg[3]_0 ,
     \s_axil_rdata_reg[5] ,
-    \s_axil_rdata_reg[8] ,
-    \s_axil_rdata_reg[8]_0 ,
     \s_axil_rdata_reg[5]_0 ,
-    \s_axil_rdata_reg[5]_1 ,
+    \s_axil_rdata_reg[8] ,
     \s_axil_rdata_reg[6] ,
-    \s_axil_rdata_reg[6]_0 ,
-    \s_axil_rdata[3]_i_2_0 ,
-    \s_axil_rdata[3]_i_2_1 ,
-    \s_axil_rdata[0]_i_3 ,
-    \s_axil_rdata[0]_i_3_0 ,
+    \s_axil_rdata_reg[7] ,
+    \s_axil_rdata_reg[8]_0 ,
+    \s_axil_rdata[1]_i_3 ,
+    \s_axil_rdata[3]_i_3 ,
+    \s_axil_rdata_reg[3]_i_7 ,
+    \s_axil_rdata[3]_i_10 ,
+    \s_axil_rdata[5]_i_3 ,
+    \s_axil_rdata_reg[1]_i_7 ,
+    \s_axil_rdata_reg[1]_i_7_0 ,
     \s_axil_rdata[0]_i_9 ,
-    \s_axil_rdata[0]_i_9_0 ,
-    \s_axil_rdata[1]_i_6 ,
-    \s_axil_rdata_reg[4] ,
-    \s_axil_rdata_reg[8]_1 ,
-    \s_axil_rdata[3]_i_4 ,
     \s_axil_rdata[4]_i_2 ,
-    Q,
-    \s_axil_rdata[8]_i_2 ,
-    \s_axil_rdata_reg[5]_2 ,
-    \s_axil_rdata_reg[3]_1 );
+    \s_axil_rdata_reg[8]_1 ,
+    \s_axil_rdata_reg[7]_0 ,
+    \s_axil_rdata_reg[6]_0 ,
+    \s_axil_rdata_reg[5]_1 ,
+    \s_axil_rdata_reg[4] ,
+    \s_axil_rdata_reg[3]_0 ,
+    \s_axil_rdata_reg[2] );
+  output o_hb_ck_p;
+  output [0:0]CNTVALUEOUT;
+  output [1:0]\g_io_delay.u_idelay_rwds ;
   output [7:0]dq_q1;
   output [7:0]dq_q2;
-  output [1:0]CNTVALUEOUT;
-  output o_hb_ck_p;
-  output [0:0]u_idelay_rwds;
   output rwds_q1;
   output rwds_q2;
-  output s_axil_araddr_2_sp_1;
-  output u_odelay_hb_ck_p;
-  output u_odelay_hb_ck_p_0;
-  output s_axil_araddr_3_sp_1;
-  output s_axil_araddr_6_sp_1;
-  output \s_axil_araddr[3]_0 ;
+  output idelayctrl_rdy_axi;
   output s_axil_araddr_4_sp_1;
-  output s_axil_araddr_5_sp_1;
-  output u_idelay_rwds_0;
-  output \s_axil_araddr[3]_1 ;
-  output \s_axil_araddr[2]_0 ;
-  output \s_axil_araddr[2]_1 ;
-  output u_odelay_hb_ck_p_1;
-  output s_axil_araddr_7_sp_1;
+  output s_axil_araddr_6_sp_1;
+  output s_axil_araddr_3_sp_1;
+  output \s_axil_araddr[3]_0 ;
+  output \g_io_delay.u_odelay_hb_ck_p ;
+  output \s_axil_araddr[9] ;
   output \s_axil_araddr[6]_0 ;
-  output \s_axil_araddr[2]_2 ;
-  output \s_axil_araddr[2]_3 ;
+  output \g_io_delay.u_odelay_hb_ck_p_0 ;
+  output s_axil_araddr_2_sp_1;
   output \s_axil_araddr[6]_1 ;
   output \s_axil_araddr[6]_2 ;
+  output \s_axil_araddr[6]_3 ;
+  output \s_axil_araddr[2]_0 ;
+  output \s_axil_araddr[2]_1 ;
+  output \s_axil_araddr[2]_2 ;
+  output \s_axil_araddr[6]_4 ;
+  output \s_axil_araddr[6]_5 ;
   inout [7:0]io_hb_dq;
   inout io_hb_rwds;
+  input [7:0]\g_io_delay.g_dq_idelay[7].u_idelay_dq ;
+  input i_axi_aclk;
+  input [7:0]dq_idly_en_vtc;
+  input [7:0]dq_idly_inc;
+  input [3:0]Q;
+  input [71:0]dq_idly_cntvaluein;
+  input i_ref_clk_300;
+  input odly_ce;
+  input odly_en_vtc;
+  input odly_inc;
+  input [8:0]\g_io_delay.u_odelay_hb_ck_p_1 ;
+  input rwds_idly_ce;
+  input rwds_idly_en_vtc;
+  input rwds_idly_inc;
+  input [8:0]CNTVALUEIN;
   input i_hb_clk_200;
   input [7:0]o_dbg_dq_o_d1;
   input [7:0]o_dbg_dq_o_d2;
   input [0:0]SR;
-  input \g_dq_phy[0].u_iobuf_dq ;
-  input [7:0]\g_dq_phy[7].u_idelay_dq ;
-  input i_axi_aclk;
-  input [7:0]dq_idly_en_vtc;
-  input [7:0]dq_idly_inc;
-  input [3:0]\s_axil_rdata[3]_i_2 ;
-  input [71:0]dq_idly_cntvaluein;
   input i_hb_clk_200_samp_90;
   input i_iddre1_rst;
-  input i_ref_clk_300;
+  input \g_dq_phy[0].u_iobuf_dq ;
   input i_hb_clk_200_gated;
-  input odly_ce;
-  input odly_en_vtc;
-  input odly_inc;
-  input [8:0]CNTVALUEIN;
   input o_dbg_rwds_o_d1;
   input o_dbg_rwds_o_d2;
   input o_dbg_i_rwds_t;
-  input rwds_idly_ce;
-  input rwds_idly_en_vtc;
-  input rwds_idly_inc;
-  input [8:0]u_idelay_rwds_1;
   input fifo_rst_axi_wr;
   input i_idelayctrl_rst;
   input [7:0]s_axil_araddr;
   input \s_axil_rdata_reg[3] ;
-  input \s_axil_rdata_reg[3]_0 ;
   input \s_axil_rdata_reg[5] ;
-  input \s_axil_rdata_reg[8] ;
-  input \s_axil_rdata_reg[8]_0 ;
   input \s_axil_rdata_reg[5]_0 ;
-  input \s_axil_rdata_reg[5]_1 ;
+  input \s_axil_rdata_reg[8] ;
   input \s_axil_rdata_reg[6] ;
-  input \s_axil_rdata_reg[6]_0 ;
-  input \s_axil_rdata[3]_i_2_0 ;
-  input \s_axil_rdata[3]_i_2_1 ;
-  input \s_axil_rdata[0]_i_3 ;
-  input \s_axil_rdata[0]_i_3_0 ;
+  input \s_axil_rdata_reg[7] ;
+  input \s_axil_rdata_reg[8]_0 ;
+  input \s_axil_rdata[1]_i_3 ;
+  input \s_axil_rdata[3]_i_3 ;
+  input \s_axil_rdata_reg[3]_i_7 ;
+  input \s_axil_rdata[3]_i_10 ;
+  input [4:0]\s_axil_rdata[5]_i_3 ;
+  input \s_axil_rdata_reg[1]_i_7 ;
+  input \s_axil_rdata_reg[1]_i_7_0 ;
   input \s_axil_rdata[0]_i_9 ;
-  input \s_axil_rdata[0]_i_9_0 ;
-  input \s_axil_rdata[1]_i_6 ;
-  input \s_axil_rdata_reg[4] ;
-  input \s_axil_rdata_reg[8]_1 ;
-  input \s_axil_rdata[3]_i_4 ;
   input \s_axil_rdata[4]_i_2 ;
-  input [2:0]Q;
-  input \s_axil_rdata[8]_i_2 ;
-  input \s_axil_rdata_reg[5]_2 ;
-  input \s_axil_rdata_reg[3]_1 ;
+  input \s_axil_rdata_reg[8]_1 ;
+  input \s_axil_rdata_reg[7]_0 ;
+  input \s_axil_rdata_reg[6]_0 ;
+  input \s_axil_rdata_reg[5]_1 ;
+  input \s_axil_rdata_reg[4] ;
+  input \s_axil_rdata_reg[3]_0 ;
+  input \s_axil_rdata_reg[2] ;
 
   wire [8:0]CNTVALUEIN;
-  wire [1:0]CNTVALUEOUT;
-  wire [2:0]Q;
+  wire [0:0]CNTVALUEOUT;
+  wire [3:0]Q;
   wire [0:0]SR;
   wire [71:0]dq_idly_cntvaluein;
   wire [7:0]dq_idly_en_vtc;
@@ -22579,7 +22486,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
   wire [7:0]dq_q2;
   wire fifo_rst_axi_wr;
   wire \g_dq_phy[0].u_iobuf_dq ;
-  wire [7:0]\g_dq_phy[7].u_idelay_dq ;
+  wire [7:0]\g_io_delay.g_dq_idelay[7].u_idelay_dq ;
+  wire [1:0]\g_io_delay.u_idelay_rwds ;
+  wire \g_io_delay.u_odelay_hb_ck_p ;
+  wire \g_io_delay.u_odelay_hb_ck_p_0 ;
+  wire [8:0]\g_io_delay.u_odelay_hb_ck_p_1 ;
   wire i_axi_aclk;
   wire i_hb_clk_200;
   wire i_hb_clk_200_gated;
@@ -22587,6 +22498,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
   wire i_iddre1_rst;
   wire i_idelayctrl_rst;
   wire i_ref_clk_300;
+  wire idelayctrl_rdy_axi;
   wire [7:0]io_hb_dq;
   wire io_hb_rwds;
   wire [7:0]o_dbg_dq_o_d1;
@@ -22607,55 +22519,46 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
   wire \s_axil_araddr[2]_0 ;
   wire \s_axil_araddr[2]_1 ;
   wire \s_axil_araddr[2]_2 ;
-  wire \s_axil_araddr[2]_3 ;
   wire \s_axil_araddr[3]_0 ;
-  wire \s_axil_araddr[3]_1 ;
   wire \s_axil_araddr[6]_0 ;
   wire \s_axil_araddr[6]_1 ;
   wire \s_axil_araddr[6]_2 ;
+  wire \s_axil_araddr[6]_3 ;
+  wire \s_axil_araddr[6]_4 ;
+  wire \s_axil_araddr[6]_5 ;
+  wire \s_axil_araddr[9] ;
   wire s_axil_araddr_2_sn_1;
   wire s_axil_araddr_3_sn_1;
   wire s_axil_araddr_4_sn_1;
-  wire s_axil_araddr_5_sn_1;
   wire s_axil_araddr_6_sn_1;
-  wire s_axil_araddr_7_sn_1;
-  wire \s_axil_rdata[0]_i_3 ;
-  wire \s_axil_rdata[0]_i_3_0 ;
   wire \s_axil_rdata[0]_i_9 ;
-  wire \s_axil_rdata[0]_i_9_0 ;
-  wire \s_axil_rdata[1]_i_6 ;
-  wire [3:0]\s_axil_rdata[3]_i_2 ;
-  wire \s_axil_rdata[3]_i_2_0 ;
-  wire \s_axil_rdata[3]_i_2_1 ;
-  wire \s_axil_rdata[3]_i_4 ;
+  wire \s_axil_rdata[1]_i_3 ;
+  wire \s_axil_rdata[3]_i_10 ;
+  wire \s_axil_rdata[3]_i_3 ;
   wire \s_axil_rdata[4]_i_2 ;
-  wire \s_axil_rdata[8]_i_2 ;
+  wire [4:0]\s_axil_rdata[5]_i_3 ;
+  wire \s_axil_rdata_reg[1]_i_7 ;
+  wire \s_axil_rdata_reg[1]_i_7_0 ;
+  wire \s_axil_rdata_reg[2] ;
   wire \s_axil_rdata_reg[3] ;
   wire \s_axil_rdata_reg[3]_0 ;
-  wire \s_axil_rdata_reg[3]_1 ;
+  wire \s_axil_rdata_reg[3]_i_7 ;
   wire \s_axil_rdata_reg[4] ;
   wire \s_axil_rdata_reg[5] ;
   wire \s_axil_rdata_reg[5]_0 ;
   wire \s_axil_rdata_reg[5]_1 ;
-  wire \s_axil_rdata_reg[5]_2 ;
   wire \s_axil_rdata_reg[6] ;
   wire \s_axil_rdata_reg[6]_0 ;
+  wire \s_axil_rdata_reg[7] ;
+  wire \s_axil_rdata_reg[7]_0 ;
   wire \s_axil_rdata_reg[8] ;
   wire \s_axil_rdata_reg[8]_0 ;
   wire \s_axil_rdata_reg[8]_1 ;
-  wire [0:0]u_idelay_rwds;
-  wire u_idelay_rwds_0;
-  wire [8:0]u_idelay_rwds_1;
-  wire u_odelay_hb_ck_p;
-  wire u_odelay_hb_ck_p_0;
-  wire u_odelay_hb_ck_p_1;
 
   assign s_axil_araddr_2_sp_1 = s_axil_araddr_2_sn_1;
   assign s_axil_araddr_3_sp_1 = s_axil_araddr_3_sn_1;
   assign s_axil_araddr_4_sp_1 = s_axil_araddr_4_sn_1;
-  assign s_axil_araddr_5_sp_1 = s_axil_araddr_5_sn_1;
   assign s_axil_araddr_6_sp_1 = s_axil_araddr_6_sn_1;
-  assign s_axil_araddr_7_sp_1 = s_axil_araddr_7_sn_1;
   design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus \g_phy_ultrascale_plus.u_phy_impl 
        (.CNTVALUEIN(CNTVALUEIN),
         .CNTVALUEOUT(CNTVALUEOUT),
@@ -22668,7 +22571,11 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
         .dq_q2(dq_q2),
         .fifo_rst_axi_wr(fifo_rst_axi_wr),
         .\g_dq_phy[0].u_iobuf_dq_0 (\g_dq_phy[0].u_iobuf_dq ),
-        .\g_dq_phy[7].u_idelay_dq_0 (\g_dq_phy[7].u_idelay_dq ),
+        .\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 (\g_io_delay.g_dq_idelay[7].u_idelay_dq ),
+        .\g_io_delay.u_idelay_rwds_0 (\g_io_delay.u_idelay_rwds ),
+        .\g_io_delay.u_odelay_hb_ck_p_0 (\g_io_delay.u_odelay_hb_ck_p ),
+        .\g_io_delay.u_odelay_hb_ck_p_1 (\g_io_delay.u_odelay_hb_ck_p_0 ),
+        .\g_io_delay.u_odelay_hb_ck_p_2 (\g_io_delay.u_odelay_hb_ck_p_1 ),
         .i_axi_aclk(i_axi_aclk),
         .i_hb_clk_200(i_hb_clk_200),
         .i_hb_clk_200_gated(i_hb_clk_200_gated),
@@ -22676,6 +22583,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
         .i_iddre1_rst(i_iddre1_rst),
         .i_idelayctrl_rst(i_idelayctrl_rst),
         .i_ref_clk_300(i_ref_clk_300),
+        .idelayctrl_rdy_axi(idelayctrl_rdy_axi),
         .io_hb_dq(io_hb_dq),
         .io_hb_rwds(io_hb_rwds),
         .o_dbg_dq_o_d1(o_dbg_dq_o_d1),
@@ -22696,218 +22604,207 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx
         .\s_axil_araddr[2]_0 (\s_axil_araddr[2]_0 ),
         .\s_axil_araddr[2]_1 (\s_axil_araddr[2]_1 ),
         .\s_axil_araddr[2]_2 (\s_axil_araddr[2]_2 ),
-        .\s_axil_araddr[2]_3 (\s_axil_araddr[2]_3 ),
         .\s_axil_araddr[3]_0 (\s_axil_araddr[3]_0 ),
-        .\s_axil_araddr[3]_1 (\s_axil_araddr[3]_1 ),
         .\s_axil_araddr[6]_0 (\s_axil_araddr[6]_0 ),
         .\s_axil_araddr[6]_1 (\s_axil_araddr[6]_1 ),
         .\s_axil_araddr[6]_2 (\s_axil_araddr[6]_2 ),
+        .\s_axil_araddr[6]_3 (\s_axil_araddr[6]_3 ),
+        .\s_axil_araddr[6]_4 (\s_axil_araddr[6]_4 ),
+        .\s_axil_araddr[6]_5 (\s_axil_araddr[6]_5 ),
+        .\s_axil_araddr[9] (\s_axil_araddr[9] ),
         .s_axil_araddr_2_sp_1(s_axil_araddr_2_sn_1),
         .s_axil_araddr_3_sp_1(s_axil_araddr_3_sn_1),
         .s_axil_araddr_4_sp_1(s_axil_araddr_4_sn_1),
-        .s_axil_araddr_5_sp_1(s_axil_araddr_5_sn_1),
         .s_axil_araddr_6_sp_1(s_axil_araddr_6_sn_1),
-        .s_axil_araddr_7_sp_1(s_axil_araddr_7_sn_1),
-        .\s_axil_rdata[0]_i_3 (\s_axil_rdata[0]_i_3 ),
-        .\s_axil_rdata[0]_i_3_0 (\s_axil_rdata[0]_i_3_0 ),
         .\s_axil_rdata[0]_i_9_0 (\s_axil_rdata[0]_i_9 ),
-        .\s_axil_rdata[0]_i_9_1 (\s_axil_rdata[0]_i_9_0 ),
-        .\s_axil_rdata[1]_i_6 (\s_axil_rdata[1]_i_6 ),
-        .\s_axil_rdata[3]_i_2_0 (\s_axil_rdata[3]_i_2 ),
-        .\s_axil_rdata[3]_i_2_1 (\s_axil_rdata[3]_i_2_0 ),
-        .\s_axil_rdata[3]_i_2_2 (\s_axil_rdata[3]_i_2_1 ),
-        .\s_axil_rdata[3]_i_4_0 (\s_axil_rdata[3]_i_4 ),
+        .\s_axil_rdata[1]_i_3_0 (\s_axil_rdata[1]_i_3 ),
+        .\s_axil_rdata[3]_i_10_0 (\s_axil_rdata[3]_i_10 ),
+        .\s_axil_rdata[3]_i_3_0 (\s_axil_rdata[3]_i_3 ),
         .\s_axil_rdata[4]_i_2 (\s_axil_rdata[4]_i_2 ),
-        .\s_axil_rdata[8]_i_2_0 (\s_axil_rdata[8]_i_2 ),
+        .\s_axil_rdata[5]_i_3_0 (\s_axil_rdata[5]_i_3 ),
+        .\s_axil_rdata_reg[1]_i_7_0 (\s_axil_rdata_reg[1]_i_7 ),
+        .\s_axil_rdata_reg[1]_i_7_1 (\s_axil_rdata_reg[1]_i_7_0 ),
+        .\s_axil_rdata_reg[2] (\s_axil_rdata_reg[2] ),
         .\s_axil_rdata_reg[3] (\s_axil_rdata_reg[3] ),
         .\s_axil_rdata_reg[3]_0 (\s_axil_rdata_reg[3]_0 ),
-        .\s_axil_rdata_reg[3]_1 (\s_axil_rdata_reg[3]_1 ),
+        .\s_axil_rdata_reg[3]_i_7_0 (\s_axil_rdata_reg[3]_i_7 ),
         .\s_axil_rdata_reg[4] (\s_axil_rdata_reg[4] ),
         .\s_axil_rdata_reg[5] (\s_axil_rdata_reg[5] ),
         .\s_axil_rdata_reg[5]_0 (\s_axil_rdata_reg[5]_0 ),
         .\s_axil_rdata_reg[5]_1 (\s_axil_rdata_reg[5]_1 ),
-        .\s_axil_rdata_reg[5]_2 (\s_axil_rdata_reg[5]_2 ),
         .\s_axil_rdata_reg[6] (\s_axil_rdata_reg[6] ),
         .\s_axil_rdata_reg[6]_0 (\s_axil_rdata_reg[6]_0 ),
+        .\s_axil_rdata_reg[7] (\s_axil_rdata_reg[7] ),
+        .\s_axil_rdata_reg[7]_0 (\s_axil_rdata_reg[7]_0 ),
         .\s_axil_rdata_reg[8] (\s_axil_rdata_reg[8] ),
         .\s_axil_rdata_reg[8]_0 (\s_axil_rdata_reg[8]_0 ),
-        .\s_axil_rdata_reg[8]_1 (\s_axil_rdata_reg[8]_1 ),
-        .u_idelay_rwds_0(u_idelay_rwds),
-        .u_idelay_rwds_1(u_idelay_rwds_0),
-        .u_idelay_rwds_2(u_idelay_rwds_1),
-        .u_odelay_hb_ck_p_0(u_odelay_hb_ck_p),
-        .u_odelay_hb_ck_p_1(u_odelay_hb_ck_p_0),
-        .u_odelay_hb_ck_p_2(u_odelay_hb_ck_p_1));
+        .\s_axil_rdata_reg[8]_1 (\s_axil_rdata_reg[8]_1 ));
 endmodule
 
 (* ORIG_REF_NAME = "hyperbus_phy_xilinx_usplus" *) 
 module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
-   (dq_q1,
-    dq_q2,
+   (o_hb_ck_p,
     CNTVALUEOUT,
-    o_hb_ck_p,
-    u_idelay_rwds_0,
+    \g_io_delay.u_idelay_rwds_0 ,
+    dq_q1,
+    dq_q2,
     rwds_q1,
     rwds_q2,
-    s_axil_araddr_2_sp_1,
-    u_odelay_hb_ck_p_0,
-    u_odelay_hb_ck_p_1,
-    s_axil_araddr_3_sp_1,
-    s_axil_araddr_6_sp_1,
-    \s_axil_araddr[3]_0 ,
+    idelayctrl_rdy_axi,
     s_axil_araddr_4_sp_1,
-    s_axil_araddr_5_sp_1,
-    u_idelay_rwds_1,
-    \s_axil_araddr[3]_1 ,
-    \s_axil_araddr[2]_0 ,
-    \s_axil_araddr[2]_1 ,
-    u_odelay_hb_ck_p_2,
-    s_axil_araddr_7_sp_1,
+    s_axil_araddr_6_sp_1,
+    s_axil_araddr_3_sp_1,
+    \s_axil_araddr[3]_0 ,
+    \g_io_delay.u_odelay_hb_ck_p_0 ,
+    \s_axil_araddr[9] ,
     \s_axil_araddr[6]_0 ,
-    \s_axil_araddr[2]_2 ,
-    \s_axil_araddr[2]_3 ,
+    \g_io_delay.u_odelay_hb_ck_p_1 ,
+    s_axil_araddr_2_sp_1,
     \s_axil_araddr[6]_1 ,
     \s_axil_araddr[6]_2 ,
+    \s_axil_araddr[6]_3 ,
+    \s_axil_araddr[2]_0 ,
+    \s_axil_araddr[2]_1 ,
+    \s_axil_araddr[2]_2 ,
+    \s_axil_araddr[6]_4 ,
+    \s_axil_araddr[6]_5 ,
     io_hb_dq,
     io_hb_rwds,
+    \g_io_delay.g_dq_idelay[7].u_idelay_dq_0 ,
+    i_axi_aclk,
+    dq_idly_en_vtc,
+    dq_idly_inc,
+    Q,
+    dq_idly_cntvaluein,
+    i_ref_clk_300,
+    odly_ce,
+    odly_en_vtc,
+    odly_inc,
+    \g_io_delay.u_odelay_hb_ck_p_2 ,
+    rwds_idly_ce,
+    rwds_idly_en_vtc,
+    rwds_idly_inc,
+    CNTVALUEIN,
     i_hb_clk_200,
     o_dbg_dq_o_d1,
     o_dbg_dq_o_d2,
     SR,
-    \g_dq_phy[0].u_iobuf_dq_0 ,
-    \g_dq_phy[7].u_idelay_dq_0 ,
-    i_axi_aclk,
-    dq_idly_en_vtc,
-    dq_idly_inc,
-    \s_axil_rdata[3]_i_2_0 ,
-    dq_idly_cntvaluein,
     i_hb_clk_200_samp_90,
     i_iddre1_rst,
-    i_ref_clk_300,
+    \g_dq_phy[0].u_iobuf_dq_0 ,
     i_hb_clk_200_gated,
-    odly_ce,
-    odly_en_vtc,
-    odly_inc,
-    CNTVALUEIN,
     o_dbg_rwds_o_d1,
     o_dbg_rwds_o_d2,
     o_dbg_i_rwds_t,
-    rwds_idly_ce,
-    rwds_idly_en_vtc,
-    rwds_idly_inc,
-    u_idelay_rwds_2,
     fifo_rst_axi_wr,
     i_idelayctrl_rst,
     s_axil_araddr,
     \s_axil_rdata_reg[3] ,
-    \s_axil_rdata_reg[3]_0 ,
     \s_axil_rdata_reg[5] ,
-    \s_axil_rdata_reg[8] ,
-    \s_axil_rdata_reg[8]_0 ,
     \s_axil_rdata_reg[5]_0 ,
-    \s_axil_rdata_reg[5]_1 ,
+    \s_axil_rdata_reg[8] ,
     \s_axil_rdata_reg[6] ,
-    \s_axil_rdata_reg[6]_0 ,
-    \s_axil_rdata[3]_i_2_1 ,
-    \s_axil_rdata[3]_i_2_2 ,
-    \s_axil_rdata[0]_i_3 ,
-    \s_axil_rdata[0]_i_3_0 ,
+    \s_axil_rdata_reg[7] ,
+    \s_axil_rdata_reg[8]_0 ,
+    \s_axil_rdata[1]_i_3_0 ,
+    \s_axil_rdata[3]_i_3_0 ,
+    \s_axil_rdata_reg[3]_i_7_0 ,
+    \s_axil_rdata[3]_i_10_0 ,
+    \s_axil_rdata[5]_i_3_0 ,
+    \s_axil_rdata_reg[1]_i_7_0 ,
+    \s_axil_rdata_reg[1]_i_7_1 ,
     \s_axil_rdata[0]_i_9_0 ,
-    \s_axil_rdata[0]_i_9_1 ,
-    \s_axil_rdata[1]_i_6 ,
-    \s_axil_rdata_reg[4] ,
-    \s_axil_rdata_reg[8]_1 ,
-    \s_axil_rdata[3]_i_4_0 ,
     \s_axil_rdata[4]_i_2 ,
-    Q,
-    \s_axil_rdata[8]_i_2_0 ,
-    \s_axil_rdata_reg[5]_2 ,
-    \s_axil_rdata_reg[3]_1 );
+    \s_axil_rdata_reg[8]_1 ,
+    \s_axil_rdata_reg[7]_0 ,
+    \s_axil_rdata_reg[6]_0 ,
+    \s_axil_rdata_reg[5]_1 ,
+    \s_axil_rdata_reg[4] ,
+    \s_axil_rdata_reg[3]_0 ,
+    \s_axil_rdata_reg[2] );
+  output o_hb_ck_p;
+  output [0:0]CNTVALUEOUT;
+  output [1:0]\g_io_delay.u_idelay_rwds_0 ;
   output [7:0]dq_q1;
   output [7:0]dq_q2;
-  output [1:0]CNTVALUEOUT;
-  output o_hb_ck_p;
-  output [0:0]u_idelay_rwds_0;
   output rwds_q1;
   output rwds_q2;
-  output s_axil_araddr_2_sp_1;
-  output u_odelay_hb_ck_p_0;
-  output u_odelay_hb_ck_p_1;
-  output s_axil_araddr_3_sp_1;
-  output s_axil_araddr_6_sp_1;
-  output \s_axil_araddr[3]_0 ;
+  output idelayctrl_rdy_axi;
   output s_axil_araddr_4_sp_1;
-  output s_axil_araddr_5_sp_1;
-  output u_idelay_rwds_1;
-  output \s_axil_araddr[3]_1 ;
-  output \s_axil_araddr[2]_0 ;
-  output \s_axil_araddr[2]_1 ;
-  output u_odelay_hb_ck_p_2;
-  output s_axil_araddr_7_sp_1;
+  output s_axil_araddr_6_sp_1;
+  output s_axil_araddr_3_sp_1;
+  output \s_axil_araddr[3]_0 ;
+  output \g_io_delay.u_odelay_hb_ck_p_0 ;
+  output \s_axil_araddr[9] ;
   output \s_axil_araddr[6]_0 ;
-  output \s_axil_araddr[2]_2 ;
-  output \s_axil_araddr[2]_3 ;
+  output \g_io_delay.u_odelay_hb_ck_p_1 ;
+  output s_axil_araddr_2_sp_1;
   output \s_axil_araddr[6]_1 ;
   output \s_axil_araddr[6]_2 ;
+  output \s_axil_araddr[6]_3 ;
+  output \s_axil_araddr[2]_0 ;
+  output \s_axil_araddr[2]_1 ;
+  output \s_axil_araddr[2]_2 ;
+  output \s_axil_araddr[6]_4 ;
+  output \s_axil_araddr[6]_5 ;
   inout [7:0]io_hb_dq;
   inout io_hb_rwds;
+  input [7:0]\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 ;
+  input i_axi_aclk;
+  input [7:0]dq_idly_en_vtc;
+  input [7:0]dq_idly_inc;
+  input [3:0]Q;
+  input [71:0]dq_idly_cntvaluein;
+  input i_ref_clk_300;
+  input odly_ce;
+  input odly_en_vtc;
+  input odly_inc;
+  input [8:0]\g_io_delay.u_odelay_hb_ck_p_2 ;
+  input rwds_idly_ce;
+  input rwds_idly_en_vtc;
+  input rwds_idly_inc;
+  input [8:0]CNTVALUEIN;
   input i_hb_clk_200;
   input [7:0]o_dbg_dq_o_d1;
   input [7:0]o_dbg_dq_o_d2;
   input [0:0]SR;
-  input \g_dq_phy[0].u_iobuf_dq_0 ;
-  input [7:0]\g_dq_phy[7].u_idelay_dq_0 ;
-  input i_axi_aclk;
-  input [7:0]dq_idly_en_vtc;
-  input [7:0]dq_idly_inc;
-  input [3:0]\s_axil_rdata[3]_i_2_0 ;
-  input [71:0]dq_idly_cntvaluein;
   input i_hb_clk_200_samp_90;
   input i_iddre1_rst;
-  input i_ref_clk_300;
+  input \g_dq_phy[0].u_iobuf_dq_0 ;
   input i_hb_clk_200_gated;
-  input odly_ce;
-  input odly_en_vtc;
-  input odly_inc;
-  input [8:0]CNTVALUEIN;
   input o_dbg_rwds_o_d1;
   input o_dbg_rwds_o_d2;
   input o_dbg_i_rwds_t;
-  input rwds_idly_ce;
-  input rwds_idly_en_vtc;
-  input rwds_idly_inc;
-  input [8:0]u_idelay_rwds_2;
   input fifo_rst_axi_wr;
   input i_idelayctrl_rst;
   input [7:0]s_axil_araddr;
   input \s_axil_rdata_reg[3] ;
-  input \s_axil_rdata_reg[3]_0 ;
   input \s_axil_rdata_reg[5] ;
-  input \s_axil_rdata_reg[8] ;
-  input \s_axil_rdata_reg[8]_0 ;
   input \s_axil_rdata_reg[5]_0 ;
-  input \s_axil_rdata_reg[5]_1 ;
+  input \s_axil_rdata_reg[8] ;
   input \s_axil_rdata_reg[6] ;
-  input \s_axil_rdata_reg[6]_0 ;
-  input \s_axil_rdata[3]_i_2_1 ;
-  input \s_axil_rdata[3]_i_2_2 ;
-  input \s_axil_rdata[0]_i_3 ;
-  input \s_axil_rdata[0]_i_3_0 ;
+  input \s_axil_rdata_reg[7] ;
+  input \s_axil_rdata_reg[8]_0 ;
+  input \s_axil_rdata[1]_i_3_0 ;
+  input \s_axil_rdata[3]_i_3_0 ;
+  input \s_axil_rdata_reg[3]_i_7_0 ;
+  input \s_axil_rdata[3]_i_10_0 ;
+  input [4:0]\s_axil_rdata[5]_i_3_0 ;
+  input \s_axil_rdata_reg[1]_i_7_0 ;
+  input \s_axil_rdata_reg[1]_i_7_1 ;
   input \s_axil_rdata[0]_i_9_0 ;
-  input \s_axil_rdata[0]_i_9_1 ;
-  input \s_axil_rdata[1]_i_6 ;
-  input \s_axil_rdata_reg[4] ;
-  input \s_axil_rdata_reg[8]_1 ;
-  input \s_axil_rdata[3]_i_4_0 ;
   input \s_axil_rdata[4]_i_2 ;
-  input [2:0]Q;
-  input \s_axil_rdata[8]_i_2_0 ;
-  input \s_axil_rdata_reg[5]_2 ;
-  input \s_axil_rdata_reg[3]_1 ;
+  input \s_axil_rdata_reg[8]_1 ;
+  input \s_axil_rdata_reg[7]_0 ;
+  input \s_axil_rdata_reg[6]_0 ;
+  input \s_axil_rdata_reg[5]_1 ;
+  input \s_axil_rdata_reg[4] ;
+  input \s_axil_rdata_reg[3]_0 ;
+  input \s_axil_rdata_reg[2] ;
 
   wire [8:0]CNTVALUEIN;
-  wire [1:0]CNTVALUEOUT;
-  wire [2:0]Q;
+  wire [0:0]CNTVALUEOUT;
+  wire [3:0]Q;
   wire [0:0]SR;
   wire dq_i_0;
   wire dq_i_1;
@@ -22941,9 +22838,16 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
   wire [7:0]dq_q2;
   wire fifo_rst_axi_wr;
   wire \g_dq_phy[0].u_iobuf_dq_0 ;
-  wire [7:0]\g_dq_phy[7].u_idelay_dq_0 ;
+  wire [7:0]\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 ;
+  wire \g_io_delay.idelayctrl_rdy ;
+  wire \g_io_delay.idelayctrl_rdy_axi_meta ;
+  wire \g_io_delay.idelayctrl_rst_ref_meta ;
+  wire \g_io_delay.idelayctrl_rst_ref_sync ;
+  wire [1:0]\g_io_delay.u_idelay_rwds_0 ;
+  wire \g_io_delay.u_odelay_hb_ck_p_0 ;
+  wire \g_io_delay.u_odelay_hb_ck_p_1 ;
+  wire [8:0]\g_io_delay.u_odelay_hb_ck_p_2 ;
   wire hb_ck_fwd;
-  wire hb_ck_fwd_delayed;
   wire i_axi_aclk;
   wire i_hb_clk_200;
   wire i_hb_clk_200_gated;
@@ -22951,11 +22855,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
   wire i_iddre1_rst;
   wire i_idelayctrl_rst;
   wire i_ref_clk_300;
-  wire idelayctrl_rdy;
   wire idelayctrl_rdy_axi;
-  wire idelayctrl_rdy_axi_meta;
-  wire idelayctrl_rst_ref_meta;
-  wire idelayctrl_rst_ref_sync;
   wire [7:0]io_hb_dq;
   wire io_hb_rwds;
   wire [7:0]o_dbg_dq_o_d1;
@@ -22981,131 +22881,124 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
   wire \s_axil_araddr[2]_0 ;
   wire \s_axil_araddr[2]_1 ;
   wire \s_axil_araddr[2]_2 ;
-  wire \s_axil_araddr[2]_3 ;
   wire \s_axil_araddr[3]_0 ;
-  wire \s_axil_araddr[3]_1 ;
   wire \s_axil_araddr[6]_0 ;
   wire \s_axil_araddr[6]_1 ;
   wire \s_axil_araddr[6]_2 ;
+  wire \s_axil_araddr[6]_3 ;
+  wire \s_axil_araddr[6]_4 ;
+  wire \s_axil_araddr[6]_5 ;
+  wire \s_axil_araddr[9] ;
   wire s_axil_araddr_2_sn_1;
   wire s_axil_araddr_3_sn_1;
   wire s_axil_araddr_4_sn_1;
-  wire s_axil_araddr_5_sn_1;
   wire s_axil_araddr_6_sn_1;
-  wire s_axil_araddr_7_sn_1;
   wire \s_axil_rdata[0]_i_14_n_0 ;
   wire \s_axil_rdata[0]_i_15_n_0 ;
   wire \s_axil_rdata[0]_i_18_n_0 ;
-  wire \s_axil_rdata[0]_i_20_n_0 ;
-  wire \s_axil_rdata[0]_i_3 ;
-  wire \s_axil_rdata[0]_i_3_0 ;
+  wire \s_axil_rdata[0]_i_19_n_0 ;
   wire \s_axil_rdata[0]_i_9_0 ;
-  wire \s_axil_rdata[0]_i_9_1 ;
-  wire \s_axil_rdata[1]_i_6 ;
-  wire \s_axil_rdata[1]_i_7_n_0 ;
-  wire \s_axil_rdata[1]_i_8_n_0 ;
-  wire \s_axil_rdata[2]_i_17_n_0 ;
-  wire \s_axil_rdata[2]_i_8_n_0 ;
+  wire \s_axil_rdata[1]_i_12_n_0 ;
+  wire \s_axil_rdata[1]_i_13_n_0 ;
+  wire \s_axil_rdata[1]_i_14_n_0 ;
+  wire \s_axil_rdata[1]_i_17_n_0 ;
+  wire \s_axil_rdata[1]_i_3_0 ;
+  wire \s_axil_rdata[2]_i_10_n_0 ;
   wire \s_axil_rdata[2]_i_9_n_0 ;
+  wire \s_axil_rdata[3]_i_10_0 ;
   wire \s_axil_rdata[3]_i_10_n_0 ;
-  wire [3:0]\s_axil_rdata[3]_i_2_0 ;
-  wire \s_axil_rdata[3]_i_2_1 ;
-  wire \s_axil_rdata[3]_i_2_2 ;
-  wire \s_axil_rdata[3]_i_4_0 ;
-  wire \s_axil_rdata[3]_i_4_n_0 ;
-  wire \s_axil_rdata[3]_i_8_n_0 ;
-  wire \s_axil_rdata[3]_i_9_n_0 ;
+  wire \s_axil_rdata[3]_i_12_n_0 ;
+  wire \s_axil_rdata[3]_i_15_n_0 ;
+  wire \s_axil_rdata[3]_i_3_0 ;
+  wire \s_axil_rdata[3]_i_5_n_0 ;
+  wire \s_axil_rdata[3]_i_6_n_0 ;
   wire \s_axil_rdata[4]_i_2 ;
   wire \s_axil_rdata[4]_i_8_n_0 ;
   wire \s_axil_rdata[4]_i_9_n_0 ;
-  wire \s_axil_rdata[5]_i_11_n_0 ;
+  wire \s_axil_rdata[5]_i_10_n_0 ;
+  wire [4:0]\s_axil_rdata[5]_i_3_0 ;
+  wire \s_axil_rdata[5]_i_4_n_0 ;
   wire \s_axil_rdata[5]_i_5_n_0 ;
-  wire \s_axil_rdata[5]_i_6_n_0 ;
-  wire \s_axil_rdata[5]_i_9_n_0 ;
+  wire \s_axil_rdata[5]_i_8_n_0 ;
   wire \s_axil_rdata[6]_i_4_n_0 ;
   wire \s_axil_rdata[6]_i_5_n_0 ;
-  wire \s_axil_rdata[6]_i_8_n_0 ;
-  wire \s_axil_rdata[7]_i_7_n_0 ;
-  wire \s_axil_rdata[7]_i_8_n_0 ;
+  wire \s_axil_rdata[7]_i_4_n_0 ;
+  wire \s_axil_rdata[7]_i_5_n_0 ;
   wire \s_axil_rdata[8]_i_10_n_0 ;
-  wire \s_axil_rdata[8]_i_2_0 ;
-  wire \s_axil_rdata[8]_i_6_n_0 ;
   wire \s_axil_rdata[8]_i_9_n_0 ;
+  wire \s_axil_rdata_reg[1]_i_7_0 ;
+  wire \s_axil_rdata_reg[1]_i_7_1 ;
+  wire \s_axil_rdata_reg[1]_i_7_n_0 ;
+  wire \s_axil_rdata_reg[2] ;
   wire \s_axil_rdata_reg[3] ;
   wire \s_axil_rdata_reg[3]_0 ;
-  wire \s_axil_rdata_reg[3]_1 ;
+  wire \s_axil_rdata_reg[3]_i_7_0 ;
+  wire \s_axil_rdata_reg[3]_i_7_n_0 ;
   wire \s_axil_rdata_reg[4] ;
   wire \s_axil_rdata_reg[5] ;
   wire \s_axil_rdata_reg[5]_0 ;
   wire \s_axil_rdata_reg[5]_1 ;
-  wire \s_axil_rdata_reg[5]_2 ;
   wire \s_axil_rdata_reg[6] ;
   wire \s_axil_rdata_reg[6]_0 ;
+  wire \s_axil_rdata_reg[7] ;
+  wire \s_axil_rdata_reg[7]_0 ;
   wire \s_axil_rdata_reg[8] ;
   wire \s_axil_rdata_reg[8]_0 ;
   wire \s_axil_rdata_reg[8]_1 ;
-  wire [0:0]u_idelay_rwds_0;
-  wire u_idelay_rwds_1;
-  wire [8:0]u_idelay_rwds_2;
-  wire u_odelay_hb_ck_p_0;
-  wire u_odelay_hb_ck_p_1;
-  wire u_odelay_hb_ck_p_2;
-  wire \NLW_g_dq_phy[0].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[0].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[0].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[0].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[0].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[1].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[1].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[1].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[1].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[1].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[2].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[2].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[2].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[2].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[2].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[3].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[3].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[3].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[3].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[3].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[4].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[4].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[4].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[4].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[4].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[5].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[5].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[5].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[5].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[5].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[6].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[6].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[6].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[6].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[6].u_oddr_dq_D_UNCONNECTED ;
-  wire \NLW_g_dq_phy[7].u_idelay_dq_CASC_OUT_UNCONNECTED ;
-  wire \NLW_g_dq_phy[7].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
   wire \NLW_g_dq_phy[7].u_oddr_dq_CLKDIV_UNCONNECTED ;
   wire \NLW_g_dq_phy[7].u_oddr_dq_T_OUT_UNCONNECTED ;
   wire [7:1]\NLW_g_dq_phy[7].u_oddr_dq_D_UNCONNECTED ;
-  wire NLW_u_idelay_rwds_CASC_OUT_UNCONNECTED;
-  wire NLW_u_idelay_rwds_CASC_RETURN_UNCONNECTED;
+  wire \NLW_g_io_delay.g_dq_idelay[0].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[0].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[1].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[1].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[2].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[2].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[3].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[3].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[4].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[4].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[5].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[5].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[6].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[6].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[7].u_idelay_dq_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.g_dq_idelay[7].u_idelay_dq_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.u_idelay_rwds_CASC_OUT_UNCONNECTED ;
+  wire \NLW_g_io_delay.u_idelay_rwds_CASC_RETURN_UNCONNECTED ;
+  wire \NLW_g_io_delay.u_odelay_hb_ck_p_CASC_OUT_UNCONNECTED ;
   wire NLW_u_oddr_ck_CLKDIV_UNCONNECTED;
   wire NLW_u_oddr_ck_T_OUT_UNCONNECTED;
   wire [7:1]NLW_u_oddr_ck_D_UNCONNECTED;
   wire NLW_u_oddr_rwds_CLKDIV_UNCONNECTED;
   wire NLW_u_oddr_rwds_T_OUT_UNCONNECTED;
   wire [7:1]NLW_u_oddr_rwds_D_UNCONNECTED;
-  wire NLW_u_odelay_hb_ck_p_CASC_OUT_UNCONNECTED;
 
   assign s_axil_araddr_2_sp_1 = s_axil_araddr_2_sn_1;
   assign s_axil_araddr_3_sp_1 = s_axil_araddr_3_sn_1;
   assign s_axil_araddr_4_sp_1 = s_axil_araddr_4_sn_1;
-  assign s_axil_araddr_5_sp_1 = s_axil_araddr_5_sn_1;
   assign s_axil_araddr_6_sp_1 = s_axil_araddr_6_sn_1;
-  assign s_axil_araddr_7_sp_1 = s_axil_araddr_7_sn_1;
   (* BOX_TYPE = "PRIMITIVE" *) 
   IDDRE1 #(
     .DDR_CLK_EDGE("OPPOSITE_EDGE"),
@@ -23118,36 +23011,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q1(dq_q1[0]),
         .Q2(dq_q2[0]),
         .R(i_iddre1_rst));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[0].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[0].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[0].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [0]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[8:0]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[8:0]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_0),
-        .EN_VTC(dq_idly_en_vtc[0]),
-        .IDATAIN(dq_i_0),
-        .INC(dq_idly_inc[0]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
   (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
@@ -23186,36 +23049,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q2(dq_q2[1]),
         .R(i_iddre1_rst));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[1].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[1].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[1].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [1]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[17:9]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[17:9]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_1),
-        .EN_VTC(dq_idly_en_vtc[1]),
-        .IDATAIN(dq_i_1),
-        .INC(dq_idly_inc[1]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
     \g_dq_phy[1].u_iobuf_dq 
@@ -23252,36 +23085,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q1(dq_q1[2]),
         .Q2(dq_q2[2]),
         .R(i_iddre1_rst));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[2].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[2].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[2].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [2]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[26:18]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[26:18]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_2),
-        .EN_VTC(dq_idly_en_vtc[2]),
-        .IDATAIN(dq_i_2),
-        .INC(dq_idly_inc[2]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
   (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
@@ -23320,36 +23123,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q2(dq_q2[3]),
         .R(i_iddre1_rst));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[3].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[3].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[3].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [3]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[35:27]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[35:27]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_3),
-        .EN_VTC(dq_idly_en_vtc[3]),
-        .IDATAIN(dq_i_3),
-        .INC(dq_idly_inc[3]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
     \g_dq_phy[3].u_iobuf_dq 
@@ -23386,36 +23159,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q1(dq_q1[4]),
         .Q2(dq_q2[4]),
         .R(i_iddre1_rst));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[4].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[4].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[4].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [4]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[44:36]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[44:36]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_4),
-        .EN_VTC(dq_idly_en_vtc[4]),
-        .IDATAIN(dq_i_4),
-        .INC(dq_idly_inc[4]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
   (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
@@ -23454,36 +23197,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q2(dq_q2[5]),
         .R(i_iddre1_rst));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[5].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[5].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[5].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [5]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[53:45]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[53:45]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_5),
-        .EN_VTC(dq_idly_en_vtc[5]),
-        .IDATAIN(dq_i_5),
-        .INC(dq_idly_inc[5]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
     \g_dq_phy[5].u_iobuf_dq 
@@ -23520,36 +23233,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q1(dq_q1[6]),
         .Q2(dq_q2[6]),
         .R(i_iddre1_rst));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[6].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[6].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[6].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [6]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[62:54]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[62:54]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_6),
-        .EN_VTC(dq_idly_en_vtc[6]),
-        .IDATAIN(dq_i_6),
-        .INC(dq_idly_inc[6]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
   (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
@@ -23588,36 +23271,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q2(dq_q2[7]),
         .R(i_iddre1_rst));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(0),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    \g_dq_phy[7].u_idelay_dq 
-       (.CASC_IN(1'b0),
-        .CASC_OUT(\NLW_g_dq_phy[7].u_idelay_dq_CASC_OUT_UNCONNECTED ),
-        .CASC_RETURN(\NLW_g_dq_phy[7].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
-        .CE(\g_dq_phy[7].u_idelay_dq_0 [7]),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(dq_idly_cntvaluein[71:63]),
-        .CNTVALUEOUT(dq_idly_cntvalueout[71:63]),
-        .DATAIN(1'b0),
-        .DATAOUT(dq_i_delayed_7),
-        .EN_VTC(dq_idly_en_vtc[7]),
-        .IDATAIN(dq_i_7),
-        .INC(dq_idly_inc[7]),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
     \g_dq_phy[7].u_iobuf_dq 
@@ -23642,30 +23295,333 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .RST(SR),
         .T(1'b0),
         .T_OUT(\NLW_g_dq_phy[7].u_oddr_dq_T_OUT_UNCONNECTED ));
-  FDRE idelayctrl_rdy_axi_meta_reg
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[0].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[0].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[0].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [0]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[8:0]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[8:0]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_0),
+        .EN_VTC(dq_idly_en_vtc[0]),
+        .IDATAIN(dq_i_0),
+        .INC(dq_idly_inc[0]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[1].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[1].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[1].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [1]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[17:9]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[17:9]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_1),
+        .EN_VTC(dq_idly_en_vtc[1]),
+        .IDATAIN(dq_i_1),
+        .INC(dq_idly_inc[1]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[2].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[2].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[2].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [2]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[26:18]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[26:18]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_2),
+        .EN_VTC(dq_idly_en_vtc[2]),
+        .IDATAIN(dq_i_2),
+        .INC(dq_idly_inc[2]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[3].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[3].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[3].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [3]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[35:27]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[35:27]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_3),
+        .EN_VTC(dq_idly_en_vtc[3]),
+        .IDATAIN(dq_i_3),
+        .INC(dq_idly_inc[3]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[4].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[4].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[4].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [4]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[44:36]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[44:36]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_4),
+        .EN_VTC(dq_idly_en_vtc[4]),
+        .IDATAIN(dq_i_4),
+        .INC(dq_idly_inc[4]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[5].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[5].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[5].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [5]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[53:45]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[53:45]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_5),
+        .EN_VTC(dq_idly_en_vtc[5]),
+        .IDATAIN(dq_i_5),
+        .INC(dq_idly_inc[5]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[6].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[6].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[6].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [6]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[62:54]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[62:54]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_6),
+        .EN_VTC(dq_idly_en_vtc[6]),
+        .IDATAIN(dq_i_6),
+        .INC(dq_idly_inc[6]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(0),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.g_dq_idelay[7].u_idelay_dq 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.g_dq_idelay[7].u_idelay_dq_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.g_dq_idelay[7].u_idelay_dq_CASC_RETURN_UNCONNECTED ),
+        .CE(\g_io_delay.g_dq_idelay[7].u_idelay_dq_0 [7]),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(dq_idly_cntvaluein[71:63]),
+        .CNTVALUEOUT(dq_idly_cntvalueout[71:63]),
+        .DATAIN(1'b0),
+        .DATAOUT(dq_i_delayed_7),
+        .EN_VTC(dq_idly_en_vtc[7]),
+        .IDATAIN(dq_i_7),
+        .INC(dq_idly_inc[7]),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  FDRE \g_io_delay.idelayctrl_rdy_axi_meta_reg 
        (.C(i_axi_aclk),
         .CE(1'b1),
-        .D(idelayctrl_rdy),
-        .Q(idelayctrl_rdy_axi_meta),
+        .D(\g_io_delay.idelayctrl_rdy ),
+        .Q(\g_io_delay.idelayctrl_rdy_axi_meta ),
         .R(fifo_rst_axi_wr));
-  FDRE idelayctrl_rdy_axi_sync_reg
+  FDRE \g_io_delay.idelayctrl_rdy_axi_sync_reg 
        (.C(i_axi_aclk),
         .CE(1'b1),
-        .D(idelayctrl_rdy_axi_meta),
+        .D(\g_io_delay.idelayctrl_rdy_axi_meta ),
         .Q(idelayctrl_rdy_axi),
         .R(fifo_rst_axi_wr));
-  FDSE idelayctrl_rst_ref_meta_reg
+  FDSE \g_io_delay.idelayctrl_rst_ref_meta_reg 
        (.C(i_ref_clk_300),
         .CE(1'b1),
-        .D(\s_axil_rdata[3]_i_2_0 [0]),
-        .Q(idelayctrl_rst_ref_meta),
+        .D(Q[0]),
+        .Q(\g_io_delay.idelayctrl_rst_ref_meta ),
         .S(i_idelayctrl_rst));
-  FDSE idelayctrl_rst_ref_sync_reg
+  FDSE \g_io_delay.idelayctrl_rst_ref_sync_reg 
        (.C(i_ref_clk_300),
         .CE(1'b1),
-        .D(idelayctrl_rst_ref_meta),
-        .Q(idelayctrl_rst_ref_sync),
+        .D(\g_io_delay.idelayctrl_rst_ref_meta ),
+        .Q(\g_io_delay.idelayctrl_rst_ref_sync ),
         .S(i_idelayctrl_rst));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  (* OPT_MODIFIED = "MLO" *) 
+  IDELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_SRC("IDATAIN"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(10),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .LOOPBACK("FALSE"),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.u_idelay_rwds 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.u_idelay_rwds_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(\NLW_g_io_delay.u_idelay_rwds_CASC_RETURN_UNCONNECTED ),
+        .CE(rwds_idly_ce),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(CNTVALUEIN),
+        .CNTVALUEOUT({rwds_idly_cntvalueout[8:5],\g_io_delay.u_idelay_rwds_0 [1],rwds_idly_cntvalueout[3],\g_io_delay.u_idelay_rwds_0 [0],rwds_idly_cntvalueout[1:0]}),
+        .DATAIN(1'b0),
+        .DATAOUT(rwds_i_delayed),
+        .EN_VTC(rwds_idly_en_vtc),
+        .IDATAIN(rwds_i),
+        .INC(rwds_idly_inc),
+        .LOAD(1'b0),
+        .RST(Q[2]));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  IDELAYCTRL #(
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS")) 
+    \g_io_delay.u_idelayctrl 
+       (.RDY(\g_io_delay.idelayctrl_rdy ),
+        .REFCLK(i_ref_clk_300),
+        .RST(\g_io_delay.idelayctrl_rst_ref_sync ));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  ODELAYE3 #(
+    .CASCADE("NONE"),
+    .DELAY_FORMAT("TIME"),
+    .DELAY_TYPE("VARIABLE"),
+    .DELAY_VALUE(34),
+    .IS_CLK_INVERTED(1'b0),
+    .IS_RST_INVERTED(1'b0),
+    .REFCLK_FREQUENCY(300.000000),
+    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+    .SIM_VERSION(2.000000),
+    .UPDATE_MODE("ASYNC")) 
+    \g_io_delay.u_odelay_hb_ck_p 
+       (.CASC_IN(1'b0),
+        .CASC_OUT(\NLW_g_io_delay.u_odelay_hb_ck_p_CASC_OUT_UNCONNECTED ),
+        .CASC_RETURN(1'b0),
+        .CE(odly_ce),
+        .CLK(i_axi_aclk),
+        .CNTVALUEIN(\g_io_delay.u_odelay_hb_ck_p_2 ),
+        .CNTVALUEOUT({odly_cntvalueout[8:3],CNTVALUEOUT,odly_cntvalueout[1:0]}),
+        .DATAOUT(o_hb_ck_p),
+        .EN_VTC(odly_en_vtc),
+        .INC(odly_inc),
+        .LOAD(1'b0),
+        .ODATAIN(hb_ck_fwd),
+        .RST(Q[1]));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \s_axil_rdata[0]_i_14 
@@ -23686,185 +23642,190 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[36]),
         .O(\s_axil_rdata[0]_i_15_n_0 ));
-  LUT5 #(
-    .INIT(32'h0000F8A8)) 
-    \s_axil_rdata[0]_i_17 
-       (.I0(s_axil_araddr[5]),
-        .I1(Q[0]),
-        .I2(s_axil_araddr[6]),
-        .I3(odly_cntvalueout[0]),
-        .I4(\s_axil_rdata[0]_i_20_n_0 ),
-        .O(s_axil_araddr_7_sn_1));
   LUT6 #(
-    .INIT(64'h000000003808FFFF)) 
+    .INIT(64'hFFFFFFFF55504040)) 
     \s_axil_rdata[0]_i_18 
-       (.I0(idelayctrl_rdy_axi),
-        .I1(s_axil_araddr[7]),
+       (.I0(\s_axil_rdata[0]_i_19_n_0 ),
+        .I1(odly_cntvalueout[0]),
         .I2(s_axil_araddr[6]),
-        .I3(CNTVALUEIN[0]),
-        .I4(\s_axil_rdata[0]_i_9_0 ),
-        .I5(\s_axil_rdata[0]_i_9_1 ),
+        .I3(\s_axil_rdata[5]_i_3_0 [0]),
+        .I4(s_axil_araddr[5]),
+        .I5(\s_axil_rdata[0]_i_9_0 ),
         .O(\s_axil_rdata[0]_i_18_n_0 ));
   LUT5 #(
     .INIT(32'hFDFFFDFD)) 
-    \s_axil_rdata[0]_i_20 
+    \s_axil_rdata[0]_i_19 
        (.I0(s_axil_araddr[1]),
         .I1(s_axil_araddr[3]),
         .I2(s_axil_araddr[2]),
         .I3(rwds_idly_cntvalueout[0]),
         .I4(s_axil_araddr[4]),
-        .O(\s_axil_rdata[0]_i_20_n_0 ));
+        .O(\s_axil_rdata[0]_i_19_n_0 ));
   LUT6 #(
-    .INIT(64'h5570557355775573)) 
+    .INIT(64'h0082008202200020)) 
     \s_axil_rdata[0]_i_9 
-       (.I0(\s_axil_rdata[0]_i_3 ),
-        .I1(\s_axil_rdata[0]_i_18_n_0 ),
-        .I2(s_axil_araddr[2]),
-        .I3(s_axil_araddr[3]),
-        .I4(s_axil_araddr[1]),
-        .I5(\s_axil_rdata[0]_i_3_0 ),
-        .O(s_axil_araddr_4_sn_1));
-  LUT6 #(
-    .INIT(64'h0080FFFF00800000)) 
-    \s_axil_rdata[1]_i_12 
-       (.I0(rwds_idly_cntvalueout[1]),
-        .I1(s_axil_araddr[5]),
+       (.I0(\s_axil_rdata[0]_i_18_n_0 ),
+        .I1(s_axil_araddr[4]),
         .I2(s_axil_araddr[6]),
         .I3(s_axil_araddr[7]),
-        .I4(s_axil_araddr[4]),
-        .I5(\s_axil_rdata[1]_i_6 ),
-        .O(u_idelay_rwds_1));
+        .I4(Q[0]),
+        .I5(s_axil_araddr[5]),
+        .O(\s_axil_araddr[6]_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_7 
+    \s_axil_rdata[1]_i_12 
        (.I0(dq_idly_cntvalueout[28]),
         .I1(dq_idly_cntvalueout[19]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[10]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[1]),
-        .O(\s_axil_rdata[1]_i_7_n_0 ));
+        .O(\s_axil_rdata[1]_i_12_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[1]_i_8 
+    \s_axil_rdata[1]_i_13 
        (.I0(dq_idly_cntvalueout[64]),
         .I1(dq_idly_cntvalueout[55]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[46]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[37]),
-        .O(\s_axil_rdata[1]_i_8_n_0 ));
-  LUT5 #(
-    .INIT(32'h10100010)) 
-    \s_axil_rdata[2]_i_13 
-       (.I0(\s_axil_rdata[2]_i_17_n_0 ),
-        .I1(s_axil_araddr[3]),
-        .I2(s_axil_araddr[1]),
-        .I3(s_axil_araddr[4]),
-        .I4(rwds_idly_cntvalueout[2]),
-        .O(s_axil_araddr_5_sn_1));
-  LUT5 #(
-    .INIT(32'h10111111)) 
-    \s_axil_rdata[2]_i_17 
-       (.I0(s_axil_araddr[4]),
-        .I1(s_axil_araddr[5]),
-        .I2(s_axil_araddr[7]),
-        .I3(s_axil_araddr[6]),
-        .I4(odly_cntvalueout[2]),
-        .O(\s_axil_rdata[2]_i_17_n_0 ));
-  LUT4 #(
-    .INIT(16'hC808)) 
-    \s_axil_rdata[2]_i_4 
-       (.I0(\s_axil_rdata[2]_i_8_n_0 ),
-        .I1(s_axil_araddr[1]),
+        .O(\s_axil_rdata[1]_i_13_n_0 ));
+  LUT6 #(
+    .INIT(64'h2F20FFFF2F200000)) 
+    \s_axil_rdata[1]_i_14 
+       (.I0(rwds_idly_cntvalueout[1]),
+        .I1(\s_axil_rdata_reg[1]_i_7_0 ),
         .I2(s_axil_araddr[4]),
-        .I3(\s_axil_rdata[2]_i_9_n_0 ),
-        .O(\s_axil_araddr[3]_1 ));
+        .I3(\s_axil_rdata[1]_i_17_n_0 ),
+        .I4(s_axil_araddr[1]),
+        .I5(\s_axil_rdata_reg[1]_i_7_1 ),
+        .O(\s_axil_rdata[1]_i_14_n_0 ));
+  LUT5 #(
+    .INIT(32'h02300200)) 
+    \s_axil_rdata[1]_i_17 
+       (.I0(odly_cntvalueout[1]),
+        .I1(s_axil_araddr[7]),
+        .I2(s_axil_araddr[5]),
+        .I3(s_axil_araddr[6]),
+        .I4(\s_axil_rdata[5]_i_3_0 [1]),
+        .O(\s_axil_rdata[1]_i_17_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[2]_i_8 
-       (.I0(dq_idly_cntvalueout[29]),
-        .I1(dq_idly_cntvalueout[20]),
+    .INIT(64'h0000000002000202)) 
+    \s_axil_rdata[1]_i_3 
+       (.I0(\s_axil_rdata_reg[1]_i_7_n_0 ),
+        .I1(s_axil_araddr[2]),
         .I2(s_axil_araddr[3]),
-        .I3(dq_idly_cntvalueout[11]),
-        .I4(s_axil_araddr[2]),
-        .I5(dq_idly_cntvalueout[2]),
-        .O(\s_axil_rdata[2]_i_8_n_0 ));
+        .I3(Q[1]),
+        .I4(s_axil_araddr[7]),
+        .I5(\s_axil_rdata_reg[3] ),
+        .O(s_axil_araddr_4_sn_1));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[2]_i_9 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[2]_i_10 
        (.I0(dq_idly_cntvalueout[65]),
         .I1(dq_idly_cntvalueout[56]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[47]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[38]),
+        .O(\s_axil_rdata[2]_i_10_n_0 ));
+  LUT6 #(
+    .INIT(64'h7770777707007777)) 
+    \s_axil_rdata[2]_i_3 
+       (.I0(\s_axil_rdata_reg[2] ),
+        .I1(s_axil_araddr[0]),
+        .I2(s_axil_araddr[4]),
+        .I3(\s_axil_rdata[2]_i_9_n_0 ),
+        .I4(s_axil_araddr[1]),
+        .I5(\s_axil_rdata[2]_i_10_n_0 ),
+        .O(\s_axil_araddr[2]_2 ));
+  LUT6 #(
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[2]_i_9 
+       (.I0(dq_idly_cntvalueout[29]),
+        .I1(dq_idly_cntvalueout[20]),
+        .I2(s_axil_araddr[3]),
+        .I3(dq_idly_cntvalueout[11]),
+        .I4(s_axil_araddr[2]),
+        .I5(dq_idly_cntvalueout[2]),
         .O(\s_axil_rdata[2]_i_9_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFFFFFFBF00FF00)) 
+    .INIT(64'hAAAAAAAAABAAAAAA)) 
     \s_axil_rdata[3]_i_10 
-       (.I0(s_axil_araddr[7]),
-        .I1(s_axil_araddr[6]),
-        .I2(s_axil_araddr[5]),
-        .I3(s_axil_araddr[4]),
-        .I4(rwds_idly_cntvalueout[3]),
-        .I5(\s_axil_rdata[3]_i_4_0 ),
+       (.I0(\s_axil_rdata[3]_i_12_n_0 ),
+        .I1(s_axil_araddr[3]),
+        .I2(s_axil_araddr[1]),
+        .I3(s_axil_araddr[7]),
+        .I4(\s_axil_rdata_reg[3]_i_7_0 ),
+        .I5(s_axil_araddr[6]),
         .O(\s_axil_rdata[3]_i_10_n_0 ));
-  LUT5 #(
-    .INIT(32'hEEE2FFFF)) 
+  LUT6 #(
+    .INIT(64'h0000000000008A00)) 
+    \s_axil_rdata[3]_i_12 
+       (.I0(\s_axil_rdata[3]_i_15_n_0 ),
+        .I1(rwds_idly_cntvalueout[3]),
+        .I2(s_axil_araddr[4]),
+        .I3(s_axil_araddr[1]),
+        .I4(s_axil_araddr[3]),
+        .I5(\s_axil_rdata[3]_i_10_0 ),
+        .O(\s_axil_rdata[3]_i_12_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFFFFFF000C00A0)) 
+    \s_axil_rdata[3]_i_15 
+       (.I0(odly_cntvalueout[3]),
+        .I1(\s_axil_rdata[5]_i_3_0 [2]),
+        .I2(s_axil_araddr[6]),
+        .I3(s_axil_araddr[7]),
+        .I4(s_axil_araddr[5]),
+        .I5(s_axil_araddr[4]),
+        .O(\s_axil_rdata[3]_i_15_n_0 ));
+  LUT6 #(
+    .INIT(64'h7707777770007777)) 
     \s_axil_rdata[3]_i_2 
-       (.I0(\s_axil_rdata[3]_i_4_n_0 ),
+       (.I0(\s_axil_rdata_reg[3]_0 ),
         .I1(s_axil_araddr[0]),
-        .I2(\s_axil_rdata_reg[3] ),
-        .I3(\s_axil_rdata_reg[3]_0 ),
-        .I4(\s_axil_rdata_reg[5] ),
-        .O(s_axil_araddr_2_sn_1));
-  LUT6 #(
-    .INIT(64'h0007777777077777)) 
-    \s_axil_rdata[3]_i_3 
-       (.I0(\s_axil_rdata_reg[3]_1 ),
-        .I1(s_axil_araddr[0]),
-        .I2(\s_axil_rdata[3]_i_8_n_0 ),
-        .I3(s_axil_araddr[4]),
+        .I2(s_axil_araddr[4]),
+        .I3(\s_axil_rdata[3]_i_5_n_0 ),
         .I4(s_axil_araddr[1]),
-        .I5(\s_axil_rdata[3]_i_9_n_0 ),
-        .O(\s_axil_araddr[2]_3 ));
+        .I5(\s_axil_rdata[3]_i_6_n_0 ),
+        .O(\s_axil_araddr[2]_1 ));
   LUT5 #(
-    .INIT(32'h0EEEEEEE)) 
-    \s_axil_rdata[3]_i_4 
-       (.I0(\s_axil_rdata[3]_i_10_n_0 ),
-        .I1(\s_axil_rdata[3]_i_2_1 ),
-        .I2(s_axil_araddr[7]),
-        .I3(\s_axil_rdata[3]_i_2_0 [3]),
-        .I4(\s_axil_rdata[3]_i_2_2 ),
-        .O(\s_axil_rdata[3]_i_4_n_0 ));
+    .INIT(32'h000000A2)) 
+    \s_axil_rdata[3]_i_3 
+       (.I0(\s_axil_rdata_reg[3]_i_7_n_0 ),
+        .I1(s_axil_araddr[7]),
+        .I2(Q[3]),
+        .I3(s_axil_araddr[2]),
+        .I4(\s_axil_rdata_reg[3] ),
+        .O(\s_axil_araddr[9] ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[3]_i_8 
-       (.I0(dq_idly_cntvalueout[30]),
-        .I1(dq_idly_cntvalueout[21]),
-        .I2(s_axil_araddr[3]),
-        .I3(dq_idly_cntvalueout[12]),
-        .I4(s_axil_araddr[2]),
-        .I5(dq_idly_cntvalueout[3]),
-        .O(\s_axil_rdata[3]_i_8_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[3]_i_9 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[3]_i_5 
        (.I0(dq_idly_cntvalueout[66]),
         .I1(dq_idly_cntvalueout[57]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[48]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[39]),
-        .O(\s_axil_rdata[3]_i_9_n_0 ));
+        .O(\s_axil_rdata[3]_i_5_n_0 ));
   LUT6 #(
-    .INIT(64'h0700777707777777)) 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[3]_i_6 
+       (.I0(dq_idly_cntvalueout[30]),
+        .I1(dq_idly_cntvalueout[21]),
+        .I2(s_axil_araddr[3]),
+        .I3(dq_idly_cntvalueout[12]),
+        .I4(s_axil_araddr[2]),
+        .I5(dq_idly_cntvalueout[3]),
+        .O(\s_axil_rdata[3]_i_6_n_0 ));
+  LUT6 #(
+    .INIT(64'h7707777770007777)) 
     \s_axil_rdata[4]_i_3 
        (.I0(\s_axil_rdata_reg[4] ),
         .I1(s_axil_araddr[0]),
-        .I2(\s_axil_rdata[4]_i_8_n_0 ),
-        .I3(s_axil_araddr[4]),
+        .I2(s_axil_araddr[4]),
+        .I3(\s_axil_rdata[4]_i_8_n_0 ),
         .I4(s_axil_araddr[1]),
         .I5(\s_axil_rdata[4]_i_9_n_0 ),
         .O(\s_axil_araddr[2]_0 ));
@@ -23876,10 +23837,10 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I2(s_axil_araddr[7]),
         .I3(s_axil_araddr[6]),
         .I4(s_axil_araddr[5]),
-        .I5(Q[1]),
-        .O(u_odelay_hb_ck_p_2));
+        .I5(\s_axil_rdata[5]_i_3_0 [3]),
+        .O(\g_io_delay.u_odelay_hb_ck_p_1 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[4]_i_8 
        (.I0(dq_idly_cntvalueout[67]),
         .I1(dq_idly_cntvalueout[58]),
@@ -23889,7 +23850,7 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I5(dq_idly_cntvalueout[40]),
         .O(\s_axil_rdata[4]_i_8_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[4]_i_9 
        (.I0(dq_idly_cntvalueout[31]),
         .I1(dq_idly_cntvalueout[22]),
@@ -23899,37 +23860,47 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I5(dq_idly_cntvalueout[4]),
         .O(\s_axil_rdata[4]_i_9_n_0 ));
   LUT6 #(
-    .INIT(64'hFFFCFFF7FFFFFFF7)) 
-    \s_axil_rdata[5]_i_11 
+    .INIT(64'hFFFDFCFFFFFDFFFF)) 
+    \s_axil_rdata[5]_i_10 
        (.I0(rwds_idly_cntvalueout[5]),
-        .I1(s_axil_araddr[1]),
-        .I2(s_axil_araddr[2]),
-        .I3(s_axil_araddr[3]),
-        .I4(s_axil_araddr[0]),
-        .I5(u_idelay_rwds_2[5]),
-        .O(\s_axil_rdata[5]_i_11_n_0 ));
-  LUT6 #(
-    .INIT(64'h0700777707777777)) 
-    \s_axil_rdata[5]_i_2 
-       (.I0(\s_axil_rdata_reg[5]_2 ),
-        .I1(s_axil_araddr[0]),
-        .I2(\s_axil_rdata[5]_i_5_n_0 ),
-        .I3(s_axil_araddr[4]),
+        .I1(s_axil_araddr[2]),
+        .I2(s_axil_araddr[3]),
+        .I3(s_axil_araddr[0]),
         .I4(s_axil_araddr[1]),
-        .I5(\s_axil_rdata[5]_i_6_n_0 ),
-        .O(\s_axil_araddr[2]_2 ));
+        .I5(CNTVALUEIN[5]),
+        .O(\s_axil_rdata[5]_i_10_n_0 ));
   LUT6 #(
-    .INIT(64'h202220222022A8AA)) 
+    .INIT(64'h0000EF4FEF4FEF4F)) 
+    \s_axil_rdata[5]_i_2 
+       (.I0(s_axil_araddr[4]),
+        .I1(\s_axil_rdata[5]_i_4_n_0 ),
+        .I2(s_axil_araddr[1]),
+        .I3(\s_axil_rdata[5]_i_5_n_0 ),
+        .I4(s_axil_araddr[0]),
+        .I5(\s_axil_rdata_reg[5]_1 ),
+        .O(\s_axil_araddr[6]_3 ));
+  LUT6 #(
+    .INIT(64'h1011101110115555)) 
     \s_axil_rdata[5]_i_3 
-       (.I0(\s_axil_rdata_reg[5] ),
+       (.I0(\s_axil_rdata_reg[3] ),
         .I1(s_axil_araddr[4]),
-        .I2(\s_axil_rdata_reg[5]_0 ),
-        .I3(\s_axil_rdata[5]_i_9_n_0 ),
-        .I4(\s_axil_rdata_reg[5]_1 ),
-        .I5(\s_axil_rdata[5]_i_11_n_0 ),
+        .I2(\s_axil_rdata_reg[5] ),
+        .I3(\s_axil_rdata[5]_i_8_n_0 ),
+        .I4(\s_axil_rdata_reg[5]_0 ),
+        .I5(\s_axil_rdata[5]_i_10_n_0 ),
         .O(s_axil_araddr_6_sn_1));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[5]_i_4 
+       (.I0(dq_idly_cntvalueout[32]),
+        .I1(dq_idly_cntvalueout[23]),
+        .I2(s_axil_araddr[3]),
+        .I3(dq_idly_cntvalueout[14]),
+        .I4(s_axil_araddr[2]),
+        .I5(dq_idly_cntvalueout[5]),
+        .O(\s_axil_rdata[5]_i_4_n_0 ));
+  LUT6 #(
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[5]_i_5 
        (.I0(dq_idly_cntvalueout[68]),
         .I1(dq_idly_cntvalueout[59]),
@@ -23939,103 +23910,97 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I5(dq_idly_cntvalueout[41]),
         .O(\s_axil_rdata[5]_i_5_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[5]_i_6 
-       (.I0(dq_idly_cntvalueout[32]),
-        .I1(dq_idly_cntvalueout[23]),
-        .I2(s_axil_araddr[3]),
-        .I3(dq_idly_cntvalueout[14]),
-        .I4(s_axil_araddr[2]),
-        .I5(dq_idly_cntvalueout[5]),
-        .O(\s_axil_rdata[5]_i_6_n_0 ));
-  LUT6 #(
     .INIT(64'hFFFAFBFFFFFFFBFF)) 
-    \s_axil_rdata[5]_i_9 
+    \s_axil_rdata[5]_i_8 
        (.I0(\s_axil_rdata[4]_i_2 ),
         .I1(odly_cntvalueout[5]),
         .I2(s_axil_araddr[7]),
         .I3(s_axil_araddr[6]),
         .I4(s_axil_araddr[5]),
-        .I5(Q[2]),
-        .O(\s_axil_rdata[5]_i_9_n_0 ));
-  LUT4 #(
-    .INIT(16'hE200)) 
-    \s_axil_rdata[6]_i_11 
-       (.I0(odly_cntvalueout[6]),
-        .I1(s_axil_araddr[4]),
-        .I2(rwds_idly_cntvalueout[6]),
-        .I3(s_axil_araddr[1]),
-        .O(u_odelay_hb_ck_p_1));
+        .I5(\s_axil_rdata[5]_i_3_0 [4]),
+        .O(\s_axil_rdata[5]_i_8_n_0 ));
   LUT6 #(
-    .INIT(64'h0000000D000D000D)) 
+    .INIT(64'h0000EF4FEF4FEF4F)) 
     \s_axil_rdata[6]_i_2 
-       (.I0(s_axil_araddr[1]),
+       (.I0(s_axil_araddr[4]),
         .I1(\s_axil_rdata[6]_i_4_n_0 ),
-        .I2(\s_axil_rdata_reg[6] ),
+        .I2(s_axil_araddr[1]),
         .I3(\s_axil_rdata[6]_i_5_n_0 ),
-        .I4(\s_axil_rdata_reg[6]_0 ),
-        .I5(s_axil_araddr[0]),
-        .O(\s_axil_araddr[3]_0 ));
+        .I4(s_axil_araddr[0]),
+        .I5(\s_axil_rdata_reg[6]_0 ),
+        .O(\s_axil_araddr[6]_2 ));
   LUT6 #(
-    .INIT(64'hC5F5C5C5C5F5F5F5)) 
+    .INIT(64'hA8A8A8888888A888)) 
+    \s_axil_rdata[6]_i_3 
+       (.I0(\s_axil_rdata_reg[8] ),
+        .I1(\s_axil_rdata_reg[6] ),
+        .I2(s_axil_araddr[1]),
+        .I3(odly_cntvalueout[6]),
+        .I4(s_axil_araddr[4]),
+        .I5(rwds_idly_cntvalueout[6]),
+        .O(s_axil_araddr_3_sn_1));
+  LUT6 #(
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[6]_i_4 
-       (.I0(\s_axil_rdata[6]_i_8_n_0 ),
-        .I1(s_axil_araddr[3]),
-        .I2(s_axil_araddr[4]),
-        .I3(dq_idly_cntvalueout[51]),
-        .I4(s_axil_araddr[2]),
-        .I5(dq_idly_cntvalueout[42]),
-        .O(\s_axil_rdata[6]_i_4_n_0 ));
-  LUT6 #(
-    .INIT(64'h8C80000000000000)) 
-    \s_axil_rdata[6]_i_5 
-       (.I0(dq_idly_cntvalueout[69]),
-        .I1(s_axil_araddr[3]),
-        .I2(s_axil_araddr[2]),
-        .I3(dq_idly_cntvalueout[60]),
-        .I4(s_axil_araddr[1]),
-        .I5(s_axil_araddr[4]),
-        .O(\s_axil_rdata[6]_i_5_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[6]_i_8 
        (.I0(dq_idly_cntvalueout[33]),
         .I1(dq_idly_cntvalueout[24]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[15]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[6]),
-        .O(\s_axil_rdata[6]_i_8_n_0 ));
-  LUT4 #(
-    .INIT(16'hE200)) 
-    \s_axil_rdata[7]_i_11 
-       (.I0(odly_cntvalueout[7]),
-        .I1(s_axil_araddr[4]),
-        .I2(rwds_idly_cntvalueout[7]),
-        .I3(s_axil_araddr[1]),
-        .O(u_odelay_hb_ck_p_0));
+        .O(\s_axil_rdata[6]_i_4_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[7]_i_7 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[6]_i_5 
+       (.I0(dq_idly_cntvalueout[69]),
+        .I1(dq_idly_cntvalueout[60]),
+        .I2(s_axil_araddr[3]),
+        .I3(dq_idly_cntvalueout[51]),
+        .I4(s_axil_araddr[2]),
+        .I5(dq_idly_cntvalueout[42]),
+        .O(\s_axil_rdata[6]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000EF4FEF4FEF4F)) 
+    \s_axil_rdata[7]_i_2 
+       (.I0(s_axil_araddr[4]),
+        .I1(\s_axil_rdata[7]_i_4_n_0 ),
+        .I2(s_axil_araddr[1]),
+        .I3(\s_axil_rdata[7]_i_5_n_0 ),
+        .I4(s_axil_araddr[0]),
+        .I5(\s_axil_rdata_reg[7]_0 ),
+        .O(\s_axil_araddr[6]_1 ));
+  LUT6 #(
+    .INIT(64'hA8A8A8888888A888)) 
+    \s_axil_rdata[7]_i_3 
+       (.I0(\s_axil_rdata_reg[8] ),
+        .I1(\s_axil_rdata_reg[7] ),
+        .I2(s_axil_araddr[1]),
+        .I3(odly_cntvalueout[7]),
+        .I4(s_axil_araddr[4]),
+        .I5(rwds_idly_cntvalueout[7]),
+        .O(\s_axil_araddr[3]_0 ));
+  LUT6 #(
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[7]_i_4 
        (.I0(dq_idly_cntvalueout[34]),
         .I1(dq_idly_cntvalueout[25]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[16]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[7]),
-        .O(\s_axil_rdata[7]_i_7_n_0 ));
+        .O(\s_axil_rdata[7]_i_4_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \s_axil_rdata[7]_i_8 
+    .INIT(64'h505F3030505F3F3F)) 
+    \s_axil_rdata[7]_i_5 
        (.I0(dq_idly_cntvalueout[70]),
         .I1(dq_idly_cntvalueout[61]),
         .I2(s_axil_araddr[3]),
         .I3(dq_idly_cntvalueout[52]),
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[43]),
-        .O(\s_axil_rdata[7]_i_8_n_0 ));
+        .O(\s_axil_rdata[7]_i_5_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[8]_i_10 
        (.I0(dq_idly_cntvalueout[35]),
         .I1(dq_idly_cntvalueout[26]),
@@ -24044,36 +24009,28 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .I4(s_axil_araddr[2]),
         .I5(dq_idly_cntvalueout[8]),
         .O(\s_axil_rdata[8]_i_10_n_0 ));
-  LUT5 #(
-    .INIT(32'hFEEEFFFF)) 
-    \s_axil_rdata[8]_i_2 
-       (.I0(\s_axil_rdata[8]_i_6_n_0 ),
-        .I1(\s_axil_rdata_reg[8] ),
-        .I2(s_axil_araddr[1]),
-        .I3(s_axil_araddr[0]),
-        .I4(\s_axil_rdata_reg[8]_0 ),
-        .O(s_axil_araddr_3_sn_1));
   LUT6 #(
-    .INIT(64'h0700777707777777)) 
+    .INIT(64'h7707777770007777)) 
     \s_axil_rdata[8]_i_3 
        (.I0(\s_axil_rdata_reg[8]_1 ),
         .I1(s_axil_araddr[0]),
-        .I2(\s_axil_rdata[8]_i_9_n_0 ),
-        .I3(s_axil_araddr[4]),
+        .I2(s_axil_araddr[4]),
+        .I3(\s_axil_rdata[8]_i_9_n_0 ),
         .I4(s_axil_araddr[1]),
         .I5(\s_axil_rdata[8]_i_10_n_0 ),
-        .O(\s_axil_araddr[2]_1 ));
-  LUT5 #(
-    .INIT(32'h000047FF)) 
-    \s_axil_rdata[8]_i_6 
-       (.I0(rwds_idly_cntvalueout[8]),
-        .I1(s_axil_araddr[4]),
-        .I2(odly_cntvalueout[8]),
-        .I3(s_axil_araddr[1]),
-        .I4(\s_axil_rdata[8]_i_2_0 ),
-        .O(\s_axil_rdata[8]_i_6_n_0 ));
+        .O(s_axil_araddr_2_sn_1));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    .INIT(64'hFEAEAAAA00000000)) 
+    \s_axil_rdata[8]_i_5 
+       (.I0(\s_axil_rdata_reg[8]_0 ),
+        .I1(odly_cntvalueout[8]),
+        .I2(s_axil_araddr[4]),
+        .I3(rwds_idly_cntvalueout[8]),
+        .I4(s_axil_araddr[1]),
+        .I5(\s_axil_rdata_reg[8] ),
+        .O(\g_io_delay.u_odelay_hb_ck_p_0 ));
+  LUT6 #(
+    .INIT(64'h505F3030505F3F3F)) 
     \s_axil_rdata[8]_i_9 
        (.I0(dq_idly_cntvalueout[71]),
         .I1(dq_idly_cntvalueout[62]),
@@ -24085,18 +24042,23 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
   MUXF7 \s_axil_rdata_reg[0]_i_6 
        (.I0(\s_axil_rdata[0]_i_14_n_0 ),
         .I1(\s_axil_rdata[0]_i_15_n_0 ),
-        .O(\s_axil_araddr[6]_2 ),
+        .O(\s_axil_araddr[6]_5 ),
         .S(s_axil_araddr[4]));
-  MUXF7 \s_axil_rdata_reg[1]_i_4 
-       (.I0(\s_axil_rdata[1]_i_7_n_0 ),
-        .I1(\s_axil_rdata[1]_i_8_n_0 ),
-        .O(\s_axil_araddr[6]_1 ),
+  MUXF7 \s_axil_rdata_reg[1]_i_6 
+       (.I0(\s_axil_rdata[1]_i_12_n_0 ),
+        .I1(\s_axil_rdata[1]_i_13_n_0 ),
+        .O(\s_axil_araddr[6]_4 ),
         .S(s_axil_araddr[4]));
-  MUXF7 \s_axil_rdata_reg[7]_i_4 
-       (.I0(\s_axil_rdata[7]_i_7_n_0 ),
-        .I1(\s_axil_rdata[7]_i_8_n_0 ),
-        .O(\s_axil_araddr[6]_0 ),
-        .S(s_axil_araddr[4]));
+  MUXF7 \s_axil_rdata_reg[1]_i_7 
+       (.I0(\s_axil_rdata[1]_i_14_n_0 ),
+        .I1(\s_axil_rdata[1]_i_3_0 ),
+        .O(\s_axil_rdata_reg[1]_i_7_n_0 ),
+        .S(s_axil_araddr[0]));
+  MUXF7 \s_axil_rdata_reg[3]_i_7 
+       (.I0(\s_axil_rdata[3]_i_10_n_0 ),
+        .I1(\s_axil_rdata[3]_i_3_0 ),
+        .O(\s_axil_rdata_reg[3]_i_7_n_0 ),
+        .S(s_axil_araddr[0]));
   (* BOX_TYPE = "PRIMITIVE" *) 
   IDDRE1 #(
     .DDR_CLK_EDGE("OPPOSITE_EDGE"),
@@ -24110,43 +24072,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .Q2(rwds_q2),
         .R(i_iddre1_rst));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  (* OPT_MODIFIED = "MLO" *) 
-  IDELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_SRC("IDATAIN"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(10),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .LOOPBACK("FALSE"),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    u_idelay_rwds
-       (.CASC_IN(1'b0),
-        .CASC_OUT(NLW_u_idelay_rwds_CASC_OUT_UNCONNECTED),
-        .CASC_RETURN(NLW_u_idelay_rwds_CASC_RETURN_UNCONNECTED),
-        .CE(rwds_idly_ce),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(u_idelay_rwds_2),
-        .CNTVALUEOUT({rwds_idly_cntvalueout[8:5],u_idelay_rwds_0,rwds_idly_cntvalueout[3:0]}),
-        .DATAIN(1'b0),
-        .DATAOUT(rwds_i_delayed),
-        .EN_VTC(rwds_idly_en_vtc),
-        .IDATAIN(rwds_i),
-        .INC(rwds_idly_inc),
-        .LOAD(1'b0),
-        .RST(\s_axil_rdata[3]_i_2_0 [2]));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  IDELAYCTRL #(
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS")) 
-    u_idelayctrl
-       (.RDY(idelayctrl_rdy),
-        .REFCLK(i_ref_clk_300),
-        .RST(idelayctrl_rst_ref_sync));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   IOBUF #(
     .IOSTANDARD("DEFAULT")) 
     u_iobuf_rwds
@@ -24154,13 +24079,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .IO(io_hb_rwds),
         .O(rwds_i),
         .T(o_dbg_i_rwds_t));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  (* CAPACITANCE = "DONT_CARE" *) 
-  OBUF #(
-    .IOSTANDARD("DEFAULT")) 
-    u_obuf_ck_p
-       (.I(hb_ck_fwd_delayed),
-        .O(o_hb_ck_p));
   (* BOX_TYPE = "PRIMITIVE" *) 
   (* XILINX_LEGACY_PRIM = "ODDRE1" *) 
   (* XILINX_TRANSFORM_PINMAP = "C:CLK SR:RST GND:T Q:OQ D1:D[0] D2:D[4]" *) 
@@ -24195,32 +24113,6 @@ module design_1_hyperbus_controller_0_0_hyperbus_phy_xilinx_usplus
         .RST(SR),
         .T(1'b0),
         .T_OUT(NLW_u_oddr_rwds_T_OUT_UNCONNECTED));
-  (* BOX_TYPE = "PRIMITIVE" *) 
-  ODELAYE3 #(
-    .CASCADE("NONE"),
-    .DELAY_FORMAT("TIME"),
-    .DELAY_TYPE("VARIABLE"),
-    .DELAY_VALUE(34),
-    .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b0),
-    .REFCLK_FREQUENCY(300.000000),
-    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-    .SIM_VERSION(2.000000),
-    .UPDATE_MODE("ASYNC")) 
-    u_odelay_hb_ck_p
-       (.CASC_IN(1'b0),
-        .CASC_OUT(NLW_u_odelay_hb_ck_p_CASC_OUT_UNCONNECTED),
-        .CASC_RETURN(1'b0),
-        .CE(odly_ce),
-        .CLK(i_axi_aclk),
-        .CNTVALUEIN(CNTVALUEIN),
-        .CNTVALUEOUT({odly_cntvalueout[8:4],CNTVALUEOUT[1],odly_cntvalueout[2],CNTVALUEOUT[0],odly_cntvalueout[0]}),
-        .DATAOUT(hb_ck_fwd_delayed),
-        .EN_VTC(odly_en_vtc),
-        .INC(odly_inc),
-        .LOAD(1'b0),
-        .ODATAIN(hb_ck_fwd),
-        .RST(\s_axil_rdata[3]_i_2_0 [1]));
 endmodule
 
 (* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "1" *) (* ORIG_REF_NAME = "xpm_cdc_gray" *) 
@@ -24368,28 +24260,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray
        (.I0(\dest_graysync_ff[1] [3]),
         .I1(\dest_graysync_ff[1] [4]),
         .O(\^dest_out_bin [3]));
-  (* SOFT_HLUTNM = "soft_lutpair204" *) 
+  (* SOFT_HLUTNM = "soft_lutpair205" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair204" *) 
+  (* SOFT_HLUTNM = "soft_lutpair205" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair205" *) 
+  (* SOFT_HLUTNM = "soft_lutpair206" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair205" *) 
+  (* SOFT_HLUTNM = "soft_lutpair206" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -24573,28 +24465,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__1
        (.I0(\dest_graysync_ff[1] [3]),
         .I1(\dest_graysync_ff[1] [4]),
         .O(\^dest_out_bin [3]));
-  (* SOFT_HLUTNM = "soft_lutpair121" *) 
+  (* SOFT_HLUTNM = "soft_lutpair122" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair121" *) 
+  (* SOFT_HLUTNM = "soft_lutpair122" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair122" *) 
+  (* SOFT_HLUTNM = "soft_lutpair123" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair122" *) 
+  (* SOFT_HLUTNM = "soft_lutpair123" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -24778,28 +24670,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__2
        (.I0(\dest_graysync_ff[1] [3]),
         .I1(\dest_graysync_ff[1] [4]),
         .O(\^dest_out_bin [3]));
-  (* SOFT_HLUTNM = "soft_lutpair125" *) 
+  (* SOFT_HLUTNM = "soft_lutpair126" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair125" *) 
+  (* SOFT_HLUTNM = "soft_lutpair126" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair126" *) 
+  (* SOFT_HLUTNM = "soft_lutpair127" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair126" *) 
+  (* SOFT_HLUTNM = "soft_lutpair127" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -24983,28 +24875,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__3
        (.I0(\dest_graysync_ff[1] [3]),
         .I1(\dest_graysync_ff[1] [4]),
         .O(\^dest_out_bin [3]));
-  (* SOFT_HLUTNM = "soft_lutpair200" *) 
+  (* SOFT_HLUTNM = "soft_lutpair201" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair200" *) 
+  (* SOFT_HLUTNM = "soft_lutpair201" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair201" *) 
+  (* SOFT_HLUTNM = "soft_lutpair202" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair201" *) 
+  (* SOFT_HLUTNM = "soft_lutpair202" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -25292,28 +25184,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized0
         .D(\dest_graysync_ff[2] [5]),
         .Q(\dest_graysync_ff[3] [5]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair123" *) 
+  (* SOFT_HLUTNM = "soft_lutpair124" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair123" *) 
+  (* SOFT_HLUTNM = "soft_lutpair124" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair124" *) 
+  (* SOFT_HLUTNM = "soft_lutpair125" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair124" *) 
+  (* SOFT_HLUTNM = "soft_lutpair125" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -25503,28 +25395,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized1
         .D(\dest_graysync_ff[0] [5]),
         .Q(\dest_graysync_ff[1] [5]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair206" *) 
+  (* SOFT_HLUTNM = "soft_lutpair207" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair206" *) 
+  (* SOFT_HLUTNM = "soft_lutpair207" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair207" *) 
+  (* SOFT_HLUTNM = "soft_lutpair208" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair207" *) 
+  (* SOFT_HLUTNM = "soft_lutpair208" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -25714,28 +25606,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized1__1
         .D(\dest_graysync_ff[0] [5]),
         .Q(\dest_graysync_ff[1] [5]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair127" *) 
+  (* SOFT_HLUTNM = "soft_lutpair128" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair127" *) 
+  (* SOFT_HLUTNM = "soft_lutpair128" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair128" *) 
+  (* SOFT_HLUTNM = "soft_lutpair129" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair128" *) 
+  (* SOFT_HLUTNM = "soft_lutpair129" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -25925,28 +25817,28 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized1__2
         .D(\dest_graysync_ff[0] [5]),
         .Q(\dest_graysync_ff[1] [5]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair202" *) 
+  (* SOFT_HLUTNM = "soft_lutpair203" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair202" *) 
+  (* SOFT_HLUTNM = "soft_lutpair203" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair203" *) 
+  (* SOFT_HLUTNM = "soft_lutpair204" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair203" *) 
+  (* SOFT_HLUTNM = "soft_lutpair204" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
@@ -26219,42 +26111,42 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized2
        (.I0(\dest_graysync_ff[1] [6]),
         .I1(\dest_graysync_ff[1] [7]),
         .O(\^dest_out_bin [6]));
-  (* SOFT_HLUTNM = "soft_lutpair179" *) 
+  (* SOFT_HLUTNM = "soft_lutpair180" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair179" *) 
+  (* SOFT_HLUTNM = "soft_lutpair180" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair180" *) 
+  (* SOFT_HLUTNM = "soft_lutpair181" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair180" *) 
+  (* SOFT_HLUTNM = "soft_lutpair181" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair181" *) 
+  (* SOFT_HLUTNM = "soft_lutpair182" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair181" *) 
+  (* SOFT_HLUTNM = "soft_lutpair182" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
@@ -26539,42 +26431,42 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized2__1
        (.I0(\dest_graysync_ff[1] [6]),
         .I1(\dest_graysync_ff[1] [7]),
         .O(\^dest_out_bin [6]));
-  (* SOFT_HLUTNM = "soft_lutpair143" *) 
+  (* SOFT_HLUTNM = "soft_lutpair144" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair143" *) 
+  (* SOFT_HLUTNM = "soft_lutpair144" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair144" *) 
+  (* SOFT_HLUTNM = "soft_lutpair145" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair144" *) 
+  (* SOFT_HLUTNM = "soft_lutpair145" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair145" *) 
+  (* SOFT_HLUTNM = "soft_lutpair146" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair145" *) 
+  (* SOFT_HLUTNM = "soft_lutpair146" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
@@ -26859,42 +26751,42 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized2__2
        (.I0(\dest_graysync_ff[1] [6]),
         .I1(\dest_graysync_ff[1] [7]),
         .O(\^dest_out_bin [6]));
-  (* SOFT_HLUTNM = "soft_lutpair150" *) 
+  (* SOFT_HLUTNM = "soft_lutpair151" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair150" *) 
+  (* SOFT_HLUTNM = "soft_lutpair151" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair151" *) 
+  (* SOFT_HLUTNM = "soft_lutpair152" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair151" *) 
+  (* SOFT_HLUTNM = "soft_lutpair152" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair152" *) 
+  (* SOFT_HLUTNM = "soft_lutpair153" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair152" *) 
+  (* SOFT_HLUTNM = "soft_lutpair153" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
@@ -27179,42 +27071,42 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized2__3
        (.I0(\dest_graysync_ff[1] [6]),
         .I1(\dest_graysync_ff[1] [7]),
         .O(\^dest_out_bin [6]));
-  (* SOFT_HLUTNM = "soft_lutpair172" *) 
+  (* SOFT_HLUTNM = "soft_lutpair173" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair172" *) 
+  (* SOFT_HLUTNM = "soft_lutpair173" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair173" *) 
+  (* SOFT_HLUTNM = "soft_lutpair174" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair173" *) 
+  (* SOFT_HLUTNM = "soft_lutpair174" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair174" *) 
+  (* SOFT_HLUTNM = "soft_lutpair175" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair174" *) 
+  (* SOFT_HLUTNM = "soft_lutpair175" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
@@ -27637,56 +27529,56 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized3
         .D(\dest_graysync_ff[2] [8]),
         .Q(\dest_graysync_ff[3] [8]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair146" *) 
+  (* SOFT_HLUTNM = "soft_lutpair147" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair146" *) 
+  (* SOFT_HLUTNM = "soft_lutpair147" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair147" *) 
+  (* SOFT_HLUTNM = "soft_lutpair148" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair147" *) 
+  (* SOFT_HLUTNM = "soft_lutpair148" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair148" *) 
+  (* SOFT_HLUTNM = "soft_lutpair149" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair148" *) 
+  (* SOFT_HLUTNM = "soft_lutpair149" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
        (.I0(src_in_bin[6]),
         .I1(src_in_bin[5]),
         .O(gray_enc[5]));
-  (* SOFT_HLUTNM = "soft_lutpair149" *) 
+  (* SOFT_HLUTNM = "soft_lutpair150" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[6]_i_1 
        (.I0(src_in_bin[7]),
         .I1(src_in_bin[6]),
         .O(gray_enc[6]));
-  (* SOFT_HLUTNM = "soft_lutpair149" *) 
+  (* SOFT_HLUTNM = "soft_lutpair150" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[7]_i_1 
@@ -27945,56 +27837,56 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized4
         .D(\dest_graysync_ff[0] [8]),
         .Q(\dest_graysync_ff[1] [8]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair182" *) 
+  (* SOFT_HLUTNM = "soft_lutpair183" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair182" *) 
+  (* SOFT_HLUTNM = "soft_lutpair183" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair183" *) 
+  (* SOFT_HLUTNM = "soft_lutpair184" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair183" *) 
+  (* SOFT_HLUTNM = "soft_lutpair184" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair184" *) 
+  (* SOFT_HLUTNM = "soft_lutpair185" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair184" *) 
+  (* SOFT_HLUTNM = "soft_lutpair185" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
        (.I0(src_in_bin[6]),
         .I1(src_in_bin[5]),
         .O(gray_enc[5]));
-  (* SOFT_HLUTNM = "soft_lutpair185" *) 
+  (* SOFT_HLUTNM = "soft_lutpair186" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[6]_i_1 
        (.I0(src_in_bin[7]),
         .I1(src_in_bin[6]),
         .O(gray_enc[6]));
-  (* SOFT_HLUTNM = "soft_lutpair185" *) 
+  (* SOFT_HLUTNM = "soft_lutpair186" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[7]_i_1 
@@ -28253,56 +28145,56 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized4__1
         .D(\dest_graysync_ff[0] [8]),
         .Q(\dest_graysync_ff[1] [8]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair153" *) 
+  (* SOFT_HLUTNM = "soft_lutpair154" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair153" *) 
+  (* SOFT_HLUTNM = "soft_lutpair154" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair154" *) 
+  (* SOFT_HLUTNM = "soft_lutpair155" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair154" *) 
+  (* SOFT_HLUTNM = "soft_lutpair155" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair155" *) 
+  (* SOFT_HLUTNM = "soft_lutpair156" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair155" *) 
+  (* SOFT_HLUTNM = "soft_lutpair156" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
        (.I0(src_in_bin[6]),
         .I1(src_in_bin[5]),
         .O(gray_enc[5]));
-  (* SOFT_HLUTNM = "soft_lutpair156" *) 
+  (* SOFT_HLUTNM = "soft_lutpair157" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[6]_i_1 
        (.I0(src_in_bin[7]),
         .I1(src_in_bin[6]),
         .O(gray_enc[6]));
-  (* SOFT_HLUTNM = "soft_lutpair156" *) 
+  (* SOFT_HLUTNM = "soft_lutpair157" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[7]_i_1 
@@ -28561,56 +28453,56 @@ module design_1_hyperbus_controller_0_0_xpm_cdc_gray__parameterized4__2
         .D(\dest_graysync_ff[0] [8]),
         .Q(\dest_graysync_ff[1] [8]),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair175" *) 
+  (* SOFT_HLUTNM = "soft_lutpair176" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[0]_i_1 
        (.I0(src_in_bin[1]),
         .I1(src_in_bin[0]),
         .O(gray_enc[0]));
-  (* SOFT_HLUTNM = "soft_lutpair175" *) 
+  (* SOFT_HLUTNM = "soft_lutpair176" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[1]_i_1 
        (.I0(src_in_bin[2]),
         .I1(src_in_bin[1]),
         .O(gray_enc[1]));
-  (* SOFT_HLUTNM = "soft_lutpair176" *) 
+  (* SOFT_HLUTNM = "soft_lutpair177" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[2]_i_1 
        (.I0(src_in_bin[3]),
         .I1(src_in_bin[2]),
         .O(gray_enc[2]));
-  (* SOFT_HLUTNM = "soft_lutpair176" *) 
+  (* SOFT_HLUTNM = "soft_lutpair177" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[3]_i_1 
        (.I0(src_in_bin[4]),
         .I1(src_in_bin[3]),
         .O(gray_enc[3]));
-  (* SOFT_HLUTNM = "soft_lutpair177" *) 
+  (* SOFT_HLUTNM = "soft_lutpair178" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[4]_i_1 
        (.I0(src_in_bin[5]),
         .I1(src_in_bin[4]),
         .O(gray_enc[4]));
-  (* SOFT_HLUTNM = "soft_lutpair177" *) 
+  (* SOFT_HLUTNM = "soft_lutpair178" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[5]_i_1 
        (.I0(src_in_bin[6]),
         .I1(src_in_bin[5]),
         .O(gray_enc[5]));
-  (* SOFT_HLUTNM = "soft_lutpair178" *) 
+  (* SOFT_HLUTNM = "soft_lutpair179" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[6]_i_1 
        (.I0(src_in_bin[7]),
         .I1(src_in_bin[6]),
         .O(gray_enc[6]));
-  (* SOFT_HLUTNM = "soft_lutpair178" *) 
+  (* SOFT_HLUTNM = "soft_lutpair179" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \src_gray_ff[7]_i_1 
@@ -29245,20 +29137,20 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0
   wire rd_clk;
   wire rd_en;
 
-  (* SOFT_HLUTNM = "soft_lutpair209" *) 
+  (* SOFT_HLUTNM = "soft_lutpair210" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \count_value_i[0]_i_1__3 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair209" *) 
+  (* SOFT_HLUTNM = "soft_lutpair210" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__3 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair208" *) 
+  (* SOFT_HLUTNM = "soft_lutpair209" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__3 
@@ -29266,7 +29158,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0
         .I1(Q[0]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair208" *) 
+  (* SOFT_HLUTNM = "soft_lutpair209" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__3 
@@ -29405,14 +29297,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_1
     \count_value_i[0]_i_1__1 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair214" *) 
+  (* SOFT_HLUTNM = "soft_lutpair215" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__1 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair214" *) 
+  (* SOFT_HLUTNM = "soft_lutpair215" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__1 
@@ -29420,7 +29312,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_1
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair213" *) 
+  (* SOFT_HLUTNM = "soft_lutpair214" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__1 
@@ -29429,7 +29321,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_1
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair213" *) 
+  (* SOFT_HLUTNM = "soft_lutpair214" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__1 
@@ -29554,7 +29446,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
   wire [1:0]\src_gray_ff_reg[5] ;
   wire [5:0]src_in_bin;
 
-  (* SOFT_HLUTNM = "soft_lutpair132" *) 
+  (* SOFT_HLUTNM = "soft_lutpair133" *) 
   LUT4 #(
     .INIT(16'h02FD)) 
     \count_value_i[0]_i_1__4 
@@ -29563,7 +29455,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I2(rd_en),
         .I3(Q[0]),
         .O(\count_value_i[0]_i_1__4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair132" *) 
+  (* SOFT_HLUTNM = "soft_lutpair133" *) 
   LUT5 #(
     .INIT(32'h10FFEF00)) 
     \count_value_i[1]_i_1__4 
@@ -29573,7 +29465,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I3(Q[0]),
         .I4(Q[1]),
         .O(\count_value_i[1]_i_1__4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair133" *) 
+  (* SOFT_HLUTNM = "soft_lutpair134" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__3 
@@ -29581,7 +29473,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair131" *) 
+  (* SOFT_HLUTNM = "soft_lutpair132" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__3 
@@ -29590,7 +29482,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I2(Q[0]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair131" *) 
+  (* SOFT_HLUTNM = "soft_lutpair132" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__3 
@@ -29667,7 +29559,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .D(\count_value_i[5]_i_1__0_n_0 ),
         .Q(\count_value_i_reg_n_0_[5] ),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair130" *) 
+  (* SOFT_HLUTNM = "soft_lutpair131" *) 
   LUT5 #(
     .INIT(32'hA9A9A96A)) 
     \gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_1 
@@ -29677,7 +29569,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I3(\src_gray_ff_reg[5] [0]),
         .I4(\src_gray_ff_reg[5] [1]),
         .O(src_in_bin[5]));
-  (* SOFT_HLUTNM = "soft_lutpair130" *) 
+  (* SOFT_HLUTNM = "soft_lutpair131" *) 
   LUT4 #(
     .INIT(16'hA956)) 
     \gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_2 
@@ -29696,7 +29588,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I4(\src_gray_ff_reg[5] [0]),
         .I5(\src_gray_ff_reg[5] [1]),
         .O(src_in_bin[3]));
-  (* SOFT_HLUTNM = "soft_lutpair129" *) 
+  (* SOFT_HLUTNM = "soft_lutpair130" *) 
   LUT5 #(
     .INIT(32'h9599A9AA)) 
     \gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_4 
@@ -29706,7 +29598,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I3(\src_gray_ff_reg[5] [0]),
         .I4(\src_gray_ff_reg[5] [1]),
         .O(src_in_bin[2]));
-  (* SOFT_HLUTNM = "soft_lutpair129" *) 
+  (* SOFT_HLUTNM = "soft_lutpair130" *) 
   LUT4 #(
     .INIT(16'h4BB4)) 
     \gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_5 
@@ -29715,7 +29607,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_20
         .I2(\src_gray_ff_reg[5] [1]),
         .I3(Q[1]),
         .O(src_in_bin[1]));
-  (* SOFT_HLUTNM = "soft_lutpair133" *) 
+  (* SOFT_HLUTNM = "soft_lutpair134" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_6 
@@ -29789,14 +29681,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_23
     \count_value_i[0]_i_1__1 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair136" *) 
+  (* SOFT_HLUTNM = "soft_lutpair137" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__1 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair136" *) 
+  (* SOFT_HLUTNM = "soft_lutpair137" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__1 
@@ -29804,7 +29696,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_23
         .I1(Q[0]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair135" *) 
+  (* SOFT_HLUTNM = "soft_lutpair136" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__1 
@@ -29813,7 +29705,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized0_23
         .I2(Q[1]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair135" *) 
+  (* SOFT_HLUTNM = "soft_lutpair136" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__1 
@@ -29944,14 +29836,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1
     \count_value_i[0]_i_1__2 
        (.I0(\count_value_i_reg_n_0_[0] ),
         .O(\count_value_i[0]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair212" *) 
+  (* SOFT_HLUTNM = "soft_lutpair213" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__2 
        (.I0(\count_value_i_reg_n_0_[0] ),
         .I1(\count_value_i_reg_n_0_[1] ),
         .O(\count_value_i[1]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair211" *) 
+  (* SOFT_HLUTNM = "soft_lutpair212" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__2 
@@ -29959,7 +29851,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1
         .I1(\count_value_i_reg_n_0_[0] ),
         .I2(\count_value_i_reg_n_0_[2] ),
         .O(\count_value_i[2]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair212" *) 
+  (* SOFT_HLUTNM = "soft_lutpair213" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__2 
@@ -29978,7 +29870,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1
         .I4(\count_value_i_reg_n_0_[2] ),
         .I5(\count_value_i_reg_n_0_[4] ),
         .O(\count_value_i[4]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair210" *) 
+  (* SOFT_HLUTNM = "soft_lutpair211" *) 
   LUT2 #(
     .INIT(4'hB)) 
     \count_value_i[4]_i_2 
@@ -30034,7 +29926,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1
         .I3(\gen_pf_ic_rc.ram_empty_i_i_5_n_0 ),
         .I4(\gen_pf_ic_rc.ram_empty_i_i_6_n_0 ),
         .O(empty_i0));
-  (* SOFT_HLUTNM = "soft_lutpair210" *) 
+  (* SOFT_HLUTNM = "soft_lutpair211" *) 
   LUT4 #(
     .INIT(16'h2002)) 
     \gen_pf_ic_rc.ram_empty_i_i_4 
@@ -30043,7 +29935,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1
         .I2(\count_value_i_reg_n_0_[0] ),
         .I3(Q[0]),
         .O(\gen_pf_ic_rc.ram_empty_i_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair211" *) 
+  (* SOFT_HLUTNM = "soft_lutpair212" *) 
   LUT4 #(
     .INIT(16'h9009)) 
     \gen_pf_ic_rc.ram_empty_i_i_5 
@@ -30095,14 +29987,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_2
     \count_value_i[0]_i_1__0 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair216" *) 
+  (* SOFT_HLUTNM = "soft_lutpair217" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__0 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair216" *) 
+  (* SOFT_HLUTNM = "soft_lutpair217" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__0 
@@ -30110,7 +30002,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_2
         .I1(Q[1]),
         .I2(count_value_i[2]),
         .O(\count_value_i[2]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair215" *) 
+  (* SOFT_HLUTNM = "soft_lutpair216" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__0 
@@ -30119,7 +30011,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_2
         .I2(Q[0]),
         .I3(count_value_i[3]),
         .O(\count_value_i[3]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair215" *) 
+  (* SOFT_HLUTNM = "soft_lutpair216" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__0 
@@ -30241,7 +30133,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_21
         .I1(Q[1]),
         .I2(\count_value_i_reg_n_0_[2] ),
         .O(\count_value_i[2]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair134" *) 
+  (* SOFT_HLUTNM = "soft_lutpair135" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__2 
@@ -30250,7 +30142,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_21
         .I2(Q[0]),
         .I3(\count_value_i_reg_n_0_[3] ),
         .O(\count_value_i[3]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair134" *) 
+  (* SOFT_HLUTNM = "soft_lutpair135" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__2 
@@ -30359,14 +30251,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_24
     \count_value_i[0]_i_1__0 
        (.I0(wr_pntr_plus1_pf[1]),
         .O(\count_value_i[0]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair138" *) 
+  (* SOFT_HLUTNM = "soft_lutpair139" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__0 
        (.I0(wr_pntr_plus1_pf[1]),
         .I1(wr_pntr_plus1_pf[2]),
         .O(\count_value_i[1]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair138" *) 
+  (* SOFT_HLUTNM = "soft_lutpair139" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__0 
@@ -30374,7 +30266,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_24
         .I1(wr_pntr_plus1_pf[1]),
         .I2(wr_pntr_plus1_pf[3]),
         .O(\count_value_i[2]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair137" *) 
+  (* SOFT_HLUTNM = "soft_lutpair138" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__0 
@@ -30383,7 +30275,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized1_24
         .I2(wr_pntr_plus1_pf[3]),
         .I3(Q[0]),
         .O(\count_value_i[3]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair137" *) 
+  (* SOFT_HLUTNM = "soft_lutpair138" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__0 
@@ -30513,7 +30405,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2
   wire wr_clk;
   wire wrst_busy;
 
-  (* SOFT_HLUTNM = "soft_lutpair218" *) 
+  (* SOFT_HLUTNM = "soft_lutpair219" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \count_value_i[0]_i_1 
@@ -30525,7 +30417,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair218" *) 
+  (* SOFT_HLUTNM = "soft_lutpair219" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1 
@@ -30533,7 +30425,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2
         .I1(Q[1]),
         .I2(\count_value_i_reg_n_0_[2] ),
         .O(\count_value_i[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair217" *) 
+  (* SOFT_HLUTNM = "soft_lutpair218" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1 
@@ -30542,7 +30434,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2
         .I2(Q[0]),
         .I3(\count_value_i_reg_n_0_[3] ),
         .O(\count_value_i[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair217" *) 
+  (* SOFT_HLUTNM = "soft_lutpair218" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1 
@@ -30634,7 +30526,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2_25
   wire wr_clk;
   wire wrst_busy;
 
-  (* SOFT_HLUTNM = "soft_lutpair140" *) 
+  (* SOFT_HLUTNM = "soft_lutpair141" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \count_value_i[0]_i_1 
@@ -30646,7 +30538,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2_25
        (.I0(\count_value_i_reg_n_0_[0] ),
         .I1(\count_value_i_reg_n_0_[1] ),
         .O(\count_value_i[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair140" *) 
+  (* SOFT_HLUTNM = "soft_lutpair141" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1 
@@ -30654,7 +30546,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2_25
         .I1(\count_value_i_reg_n_0_[0] ),
         .I2(\count_value_i_reg_n_0_[2] ),
         .O(\count_value_i[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair139" *) 
+  (* SOFT_HLUTNM = "soft_lutpair140" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1 
@@ -30663,7 +30555,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized2_25
         .I2(\count_value_i_reg_n_0_[2] ),
         .I3(\count_value_i_reg[4]_0 [0]),
         .O(\count_value_i[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair139" *) 
+  (* SOFT_HLUTNM = "soft_lutpair140" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1 
@@ -30762,14 +30654,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3
     \count_value_i[0]_i_1__3 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair188" *) 
+  (* SOFT_HLUTNM = "soft_lutpair189" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__3 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair188" *) 
+  (* SOFT_HLUTNM = "soft_lutpair189" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__3 
@@ -30777,7 +30669,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair187" *) 
+  (* SOFT_HLUTNM = "soft_lutpair188" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__3 
@@ -30786,7 +30678,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair187" *) 
+  (* SOFT_HLUTNM = "soft_lutpair188" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__3 
@@ -30803,7 +30695,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3
         .I1(Q[4]),
         .I2(Q[5]),
         .O(\count_value_i[5]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair186" *) 
+  (* SOFT_HLUTNM = "soft_lutpair187" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[6]_i_1__3 
@@ -30812,7 +30704,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3
         .I2(Q[5]),
         .I3(Q[6]),
         .O(\count_value_i[6]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair186" *) 
+  (* SOFT_HLUTNM = "soft_lutpair187" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[7]_i_1__3 
@@ -30992,7 +30884,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_10
   wire [7:0]\NLW_gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_1_CO_UNCONNECTED ;
   wire [7:1]\NLW_gen_cdc_pntr.rd_pntr_cdc_dc_inst_i_1_O_UNCONNECTED ;
 
-  (* SOFT_HLUTNM = "soft_lutpair158" *) 
+  (* SOFT_HLUTNM = "soft_lutpair159" *) 
   LUT4 #(
     .INIT(16'h5565)) 
     \count_value_i[0]_i_1__4 
@@ -31001,7 +30893,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_10
         .I2(\count_value_i_reg[8]_0 [1]),
         .I3(\count_value_i_reg[8]_0 [0]),
         .O(\count_value_i[0]_i_1__4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair158" *) 
+  (* SOFT_HLUTNM = "soft_lutpair159" *) 
   LUT5 #(
     .INIT(32'h5565AAAA)) 
     \count_value_i[1]_i_1__4 
@@ -31019,7 +30911,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_10
         .I2(\count_value_i_reg[2]_0 ),
         .I3(Q[1]),
         .O(\count_value_i[2]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair157" *) 
+  (* SOFT_HLUTNM = "soft_lutpair158" *) 
   LUT5 #(
     .INIT(32'hDFFF2000)) 
     \count_value_i[3]_i_1__2 
@@ -31087,7 +30979,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_10
         .I4(Q[5]),
         .I5(Q[7]),
         .O(\count_value_i[8]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair157" *) 
+  (* SOFT_HLUTNM = "soft_lutpair158" *) 
   LUT5 #(
     .INIT(32'h00800000)) 
     \count_value_i[8]_i_2__0 
@@ -31272,14 +31164,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_13
     \count_value_i[0]_i_1__1 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair163" *) 
+  (* SOFT_HLUTNM = "soft_lutpair164" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__1 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair163" *) 
+  (* SOFT_HLUTNM = "soft_lutpair164" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__1 
@@ -31287,7 +31179,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_13
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair162" *) 
+  (* SOFT_HLUTNM = "soft_lutpair163" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__1 
@@ -31296,7 +31188,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_13
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair162" *) 
+  (* SOFT_HLUTNM = "soft_lutpair163" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__1 
@@ -31335,7 +31227,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_13
         .I4(rst_d1),
         .I5(Q[0]),
         .O(\count_value_i[6]_i_2__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair161" *) 
+  (* SOFT_HLUTNM = "soft_lutpair162" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[7]_i_1__1 
@@ -31344,7 +31236,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_13
         .I2(Q[6]),
         .I3(Q[7]),
         .O(\count_value_i[7]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair161" *) 
+  (* SOFT_HLUTNM = "soft_lutpair162" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[8]_i_1 
@@ -31479,14 +31371,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_5
     \count_value_i[0]_i_1__1 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair194" *) 
+  (* SOFT_HLUTNM = "soft_lutpair195" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__1 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair194" *) 
+  (* SOFT_HLUTNM = "soft_lutpair195" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__1 
@@ -31494,7 +31386,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_5
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair193" *) 
+  (* SOFT_HLUTNM = "soft_lutpair194" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__1 
@@ -31503,7 +31395,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_5
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair193" *) 
+  (* SOFT_HLUTNM = "soft_lutpair194" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__1 
@@ -31542,7 +31434,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_5
         .I4(rst_d1),
         .I5(Q[0]),
         .O(\count_value_i[6]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair192" *) 
+  (* SOFT_HLUTNM = "soft_lutpair193" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[7]_i_1 
@@ -31551,7 +31443,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized3_5
         .I2(Q[6]),
         .I3(Q[7]),
         .O(\count_value_i[7]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair192" *) 
+  (* SOFT_HLUTNM = "soft_lutpair193" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[8]_i_1 
@@ -31681,14 +31573,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4
     \count_value_i[0]_i_1__2 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair191" *) 
+  (* SOFT_HLUTNM = "soft_lutpair192" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__2 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair191" *) 
+  (* SOFT_HLUTNM = "soft_lutpair192" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__2 
@@ -31696,7 +31588,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair190" *) 
+  (* SOFT_HLUTNM = "soft_lutpair191" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__2 
@@ -31705,7 +31597,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair190" *) 
+  (* SOFT_HLUTNM = "soft_lutpair191" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__2 
@@ -31722,7 +31614,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4
         .I1(Q[4]),
         .I2(Q[5]),
         .O(\count_value_i[5]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair189" *) 
+  (* SOFT_HLUTNM = "soft_lutpair190" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[6]_i_1__2 
@@ -31731,7 +31623,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4
         .I2(Q[5]),
         .I3(Q[6]),
         .O(\count_value_i[6]_i_1__2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair189" *) 
+  (* SOFT_HLUTNM = "soft_lutpair190" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[7]_i_1__2 
@@ -31855,7 +31747,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_11
   wire rd_clk;
   wire rd_en;
 
-  (* SOFT_HLUTNM = "soft_lutpair160" *) 
+  (* SOFT_HLUTNM = "soft_lutpair161" *) 
   LUT4 #(
     .INIT(16'h5565)) 
     \count_value_i[0]_i_1__3 
@@ -31881,7 +31773,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_11
         .I2(\gen_pf_ic_rc.ram_empty_i_reg ),
         .I3(Q[1]),
         .O(\count_value_i[2]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair159" *) 
+  (* SOFT_HLUTNM = "soft_lutpair160" *) 
   LUT5 #(
     .INIT(32'hDFFF2000)) 
     \count_value_i[3]_i_1__3 
@@ -31901,7 +31793,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_11
         .I4(Q[2]),
         .I5(Q[3]),
         .O(\count_value_i[4]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair160" *) 
+  (* SOFT_HLUTNM = "soft_lutpair161" *) 
   LUT4 #(
     .INIT(16'hAABA)) 
     \count_value_i[4]_i_2 
@@ -31948,7 +31840,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_11
         .I3(Q[4]),
         .I4(Q[6]),
         .O(\count_value_i[7]_i_1__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair159" *) 
+  (* SOFT_HLUTNM = "soft_lutpair160" *) 
   LUT5 #(
     .INIT(32'h00800000)) 
     \count_value_i[7]_i_2__1 
@@ -32064,14 +31956,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_14
     \count_value_i[0]_i_1__0 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair165" *) 
+  (* SOFT_HLUTNM = "soft_lutpair166" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__0 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair165" *) 
+  (* SOFT_HLUTNM = "soft_lutpair166" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__0 
@@ -32079,7 +31971,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_14
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair164" *) 
+  (* SOFT_HLUTNM = "soft_lutpair165" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__0 
@@ -32088,7 +31980,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_14
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair164" *) 
+  (* SOFT_HLUTNM = "soft_lutpair165" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__0 
@@ -32274,14 +32166,14 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_6
     \count_value_i[0]_i_1__0 
        (.I0(Q[0]),
         .O(\count_value_i[0]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair196" *) 
+  (* SOFT_HLUTNM = "soft_lutpair197" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \count_value_i[1]_i_1__0 
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair196" *) 
+  (* SOFT_HLUTNM = "soft_lutpair197" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1__0 
@@ -32289,7 +32181,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_6
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair195" *) 
+  (* SOFT_HLUTNM = "soft_lutpair196" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1__0 
@@ -32298,7 +32190,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized4_6
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair195" *) 
+  (* SOFT_HLUTNM = "soft_lutpair196" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1__0 
@@ -32512,7 +32404,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5
   wire wr_pntr_plus1_pf_carry;
   wire wrst_busy;
 
-  (* SOFT_HLUTNM = "soft_lutpair198" *) 
+  (* SOFT_HLUTNM = "soft_lutpair199" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \count_value_i[0]_i_1 
@@ -32524,7 +32416,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair198" *) 
+  (* SOFT_HLUTNM = "soft_lutpair199" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1 
@@ -32532,7 +32424,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair197" *) 
+  (* SOFT_HLUTNM = "soft_lutpair198" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1 
@@ -32541,7 +32433,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair197" *) 
+  (* SOFT_HLUTNM = "soft_lutpair198" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1 
@@ -32699,7 +32591,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5_15
   wire wr_en;
   wire wrst_busy;
 
-  (* SOFT_HLUTNM = "soft_lutpair167" *) 
+  (* SOFT_HLUTNM = "soft_lutpair168" *) 
   LUT1 #(
     .INIT(2'h1)) 
     \count_value_i[0]_i_1 
@@ -32711,7 +32603,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5_15
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\count_value_i[1]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair167" *) 
+  (* SOFT_HLUTNM = "soft_lutpair168" *) 
   LUT3 #(
     .INIT(8'h78)) 
     \count_value_i[2]_i_1 
@@ -32719,7 +32611,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5_15
         .I1(Q[1]),
         .I2(Q[2]),
         .O(\count_value_i[2]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair166" *) 
+  (* SOFT_HLUTNM = "soft_lutpair167" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \count_value_i[3]_i_1 
@@ -32728,7 +32620,7 @@ module design_1_hyperbus_controller_0_0_xpm_counter_updn__parameterized5_15
         .I2(Q[2]),
         .I3(Q[3]),
         .O(\count_value_i[3]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair166" *) 
+  (* SOFT_HLUTNM = "soft_lutpair167" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \count_value_i[4]_i_1 
@@ -33846,7 +33738,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base
   assign wr_data_count[2] = \<const0> ;
   assign wr_data_count[1] = \<const0> ;
   assign wr_data_count[0] = \<const0> ;
-  (* SOFT_HLUTNM = "soft_lutpair141" *) 
+  (* SOFT_HLUTNM = "soft_lutpair142" *) 
   LUT4 #(
     .INIT(16'h7883)) 
     \FSM_sequential_gen_fwft.curr_fwft_state[0]_i_1 
@@ -33855,7 +33747,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base
         .I2(curr_fwft_state[0]),
         .I3(ram_empty_i),
         .O(next_fwft_state__0[0]));
-  (* SOFT_HLUTNM = "soft_lutpair141" *) 
+  (* SOFT_HLUTNM = "soft_lutpair142" *) 
   LUT4 #(
     .INIT(16'h3FF0)) 
     \FSM_sequential_gen_fwft.curr_fwft_state[1]_i_1 
@@ -33962,7 +33854,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base
         .dest_out_bin(wr_pntr_rd_cdc),
         .src_clk(wr_clk),
         .src_in_bin(wr_pntr_ext[4:0]));
-  (* SOFT_HLUTNM = "soft_lutpair142" *) 
+  (* SOFT_HLUTNM = "soft_lutpair143" *) 
   LUT4 #(
     .INIT(16'hE0CC)) 
     \gen_fwft.empty_fwft_i_i_1 
@@ -34179,7 +34071,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base
         .sleep(sleep),
         .wea(wr_pntr_plus1_pf_carry),
         .web(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair142" *) 
+  (* SOFT_HLUTNM = "soft_lutpair143" *) 
   LUT3 #(
     .INIT(8'h2C)) 
     \gen_sdpram.xpm_memory_base_inst_i_3 
@@ -34447,7 +34339,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base__parameterized0
   assign wr_data_count[2] = \<const0> ;
   assign wr_data_count[1] = \<const0> ;
   assign wr_data_count[0] = \<const0> ;
-  (* SOFT_HLUTNM = "soft_lutpair170" *) 
+  (* SOFT_HLUTNM = "soft_lutpair171" *) 
   LUT4 #(
     .INIT(16'h6899)) 
     \FSM_sequential_gen_fwft.curr_fwft_state[0]_i_1 
@@ -34456,7 +34348,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base__parameterized0
         .I2(rd_en),
         .I3(curr_fwft_state[1]),
         .O(next_fwft_state__0[0]));
-  (* SOFT_HLUTNM = "soft_lutpair170" *) 
+  (* SOFT_HLUTNM = "soft_lutpair171" *) 
   LUT3 #(
     .INIT(8'h7A)) 
     \FSM_sequential_gen_fwft.curr_fwft_state[1]_i_1 
@@ -34577,7 +34469,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base__parameterized0
         .D(data_valid_fwft1),
         .Q(empty),
         .S(rd_rst_busy));
-  (* SOFT_HLUTNM = "soft_lutpair171" *) 
+  (* SOFT_HLUTNM = "soft_lutpair172" *) 
   LUT4 #(
     .INIT(16'h07AF)) 
     \gen_fwft.gdvld_fwft.data_valid_fwft_i_1 
@@ -34733,7 +34625,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_base__parameterized0
         .sleep(sleep),
         .wea(ram_wr_en_i),
         .web(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair171" *) 
+  (* SOFT_HLUTNM = "soft_lutpair172" *) 
   LUT3 #(
     .INIT(8'h38)) 
     \gen_sdpram.xpm_memory_base_inst_i_3 
@@ -37188,7 +37080,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst
         .I4(\gen_rst_ic.fifo_wr_rst_ic_i_3_n_0 ),
         .I5(\gen_rst_ic.fifo_wr_rst_ic ),
         .O(\gen_rst_ic.fifo_wr_rst_ic_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair219" *) 
+  (* SOFT_HLUTNM = "soft_lutpair220" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \gen_rst_ic.fifo_wr_rst_ic_i_2 
@@ -37224,7 +37116,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst
        (.dest_clk(wr_clk),
         .dest_rst(\gen_rst_ic.fifo_rd_rst_wr_i ),
         .src_rst(SR));
-  (* SOFT_HLUTNM = "soft_lutpair219" *) 
+  (* SOFT_HLUTNM = "soft_lutpair220" *) 
   LUT3 #(
     .INIT(8'h02)) 
     \gen_rst_ic.rst_seq_reentered_i_1 
@@ -37570,7 +37462,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_16
         .I4(\gen_rst_ic.fifo_wr_rst_ic_i_3_n_0 ),
         .I5(\gen_rst_ic.fifo_wr_rst_ic ),
         .O(\gen_rst_ic.fifo_wr_rst_ic_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair169" *) 
+  (* SOFT_HLUTNM = "soft_lutpair170" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \gen_rst_ic.fifo_wr_rst_ic_i_2 
@@ -37606,7 +37498,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_16
        (.dest_clk(wr_clk),
         .dest_rst(\gen_rst_ic.fifo_rd_rst_wr_i ),
         .src_rst(SR));
-  (* SOFT_HLUTNM = "soft_lutpair169" *) 
+  (* SOFT_HLUTNM = "soft_lutpair170" *) 
   LUT3 #(
     .INIT(8'h02)) 
     \gen_rst_ic.rst_seq_reentered_i_1 
@@ -37670,7 +37562,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_16
        (.dest_clk(rd_clk),
         .dest_rst(\gen_rst_ic.fifo_wr_rst_rd ),
         .src_rst(\gen_rst_ic.fifo_wr_rst_ic ));
-  (* SOFT_HLUTNM = "soft_lutpair168" *) 
+  (* SOFT_HLUTNM = "soft_lutpair169" *) 
   LUT4 #(
     .INIT(16'h0002)) 
     \gen_sdpram.xpm_memory_base_inst_i_1 
@@ -37695,7 +37587,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_16
         .D(\power_on_rst_reg_n_0_[0] ),
         .Q(p_0_in),
         .R(1'b0));
-  (* SOFT_HLUTNM = "soft_lutpair168" *) 
+  (* SOFT_HLUTNM = "soft_lutpair169" *) 
   LUT2 #(
     .INIT(4'hE)) 
     wr_rst_busy_INST_0
@@ -38313,7 +38205,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_7
         .I4(\gen_rst_ic.fifo_wr_rst_ic_i_3_n_0 ),
         .I5(\gen_rst_ic.fifo_wr_rst_ic ),
         .O(\gen_rst_ic.fifo_wr_rst_ic_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair199" *) 
+  (* SOFT_HLUTNM = "soft_lutpair200" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \gen_rst_ic.fifo_wr_rst_ic_i_2 
@@ -38349,7 +38241,7 @@ module design_1_hyperbus_controller_0_0_xpm_fifo_rst_7
        (.dest_clk(wr_clk),
         .dest_rst(\gen_rst_ic.fifo_rd_rst_wr_i ),
         .src_rst(SR));
-  (* SOFT_HLUTNM = "soft_lutpair199" *) 
+  (* SOFT_HLUTNM = "soft_lutpair200" *) 
   LUT3 #(
     .INIT(8'h02)) 
     \gen_rst_ic.rst_seq_reentered_i_1 

@@ -1,4 +1,4 @@
-# Install script for directory: /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/common/intr
+# Install script for directory: /raid/work/ghl_ip/hyperbus_ai3/vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/common/intr
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -70,13 +70,13 @@ design_1_sv your_instance_name (
   .CLK_IN1_D_0_clk_p(CLK_IN1_D_0_clk_p), // input wire CLK_IN1_D_0_clk_p
   .UART_0_txd(UART_0_txd), // output wire UART_0_txd
   .UART_0_rxd(UART_0_rxd), // input wire UART_0_rxd
+  .o_hb_reset_n_0(o_hb_reset_n_0), // output wire o_hb_reset_n_0
+  .ext_reset_in_0(ext_reset_in_0), // input wire ext_reset_in_0
   .o_hb_cs_n_0(o_hb_cs_n_0), // output wire o_hb_cs_n_0
   .o_hb_ck_p_0(o_hb_ck_p_0), // output wire o_hb_ck_p_0
   .o_hb_ck_n_0(o_hb_ck_n_0), // output wire o_hb_ck_n_0
   .io_hb_rwds_0(io_hb_rwds_0), // inout wire io_hb_rwds_0
-  .io_hb_dq_0(io_hb_dq_0), // inout wire [7:0] io_hb_dq_0
-  .o_hb_reset_n_0(o_hb_reset_n_0), // output wire o_hb_reset_n_0
-  .ext_reset_in_0(ext_reset_in_0) // input wire ext_reset_in_0
+  .io_hb_dq_0(io_hb_dq_0) // inout wire [7:0] io_hb_dq_0
 );
 // INST_TAG_END ------  End cut for WRAPPER INSTANTIATION Template  ------
 

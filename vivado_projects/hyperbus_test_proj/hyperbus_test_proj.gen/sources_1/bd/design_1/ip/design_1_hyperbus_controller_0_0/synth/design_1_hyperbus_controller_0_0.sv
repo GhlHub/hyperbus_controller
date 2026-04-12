@@ -47,7 +47,7 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: user.org:user:hyperbus_controller:1.0
+// IP VLNV: user.org:user:hyperbus_controller:1.2
 // IP Revision: 1
 
 (* X_CORE_INFO = "hyperbus_controller,Vivado 2025.2" *)
@@ -285,6 +285,7 @@ output wire o_dbg_rd_half;
     .AXI_ID_WIDTH(1),
     .AXIL_ADDR_WIDTH(16),
     .HB_LATENCY_DEFAULT(7),
+    .PHY_IO_STYLE(0),
     .PHY_FAMILY(0),
     .ODDRE1_TX_PIPE_CYCLES(1),
     .HB_READ_CS_DEASSERT_DELAY(2)

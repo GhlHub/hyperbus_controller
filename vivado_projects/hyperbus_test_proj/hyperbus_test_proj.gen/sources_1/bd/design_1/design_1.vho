@@ -57,13 +57,13 @@ COMPONENT design_1
     CLK_IN1_D_0_clk_p : IN STD_LOGIC;
     UART_0_txd : OUT STD_LOGIC;
     UART_0_rxd : IN STD_LOGIC;
+    o_hb_reset_n_0 : OUT STD_LOGIC;
+    ext_reset_in_0 : IN STD_LOGIC;
     o_hb_cs_n_0 : OUT STD_LOGIC;
     o_hb_ck_p_0 : OUT STD_LOGIC;
     o_hb_ck_n_0 : OUT STD_LOGIC;
     io_hb_rwds_0 : INOUT STD_LOGIC;
-    io_hb_dq_0 : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    o_hb_reset_n_0 : OUT STD_LOGIC;
-    ext_reset_in_0 : IN STD_LOGIC
+    io_hb_dq_0 : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0)
   );
 END COMPONENT;
 -- COMP_TAG_END ------  End cut for COMPONENT Declaration  ------
@@ -78,13 +78,13 @@ your_instance_name : design_1
     CLK_IN1_D_0_clk_p => CLK_IN1_D_0_clk_p,
     UART_0_txd => UART_0_txd,
     UART_0_rxd => UART_0_rxd,
+    o_hb_reset_n_0 => o_hb_reset_n_0,
+    ext_reset_in_0 => ext_reset_in_0,
     o_hb_cs_n_0 => o_hb_cs_n_0,
     o_hb_ck_p_0 => o_hb_ck_p_0,
     o_hb_ck_n_0 => o_hb_ck_n_0,
     io_hb_rwds_0 => io_hb_rwds_0,
-    io_hb_dq_0 => io_hb_dq_0,
-    o_hb_reset_n_0 => o_hb_reset_n_0,
-    ext_reset_in_0 => ext_reset_in_0
+    io_hb_dq_0 => io_hb_dq_0
   );
 -- INST_TAG_END ------  End cut for INSTANTIATION Template  ------
 

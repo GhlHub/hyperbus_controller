@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 
-module hyperbus_phy_xilinx_7series (
+module hyperbus_phy_xilinx_7series #(
+    parameter int PHY_IO_STYLE = 0
+) (
     input  wire       i_hb_clk_200,
     input  wire       i_hb_clk_200_gated,
     input  wire       i_axi_aclk,
@@ -51,8 +53,11 @@ module hyperbus_phy_xilinx_7series (
     output logic [15:0] o_dq
 );
 
+    localparam int PHY_IO_STYLE_IO_DELAY            = 0;
+    localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
+
     logic hb_ck_pre_odly;
-    logic hb_ck_fwd_delayed;
+    logic hb_ck_fwd;
     logic [7:0] dq_i;
     logic [7:0] dq_i_delayed;
     logic [7:0] dq_out_ddr;
@@ -63,40 +68,9 @@ module hyperbus_phy_xilinx_7series (
     logic rwds_out_ddr;
     logic rwds_q1_raw;
     logic rwds_q2_raw;
-    logic idelayctrl_rdy;
-    logic idelayctrl_rst_ref_meta;
-    logic idelayctrl_rst_ref_sync;
-    logic idelayctrl_rdy_axi_meta;
-    logic idelayctrl_rdy_axi_sync;
-    logic i_hb_clk_200_samp_90_n;
 
-    assign i_hb_clk_200_samp_90_n = ~i_hb_clk_200_samp_90;
-
-    always_ff @(posedge i_ref_clk_300) begin
-        if (i_idelayctrl_rst) begin
-            idelayctrl_rst_ref_meta <= 1'b1;
-            idelayctrl_rst_ref_sync <= 1'b1;
-        end else begin
-            idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
-            idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
-        end
-    end
-
-    always_ff @(posedge i_axi_aclk) begin
-        if (!i_axi_aresetn) begin
-            idelayctrl_rdy_axi_meta <= 1'b0;
-            idelayctrl_rdy_axi_sync <= 1'b0;
-        end else begin
-            idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
-            idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
-        end
-    end
-
-    IDELAYCTRL u_idelayctrl (
-        .RDY    (        idelayctrl_rdy),
-        .REFCLK (         i_ref_clk_300),
-        .RST    (idelayctrl_rst_ref_sync)
-    );
+    assign o_hb_ck_p   = hb_ck_fwd;
+    assign o_hb_ck_n   = 1'b0;
 
     ODDR #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
@@ -112,37 +86,157 @@ module hyperbus_phy_xilinx_7series (
         .S  (         1'b0)
     );
 
-    ODELAYE2 #(
-        .CINVCTRL_SEL("FALSE"),
-        .DELAY_SRC("ODATAIN"),
-        .HIGH_PERFORMANCE_MODE("TRUE"),
-        .ODELAY_TYPE("VAR_LOAD"),
-        .ODELAY_VALUE(0),
-        .PIPE_SEL("FALSE"),
-        .REFCLK_FREQUENCY(300.0),
-        .SIGNAL_PATTERN("CLOCK")
-    ) u_odelay_ck (
-        .CNTVALUEOUT (o_odly_cntvalueout[4:0]),
-        .DATAOUT     (     hb_ck_fwd_delayed),
-        .C           (          i_axi_aclk),
-        .CE          (          i_odly_ce),
-        .CINVCTRL    (               1'b0),
-        .CLKIN       (               1'b0),
-        .CNTVALUEIN  ( i_odly_cntvaluein[4:0]),
-        .INC         (         i_odly_inc),
-        .LD          (        i_odly_load),
-        .LDPIPEEN    (               1'b0),
-        .ODATAIN     (       hb_ck_pre_odly),
-        .REGRST      (    i_odelay_rst_req)
-    );
+    generate
+        if (PHY_IO_STYLE == PHY_IO_STYLE_IO_DELAY) begin : g_io_delay
+            logic idelayctrl_rdy;
+            logic idelayctrl_rst_ref_meta;
+            logic idelayctrl_rst_ref_sync;
+            logic idelayctrl_rdy_axi_meta;
+            logic idelayctrl_rdy_axi_sync;
 
-    OBUF u_obuf_ck_p (
-        .O (         o_hb_ck_p),
-        .I ( hb_ck_fwd_delayed)
-    );
+            always_ff @(posedge i_ref_clk_300) begin
+                if (i_idelayctrl_rst) begin
+                    idelayctrl_rst_ref_meta <= 1'b1;
+                    idelayctrl_rst_ref_sync <= 1'b1;
+                end else begin
+                    idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
+                    idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
+                end
+            end
 
-    assign o_hb_ck_n = 1'b0;
-    assign o_odly_cntvalueout[8:5] = 4'h0;
+            always_ff @(posedge i_axi_aclk) begin
+                if (!i_axi_aresetn) begin
+                    idelayctrl_rdy_axi_meta <= 1'b0;
+                    idelayctrl_rdy_axi_sync <= 1'b0;
+                end else begin
+                    idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
+                    idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
+                end
+            end
+
+            IDELAYCTRL u_idelayctrl (
+                .RDY    (        idelayctrl_rdy),
+                .REFCLK (         i_ref_clk_300),
+                .RST    (idelayctrl_rst_ref_sync)
+            );
+
+            ODELAYE2 #(
+                .CINVCTRL_SEL("FALSE"),
+                .DELAY_SRC("ODATAIN"),
+                .HIGH_PERFORMANCE_MODE("TRUE"),
+                .ODELAY_TYPE("VAR_LOAD"),
+                .ODELAY_VALUE(0),
+                .PIPE_SEL("FALSE"),
+                .REFCLK_FREQUENCY(300.0),
+                .SIGNAL_PATTERN("CLOCK")
+            ) u_odelay_ck (
+                .CNTVALUEOUT (o_odly_cntvalueout[4:0]),
+                .DATAOUT     (             hb_ck_fwd),
+                .C           (          i_axi_aclk),
+                .CE          (          i_odly_ce),
+                .CINVCTRL    (               1'b0),
+                .CLKIN       (               1'b0),
+                .CNTVALUEIN  ( i_odly_cntvaluein[4:0]),
+                .INC         (         i_odly_inc),
+                .LD          (        i_odly_load),
+                .LDPIPEEN    (               1'b0),
+                .ODATAIN     (       hb_ck_pre_odly),
+                .REGRST      (    i_odelay_rst_req)
+            );
+            assign o_odly_cntvalueout[8:5] = 4'h0;
+            assign o_idelayctrl_rdy_axi = idelayctrl_rdy_axi_sync;
+
+            genvar gdi;
+            for (gdi = 0; gdi < 8; gdi = gdi + 1) begin : g_dq_idelay
+                IDELAYE2 #(
+                    .CINVCTRL_SEL("FALSE"),
+                    .DELAY_SRC("IDATAIN"),
+                    .HIGH_PERFORMANCE_MODE("TRUE"),
+                    .IDELAY_TYPE("VAR_LOAD"),
+                    .IDELAY_VALUE(0),
+                    .PIPE_SEL("FALSE"),
+                    .REFCLK_FREQUENCY(300.0),
+                    .SIGNAL_PATTERN("DATA")
+                ) u_idelay_dq (
+                    .CNTVALUEOUT (o_dq_idly_cntvalueout[gdi*9 +: 5]),
+                    .DATAOUT     (                  dq_i_delayed[gdi]),
+                    .C           (                        i_axi_aclk),
+                    .CE          (                   i_dq_idly_ce[gdi]),
+                    .CINVCTRL    (                             1'b0),
+                    .CNTVALUEIN  (       i_dq_idly_cntvaluein[gdi*9 +: 5]),
+                    .DATAIN      (                             1'b0),
+                    .IDATAIN     (                           dq_i[gdi]),
+                    .INC         (                  i_dq_idly_inc[gdi]),
+                    .LD          (                 i_dq_idly_load[gdi]),
+                    .LDPIPEEN    (                             1'b0),
+                    .REGRST      (               i_rwds_idelay_rst_req)
+                );
+                assign o_dq_idly_cntvalueout[gdi*9 + 5 +: 4] = 4'h0;
+            end
+
+            IDELAYE2 #(
+                .CINVCTRL_SEL("FALSE"),
+                .DELAY_SRC("IDATAIN"),
+                .HIGH_PERFORMANCE_MODE("TRUE"),
+                .IDELAY_TYPE("VAR_LOAD"),
+                .IDELAY_VALUE(10),
+                .PIPE_SEL("FALSE"),
+                .REFCLK_FREQUENCY(300.0),
+                .SIGNAL_PATTERN("DATA")
+            ) u_idelay_rwds (
+                .CNTVALUEOUT (o_rwds_idly_cntvalueout[4:0]),
+                .DATAOUT     (          rwds_i_delayed),
+                .C           (              i_axi_aclk),
+                .CE          (         i_rwds_idly_ce),
+                .CINVCTRL    (                   1'b0),
+                .CNTVALUEIN  ( i_rwds_idly_cntvaluein[4:0]),
+                .DATAIN      (                   1'b0),
+                .IDATAIN     (                   rwds_i),
+                .INC         (        i_rwds_idly_inc),
+                .LD          (       i_rwds_idly_load),
+                .LDPIPEEN    (                   1'b0),
+                .REGRST      (   i_rwds_idelay_rst_req)
+            );
+            assign o_rwds_idly_cntvalueout[8:5] = 4'h0;
+
+            wire _unused_ok = &{1'b0,
+                                i_odly_en_vtc,
+                                i_rwds_idly_en_vtc,
+                                i_dq_idly_en_vtc};
+        end else begin : g_ext_clk_phase_shift
+            assign hb_ck_fwd               = hb_ck_pre_odly;
+            assign dq_i_delayed            = dq_i;
+            assign rwds_i_delayed          = rwds_i;
+            assign o_dq_idly_cntvalueout   = 72'h0;
+            assign o_rwds_idly_cntvalueout = 9'h000;
+            assign o_odly_cntvalueout      = 9'h000;
+            assign o_idelayctrl_rdy_axi    = 1'b1;
+
+            wire _unused_ok = &{1'b0,
+                                i_axi_aclk,
+                                i_axi_aresetn,
+                                i_ref_clk_300,
+                                i_idelayctrl_rst,
+                                i_idelayctrl_rst_req,
+                                i_odelay_rst_req,
+                                i_rwds_idelay_rst_req,
+                                i_odly_en_vtc,
+                                i_odly_ce,
+                                i_odly_inc,
+                                i_odly_load,
+                                i_odly_cntvaluein,
+                                i_rwds_idly_en_vtc,
+                                i_rwds_idly_ce,
+                                i_rwds_idly_inc,
+                                i_rwds_idly_load,
+                                i_rwds_idly_cntvaluein,
+                                i_dq_idly_en_vtc,
+                                i_dq_idly_ce,
+                                i_dq_idly_inc,
+                                i_dq_idly_load,
+                                i_dq_idly_cntvaluein};
+        end
+    endgenerate
 
     genvar gi;
     generate
@@ -168,31 +262,6 @@ module hyperbus_phy_xilinx_7series (
                 .IO (           io_hb_dq[gi])
             );
 
-            IDELAYE2 #(
-                .CINVCTRL_SEL("FALSE"),
-                .DELAY_SRC("IDATAIN"),
-                .HIGH_PERFORMANCE_MODE("TRUE"),
-                .IDELAY_TYPE("VAR_LOAD"),
-                .IDELAY_VALUE(0),
-                .PIPE_SEL("FALSE"),
-                .REFCLK_FREQUENCY(300.0),
-                .SIGNAL_PATTERN("DATA")
-            ) u_idelay_dq (
-                .CNTVALUEOUT (o_dq_idly_cntvalueout[gi*9 +: 5]),
-                .DATAOUT     (                  dq_i_delayed[gi]),
-                .C           (                        i_axi_aclk),
-                .CE          (                    i_dq_idly_ce[gi]),
-                .CINVCTRL    (                             1'b0),
-                .CNTVALUEIN  (        i_dq_idly_cntvaluein[gi*9 +: 5]),
-                .DATAIN      (                             1'b0),
-                .IDATAIN     (                         dq_i[gi]),
-                .INC         (                   i_dq_idly_inc[gi]),
-                .LD          (                  i_dq_idly_load[gi]),
-                .LDPIPEEN    (                             1'b0),
-                .REGRST      (               i_rwds_idelay_rst_req)
-            );
-            assign o_dq_idly_cntvalueout[gi*9 + 5 +: 4] = 4'h0;
-
             IDDR #(
                 .DDR_CLK_EDGE("OPPOSITE_EDGE"),
                 .INIT_Q1(1'b0),
@@ -212,7 +281,7 @@ module hyperbus_phy_xilinx_7series (
 
     assign o_dq_q1 = dq_q1_raw;
     assign o_dq_q2 = dq_q2_raw;
-    assign o_dq = {dq_q2_raw, dq_q1_raw};
+    assign o_dq    = {dq_q2_raw, dq_q1_raw};
 
     ODDR #(
         .DDR_CLK_EDGE("SAME_EDGE"),
@@ -235,31 +304,6 @@ module hyperbus_phy_xilinx_7series (
         .IO (         io_hb_rwds)
     );
 
-    IDELAYE2 #(
-        .CINVCTRL_SEL("FALSE"),
-        .DELAY_SRC("IDATAIN"),
-        .HIGH_PERFORMANCE_MODE("TRUE"),
-        .IDELAY_TYPE("VAR_LOAD"),
-        .IDELAY_VALUE(10),
-        .PIPE_SEL("FALSE"),
-        .REFCLK_FREQUENCY(300.0),
-        .SIGNAL_PATTERN("DATA")
-    ) u_idelay_rwds (
-        .CNTVALUEOUT (o_rwds_idly_cntvalueout[4:0]),
-        .DATAOUT     (          rwds_i_delayed),
-        .C           (              i_axi_aclk),
-        .CE          (         i_rwds_idly_ce),
-        .CINVCTRL    (                   1'b0),
-        .CNTVALUEIN  ( i_rwds_idly_cntvaluein[4:0]),
-        .DATAIN      (                   1'b0),
-        .IDATAIN     (                 rwds_i),
-        .INC         (        i_rwds_idly_inc),
-        .LD          (       i_rwds_idly_load),
-        .LDPIPEEN    (                   1'b0),
-        .REGRST      (   i_rwds_idelay_rst_req)
-    );
-    assign o_rwds_idly_cntvalueout[8:5] = 4'h0;
-
     IDDR #(
         .DDR_CLK_EDGE("SAME_EDGE"),
         .INIT_Q1(1'b0),
@@ -277,13 +321,5 @@ module hyperbus_phy_xilinx_7series (
 
     assign o_rwds_q1 = rwds_q1_raw;
     assign o_rwds_q2 = rwds_q2_raw;
-    assign o_idelayctrl_rdy_axi = idelayctrl_rdy_axi_sync;
-
-    wire _unused_ok = &{1'b0,
-                        i_odly_en_vtc,
-                        i_rwds_idly_en_vtc,
-                        i_dq_idly_en_vtc,
-                        i_odly_cntvaluein[8:5],
-                        i_hb_clk_200_samp_90_n};
 
 endmodule

@@ -88,23 +88,6 @@
       }
     },
     "ports": {
-      "o_hb_cs_n_0": {
-        "direction": "O"
-      },
-      "o_hb_ck_p_0": {
-        "direction": "O"
-      },
-      "o_hb_ck_n_0": {
-        "direction": "O"
-      },
-      "io_hb_rwds_0": {
-        "direction": "IO"
-      },
-      "io_hb_dq_0": {
-        "direction": "IO",
-        "left": "7",
-        "right": "0"
-      },
       "o_hb_reset_n_0": {
         "direction": "O"
       },
@@ -121,6 +104,23 @@
             "value_src": "default"
           }
         }
+      },
+      "o_hb_cs_n_0": {
+        "direction": "O"
+      },
+      "o_hb_ck_p_0": {
+        "direction": "O"
+      },
+      "o_hb_ck_n_0": {
+        "direction": "O"
+      },
+      "io_hb_rwds_0": {
+        "direction": "IO"
+      },
+      "io_hb_dq_0": {
+        "direction": "IO",
+        "left": "7",
+        "right": "0"
       }
     },
     "components": {
@@ -531,7 +531,7 @@
         }
       },
       "hyperbus_controller_0": {
-        "vlnv": "user.org:user:hyperbus_controller:1.0",
+        "vlnv": "user.org:user:hyperbus_controller:1.2",
         "ip_revision": "1",
         "xci_name": "design_1_hyperbus_controller_0_0",
         "xci_path": "ip/design_1_hyperbus_controller_0_0/design_1_hyperbus_controller_0_0.xci",
@@ -1349,28 +1349,28 @@
           "hyperbus_controller_0/i_hb_clk_200_samp_90"
         ]
       },
-      "hyperbus_controller_1_o_hb_ck_n": {
+      "hyperbus_controller_0_o_hb_ck_n": {
         "ports": [
           "hyperbus_controller_0/o_hb_ck_n",
           "o_hb_ck_n_0"
         ]
       },
-      "hyperbus_controller_1_o_hb_ck_p": {
+      "hyperbus_controller_0_o_hb_ck_p": {
         "ports": [
           "hyperbus_controller_0/o_hb_ck_p",
           "o_hb_ck_p_0"
+        ]
+      },
+      "hyperbus_controller_0_o_hb_cs_n": {
+        "ports": [
+          "hyperbus_controller_0/o_hb_cs_n",
+          "o_hb_cs_n_0"
         ]
       },
       "hyperbus_controller_1_o_hb_clk_ce": {
         "ports": [
           "hyperbus_controller_0/o_hb_clk_ce",
           "clk_wiz_0/clk_out5_ce"
-        ]
-      },
-      "hyperbus_controller_1_o_hb_cs_n": {
-        "ports": [
-          "hyperbus_controller_0/o_hb_cs_n",
-          "o_hb_cs_n_0"
         ]
       },
       "hyperbus_controller_1_o_hb_reset_n": {

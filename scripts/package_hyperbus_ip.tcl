@@ -6,6 +6,7 @@ set repo_root  [file normalize [file join $script_dir ".."]]
 set build_dir  [file join $repo_root "build" "ip_pack"]
 set proj_dir   [file join $build_dir "vivado_proj"]
 set ip_root    [file join $repo_root "ip_repo" "hyperbus_controller"]
+set component_xml [file join $ip_root "component.xml"]
 set ip_name    "hyperbus_controller"
 set part_name  "xcsu35p-sbvb625-2-e"
 
@@ -47,7 +48,7 @@ set_property display_name "HyperBus Controller" $core
 set_property description "AXI4/AXI4-Lite to HyperBus HyperRAM controller (Xilinx primitive based)." $core
 set_property vendor_display_name "User" $core
 set_property company_url "https://example.com" $core
-set_property version "1.0" $core
+set_property version "1.2" $core
 
 proc set_bus_param_value {bus_if param_name param_value} {
     set p [ipx::get_bus_parameters $param_name -of_objects $bus_if]
@@ -55,6 +56,53 @@ proc set_bus_param_value {bus_if param_name param_value} {
         set p [ipx::add_bus_parameter $param_name $bus_if]
     }
     set_property value $param_value $p
+}
+
+proc apply_phy_choice_labels {component_xml} {
+    set fd [open $component_xml r]
+    set xml [read $fd]
+    close $fd
+
+    set needle {  <spirit:choices>
+    <spirit:choice>
+      <spirit:name>choice_list_9d8b0d81</spirit:name>
+      <spirit:enumeration>ACTIVE_HIGH</spirit:enumeration>
+      <spirit:enumeration>ACTIVE_LOW</spirit:enumeration>
+    </spirit:choice>
+  </spirit:choices>}
+    set replacement {  <spirit:choices>
+    <spirit:choice>
+      <spirit:name>choice_list_9d8b0d81</spirit:name>
+      <spirit:enumeration>ACTIVE_HIGH</spirit:enumeration>
+      <spirit:enumeration>ACTIVE_LOW</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_phy_io_style</spirit:name>
+      <spirit:enumeration spirit:text="io_delay">0</spirit:enumeration>
+      <spirit:enumeration spirit:text="phased_hb_clock">1</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_phy_family</spirit:name>
+      <spirit:enumeration spirit:text="UltraScale+">0</spirit:enumeration>
+      <spirit:enumeration spirit:text="Series7">1</spirit:enumeration>
+    </spirit:choice>
+  </spirit:choices>}
+
+    set xml [string map [list $needle $replacement] $xml]
+    set xml [string map [list \
+        {<spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PHY_IO_STYLE">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PHY_IO_STYLE" spirit:choiceRef="choice_list_phy_io_style">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PHY_FAMILY">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PHY_FAMILY" spirit:choiceRef="choice_list_phy_family">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PHY_IO_STYLE">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PHY_IO_STYLE" spirit:choiceRef="choice_list_phy_io_style">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PHY_FAMILY">0</spirit:value>} \
+        {<spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PHY_FAMILY" spirit:choiceRef="choice_list_phy_family">0</spirit:value>} \
+    ] $xml]
+
+    set fd [open $component_xml w]
+    puts -nonewline $fd $xml
+    close $fd
 }
 
 set axi_clk_if [ipx::get_bus_interfaces i_axi_aclk -of_objects $core]
@@ -92,4 +140,5 @@ ipx::check_integrity -quiet $core
 ipx::save_core $core
 
 close_project -delete
+apply_phy_choice_labels $component_xml
 puts "Packaged IP at: $ip_root"

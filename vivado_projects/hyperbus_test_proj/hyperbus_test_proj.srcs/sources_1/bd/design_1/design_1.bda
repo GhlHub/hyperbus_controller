@@ -244,7 +244,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axil",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.0",
+                "SV": "user.org:user:hyperbus_controller:1.2",
                 "TM": "data",
                 "TU": "register"
             },
@@ -695,7 +695,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axi",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.0",
+                "SV": "user.org:user:hyperbus_controller:1.2",
                 "TM": "data",
                 "TU": "register"
             },
@@ -713,7 +713,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axi",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.0",
+                "SV": "user.org:user:hyperbus_controller:1.2",
                 "TM": "instruction",
                 "TU": "register"
             }

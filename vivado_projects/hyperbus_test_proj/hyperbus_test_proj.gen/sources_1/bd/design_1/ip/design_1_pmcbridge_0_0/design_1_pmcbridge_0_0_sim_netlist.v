@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Thu Apr  9 11:22:33 2026
+// Date        : Sat Apr 11 13:56:46 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
-// Command     : write_verilog -force -mode funcsim
-//               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_pmcbridge_0_0/design_1_pmcbridge_0_0_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim -rename_top design_1_pmcbridge_0_0 -prefix
+//               design_1_pmcbridge_0_0_ design_1_pmcbridge_0_0_sim_netlist.v
 // Design      : design_1_pmcbridge_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -162,7 +162,7 @@ module design_1_pmcbridge_0_0
         .WID({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}));
 endmodule
 
-(* HW_HANDOFF = "design_1_pmcbridge_0_0.hwdef" *) (* ORIG_REF_NAME = "pmcbridge_v1_0_0" *) (* dont_touch = "true" *) 
+(* HW_HANDOFF = "design_1_pmcbridge_0_0.hwdef" *) (* dont_touch = "true" *) 
 module design_1_pmcbridge_0_0_pmcbridge_v1_0_0
    (S_AXI_araddr,
     S_AXI_arburst,

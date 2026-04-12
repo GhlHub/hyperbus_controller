@@ -438,6 +438,11 @@
         int push_base;
         int rdy_poll;
         begin
+            if (PHY_IO_STYLE != PHY_IO_STYLE_IO_DELAY) begin
+                $display("[%0d][ TB]                 INFO: skipping AXI-Lite delay-reset self-checks for EXT_CLK_PHASE_SHIFT", ns_time());
+                return;
+            end
+
             // Delay-control reset path checks:
             // 0x0200[0] -> IDELAYCTRL reset request
             // 0x0200[1] -> CK_P ODELAYE3 reset request
@@ -534,7 +539,7 @@
         string dq_label;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0007, "VERSION read @0x0024");
+            check_eq32(rd32, 32'h0100_0008, "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");
@@ -547,6 +552,11 @@
             axil_expect_read16(16'h0800, 16'h8F27, "CR0 write/readback 0x8F27");
             axil_write(16'h0800, 32'h0000_8F2F);
             axil_expect_read16(16'h0800, 16'h8F2F, "CR0 write/readback 0x8F2F");
+
+            if (PHY_IO_STYLE != PHY_IO_STYLE_IO_DELAY) begin
+                $display("[%0d][ TB]                 INFO: skipping AXI-Lite delay-control self-checks for EXT_CLK_PHASE_SHIFT", ns_time());
+                return;
+            end
 
             // EN_VTC reset default should be 0.
             axil_read(16'h0100, rd32);

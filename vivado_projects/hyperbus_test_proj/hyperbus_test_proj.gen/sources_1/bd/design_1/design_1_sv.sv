@@ -62,6 +62,10 @@ module design_1_sv (
   (* X_INTERFACE_IGNORE = "true" *)
   input wire UART_0_rxd,
   (* X_INTERFACE_IGNORE = "true" *)
+  output wire o_hb_reset_n_0,
+  (* X_INTERFACE_IGNORE = "true" *)
+  input wire ext_reset_in_0,
+  (* X_INTERFACE_IGNORE = "true" *)
   output wire o_hb_cs_n_0,
   (* X_INTERFACE_IGNORE = "true" *)
   output wire o_hb_ck_p_0,
@@ -70,11 +74,7 @@ module design_1_sv (
   (* X_INTERFACE_IGNORE = "true" *)
   inout wire io_hb_rwds_0,
   (* X_INTERFACE_IGNORE = "true" *)
-  inout wire [7:0] io_hb_dq_0,
-  (* X_INTERFACE_IGNORE = "true" *)
-  output wire o_hb_reset_n_0,
-  (* X_INTERFACE_IGNORE = "true" *)
-  input wire ext_reset_in_0
+  inout wire [7:0] io_hb_dq_0
 );
 
   design_1 inst (
@@ -82,13 +82,13 @@ module design_1_sv (
     .CLK_IN1_D_0_clk_p(CLK_IN1_D_0_clk_p),
     .UART_0_txd(UART_0_txd),
     .UART_0_rxd(UART_0_rxd),
+    .o_hb_reset_n_0(o_hb_reset_n_0),
+    .ext_reset_in_0(ext_reset_in_0),
     .o_hb_cs_n_0(o_hb_cs_n_0),
     .o_hb_ck_p_0(o_hb_ck_p_0),
     .o_hb_ck_n_0(o_hb_ck_n_0),
     .io_hb_rwds_0(io_hb_rwds_0),
-    .io_hb_dq_0(io_hb_dq_0),
-    .o_hb_reset_n_0(o_hb_reset_n_0),
-    .ext_reset_in_0(ext_reset_in_0)
+    .io_hb_dq_0(io_hb_dq_0)
   );
 
 endmodule

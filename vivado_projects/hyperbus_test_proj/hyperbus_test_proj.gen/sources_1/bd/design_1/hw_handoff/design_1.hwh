@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Fri Apr 10 14:18:42 2026" VIVADOVERSION="2025.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Sun Apr 12 11:24:49 2026" VIVADOVERSION="2025.2">
 
   <SYSTEMINFO ARCH="spartanuplus" BOARD="xilinx.com:scu35:part0:1.0" DEVICE="xcsu35p" NAME="design_1" PACKAGE="sbvb625" SPEEDGRADE="-2"/>
 
@@ -8589,7 +8589,7 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
-    <MODULE COREREVISION="1" FULLNAME="/hyperbus_controller_0" HWVERSION="1.0" INSTANCE="hyperbus_controller_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="hyperbus_controller" VLNV="user.org:user:hyperbus_controller:1.0">
+    <MODULE COREREVISION="1" FULLNAME="/hyperbus_controller_0" HWVERSION="1.2" INSTANCE="hyperbus_controller_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="hyperbus_controller" VLNV="user.org:user:hyperbus_controller:1.2">
       <DOCUMENTS/>
       <ADDRESSBLOCKS>
         <ADDRESSBLOCK ACCESS="" INTERFACE="s_axil" NAME="reg0" RANGE="0x10000" USAGE="register"/>
@@ -8606,6 +8606,7 @@
         <PARAMETER NAME="HB_READ_CS_DEASSERT_DELAY" VALUE="2"/>
         <PARAMETER NAME="ODDRE1_TX_PIPE_CYCLES" VALUE="1"/>
         <PARAMETER NAME="PHY_FAMILY" VALUE="0"/>
+        <PARAMETER NAME="PHY_IO_STYLE" VALUE="0"/>
         <PARAMETER NAME="Component_Name" VALUE="design_1_hyperbus_controller_0_0"/>
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
         <PARAMETER NAME="C_BASEADDR" VALUE="0x80000000"/>

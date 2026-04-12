@@ -2,10 +2,10 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Thu Apr  9 11:22:34 2026
+-- Date        : Sat Apr 11 13:56:40 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
--- Command     : write_vhdl -force -mode funcsim
---               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim -rename_top design_1_lmb_bram_if_cntlr_0_0 -prefix
+--               design_1_lmb_bram_if_cntlr_0_0_ design_1_lmb_bram_if_cntlr_0_0_sim_netlist.vhdl
 -- Design      : design_1_lmb_bram_if_cntlr_0_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -40,8 +40,6 @@ entity design_1_lmb_bram_if_cntlr_0_0_lmb_mux is
     Sl_Rdy : in STD_LOGIC;
     lmb_as : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of design_1_lmb_bram_if_cntlr_0_0_lmb_mux : entity is "lmb_mux";
 end design_1_lmb_bram_if_cntlr_0_0_lmb_mux;
 
 architecture STRUCTURE of design_1_lmb_bram_if_cntlr_0_0_lmb_mux is
@@ -1811,8 +1809,6 @@ entity design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr is
   attribute C_UE_FAILING_REGISTERS of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is 0;
   attribute C_WRITE_ACCESS : integer;
   attribute C_WRITE_ACCESS of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is 2;
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr : entity is "lmb_bram_if_cntlr";
 end design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr;
 
 architecture STRUCTURE of design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr is

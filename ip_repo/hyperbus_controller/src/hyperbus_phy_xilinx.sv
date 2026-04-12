@@ -3,6 +3,7 @@
 `timescale 1ns/1ps
 
 module hyperbus_phy_xilinx #(
+    parameter int PHY_IO_STYLE = 0,
     parameter int PHY_FAMILY = 0
 ) (
     input  wire        i_hb_clk_200,
@@ -58,7 +59,9 @@ module hyperbus_phy_xilinx #(
 
     generate
         if (PHY_FAMILY == PHY_FAMILY_7SERIES) begin : g_phy_7series
-            hyperbus_phy_xilinx_7series u_phy_impl (
+            hyperbus_phy_xilinx_7series #(
+                .PHY_IO_STYLE           (          PHY_IO_STYLE)
+            ) u_phy_impl (
                 .i_hb_clk_200            (            i_hb_clk_200),
                 .i_hb_clk_200_gated      (      i_hb_clk_200_gated),
                 .i_axi_aclk              (              i_axi_aclk),
@@ -107,7 +110,9 @@ module hyperbus_phy_xilinx #(
                 .o_dq                    (                    o_dq)
             );
         end else begin : g_phy_ultrascale_plus
-            hyperbus_phy_xilinx_usplus u_phy_impl (
+            hyperbus_phy_xilinx_usplus #(
+                .PHY_IO_STYLE           (          PHY_IO_STYLE)
+            ) u_phy_impl (
                 .i_hb_clk_200            (            i_hb_clk_200),
                 .i_hb_clk_200_gated      (      i_hb_clk_200_gated),
                 .i_axi_aclk              (              i_axi_aclk),

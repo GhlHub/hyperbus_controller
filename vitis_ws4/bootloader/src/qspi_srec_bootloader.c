@@ -57,6 +57,7 @@
 #define BOOT_VECTOR_SW_EXCEPTION_OFFSET      0x08U
 #define BOOT_VECTOR_INTERRUPT_OFFSET         0x10U
 #define BOOT_VECTOR_HW_EXCEPTION_OFFSET      0x20U
+#define BOOT_FLASH_READ_BUFFER_BYTES         SREC_MAX_BYTES
 #define BL_PRINTF( ... )                     xil_printf( "[BL] " __VA_ARGS__ )
 
 extern int srec_line;
@@ -68,6 +69,10 @@ static uint8 ucSrecData[ SREC_DATA_MAX_BYTES ];
 static XSpi xSpiInstance;
 static uint8 ucSpiTx[ SREC_MAX_BYTES + BOOT_FLASH_CMD_BYTES ];
 static uint8 ucSpiRx[ SREC_MAX_BYTES + BOOT_FLASH_CMD_BYTES ];
+static uint8 ucFlashReadBuffer[ BOOT_FLASH_READ_BUFFER_BYTES ];
+static uint32_t ulFlashReadBufferBase;
+static size_t xFlashReadBufferValid;
+static int iFlashReadBufferLoaded;
 static uintptr_t uxImageStart;
 static uintptr_t uxImageEnd;
 static int iImageRangeValid;
@@ -284,65 +289,6 @@ static void prvWaitForSpacebar( const char *pcPrompt )
     }
 }
 
-static void prvRunHyperRamStoreProbe( uintptr_t uxAddress, uint32_t ulPattern0, uint32_t ulPattern1, const char *pcLabel )
-{
-    volatile uint8_t *pucTarget = ( volatile uint8_t * ) uxAddress;
-    volatile uint32_t *pulReadback = ( volatile uint32_t * ) uxAddress;
-    size_t xIndex;
-
-    for( xIndex = 0; xIndex < sizeof( ulPattern0 ); xIndex++ )
-    {
-        pucTarget[ xIndex ] = ( uint8_t ) ( ulPattern0 >> ( xIndex * 8U ) );
-    }
-
-    for( ; xIndex < ( sizeof( ulPattern0 ) + sizeof( ulPattern1 ) ); xIndex++ )
-    {
-        pucTarget[ xIndex ] = ( uint8_t ) ( ulPattern1 >> ( ( xIndex - sizeof( ulPattern0 ) ) * 8U ) );
-    }
-
-    Xil_DCacheFlushRange( ( UINTPTR ) uxAddress, sizeof( ulPattern0 ) + sizeof( ulPattern1 ) );
-#if defined(__riscv)
-    __asm__ volatile ( "fence rw, rw" ::: "memory" );
-#endif
-    uint32_t ulReadback0 = pulReadback[ 0 ];
-    uint32_t ulReadback1 = pulReadback[ 1 ];
-
-    BL_PRINTF( "HyperRAM store probe %s: wrote bytes %02lx %02lx %02lx %02lx to 0x%08lx..0x%08lx\r\n",
-               pcLabel,
-               ( unsigned long ) ( ulPattern0 & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern0 >> 8 ) & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern0 >> 16 ) & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern0 >> 24 ) & 0xFFU ),
-               ( unsigned long ) uxAddress,
-               ( unsigned long ) ( uxAddress + sizeof( ulPattern0 ) - 1U ) );
-    BL_PRINTF( "HyperRAM store probe %s: wrote bytes %02lx %02lx %02lx %02lx to 0x%08lx..0x%08lx\r\n",
-               pcLabel,
-               ( unsigned long ) ( ulPattern1 & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern1 >> 8 ) & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern1 >> 16 ) & 0xFFU ),
-               ( unsigned long ) ( ( ulPattern1 >> 24 ) & 0xFFU ),
-               ( unsigned long ) ( uxAddress + sizeof( ulPattern0 ) ),
-               ( unsigned long ) ( uxAddress + sizeof( ulPattern0 ) + sizeof( ulPattern1 ) - 1U ) );
-    BL_PRINTF( "HyperRAM store probe %s: readback=0x%08lx 0x%08lx\r\n",
-               pcLabel,
-               ( unsigned long ) ulReadback0,
-               ( unsigned long ) ulReadback1 );
-}
-
-static int prvRunHyperRamStoreProbes( uintptr_t uxHyperBusBase )
-{
-    ( void ) uxHyperBusBase;
-
-    BL_PRINTF( "Running HyperRAM write probes before SREC load\r\n" );
-    prvRunHyperRamStoreProbe( BOOT_TEST_UNCACHED_ADDR,
-                              BOOT_TEST_CACHED_PATTERN,
-                              BOOT_TEST_UNCACHED_PATTERN,
-                              "uncached-byte-writes" );
-
-    BL_PRINTF( "HyperRAM write probes completed\r\n" );
-    return 0;
-}
-
 static int prvRangeTouchesBootloader( uintptr_t uxStart, size_t xLength )
 {
     const uintptr_t uxEnd = uxStart + xLength;
@@ -385,7 +331,33 @@ static int prvFlashRead( uint32_t ulOffset, uint8 *pucBuffer, size_t xLength )
 
 static int prvFlashReadByte( uint32_t ulOffset, uint8 *pucValue )
 {
-    return prvFlashRead( ulOffset, pucValue, 1U );
+    const uint32_t ulBufferEnd = ulFlashReadBufferBase + ( uint32_t ) xFlashReadBufferValid;
+    int iStatus;
+
+    if( ( iFlashReadBufferLoaded == 0 ) ||
+        ( ulOffset < ulFlashReadBufferBase ) ||
+        ( ulOffset >= ulBufferEnd ) )
+    {
+        iStatus = prvFlashRead( ulOffset, ucFlashReadBuffer, sizeof( ucFlashReadBuffer ) );
+        if( iStatus != XST_SUCCESS )
+        {
+            return iStatus;
+        }
+
+        ulFlashReadBufferBase = ulOffset;
+        xFlashReadBufferValid = sizeof( ucFlashReadBuffer );
+        iFlashReadBufferLoaded = 1;
+    }
+
+    *pucValue = ucFlashReadBuffer[ ulOffset - ulFlashReadBufferBase ];
+    return XST_SUCCESS;
+}
+
+static void prvResetFlashReadBuffer( void )
+{
+    ulFlashReadBufferBase = 0U;
+    xFlashReadBufferValid = 0U;
+    iFlashReadBufferLoaded = 0;
 }
 
 static void prvPrintFlashBytes( uint32_t ulOffset, const uint8 *pucData, size_t xLength )
@@ -649,14 +621,56 @@ static void prvPrintFinalProgress( void )
 static int prvVerifyRecordData( void )
 {
     const volatile uint8 *pucTarget = ( const volatile uint8 * ) xSrecInfo.addr;
+    const uint8 *pucExpected = ( const uint8 * ) xSrecInfo.sr_data;
     uint32_t ulMismatchCount = 0U;
     uint32_t ulPrintedMismatchCount = 0U;
-    uint32_t ulIndex;
+    uint32_t ulIndex = 0U;
 
-    for( ulIndex = 0U; ulIndex < xSrecInfo.dlen; ulIndex++ )
+    if( ( ( ( ( uintptr_t ) pucTarget ) | ( ( uintptr_t ) pucExpected ) ) & 0x3U ) == 0U )
+    {
+        const volatile uint32_t *pulTarget = ( const volatile uint32_t * ) pucTarget;
+        const uint32_t *pulExpected = ( const uint32_t * ) pucExpected;
+        const uint32_t ulWordCount = xSrecInfo.dlen / sizeof( uint32_t );
+        uint32_t ulWordIndex;
+
+        for( ulWordIndex = 0U; ulWordIndex < ulWordCount; ulWordIndex++ )
+        {
+            if( pulTarget[ ulWordIndex ] != pulExpected[ ulWordIndex ] )
+            {
+                const uint32_t ulBaseIndex = ulWordIndex * ( uint32_t ) sizeof( uint32_t );
+                uint32_t ulByteOffset;
+
+                /* Preserve byte-accurate mismatch reporting on word miscompares. */
+                for( ulByteOffset = 0U; ulByteOffset < ( uint32_t ) sizeof( uint32_t ); ulByteOffset++ )
+                {
+                    const uint32_t ulByteIndex = ulBaseIndex + ulByteOffset;
+                    const uint8 ucActual = pucTarget[ ulByteIndex ];
+                    const uint8 ucExpected = pucExpected[ ulByteIndex ];
+
+                    if( ucActual != ucExpected )
+                    {
+                        if( ulPrintedMismatchCount < BOOT_VERIFY_MISMATCH_PRINT_LIMIT )
+                        {
+                            BL_PRINTF( "Verify mismatch @0x%08lx expected=%02X actual=%02X\r\n",
+                                       ( unsigned long ) ( ( uintptr_t ) xSrecInfo.addr + ulByteIndex ),
+                                       ucExpected,
+                                       ucActual );
+                        }
+
+                        ulMismatchCount++;
+                        ulPrintedMismatchCount++;
+                    }
+                }
+            }
+        }
+
+        ulIndex = ulWordCount * ( uint32_t ) sizeof( uint32_t );
+    }
+
+    for( ; ulIndex < xSrecInfo.dlen; ulIndex++ )
     {
         const uint8 ucActual = pucTarget[ ulIndex ];
-        const uint8 ucExpected = xSrecInfo.sr_data[ ulIndex ];
+        const uint8 ucExpected = pucExpected[ ulIndex ];
 
         if( ucActual != ucExpected )
         {
@@ -697,6 +711,7 @@ static int prvVerifyLoadedImage( void )
 
     xSrecInfo.sr_data = ucSrecData;
     srec_line = 0;
+    prvResetFlashReadBuffer();
 
     iStatus = prvFlashGetSrecLineStrict( &ulFlashOffset, ucSrecLine );
     if( iStatus != XST_SUCCESS )
@@ -805,6 +820,7 @@ static int prvLoadSrecImage( void )
     iImageRangeValid = 0;
     ulSrecProcessedCount = 0U;
     srec_line = 0;
+    prvResetFlashReadBuffer();
 
     iStatus = prvFlashRead( ulFlashOffset, ucBootStartBytes, sizeof( ucBootStartBytes ) );
     if( iStatus != XST_SUCCESS )
@@ -962,7 +978,6 @@ int main( void )
                                          &usCntValueMin,
                                          &usCntValueMax,
                                          &usCntValueMid );
-    //iStatus = hb_odly_sweep_to_midpoint_verbose( uxHyperBusBase, NULL, NULL, NULL );
     if( iStatus != 0 )
     {
         BL_PRINTF( "hb_odly_sweep_to_midpoint failed: %d\r\n", iStatus );
@@ -975,13 +990,6 @@ int main( void )
                ( unsigned ) usCntValueMid,
                ( unsigned ) usCntValueMax );
 
-    /* prvWaitForSpacebar( "Press spacebar to begin the HyperRAM store probe..." ); */
-    /* iStatus = prvRunHyperRamStoreProbes( uxHyperBusBase );
-    if( iStatus != 0 )
-    {
-        cleanup_platform();
-        return iStatus;
-    } */
     ( void ) uxHyperBusBase;
 
 #if BOOTLOADER_HAS_XSPI

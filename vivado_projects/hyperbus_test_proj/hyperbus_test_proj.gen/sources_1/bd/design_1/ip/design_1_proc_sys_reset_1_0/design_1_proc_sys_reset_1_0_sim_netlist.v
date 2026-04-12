@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Mon Mar 30 23:25:22 2026
-// Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
-// Command     : write_verilog -force -mode funcsim
-//               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_proc_sys_reset_1_0/design_1_proc_sys_reset_1_0_sim_netlist.v
+// Date        : Wed Mar 11 10:15:40 2026
+// Host        : YouBing running 64-bit Ubuntu 24.04.3 LTS
+// Command     : write_verilog -force -mode funcsim -rename_top design_1_proc_sys_reset_1_0 -prefix
+//               design_1_proc_sys_reset_1_0_ design_1_proc_sys_reset_1_0_sim_netlist.v
 // Design      : design_1_proc_sys_reset_1_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -70,7 +70,6 @@ module design_1_proc_sys_reset_1_0
         .slowest_sync_clk(slowest_sync_clk));
 endmodule
 
-(* ORIG_REF_NAME = "lpf" *) 
 module design_1_proc_sys_reset_1_0_lpf
    (lpf_int,
     slowest_sync_clk,
@@ -261,7 +260,6 @@ endmodule
 (* C_AUX_RESET_HIGH = "1'b0" *) (* C_AUX_RST_WIDTH = "4" *) (* C_EXT_RESET_HIGH = "1'b0" *) 
 (* C_EXT_RST_WIDTH = "4" *) (* C_FAMILY = "spartanuplus" *) (* C_NUM_BUS_RST = "1" *) 
 (* C_NUM_INTERCONNECT_ARESETN = "1" *) (* C_NUM_PERP_ARESETN = "1" *) (* C_NUM_PERP_RST = "1" *) 
-(* ORIG_REF_NAME = "proc_sys_reset" *) 
 module design_1_proc_sys_reset_1_0_proc_sys_reset
    (slowest_sync_clk,
     ext_reset_in,
@@ -378,7 +376,6 @@ module design_1_proc_sys_reset_1_0_proc_sys_reset
         .slowest_sync_clk(slowest_sync_clk));
 endmodule
 
-(* ORIG_REF_NAME = "sequence_psr" *) 
 module design_1_proc_sys_reset_1_0_sequence_psr
    (MB_out,
     Bsr_out,
@@ -619,7 +616,6 @@ module design_1_proc_sys_reset_1_0_sequence_psr
         .R(lpf_int));
 endmodule
 
-(* ORIG_REF_NAME = "upcnt_n" *) 
 module design_1_proc_sys_reset_1_0_upcnt_n
    (Q,
     seq_clr,
@@ -741,9 +737,9 @@ module design_1_proc_sys_reset_1_0_upcnt_n
         .R(clear));
 endmodule
 
-(* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
-(* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
-(* XPM_MODULE = "TRUE" *) (* keep_hierarchy = "soft" *) (* xpm_cdc = "SINGLE" *) 
+(* DEST_SYNC_FF = "4" *) (* INIT_SYNC_FF = "0" *) (* SIM_ASSERT_CHK = "0" *) 
+(* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) 
+(* keep_hierarchy = "soft" *) (* xpm_cdc = "SINGLE" *) 
 module design_1_proc_sys_reset_1_0_xpm_cdc_single
    (src_clk,
     src_in,

@@ -47,7 +47,8 @@ module hyperbus_hb_engine #(
     output logic                o_hb_clk_ce,
     output logic                o_timeout_pulse_hb,
     output logic                o_timeout_holdoff_active,
-    output logic                o_hb_cs_n_q,
+    output wire                 o_hb_cs_n_q,
+    output wire                 o_dbg_hb_cs_n_q,
     output logic [7:0]          o_dq_t,
     output logic [7:0]          o_dq_o_d1,
     output logic [7:0]          o_dq_o_d2,
@@ -118,6 +119,8 @@ module hyperbus_hb_engine #(
     logic [15:0] hb_word16_cur;
     logic [15:0] hb_word16_cur_le;
     logic [15:0] hb_word16_read;
+    (* IOB = "true" *) logic hb_cs_n_pad_q;
+    logic hb_cs_n_dbg_q;
     logic [15:0] hb_word16_read_le;
     logic [7:0] dq_q1_dly;
     logic [7:0] dq_q2_dly;
@@ -147,12 +150,15 @@ module hyperbus_hb_engine #(
     assign o_rwds_q1_dly_dbg = rwds_q1_dly;
     assign o_rwds_q2_dly_dbg = rwds_q2_dly;
     assign o_rd_half_dbg = rd_half;
+    assign o_hb_cs_n_q = hb_cs_n_pad_q;
+    assign o_dbg_hb_cs_n_q = hb_cs_n_dbg_q;
 
     always_ff @(posedge i_hb_clk_200) begin
         if (!i_hb_rstn) begin
             hb_state <= HB_IDLE;
             o_cmd_fifo_rd_en <= 1'b0;
-            o_hb_cs_n_q <= 1'b1;
+            hb_cs_n_pad_q <= 1'b1;
+            hb_cs_n_dbg_q <= 1'b1;
             o_hb_clk_ce <= 1'b0;
             o_timeout_pulse_hb <= 1'b0;
             o_timeout_holdoff_active <= 1'b0;
@@ -224,7 +230,8 @@ module hyperbus_hb_engine #(
 
             case (hb_state)
                 HB_IDLE: begin
-                    o_hb_cs_n_q <= 1'b1;
+                    hb_cs_n_pad_q <= 1'b1;
+                    hb_cs_n_dbg_q <= 1'b1;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -235,7 +242,8 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_GET_CMD: begin
-                    o_hb_cs_n_q <= 1'b1;
+                    hb_cs_n_pad_q <= 1'b1;
+                    hb_cs_n_dbg_q <= 1'b1;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -302,13 +310,15 @@ module hyperbus_hb_engine #(
                         cmd_loaded <= 1'b1;
                         if (i_cmd_fifo_dout[57] || i_cmd_fifo_dout[58] || !i_rd_fifo_prog_full) begin
                             cmd_loaded <= 1'b0;
-                            o_hb_cs_n_q <= 1'b0;
+                            hb_cs_n_pad_q <= 1'b0;
+                            hb_cs_n_dbg_q <= 1'b0;
                             o_hb_clk_ce <= 1'b0;
                             hb_state <= HB_CS_SETUP;
                         end
                     end else if (cmd_loaded && (cur_is_write || cur_src_axil || !i_rd_fifo_prog_full)) begin
                         cmd_loaded <= 1'b0;
-                        o_hb_cs_n_q <= 1'b0;
+                        hb_cs_n_pad_q <= 1'b0;
+                        hb_cs_n_dbg_q <= 1'b0;
                         o_hb_clk_ce <= 1'b0;
                         hb_state <= HB_CS_SETUP;
                     end
@@ -316,7 +326,8 @@ module hyperbus_hb_engine #(
 
                 HB_CS_SETUP: begin
                     // Keep CS# asserted for 10 ns before enabling the forwarded CK.
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -339,7 +350,8 @@ module hyperbus_hb_engine #(
                              {ca_shift[44:16], ca_shift[2:0]},
                              cur_src_axil ? "AXIL" : "AXIF",
                              cur_axi_beats);
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'h00;
                     o_rwds_t <= 1'b1;
@@ -404,7 +416,8 @@ module hyperbus_hb_engine #(
 
                 HB_REG_WRITE_STOP: begin
                     // Keep CK stopped before terminating transaction.
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'h00;
                     o_rwds_t <= 1'b1;
@@ -604,7 +617,8 @@ module hyperbus_hb_engine #(
 
                 HB_WRITE_DRAIN: begin
                     // Stop CK, then delay CS# deassertion in HB_TERM_HOLD.
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'h00;
                     o_rwds_t <= 1'b0;
@@ -770,7 +784,8 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_TIMEOUT_FULL_RSP: begin
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -785,7 +800,8 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_TIMEOUT_AXIL_RSP: begin
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -799,7 +815,8 @@ module hyperbus_hb_engine #(
 
                 HB_TERM_HOLD: begin
                     // Keep CS# asserted with CK stopped before deasserting CS# (read termination).
-                    o_hb_cs_n_q <= 1'b0;
+                    hb_cs_n_pad_q <= 1'b0;
+                    hb_cs_n_dbg_q <= 1'b0;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;
@@ -811,7 +828,8 @@ module hyperbus_hb_engine #(
                 end
 
                 HB_TERM: begin
-                    o_hb_cs_n_q <= 1'b1;
+                    hb_cs_n_pad_q <= 1'b1;
+                    hb_cs_n_dbg_q <= 1'b1;
                     o_hb_clk_ce <= 1'b0;
                     o_dq_t <= 8'hFF;
                     o_rwds_t <= 1'b1;

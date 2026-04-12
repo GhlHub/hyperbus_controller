@@ -8,6 +8,7 @@ module hyperbus_controller #(
     parameter int AXI_ID_WIDTH = 1,
     parameter int AXIL_ADDR_WIDTH = 16,
     parameter int HB_LATENCY_DEFAULT = 7,
+    parameter int PHY_IO_STYLE = 0,
     parameter int PHY_FAMILY = 0,
     // Compensation window (in i_hb_clk_200 cycles) for ODDRE1 forwarded outputs.
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
@@ -146,7 +147,8 @@ module hyperbus_controller #(
     logic hb_timeout_block_axi_meta, hb_timeout_block_axi;
     logic [7:0] hb_reset_pulse_cnt;
     logic hb_clk_ce;
-    logic hb_cs_n_q;
+    logic hb_cs_n_pad_q;
+    logic hb_cs_n_dbg_q;
     logic [7:0] dq_t;
     logic [7:0] dq_o_d1, dq_o_d2;
     logic [15:0] dq;
@@ -260,7 +262,8 @@ module hyperbus_controller #(
     // -------------------------
     hyperbus_axi_lite_frontend #(
         .AXIL_ADDR_WIDTH(AXIL_ADDR_WIDTH),
-        .CMD_W(CMD_W)
+        .CMD_W(CMD_W),
+        .PHY_IO_STYLE(PHY_IO_STYLE)
     ) u_axi_lite_frontend (
         .i_axi_aclk               (            i_axi_aclk),
         .i_axi_aresetn            (         i_axi_aresetn),
@@ -324,7 +327,7 @@ module hyperbus_controller #(
     // -------------------------
     // HyperBus PHY controls and sampled inputs
     // -------------------------
-    assign o_hb_cs_n = hb_cs_n_q;
+    assign o_hb_cs_n = hb_cs_n_pad_q;
     assign o_hb_clk_ce = hb_clk_ce | hb_clk_ce_force;
     assign o_hb_reset_n = i_hb_rstn && (hb_reset_pulse_cnt == 8'd0) && !hb_reset_req;
     assign o_dbg_dq_o_d1 = dq_o_d1;
@@ -333,13 +336,14 @@ module hyperbus_controller #(
     assign o_dbg_rwds_o_d2 = rwds_o_d2;
     assign o_dbg_i_dq_t = dq_t;
     assign o_dbg_i_rwds_t = rwds_t;
-    assign o_dbg_hb_cs_n_q = hb_cs_n_q;
+    assign o_dbg_hb_cs_n_q = hb_cs_n_dbg_q;
     assign o_dbg_rd_fifo_din = rd_fifo_din;
     assign o_dbg_rd_fifo_wr_en = rd_fifo_wr_en;
     assign o_dbg_last_read_word32 = last_read_word32_dbg;
     assign o_dbg_rd_half = rd_half_dbg;
 
     hyperbus_phy_xilinx #(
+        .PHY_IO_STYLE(PHY_IO_STYLE),
         .PHY_FAMILY(PHY_FAMILY)
     ) u_hyperbus_phy (
         .i_axi_aclk             (            i_axi_aclk),
@@ -429,7 +433,8 @@ module hyperbus_controller #(
         .o_hb_clk_ce           (             hb_clk_ce),
         .o_timeout_pulse_hb    (    hb_timeout_pulse_hb),
         .o_timeout_holdoff_active  (   hb_timeout_holdoff_hb),
-        .o_hb_cs_n_q           (             hb_cs_n_q),
+        .o_hb_cs_n_q           (         hb_cs_n_pad_q),
+        .o_dbg_hb_cs_n_q       (         hb_cs_n_dbg_q),
         .o_dq_t                (                 dq_t),
         .o_dq_o_d1             (              dq_o_d1),
         .o_dq_o_d2             (              dq_o_d2),

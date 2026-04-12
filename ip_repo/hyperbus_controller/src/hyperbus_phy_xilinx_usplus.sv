@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 `timescale 1ns/1ps
 
-module hyperbus_phy_xilinx_usplus (
+module hyperbus_phy_xilinx_usplus #(
+    parameter int PHY_IO_STYLE = 0
+) (
     input  wire       i_hb_clk_200,
     input  wire       i_hb_clk_200_gated,
     input  wire       i_axi_aclk,
@@ -51,6 +53,9 @@ module hyperbus_phy_xilinx_usplus (
     output logic [15:0] o_dq
 );
 
+    localparam int PHY_IO_STYLE_IO_DELAY            = 0;
+    localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
+
     logic hb_ck_fwd;
     logic hb_ck_fwd_delayed;
     logic [7:0] dq_i;
@@ -63,44 +68,9 @@ module hyperbus_phy_xilinx_usplus (
     logic rwds_out_ddr;
     logic rwds_q1_raw;
     logic rwds_q2_raw;
-    logic idelayctrl_rdy;
-    logic idelayctrl_rst_ref_meta;
-    logic idelayctrl_rst_ref_sync;
-    logic idelayctrl_rdy_axi_meta;
-    logic idelayctrl_rdy_axi_sync;
-    logic odly_en_vtc_to_odelay;
-    logic odly_ce_to_odelay;
-    logic odly_inc_to_odelay;
-    logic odly_load_to_odelay;
-    logic odly_rst_to_odelay;
-    logic [8:0] odly_cntvaluein_to_odelay;
 
-    always_ff @(posedge i_ref_clk_300) begin
-        if (i_idelayctrl_rst) begin
-            idelayctrl_rst_ref_meta <= 1'b1;
-            idelayctrl_rst_ref_sync <= 1'b1;
-        end else begin
-            idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
-            idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
-        end
-    end
-
-    always_ff @(posedge i_axi_aclk) begin
-        if (!i_axi_aresetn) begin
-            idelayctrl_rdy_axi_meta <= 1'b0;
-            idelayctrl_rdy_axi_sync <= 1'b0;
-        end else begin
-            idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
-            idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
-        end
-    end
-
-    IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
-    u_idelayctrl (
-        .RDY    (        idelayctrl_rdy),
-        .REFCLK (         i_ref_clk_300),
-        .RST    (idelayctrl_rst_ref_sync)
-    );
+    assign o_hb_ck_p   = hb_ck_fwd_delayed;
+    assign o_hb_ck_n   = 1'b0;
 
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
@@ -115,46 +85,197 @@ module hyperbus_phy_xilinx_usplus (
         .SR (           ~i_hb_rstn)
     );
 
-    ODELAYE3 #(
-        .CASCADE("NONE"),
-        .DELAY_FORMAT("TIME"),
-`ifndef SYNTHESIS
-        .DELAY_TYPE("VAR_LOAD"),
-`else
-        .DELAY_TYPE("VARIABLE"),
-`endif
-        .DELAY_VALUE(34),
-        .IS_CLK_INVERTED(1'b0),
-        .IS_RST_INVERTED(1'b0),
-        .REFCLK_FREQUENCY(300.0),
-        .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-        .UPDATE_MODE("ASYNC")
-    ) u_odelay_hb_ck_p (
-        .CASC_OUT    (                          ),
-        .CNTVALUEOUT (       o_odly_cntvalueout),
-        .DATAOUT     (        hb_ck_fwd_delayed),
-        .CASC_IN     (                     1'b0),
-        .CASC_RETURN (                     1'b0),
-        .CE          (        odly_ce_to_odelay),
-        .CLK         (               i_axi_aclk),
-        .CNTVALUEIN  (odly_cntvaluein_to_odelay),
-        .EN_VTC      (    odly_en_vtc_to_odelay),
-        .INC         (       odly_inc_to_odelay),
-`ifndef SYNTHESIS
-        .LOAD        (      odly_load_to_odelay),
-`else
-        .LOAD        (                     1'b0),
-`endif
-        .ODATAIN     (                 hb_ck_fwd),
-        .RST         (       odly_rst_to_odelay)
-    );
+    generate
+        if (PHY_IO_STYLE == PHY_IO_STYLE_IO_DELAY) begin : g_io_delay
+            logic idelayctrl_rdy;
+            logic idelayctrl_rst_ref_meta;
+            logic idelayctrl_rst_ref_sync;
+            logic idelayctrl_rdy_axi_meta;
+            logic idelayctrl_rdy_axi_sync;
+            logic odly_en_vtc_to_odelay;
+            logic odly_ce_to_odelay;
+            logic odly_inc_to_odelay;
+            logic odly_load_to_odelay;
+            logic odly_rst_to_odelay;
+            logic [8:0] odly_cntvaluein_to_odelay;
 
-    OBUF u_obuf_ck_p (
-        .O (         o_hb_ck_p),
-        .I ( hb_ck_fwd_delayed)
-    );
+            always_ff @(posedge i_ref_clk_300) begin
+                if (i_idelayctrl_rst) begin
+                    idelayctrl_rst_ref_meta <= 1'b1;
+                    idelayctrl_rst_ref_sync <= 1'b1;
+                end else begin
+                    idelayctrl_rst_ref_meta <= i_idelayctrl_rst_req;
+                    idelayctrl_rst_ref_sync <= idelayctrl_rst_ref_meta;
+                end
+            end
 
-    assign o_hb_ck_n = 1'b0;
+            always_ff @(posedge i_axi_aclk) begin
+                if (!i_axi_aresetn) begin
+                    idelayctrl_rdy_axi_meta <= 1'b0;
+                    idelayctrl_rdy_axi_sync <= 1'b0;
+                end else begin
+                    idelayctrl_rdy_axi_meta <= idelayctrl_rdy;
+                    idelayctrl_rdy_axi_sync <= idelayctrl_rdy_axi_meta;
+                end
+            end
+
+            IDELAYCTRL #(.SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"))
+            u_idelayctrl (
+                .RDY    (        idelayctrl_rdy),
+                .REFCLK (         i_ref_clk_300),
+                .RST    (idelayctrl_rst_ref_sync)
+            );
+
+            ODELAYE3 #(
+                .CASCADE("NONE"),
+                .DELAY_FORMAT("TIME"),
+`ifndef SYNTHESIS
+                .DELAY_TYPE("VAR_LOAD"),
+`else
+                .DELAY_TYPE("VARIABLE"),
+`endif
+                .DELAY_VALUE(34),
+                .IS_CLK_INVERTED(1'b0),
+                .IS_RST_INVERTED(1'b0),
+                .REFCLK_FREQUENCY(300.0),
+                .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+                .UPDATE_MODE("ASYNC")
+            ) u_odelay_hb_ck_p (
+                .CASC_OUT    (                          ),
+                .CNTVALUEOUT (       o_odly_cntvalueout),
+                .DATAOUT     (        hb_ck_fwd_delayed),
+                .CASC_IN     (                     1'b0),
+                .CASC_RETURN (                     1'b0),
+                .CE          (        odly_ce_to_odelay),
+                .CLK         (               i_axi_aclk),
+                .CNTVALUEIN  (odly_cntvaluein_to_odelay),
+                .EN_VTC      (    odly_en_vtc_to_odelay),
+                .INC         (       odly_inc_to_odelay),
+`ifndef SYNTHESIS
+                .LOAD        (      odly_load_to_odelay),
+`else
+                .LOAD        (                     1'b0),
+`endif
+                .ODATAIN     (                 hb_ck_fwd),
+                .RST         (       odly_rst_to_odelay)
+            );
+
+            assign odly_en_vtc_to_odelay    = i_odly_en_vtc;
+            assign odly_ce_to_odelay        = i_odly_ce;
+            assign odly_inc_to_odelay       = i_odly_inc;
+            assign odly_load_to_odelay      = i_odly_load;
+            assign odly_rst_to_odelay       = i_odelay_rst_req;
+            assign odly_cntvaluein_to_odelay = i_odly_cntvaluein;
+            assign o_idelayctrl_rdy_axi     = idelayctrl_rdy_axi_sync;
+
+            genvar gdi;
+            for (gdi = 0; gdi < 8; gdi = gdi + 1) begin : g_dq_idelay
+                IDELAYE3 #(
+                    .CASCADE("NONE"),
+                    .DELAY_FORMAT("TIME"),
+                    .DELAY_SRC("IDATAIN"),
+`ifndef SYNTHESIS
+                    .DELAY_TYPE("VAR_LOAD"),
+`else
+                    .DELAY_TYPE("VARIABLE"),
+`endif
+                    .DELAY_VALUE(0),
+                    .IS_CLK_INVERTED(1'b0),
+                    .IS_RST_INVERTED(1'b0),
+                    .REFCLK_FREQUENCY(300.0),
+                    .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+                    .UPDATE_MODE("ASYNC")
+                ) u_idelay_dq (
+                    .CASC_OUT    (                                 ),
+                    .CNTVALUEOUT (o_dq_idly_cntvalueout[gdi*9 +: 9]),
+                    .DATAOUT     (                 dq_i_delayed[gdi]),
+                    .CASC_IN     (                          1'b0),
+                    .CASC_RETURN (                          1'b0),
+                    .CE          (                   i_dq_idly_ce[gdi]),
+                    .CLK         (                        i_axi_aclk),
+                    .CNTVALUEIN  (i_dq_idly_cntvaluein[gdi*9 +: 9]),
+                    .DATAIN      (                          1'b0),
+                    .EN_VTC      (               i_dq_idly_en_vtc[gdi]),
+                    .IDATAIN     (                          dq_i[gdi]),
+                    .INC         (                  i_dq_idly_inc[gdi]),
+`ifndef SYNTHESIS
+                    .LOAD        (                 i_dq_idly_load[gdi]),
+`else
+                    .LOAD        (                          1'b0),
+`endif
+                    .RST         (                i_rwds_idelay_rst_req)
+                );
+            end
+
+            IDELAYE3 #(
+                .CASCADE("NONE"),
+                .DELAY_FORMAT("TIME"),
+                .DELAY_SRC("IDATAIN"),
+`ifndef SYNTHESIS
+                .DELAY_TYPE("VAR_LOAD"),
+`else
+                .DELAY_TYPE("VARIABLE"),
+`endif
+                .DELAY_VALUE(10),
+                .IS_CLK_INVERTED(1'b0),
+                .IS_RST_INVERTED(1'b0),
+                .REFCLK_FREQUENCY(300.0),
+                .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
+                .UPDATE_MODE("ASYNC")
+            ) u_idelay_rwds (
+                .CASC_OUT    (                    ),
+                .CNTVALUEOUT (o_rwds_idly_cntvalueout),
+                .DATAOUT     (      rwds_i_delayed),
+                .CASC_IN     (          1'b0),
+                .CASC_RETURN (          1'b0),
+                .CE          (     i_rwds_idly_ce),
+                .CLK         (         i_axi_aclk),
+                .CNTVALUEIN  (i_rwds_idly_cntvaluein),
+                .DATAIN      (          1'b0),
+                .EN_VTC      (i_rwds_idly_en_vtc),
+                .IDATAIN     (            rwds_i),
+                .INC         (     i_rwds_idly_inc),
+`ifndef SYNTHESIS
+                .LOAD        (i_rwds_idly_load),
+`else
+                .LOAD        (          1'b0),
+`endif
+                .RST         (i_rwds_idelay_rst_req)
+            );
+        end else begin : g_ext_clk_phase_shift
+            assign hb_ck_fwd_delayed        = hb_ck_fwd;
+            assign dq_i_delayed             = dq_i;
+            assign rwds_i_delayed           = rwds_i;
+            assign o_dq_idly_cntvalueout    = 72'h0;
+            assign o_rwds_idly_cntvalueout  = 9'h000;
+            assign o_odly_cntvalueout       = 9'h000;
+            assign o_idelayctrl_rdy_axi     = 1'b1;
+
+            wire _unused_ok = &{1'b0,
+                                i_axi_aclk,
+                                i_axi_aresetn,
+                                i_ref_clk_300,
+                                i_idelayctrl_rst,
+                                i_idelayctrl_rst_req,
+                                i_odelay_rst_req,
+                                i_rwds_idelay_rst_req,
+                                i_odly_en_vtc,
+                                i_odly_ce,
+                                i_odly_inc,
+                                i_odly_load,
+                                i_odly_cntvaluein,
+                                i_rwds_idly_en_vtc,
+                                i_rwds_idly_ce,
+                                i_rwds_idly_inc,
+                                i_rwds_idly_load,
+                                i_rwds_idly_cntvaluein,
+                                i_dq_idly_en_vtc,
+                                i_dq_idly_ce,
+                                i_dq_idly_inc,
+                                i_dq_idly_load,
+                                i_dq_idly_cntvaluein};
+        end
+    endgenerate
 
     genvar gi;
     generate
@@ -172,49 +293,6 @@ module hyperbus_phy_xilinx_usplus (
                 .SR (             ~i_hb_rstn)
             );
 
-            IOBUF u_iobuf_dq (
-                .I  (       dq_out_ddr[gi]),
-                .O  (              dq_i[gi]),
-                .T  (            i_dq_t[gi]),
-                .IO (           io_hb_dq[gi])
-            );
-
-            IDELAYE3 #(
-                .CASCADE("NONE"),
-                .DELAY_FORMAT("TIME"),
-                .DELAY_SRC("IDATAIN"),
-`ifndef SYNTHESIS
-                .DELAY_TYPE("VAR_LOAD"),
-`else
-                .DELAY_TYPE("VARIABLE"),
-`endif
-                .DELAY_VALUE(0),
-                .IS_CLK_INVERTED(1'b0),
-                .IS_RST_INVERTED(1'b0),
-                .REFCLK_FREQUENCY(300.0),
-                .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-                .UPDATE_MODE("ASYNC")
-            ) u_idelay_dq (
-                .CASC_OUT    (                                 ),
-                .CNTVALUEOUT (o_dq_idly_cntvalueout[gi*9 +: 9]),
-                .DATAOUT     (                  dq_i_delayed[gi]),
-                .CASC_IN     (                          1'b0),
-                .CASC_RETURN (                          1'b0),
-                .CE          (                    i_dq_idly_ce[gi]),
-                .CLK         (                        i_axi_aclk),
-                .CNTVALUEIN  (i_dq_idly_cntvaluein[gi*9 +: 9]),
-                .DATAIN      (                          1'b0),
-                .EN_VTC      (                i_dq_idly_en_vtc[gi]),
-                .IDATAIN     (                          dq_i[gi]),
-                .INC         (                   i_dq_idly_inc[gi]),
-`ifndef SYNTHESIS
-                .LOAD        (                  i_dq_idly_load[gi]),
-`else
-                .LOAD        (                          1'b0),
-`endif
-                .RST         (                i_rwds_idelay_rst_req)
-            );
-
             IDDRE1 #(
                 .DDR_CLK_EDGE("OPPOSITE_EDGE"),
                 .IS_C_INVERTED(1'b0),
@@ -227,12 +305,19 @@ module hyperbus_phy_xilinx_usplus (
                 .D  (         dq_i_delayed[gi]),
                 .R  (              i_iddre1_rst)
             );
+
+            IOBUF u_iobuf_dq (
+                .I  (       dq_out_ddr[gi]),
+                .O  (              dq_i[gi]),
+                .T  (            i_dq_t[gi]),
+                .IO (           io_hb_dq[gi])
+            );
         end
     endgenerate
 
     assign o_dq_q1 = dq_q1_raw;
     assign o_dq_q2 = dq_q2_raw;
-    assign o_dq = {dq_q2_raw, dq_q1_raw};
+    assign o_dq    = {dq_q2_raw, dq_q1_raw};
 
     ODDRE1 #(
         .IS_C_INVERTED(1'b0),
@@ -252,42 +337,6 @@ module hyperbus_phy_xilinx_usplus (
         .O  (             rwds_i),
         .T  (           i_rwds_t),
         .IO (         io_hb_rwds)
-    );
-
-    IDELAYE3 #(
-        .CASCADE("NONE"),
-        .DELAY_FORMAT("TIME"),
-        .DELAY_SRC("IDATAIN"),
-`ifndef SYNTHESIS
-        .DELAY_TYPE("VAR_LOAD"),
-`else
-        .DELAY_TYPE("VARIABLE"),
-`endif
-        .DELAY_VALUE(10),
-        .IS_CLK_INVERTED(1'b0),
-        .IS_RST_INVERTED(1'b0),
-        .REFCLK_FREQUENCY(300.0),
-        .SIM_DEVICE("SPARTAN_ULTRASCALE_PLUS"),
-        .UPDATE_MODE("ASYNC")
-    ) u_idelay_rwds (
-        .CASC_OUT    (                    ),
-        .CNTVALUEOUT (o_rwds_idly_cntvalueout),
-        .DATAOUT     (      rwds_i_delayed),
-        .CASC_IN     (          1'b0),
-        .CASC_RETURN (          1'b0),
-        .CE          (     i_rwds_idly_ce),
-        .CLK         (         i_axi_aclk),
-        .CNTVALUEIN  (i_rwds_idly_cntvaluein),
-        .DATAIN      (          1'b0),
-        .EN_VTC      (i_rwds_idly_en_vtc),
-        .IDATAIN     (            rwds_i),
-        .INC         (     i_rwds_idly_inc),
-`ifndef SYNTHESIS
-        .LOAD        (i_rwds_idly_load),
-`else
-        .LOAD        (          1'b0),
-`endif
-        .RST         (i_rwds_idelay_rst_req)
     );
 
     IDDRE1 #(
@@ -310,14 +359,5 @@ module hyperbus_phy_xilinx_usplus (
 
     assign o_rwds_q1 = rwds_q1_raw;
     assign o_rwds_q2 = rwds_q2_raw;
-
-    assign odly_en_vtc_to_odelay = i_odly_en_vtc;
-    assign odly_ce_to_odelay = i_odly_ce;
-    assign odly_inc_to_odelay = i_odly_inc;
-    assign odly_load_to_odelay = i_odly_load;
-    assign odly_rst_to_odelay = i_odelay_rst_req;
-    assign odly_cntvaluein_to_odelay = i_odly_cntvaluein;
-
-    assign o_idelayctrl_rdy_axi = idelayctrl_rdy_axi_sync;
 
 endmodule

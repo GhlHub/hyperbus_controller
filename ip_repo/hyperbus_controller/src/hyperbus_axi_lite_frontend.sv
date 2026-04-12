@@ -4,7 +4,8 @@
 
 module hyperbus_axi_lite_frontend #(
     parameter int AXIL_ADDR_WIDTH = 16,
-    parameter int CMD_W = 59
+    parameter int CMD_W = 59,
+    parameter int PHY_IO_STYLE = 0
 ) (
     input  wire                         i_axi_aclk,
     input  wire                         i_axi_aresetn,
@@ -77,6 +78,9 @@ module hyperbus_axi_lite_frontend #(
         AXIL_RD_RESP
     } axil_state_t;
     axil_state_t axil_state;
+    localparam int PHY_IO_STYLE_IO_DELAY           = 0;
+    localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
+    localparam bit HAS_DELAY_CTRL = (PHY_IO_STYLE == PHY_IO_STYLE_IO_DELAY);
 
     logic [AXIL_ADDR_WIDTH-1:0] axil_awaddr_q;
     logic axil_aw_seen;
@@ -127,7 +131,8 @@ module hyperbus_axi_lite_frontend #(
 
     function automatic logic axil_is_dq_idly_addr(input logic [AXIL_ADDR_WIDTH-1:0] a);
         begin
-            if ((a >= AXIL_DQ_IDELAY_BASE_ADDR) && (a <= AXIL_DQ_IDELAY_END_ADDR)) begin
+            if (HAS_DELAY_CTRL &&
+                (a >= AXIL_DQ_IDELAY_BASE_ADDR) && (a <= AXIL_DQ_IDELAY_END_ADDR)) begin
                 unique case (a[3:0])
                     4'h0, 4'h4, 4'h8: axil_is_dq_idly_addr = 1'b1;
                     default:          axil_is_dq_idly_addr = 1'b0;
@@ -148,7 +153,8 @@ module hyperbus_axi_lite_frontend #(
                     AXIL_VERSION_ADDR,
                     AXIL_AXIF_RWDS_CNTR_ADDR,
                     AXIL_AXIL_RWDS_CNTR_ADDR,
-                    AXIL_HB_CLK_CE_FORCE_ADDR,
+                    AXIL_HB_CLK_CE_FORCE_ADDR:
+                        axil_is_local_addr = 1'b1;
                     AXIL_CK_P_ODELAY_CTRL_ADDR,
                     AXIL_CK_P_ODELAY_TIME_ADDR,
                     AXIL_CK_P_ODELAY_STATUS_ADDR,
@@ -156,7 +162,8 @@ module hyperbus_axi_lite_frontend #(
                     AXIL_RWDS_IDELAY_TIME_ADDR,
                     AXIL_RWDS_IDELAY_STATUS_ADDR,
                     AXIL_DELAY_RST_CTRL_ADDR,
-                    AXIL_IDELAYCTRL_STATUS_ADDR: axil_is_local_addr = 1'b1;
+                    AXIL_IDELAYCTRL_STATUS_ADDR:
+                        axil_is_local_addr = HAS_DELAY_CTRL;
                     default:                    axil_is_local_addr = 1'b0;
                 endcase
             end
@@ -404,7 +411,7 @@ module hyperbus_axi_lite_frontend #(
                     end else begin
                         unique case (s_axil_araddr)
                             AXIL_ERR_STATUS_ADDR:         s_axil_rdata <= {31'h0, timeout_status_q};
-                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0007;
+                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0008;
                             AXIL_AXIF_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axif_rwds_cntr};
                             AXIL_AXIL_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axil_rwds_cntr};
                             AXIL_HB_CLK_CE_FORCE_ADDR:    s_axil_rdata <= {31'h0, hb_clk_ce_force_q};
@@ -478,19 +485,19 @@ module hyperbus_axi_lite_frontend #(
         end
     end
 
-    assign o_odly_en_vtc        = odly_en_vtc_q;
-    assign o_odly_inc           = odly_inc_q;
-    assign o_odly_cntvaluein    = odly_time_value_q;
-    assign o_rwds_idly_en_vtc   = rwds_idly_en_vtc_q;
-    assign o_rwds_idly_inc      = rwds_idly_inc_q;
-    assign o_rwds_idly_cntvaluein = rwds_idly_time_value_q;
-    assign o_dq_idly_en_vtc     = dq_idly_en_vtc_q;
-    assign o_dq_idly_inc        = dq_idly_inc_q;
-    assign o_dq_idly_cntvaluein = dq_idly_time_value_q;
-    assign o_idelayctrl_rst_req = delay_rst_ctrl_q[0];
-    assign o_odelay_rst_req     = delay_rst_ctrl_q[1];
+    assign o_odly_en_vtc        = HAS_DELAY_CTRL ? odly_en_vtc_q : 1'b0;
+    assign o_odly_inc           = HAS_DELAY_CTRL ? odly_inc_q : 1'b0;
+    assign o_odly_cntvaluein    = HAS_DELAY_CTRL ? odly_time_value_q : 9'h000;
+    assign o_rwds_idly_en_vtc   = HAS_DELAY_CTRL ? rwds_idly_en_vtc_q : 1'b0;
+    assign o_rwds_idly_inc      = HAS_DELAY_CTRL ? rwds_idly_inc_q : 1'b0;
+    assign o_rwds_idly_cntvaluein = HAS_DELAY_CTRL ? rwds_idly_time_value_q : 9'h000;
+    assign o_dq_idly_en_vtc     = HAS_DELAY_CTRL ? dq_idly_en_vtc_q : 8'h00;
+    assign o_dq_idly_inc        = HAS_DELAY_CTRL ? dq_idly_inc_q : 8'h00;
+    assign o_dq_idly_cntvaluein = HAS_DELAY_CTRL ? dq_idly_time_value_q : 72'h0;
+    assign o_idelayctrl_rst_req = HAS_DELAY_CTRL ? delay_rst_ctrl_q[0] : 1'b0;
+    assign o_odelay_rst_req     = HAS_DELAY_CTRL ? delay_rst_ctrl_q[1] : 1'b0;
     assign o_hb_clk_ce_force     = hb_clk_ce_force_q;
-    assign o_rwds_idelay_rst_req = delay_rst_ctrl_q[2];
-    assign o_hb_reset_req        = delay_rst_ctrl_q[3];
+    assign o_rwds_idelay_rst_req = HAS_DELAY_CTRL ? delay_rst_ctrl_q[2] : 1'b0;
+    assign o_hb_reset_req        = HAS_DELAY_CTRL ? delay_rst_ctrl_q[3] : 1'b0;
 
 endmodule

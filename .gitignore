@@ -20,5 +20,13 @@ hyperbus_controller_tb.wdb
 .cxl*
 .DS_Store
 ._.DS_Store
+logs/
+rdf0*/
+doc/rdf0*/
+doc/scu35-boot-and-setup-guide-20250418_WtMkX.pdf
+doc/ug1713*.pdf
+doc/xtp808*/
+simlibs/
+compile_simlib.log.save
 hyperbus_test_proj/hyperbus_test_proj.gen/
 hyperbus_test_proj/hyperbus_test_proj.srcs/utils_1/

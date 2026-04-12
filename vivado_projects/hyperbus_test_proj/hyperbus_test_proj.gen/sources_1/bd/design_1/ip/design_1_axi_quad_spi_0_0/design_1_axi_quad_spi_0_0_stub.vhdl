@@ -2,10 +2,10 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Tue Mar 31 15:59:30 2026
+-- Date        : Sat Apr 11 13:56:13 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
--- Command     : write_vhdl -force -mode synth_stub
---               /raid/work/hyperbus_controller_freertos_port/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_quad_spi_0_0/design_1_axi_quad_spi_0_0_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top design_1_axi_quad_spi_0_0 -prefix
+--               design_1_axi_quad_spi_0_0_ design_1_axi_quad_spi_0_0_stub.vhdl
 -- Design      : design_1_axi_quad_spi_0_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xcsu35p-sbvb625-2-e
