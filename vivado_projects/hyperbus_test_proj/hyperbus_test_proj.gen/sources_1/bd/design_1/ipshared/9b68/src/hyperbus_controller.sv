@@ -401,7 +401,8 @@ module hyperbus_controller #(
         .CMD_W(CMD_W),
         .HB_LATENCY_DEFAULT(HB_LATENCY_DEFAULT),
         .ODDRE1_TX_PIPE_CYCLES(ODDRE1_TX_PIPE_CYCLES),
-        .HB_READ_CS_DEASSERT_DELAY(HB_READ_CS_DEASSERT_DELAY)
+        .HB_READ_CS_DEASSERT_DELAY(HB_READ_CS_DEASSERT_DELAY),
+        .PHY_IO_STYLE(PHY_IO_STYLE)
     ) u_hb_engine (
         .i_hb_clk_200          (          i_hb_clk_200),
         .i_hb_rstn             (             i_hb_rstn),

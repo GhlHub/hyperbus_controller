@@ -9,7 +9,8 @@ module hyperbus_hb_engine #(
     parameter int HB_READ_CS_DEASSERT_DELAY = 2,
     parameter int HB_READ_STROBE_GATE_CYCLES = 15,
     parameter int RWDS_TIMEOUT_CYCLES = 24,
-    parameter int TIMEOUT_HOLDOFF_CYCLES = 92
+    parameter int TIMEOUT_HOLDOFF_CYCLES = 92,
+    parameter int PHY_IO_STYLE = 0
 ) (
     input  wire                 i_hb_clk_200,
     input  wire                 i_hb_rstn,
@@ -138,13 +139,20 @@ module hyperbus_hb_engine #(
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
     assign hb_word16_cur = {i_dq_q1, i_dq_q2};
     assign hb_word16_cur_le = {hb_word16_cur[7:0], hb_word16_cur[15:8]};
+    // In IO_DELAY mode (PHY_IO_STYLE=0), the IDELAYE3 on DQ adds ~1 clock cycle
+    // of physical delay, so the unregistered IDDRE1 output in synthesis is
+    // already aligned with the registered RWDS qualifier (rwds_q1_dly).
+    // In EXT_CLK_PHASE_SHIFT mode (PHY_IO_STYLE=1), there is no IDELAYE3, so
+    // using the unregistered DQ would capture one HyperBus word too late.
+    // Use the registered path (hb_word16) for PHY_IO_STYLE=1 in synthesis so
+    // that DQ and RWDS are both sampled from the same HyperBus clock cycle.
 `ifdef SYNTHESIS
-    assign hb_word16_read = hb_word16_cur;
-    assign hb_word16_read_le = hb_word16_cur_le;
+    localparam bit USE_REG_DQ = (PHY_IO_STYLE == 1);
 `else
-    assign hb_word16_read = hb_word16;
-    assign hb_word16_read_le = hb_word16_le;
+    localparam bit USE_REG_DQ = 1'b1;
 `endif
+    assign hb_word16_read    = USE_REG_DQ ? hb_word16    : hb_word16_cur;
+    assign hb_word16_read_le = USE_REG_DQ ? hb_word16_le : hb_word16_cur_le;
     assign o_dq_q1_dly_dbg = dq_q1_dly;
     assign o_dq_q2_dly_dbg = dq_q2_dly;
     assign o_rwds_q1_dly_dbg = rwds_q1_dly;

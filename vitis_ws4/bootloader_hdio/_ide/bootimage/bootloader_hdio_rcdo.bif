@@ -1,0 +1,21 @@
+new_bif:
+{
+ id_code = 0x04e80093
+ image
+ {
+  name = pmcl_subsys
+  id = 0x0
+  partition
+  {
+   id = 0x01
+   type = bootloader
+   file = /raid/work/ghl_ip/hyperbus_ai3/vivado_projects/hyperbus_hdio/hyperbus_hdio.runs/impl_1/static_files/plm.elf
+  }
+  partition
+  {
+   id = 0x02
+   type = pldata
+   file = /raid/work/ghl_ip/hyperbus_ai3/vitis_ws4/bootloader_hdio/_ide/bootimage/hyperbus_hdio_top_patched.rcdo
+  }
+ }
+}

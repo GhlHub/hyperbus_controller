@@ -1,0 +1,4 @@
+the_ROM_image:
+{
+  [bitstream] /raid/work/ghl_ip/hyperbus_ai3/vitis_ws4/bootloader_hdio/_ide/bootimage/hyperbus_hdio_top_patched.bit
+}
