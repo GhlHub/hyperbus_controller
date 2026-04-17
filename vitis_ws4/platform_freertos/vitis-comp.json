@@ -3,7 +3,7 @@
   "type": "PLATFORM",
   "configuration": {
     "description": "",
-    "xsa": "/raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/export/platform/hw/design_1_wrapper.xsa",
+    "xsa": "/raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform_freertos/export/platform_freertos/hw/design_1_wrapper.xsa",
     "xsaPathInPlatform": "platform_freertos/hw/design_1_wrapper.xsa",
     "emulationXsa": "",
     "emulationXsaPathInPlatform": "",
