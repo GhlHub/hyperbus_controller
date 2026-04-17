@@ -30,3 +30,14 @@ simlibs/
 compile_simlib.log.save
 hyperbus_test_proj/hyperbus_test_proj.gen/
 hyperbus_test_proj/hyperbus_test_proj.srcs/utils_1/
+sim_m/xsim/runs/
+**/compile_commands.json
+vitis_ws4/_ide/.peers.ini
+vitis_ws4/_ide/.vitisPlatformRepo.json
+vitis_ws4/_ide/version.ini
+vitis_ws4/_ide/workspace_journal*.py
+vitis_ws4/bootloader_hdio/_ide/bootimage/*.bit
+vitis_ws4/bootloader_hdio/_ide/bootimage/*.rcdo
+vitis_ws4/bootloader_hdio/_ide/bootimage/resources/*.pdi
+vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/lib/
+vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/

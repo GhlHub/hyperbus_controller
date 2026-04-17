@@ -1,6 +1,0 @@
-verilog xil_defaultlib -i "/tools/Xilinx/2025.2/data/rsb/busdef" "/raid/work/ghl_ip/hyperbus_ai3/infinion/002-26518_0B/s27kl0642.v" 
-sv xil_defaultlib -i "/tools/Xilinx/2025.2/data/rsb/busdef" -i "/raid/work/ghl_ip/hyperbus_ai3/tb" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_fifo_bank_xilinx.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_phy_xilinx.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_phy_xilinx_usplus.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_phy_xilinx_7series.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_axi_lite_frontend.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_axi_full_frontend.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_hb_engine.sv" "/raid/work/ghl_ip/hyperbus_ai3/rtl/hyperbus_controller.sv" "/raid/work/ghl_ip/hyperbus_ai3/tb/hyperbus_controller_tb.sv" 
-verilog xil_defaultlib "/raid/work/ghl_ip/hyperbus_ai3/sim_m/xsim/glbl.v"
-
-# Do not sort compile order
-nosort
