@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Documentation
 
-Last updated: 2026-03-26
+Last updated: 2026-04-17
 
 ## Start Here
 
@@ -30,6 +30,16 @@ This project implements a HyperBus / HyperRAM controller with:
 - AXI4-Full slave data path
 - AXI4-Lite slave control and register path
 - HyperBus physical interface using Xilinx primitives
+
+Checked-in project variants:
+
+- `vivado_projects/hyperbus_test_proj`
+  - current HPIO / delay-based project using `PHY_IO_STYLE=IO_DELAY`
+- `vivado_projects/hyperbus_hdio`
+  - current phased-clock project using `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`
+  - despite the project name, the passing routed implementation is currently on
+    HPIO because that is the hardware available today
+  - an HDIO-routed verification attempt may be possible in the coming year
 
 Reference assumptions:
 
@@ -102,7 +112,19 @@ Simulation compile note:
 Implementation status note:
 
 - The UltraScale+ PHY design has been verified on an implemented FPGA design.
+- The phased-clock `hyperbus_hdio` project is also passing in implemented-FPGA
+  testing and is the current validated phased-clock solution.
+- That validated phased-clock implementation is routed on HPIO, not HDIO.
 - The 7-series PHY design currently has simulation coverage, but implemented-FPGA verification is still future work.
+
+Current HyperRAM speed note:
+
+- the current validated design target remains 200 MHz for 1.8 V operation
+- for 3.0 V / 3.3 V HyperRAM operation, use 166 MHz as the expected top-end
+  operating point for this part
+- the phased-clock solution is expected to be easier to close at 166 MHz than
+  at 200 MHz, so no new architectural blocker is expected from that lower-rate
+  mode alone
 
 ## Vivado IP Packaging
 
@@ -258,6 +280,19 @@ Current public APIs:
 - `hb_odly_sweep_to_midpoint()` (finds first/last passing CK ODELAY values from
   `ID0`, computes midpoint, then steps back to the midpoint; default terse logging)
 - `hb_odly_sweep_to_midpoint_verbose()` (same sweep, with per-step logging)
+- `clk_wiz_phase_ctrl_step()` (phased-clock control helper used by the
+  `bootloader_hdio` calibration flow)
+
+Calibration flow summary:
+
+- `vitis_ws4/bootloader`
+  - delay-based flow for `PHY_IO_STYLE=IO_DELAY`
+  - reset delay blocks, tune RWDS IDELAY, then sweep CK ODELAY and choose the
+    midpoint of the passing `ID0` window
+- `vitis_ws4/bootloader_hdio`
+  - phased-clock flow for `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`
+  - wait the HyperRAM power-on guard interval, then sweep one full MMCM phase
+    cycle and choose the midpoint of the widest passing `ID0` window
 - `hb_err_status_read_print_clear()` (reads/prints `ERR_STATUS`, clears timeout bit0 if set)
 - `hb_memtest_hyperram_worst_case_bytes()` (runs byte-oriented worst-case patterns:
   solid fills, checkerboards, walking 1/0 bytes, and address-derived byte patterns)

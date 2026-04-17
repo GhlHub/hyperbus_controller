@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus Controller Theory of Operation
 
-Last updated: 2026-04-08
+Last updated: 2026-04-17
 
 ## Purpose
 
@@ -31,6 +31,14 @@ This note describes:
 - how clocks are used across the design
 - how a read or write moves through the system
 - the intended bring-up and tuning model at a high level
+
+The checked-in design now has two closely related PHY operating styles:
+
+- `PHY_IO_STYLE=IO_DELAY`
+  - forwarded-clock placement is adjusted with output/input delay primitives
+- `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`
+  - forwarded-clock placement is adjusted by stepping an external clock-wizard
+    phase control path instead of using ODELAY for CK
 
 This note does not attempt to replace detailed timing notes, full register
 definitions, checked-in project procedures, or primitive-specific integration
@@ -115,6 +123,21 @@ Data FIFOs decouple the AXI and HyperBus sides:
 
 This structure lets the design keep AXI protocol handling, HyperBus timing, and
 device I/O concerns mostly separate.
+
+## Checked-In Project Variants
+
+Two checked-in Vivado projects are now relevant:
+
+- `vivado_projects/hyperbus_test_proj`
+  - delay-based reference project
+- `vivado_projects/hyperbus_hdio`
+  - phased-clock project variant
+
+Despite the `hyperbus_hdio` name, the currently passing phased-clock
+implementation is routed on HPIO because that is the hardware path available in
+the lab today. The project exists to validate the phased-clock architecture and
+software flow first. A true HDIO-routed verification is still future work and
+may be possible in a later hardware cycle.
 
 ## Clocking And Domains
 
@@ -318,6 +341,37 @@ For reads, the engine:
 
 Read completion therefore depends on both correct command sequencing and correct
 capture alignment.
+
+## Calibration Model
+
+The checked-in software now uses two distinct calibration models depending on
+PHY style.
+
+For `PHY_IO_STYLE=IO_DELAY`:
+
+- the boot flow resets and waits for `IDELAYCTRL`
+- RWDS IDELAY is moved to a known-safe region first
+- CK ODELAY is then swept while reading HyperRAM `ID0`
+- the midpoint of the passing delay window is selected
+
+For `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`:
+
+- the boot flow waits the full HyperRAM power-on guard interval before the
+  first access
+- a clock-wizard phase-control block is stepped through one full phase cycle
+- HyperRAM `ID0` is sampled at each step
+- the midpoint of the widest passing phase window is selected
+
+So the calibration observable is still the same basic device readback, but the
+actuator is different:
+
+- delay taps in `IO_DELAY`
+- external clock phase steps in `EXT_CLK_PHASE_SHIFT`
+
+The phased-clock design is currently the validated route for the new
+architecture. At the system level, it is expected to be more comfortable at the
+3.0 V / 3.3 V HyperRAM operating point of 166 MHz than at 200 MHz, because the
+lower clock rate increases timing margin rather than tightening it.
 
 Observed implementation note:
 

@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # HyperBus System-Level Operating Guide
 
-Last updated: 2026-03-20
+Last updated: 2026-04-17
 
 ## Scope
 
@@ -26,6 +26,32 @@ This note is complementary to:
 - `doc/hyperbus_phy_design_notes.md` for primitive-level PHY rules
 - `doc/implemented_ff_by_clock_domain.md` for implemented resource counts
 - the timing notes under `doc/*.md` for extracted pin-level timing windows
+
+## Checked-In Project Variants
+
+The repo now carries two checked-in project variants for system bring-up:
+
+- `vivado_projects/hyperbus_test_proj`
+  - delay-based project using `PHY_IO_STYLE=IO_DELAY`
+- `vivado_projects/hyperbus_hdio`
+  - phased-clock project using `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`
+
+Important status note:
+
+- the currently passing phased-clock implementation is the `hyperbus_hdio`
+  project routed on HPIO
+- that is not yet a true HDIO-routed lab validation
+- the project name is kept because the architecture is intended to support that
+  direction once hardware becomes available for it
+- a direct HDIO-routed verification may be possible in the coming year
+
+Current speed expectation note:
+
+- 1.8 V operation remains the 200 MHz target
+- for 3.0 V / 3.3 V HyperRAM on this part, treat 166 MHz as the expected
+  top-end operating point
+- the phased-clock solution is expected to translate well to that lower rate,
+  because 166 MHz should be easier to close than the present 200 MHz case
 
 ## Checked-In Project Clock Sources
 
@@ -52,7 +78,7 @@ bring-up, delay calibration, or debug.
 
 ## Recommended Bring-Up Sequence
 
-For the checked-in project and software flow, use this order:
+For the delay-based checked-in project and software flow, use this order:
 
 1. Ensure `clk_wiz_0` is locked and controller resets are released.
 2. Bring up delay control blocks before depending on read capture:
@@ -72,6 +98,14 @@ Practical note:
 - The software helpers already force `HB_CLK_CE_FORCE` when needed during delay
   reset and ODELAY stepping, because the gated CK path must be running for that
   logic to behave predictably.
+
+For the phased-clock project (`hyperbus_hdio`), the high-level order changes:
+
+1. Ensure the clock wizard and phase-control block are reachable and locked.
+2. Wait the full HyperRAM power-on guard interval before the first access.
+3. Sweep one full MMCM phase cycle while repeatedly reading HyperRAM `ID0`.
+4. Choose the midpoint of the widest passing phase window.
+5. Run the image load / verify flow only after phase calibration is stable.
 
 ## Delay-Control Workflow
 
@@ -128,6 +162,27 @@ Recommended workflow:
 2. Then move RWDS IDELAY to center the read-valid window.
 3. Re-check `ID0`, AXI-Lite register reads, and AXI-full data reads after each
    meaningful change.
+
+## Phased-Clock Calibration Workflow
+
+The phased-clock bootloader in `vitis_ws4/bootloader_hdio` replaces CK ODELAY
+stepping with software control of an MMCM/clock-wizard phase-shift block.
+
+Relevant software helper:
+
+- `software/clk_wiz_phase_ctrl.c`
+- `software/clk_wiz_phase_ctrl.h`
+
+Practical workflow:
+
+1. Wait the full HyperRAM startup guard interval before the first bus access.
+2. Sweep all `336` phase steps in the current full-cycle configuration.
+3. Read HyperRAM `ID0` at each step and mark pass/fail.
+4. Find the widest contiguous passing region.
+5. Step to the midpoint of that region and continue the boot flow.
+
+This is the calibration path used by the currently passing `hyperbus_hdio`
+implemented design.
 
 ## Debug Signals and Counters
 
