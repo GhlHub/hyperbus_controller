@@ -51,6 +51,7 @@
 #define BOOT_HB_RESET_TOTAL_GUARD_US         1U
 #define BOOT_HB_RESET_ASSERT_US              1U
 #define BOOT_HB_RESET_DEASSERT_US            1U
+#define BOOT_EXPECTED_PHY_IO_STYLE           0U
 #define BOOT_IMAGE_VECTOR_ENTRY_OFFSET       0x50U
 #define BOOT_VECTOR_SLOT_BYTES               8U
 #define BOOT_VECTOR_RESET_OFFSET             0x00U
@@ -138,6 +139,25 @@ static inline uint32_t prvHbRegRead( uintptr_t uxBase, uint32_t ulOffset )
 static inline void prvHbRegWrite( uintptr_t uxBase, uint32_t ulOffset, uint32_t ulValue )
 {
     *prvHbRegPtr( uxBase, ulOffset ) = ulValue;
+}
+
+static int prvCheckHyperBusVersionCompatibility( uintptr_t uxHyperBusBase )
+{
+    const uint32_t ulVersion = prvHbRegRead( uxHyperBusBase, HB_VERSION_OFFSET );
+    const uint32_t ulExpected = HB_VERSION_EXPECTED( BOOT_EXPECTED_PHY_IO_STYLE );
+
+    if( ulVersion != ulExpected )
+    {
+        BL_PRINTF( "HB VERSION mismatch: got=0x%08X expected=0x%08X\r\n",
+                   ( unsigned ) ulVersion,
+                   ( unsigned ) ulExpected );
+        BL_PRINTF( "HB VERSION config bits: got=0x%02X expected=0x%02X\r\n",
+                   ( unsigned ) ( ( ulVersion & HB_VERSION_CONFIG_MASK ) >> HB_VERSION_CONFIG_SHIFT ),
+                   ( unsigned ) ( ( ulExpected & HB_VERSION_CONFIG_MASK ) >> HB_VERSION_CONFIG_SHIFT ) );
+        return -1;
+    }
+
+    return 0;
 }
 
 static void prvHyperRamExplicitReset( uintptr_t uxHyperBusBase )
@@ -951,6 +971,13 @@ int main( void )
     BL_PRINTF( "Breadcrumb BRAM: 0x%08X-0x%08X\r\n",
                HB_BREADCRUMB_BASE,
                BOOT_BREADCRUMB_END - 1U );
+
+    iStatus = prvCheckHyperBusVersionCompatibility( uxHyperBusBase );
+    if( iStatus != 0 )
+    {
+        cleanup_platform();
+        return iStatus;
+    }
 
     iStatus = hb_idelayctrl_reset_wait_ready( uxHyperBusBase, BOOT_HB_IDELAYCTRL_TIMEOUT_POLLS );
     if( iStatus != 0 )

@@ -81,6 +81,12 @@ module hyperbus_axi_lite_frontend #(
     localparam int PHY_IO_STYLE_IO_DELAY           = 0;
     localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
     localparam bit HAS_DELAY_CTRL = (PHY_IO_STYLE == PHY_IO_STYLE_IO_DELAY);
+    localparam logic [31:0] HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 32'h0100_0000;
+    localparam logic [31:0] HB_VERSION_NUMBER_VALUE = 32'h0000_0009;
+    localparam logic [31:0] HB_VERSION_VALUE =
+        ((PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ?
+            HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT : 32'h0000_0000) |
+        HB_VERSION_NUMBER_VALUE;
 
     logic [AXIL_ADDR_WIDTH-1:0] axil_awaddr_q;
     logic axil_aw_seen;
@@ -411,7 +417,7 @@ module hyperbus_axi_lite_frontend #(
                     end else begin
                         unique case (s_axil_araddr)
                             AXIL_ERR_STATUS_ADDR:         s_axil_rdata <= {31'h0, timeout_status_q};
-                            AXIL_VERSION_ADDR:            s_axil_rdata <= 32'h0100_0008;
+                            AXIL_VERSION_ADDR:            s_axil_rdata <= HB_VERSION_VALUE;
                             AXIL_AXIF_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axif_rwds_cntr};
                             AXIL_AXIL_RWDS_CNTR_ADDR:     s_axil_rdata <= {26'h0, i_axil_rwds_cntr};
                             AXIL_HB_CLK_CE_FORCE_ADDR:    s_axil_rdata <= {31'h0, hb_clk_ce_force_q};

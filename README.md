@@ -225,7 +225,10 @@ AXI-Lite register map in offset order:
 - `0x0000` -> HyperBus `0x0000` (ID0)
 - `0x0002` -> HyperBus `0x0000` (ID1 16-bit alias)
 - `0x0004` -> HyperBus `0x0002` (ID1)
-- `0x0024` VERSION (local, read-only, `0x01000008`)
+- `0x0024` VERSION (local, read-only)
+  - low 24 bits: controller version number, current value `0x000009`
+  - top 8 bits: IP configuration flags
+  - bit24 set when `PHY_IO_STYLE=EXT_CLK_PHASE_SHIFT`
 - `0x0080` ERR_STATUS (local, bit0 timeout status, W1C)
 - `0x0084` AXIF_RWDS_CNTR (local, read-only, 6-bit counter)
 - `0x0088` AXIL_RWDS_CNTR (local, read-only, 6-bit counter)

@@ -44,7 +44,18 @@ extern "C" {
 /*
  * Constant values and common masks.
  */
-#define HB_VERSION_VALUE                0x01000008u
+#define HB_VERSION_CONFIG_SHIFT         24u
+#define HB_VERSION_CONFIG_MASK          0xFF000000u
+#define HB_VERSION_NUMBER_MASK          0x00FFFFFFu
+#define HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT  (1u << HB_VERSION_CONFIG_SHIFT)
+#define HB_VERSION_NUMBER_VALUE         0x00000009u
+#define HB_VERSION_MAKE(cfg, ver)       ((((uint32_t)(cfg)) & HB_VERSION_CONFIG_MASK) | \
+                                         (((uint32_t)(ver)) & HB_VERSION_NUMBER_MASK))
+#define HB_VERSION_PHY_IO_STYLE_CONFIG(phy_io_style) \
+    ((phy_io_style) != 0u ? HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT : 0u)
+#define HB_VERSION_EXPECTED(phy_io_style) \
+    HB_VERSION_MAKE(HB_VERSION_PHY_IO_STYLE_CONFIG(phy_io_style), HB_VERSION_NUMBER_VALUE)
+#define HB_VERSION_VALUE                HB_VERSION_EXPECTED(0u)
 #define HB_ODLY_MASK_9BIT               0x01FFu
 #define HB_AXIF_RWDS_CNTR_MASK          0x3Fu
 #define HB_AXIL_RWDS_CNTR_MASK          0x3Fu

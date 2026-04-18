@@ -539,7 +539,9 @@
         string dq_label;
         begin
             axil_read(16'h0024, rd32);
-            check_eq32(rd32, 32'h0100_0008, "VERSION read @0x0024");
+            check_eq32(rd32,
+                       (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 32'h0100_0009 : 32'h0000_0009,
+                       "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);
             check_eq32(rd32, 32'h0000_0C81, "ID0 32-bit read zero-extended @0x0000");
