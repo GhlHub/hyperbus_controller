@@ -38,7 +38,7 @@ set_property top hyperbus_controller $src_fs
 set_property top_auto_set 0 $src_fs
 update_compile_order -fileset sources_1
 
-ipx::package_project -root_dir $ip_root -vendor user.org -library user -taxonomy /UserIP -import_files -set_current false
+ipx::package_project -root_dir $ip_root -vendor http://github.com/GhlHub -library user -taxonomy /UserIP -import_files -set_current false
 ipx::unload_core $ip_root/component.xml
 ipx::edit_ip_in_project -upgrade true -name tmp_edit_ip_project -directory $build_dir $ip_root/component.xml
 
@@ -46,9 +46,9 @@ set core [ipx::current_core]
 set_property name $ip_name $core
 set_property display_name "HyperBus Controller" $core
 set_property description "AXI4/AXI4-Lite to HyperBus HyperRAM controller (Xilinx primitive based)." $core
-set_property vendor_display_name "User" $core
-set_property company_url "https://example.com" $core
-set_property version "1.2" $core
+set_property vendor_display_name "GhlHub" $core
+set_property company_url "http://github.com/GhlHub" $core
+set_property version "1.3" $core
 
 proc set_bus_param_value {bus_if param_name param_value} {
     set p [ipx::get_bus_parameters $param_name -of_objects $bus_if]
@@ -105,6 +105,52 @@ proc apply_phy_choice_labels {component_xml} {
     close $fd
 }
 
+proc apply_ref_clk_enablement {component_xml} {
+    set fd [open $component_xml r]
+    set xml [read $fd]
+    close $fd
+
+    set needle {      <spirit:port>
+        <spirit:name>i_ref_clk_300</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>wire</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>}
+    set replacement {      <spirit:port>
+        <spirit:name>i_ref_clk_300</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>wire</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.i_ref_clk_300" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.PHY_IO_STYLE&apos;))=0)">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>}
+
+    set xml [string map [list $needle $replacement] $xml]
+
+    set fd [open $component_xml w]
+    puts -nonewline $fd $xml
+    close $fd
+}
+
 set axi_clk_if [ipx::get_bus_interfaces i_axi_aclk -of_objects $core]
 if {[llength $axi_clk_if] > 0} {
     set_bus_param_value $axi_clk_if ASSOCIATED_BUSIF {s_axi:s_axil}
@@ -141,4 +187,5 @@ ipx::save_core $core
 
 close_project -delete
 apply_phy_choice_labels $component_xml
+apply_ref_clk_enablement $component_xml
 puts "Packaged IP at: $ip_root"
