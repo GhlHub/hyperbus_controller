@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Sun Apr 12 11:24:46 2026
+//Date        : Sun Apr 19 15:11:39 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -165,9 +165,9 @@ module design_1
   wire clk_wiz_0_locked;
   wire e_uart_0_intr;
   wire ext_reset_in_0;
+  wire hb_clk_200_samp_90;
   wire hb_clk_gated;
   wire hb_phy_clk;
-  wire hb_phy_rx_clk;
   wire hyperbus_controller_1_o_hb_clk_ce;
   wire [2:0]ilconcat_0_dout;
   wire [7:0]io_hb_dq_0;
@@ -561,7 +561,7 @@ module design_1
        (.clk_in1_n(CLK_IN1_D_0_clk_n),
         .clk_in1_p(CLK_IN1_D_0_clk_p),
         .clk_out1(hb_phy_clk),
-        .clk_out2(hb_phy_rx_clk),
+        .clk_out2(hb_clk_200_samp_90),
         .clk_out3(axi_clk),
         .clk_out4(clk_300m),
         .clk_out5(hb_clk_gated),
@@ -598,7 +598,7 @@ module design_1
         .i_axi_aresetn(proc_sys_reset_1_peripheral_aresetn),
         .i_hb_clk_200(hb_phy_clk),
         .i_hb_clk_200_gated(hb_clk_gated),
-        .i_hb_clk_200_samp_90(hb_phy_rx_clk),
+        .i_hb_clk_200_samp_90(hb_clk_200_samp_90),
         .i_hb_rstn(reset_gen_peripheral_aresetn),
         .i_iddre1_rst(reset_gen_peripheral_reset1),
         .i_idelayctrl_rst(reset_gen_peripheral_reset),
@@ -876,7 +876,7 @@ module design_1
         .ext_reset_in_0(ext_reset_in_0),
         .hb_clk_peripheral_aresetn(reset_gen_peripheral_aresetn),
         .hb_phy_clk(hb_phy_clk),
-        .hb_phy_rx_clk(hb_phy_rx_clk),
+        .hb_phy_rx_clk(hb_clk_200_samp_90),
         .hb_phy_rx_clk_peripheral_reset(reset_gen_peripheral_reset1),
         .mb_debug_sys_rst(mb_debug_sys_rst_1),
         .mb_reset(reset_gen_mb_reset));
@@ -999,7 +999,7 @@ module reset_gen_imp_1MBKAOM
   wire mb_debug_sys_rst;
   wire mb_reset;
 
-  design_1_proc_sys_reset_1_0 axi_clk_reset_gen
+  design_1_axi_clk_reset_gen_0 axi_clk_reset_gen
        (.aux_reset_in(1'b1),
         .bus_struct_reset(axi_clk_bus_struct_reset),
         .dcm_locked(dcm_locked),
@@ -1009,21 +1009,21 @@ module reset_gen_imp_1MBKAOM
         .mb_reset(mb_reset),
         .peripheral_aresetn(axi_clk_peripheral_aresetn),
         .slowest_sync_clk(axi_clk));
-  design_1_proc_sys_reset_2_0 clk_300m_reset_gen
+  design_1_clk_300m_reset_gen_0 clk_300m_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),
         .mb_debug_sys_rst(1'b0),
         .peripheral_reset(clk_300m_peripheral_reset),
         .slowest_sync_clk(clk_300m));
-  design_1_proc_sys_reset_0_0 hb_clk_reset_gen
+  design_1_hb_clk_reset_gen_0 hb_clk_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),
         .mb_debug_sys_rst(mb_debug_sys_rst),
         .peripheral_aresetn(hb_clk_peripheral_aresetn),
         .slowest_sync_clk(hb_phy_clk));
-  design_1_proc_sys_reset_3_0 hb_phy_rx_clk_reset_gen
+  design_1_hb_phy_rx_clk_reset_gen_0 hb_phy_rx_clk_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),

@@ -2,10 +2,10 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Sat Apr 11 13:56:46 2026
+-- Date        : Sat Apr 18 20:47:03 2026
 -- Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
--- Command     : write_vhdl -force -mode funcsim -rename_top design_1_pmcbridge_0_0 -prefix
---               design_1_pmcbridge_0_0_ design_1_pmcbridge_0_0_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim
+--               /raid/work/ghl_ip/hyperbus_controller/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_pmcbridge_0_0/design_1_pmcbridge_0_0_sim_netlist.vhdl
 -- Design      : design_1_pmcbridge_0_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -57,6 +57,8 @@ entity design_1_pmcbridge_0_0_pmcbridge_v1_0_0 is
   );
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of design_1_pmcbridge_0_0_pmcbridge_v1_0_0 : entity is "design_1_pmcbridge_0_0.hwdef";
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_pmcbridge_0_0_pmcbridge_v1_0_0 : entity is "pmcbridge_v1_0_0";
   attribute dont_touch : string;
   attribute dont_touch of design_1_pmcbridge_0_0_pmcbridge_v1_0_0 : entity is "true";
 end design_1_pmcbridge_0_0_pmcbridge_v1_0_0;

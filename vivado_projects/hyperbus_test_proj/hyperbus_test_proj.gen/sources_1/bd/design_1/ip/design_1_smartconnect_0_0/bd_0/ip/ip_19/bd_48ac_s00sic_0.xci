@@ -32,8 +32,8 @@
         "MAX_WUSER_BITS_PER_BYTE": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_READ_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "HAS_ACLKEN": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SINGLE_ISSUING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "AXILITE_CONV": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -1349,8 +1349,8 @@
         "C_MAX_WUSER_BITS_PER_BYTE": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_MAX_RUSER_BITS_PER_BYTE": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SINGLE_ISSUING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_READ_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_WRITE_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_READ_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_WRITE_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SPLIT_WRAP_NARROW": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ]
@@ -1656,5 +1656,5 @@
       }
     }
   },
-  "checksum": "84b38753"
+  "checksum": "1dcc369c"
 }

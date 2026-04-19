@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-//Date        : Tue Apr 14 06:07:25 2026
+//Date        : Sat Apr 18 20:52:34 2026
 //Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -653,7 +653,6 @@ module design_1
         .i_hb_rstn(reset_gen_peripheral_aresetn),
         .i_iddre1_rst(reset_gen_peripheral_reset1),
         .i_idelayctrl_rst(reset_gen_peripheral_reset),
-        .i_ref_clk_300(clk4),
         .io_hb_dq(io_hb_dq_0),
         .io_hb_rwds(io_hb_rwds_0),
         .o_hb_ck_n(o_hb_ck_n_0),
@@ -1050,7 +1049,7 @@ module reset_gen_imp_1MBKAOM
   wire slowest_sync_clk1;
   wire slowest_sync_clk2;
 
-  design_1_proc_sys_reset_1_0 axi_clk_reset_gen
+  design_1_axi_clk_reset_gen_0 axi_clk_reset_gen
        (.aux_reset_in(1'b1),
         .bus_struct_reset(axi_clk_bus_struct_reset),
         .dcm_locked(dcm_locked),
@@ -1060,21 +1059,21 @@ module reset_gen_imp_1MBKAOM
         .mb_reset(mb_reset),
         .peripheral_aresetn(axi_clk_peripheral_aresetn),
         .slowest_sync_clk(axi_clk));
-  design_1_proc_sys_reset_2_0 clk_300m_reset_gen
+  design_1_clk_300m_reset_gen_0 clk_300m_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),
         .mb_debug_sys_rst(1'b0),
         .peripheral_reset(peripheral_reset),
         .slowest_sync_clk(slowest_sync_clk1));
-  design_1_proc_sys_reset_0_0 hb_clk_reset_gen
+  design_1_hb_clk_reset_gen_0 hb_clk_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),
         .mb_debug_sys_rst(mb_debug_sys_rst),
         .peripheral_aresetn(peripheral_aresetn),
         .slowest_sync_clk(slowest_sync_clk));
-  design_1_proc_sys_reset_3_0 hb_phy_rx_clk_reset_gen
+  design_1_hb_phy_rx_clk_reset_gen_0 hb_phy_rx_clk_reset_gen
        (.aux_reset_in(1'b1),
         .dcm_locked(dcm_locked),
         .ext_reset_in(axi_clk_peripheral_aresetn),

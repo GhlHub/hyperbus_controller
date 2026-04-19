@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Sat Mar 21 15:57:02 2026
-// Host        : YouBing running 64-bit Ubuntu 24.04.3 LTS
-// Command     : write_verilog -force -mode funcsim -rename_top design_1_clk_wiz_0_0 -prefix
-//               design_1_clk_wiz_0_0_ design_1_clk_wiz_0_0_sim_netlist.v
+// Date        : Sat Apr 18 20:47:03 2026
+// Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
+// Command     : write_verilog -force -mode funcsim
+//               /raid/work/ghl_ip/hyperbus_controller/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0_0/design_1_clk_wiz_0_0_sim_netlist.v
 // Design      : design_1_clk_wiz_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -47,7 +47,7 @@ module design_1_clk_wiz_0_0
   wire locked;
   wire reset;
 
-  design_1_clk_wiz_0_0_design_1_clk_wiz_0_0_clk_wiz inst
+  design_1_clk_wiz_0_0_clk_wiz inst
        (.clk_in1_n(clk_in1_n),
         .clk_in1_p(clk_in1_p),
         .clk_out1(clk_out1),
@@ -60,7 +60,7 @@ module design_1_clk_wiz_0_0
         .reset(reset));
 endmodule
 
-module design_1_clk_wiz_0_0_design_1_clk_wiz_0_0_clk_wiz
+module design_1_clk_wiz_0_0_clk_wiz
    (clk_out1,
     clk_out2,
     clk_out3,

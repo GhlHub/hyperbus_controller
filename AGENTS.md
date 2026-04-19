@@ -72,6 +72,13 @@ After modifying controller RTL:
 - The AXI-full frontend is intentionally write-first if `AWVALID` and `ARVALID` arrive together; preserve the rule that only one of those address handshakes is accepted in a cycle.
 - `doc/theory_of_operation.md` is the canonical narrative for controller behavior and architecture; companion docs should link to it rather than restating the same theory-of-operation material.
 - Some files under `vivado_projects/` and Vitis output trees are generated artifacts. Update them only when the task calls for it.
+- If a regular Vivado `upgrade_ip` flow does not repair custom-IP references after a VLNV change, use the fallback block-design migration flow instead:
+  1. export the BD with `write_bd_tcl`
+  2. patch the custom `create_bd_cell -vlnv ...` entries in the exported Tcl to the new VLNVs
+  3. reopen the target project with the correct `ip_repo_paths` configured and refreshed
+  4. remove the old checked-in `design_1.bd` from the project, then recreate it by sourcing the patched Tcl
+  5. regenerate BD output products so Vivado rewrites the `.bd`, `.xci`, and handoff files from the recreated design
+  6. verify the rebuilt artifacts reference the new VLNVs before considering the migration complete
 - Ignore scratch files, swap files, simulator leftovers, and other unrelated untracked files unless asked to clean them up.
 - When patching the bootloader into the FPGA image, make sure the flashed packaged image is the bootloader-specific one:
   use `design_1_wrapper_bootloader.rcdo` when running `updatemem`, regenerate `design_1_wrapper_bootloader.pdi` from `design_1_wrapper_bootloader.bif`, and flash that bootloader `.pdi`.

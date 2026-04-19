@@ -47,7 +47,7 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: user.org:user:hyperbus_controller:1.2
+// IP VLNV: github.com:user:hyperbus_controller:1.3
 // IP Revision: 1
 
 (* X_CORE_INFO = "hyperbus_controller,Vivado 2025.2" *)

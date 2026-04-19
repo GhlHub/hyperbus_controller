@@ -244,7 +244,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axil",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.2",
+                "SV": "github.com:user:hyperbus_controller:1.3",
                 "TM": "data",
                 "TU": "register"
             },
@@ -262,7 +262,7 @@
                 "SX": "/axi_clk_wiz_phase_ct_0",
                 "SI": "s_axi",
                 "SS": "reg0",
-                "SV": "ghl.local:user:axi_clk_wiz_phase_ctrl:1.0",
+                "SV": "github.com:user:axi_clk_wiz_phase_ctrl:1.0",
                 "TM": "data",
                 "TU": "register"
             },
@@ -695,7 +695,7 @@
                 "SX": "/e_uart_0",
                 "SI": "S00_AXI",
                 "SS": "S00_AXI_reg",
-                "SV": "SFG:user:e_uart:1.1",
+                "SV": "github.com:user:e_uart:1.1",
                 "TM": "data",
                 "TU": "register"
             },
@@ -713,7 +713,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axi",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.2",
+                "SV": "github.com:user:hyperbus_controller:1.3",
                 "TM": "data",
                 "TU": "register"
             },
@@ -731,7 +731,7 @@
                 "SX": "/hyperbus_controller_0",
                 "SI": "s_axi",
                 "SS": "reg0",
-                "SV": "user.org:user:hyperbus_controller:1.2",
+                "SV": "github.com:user:hyperbus_controller:1.3",
                 "TM": "instruction",
                 "TU": "register"
             }

@@ -3,7 +3,7 @@
   "ip_inst": {
     "xci_name": "design_1_e_uart_0_0",
     "cell_name": "e_uart_0",
-    "component_reference": "SFG:user:e_uart:1.1",
+    "component_reference": "github.com:user:e_uart:1.1",
     "ip_revision": "19",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_e_uart_0_0",
     "parameters": {
@@ -450,5 +450,5 @@
       }
     }
   },
-  "checksum": "64e3be6a"
+  "checksum": "326190aa"
 }

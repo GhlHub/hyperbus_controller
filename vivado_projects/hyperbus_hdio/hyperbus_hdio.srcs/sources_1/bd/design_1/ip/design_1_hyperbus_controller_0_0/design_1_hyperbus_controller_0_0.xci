@@ -3,7 +3,7 @@
   "ip_inst": {
     "xci_name": "design_1_hyperbus_controller_0_0",
     "cell_name": "hyperbus_controller_0",
-    "component_reference": "user.org:user:hyperbus_controller:1.2",
+    "component_reference": "github.com:user:hyperbus_controller:1.3",
     "ip_revision": "1",
     "gen_directory": "../../../../../../hyperbus_hdio.gen/sources_1/bd/design_1/ip/design_1_hyperbus_controller_0_0",
     "parameters": {
@@ -60,7 +60,6 @@
         "i_axi_aresetn": [ { "direction": "in" } ],
         "i_hb_clk_200": [ { "direction": "in" } ],
         "i_hb_clk_200_gated": [ { "direction": "in" } ],
-        "i_ref_clk_300": [ { "direction": "in" } ],
         "i_idelayctrl_rst": [ { "direction": "in" } ],
         "i_hb_clk_200_samp_90": [ { "direction": "in" } ],
         "i_iddre1_rst": [ { "direction": "in" } ],
@@ -143,9 +142,9 @@
           "parameters": {
             "PROTOCOL": [ { "value": "AXI4", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
             "FREQ_HZ": [ { "value": "50000000", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
-            "DATA_WIDTH": [ { "value": "32", "value_src": "auto", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "ID_WIDTH": [ { "value": "1", "value_src": "auto", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "ADDR_WIDTH": [ { "value": "32", "value_src": "auto", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "DATA_WIDTH": [ { "value": "32", "value_src": "auto", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "ID_WIDTH": [ { "value": "1", "value_src": "auto", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "ADDR_WIDTH": [ { "value": "32", "value_src": "auto", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "AWUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "ARUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "WUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
@@ -215,7 +214,7 @@
             "FREQ_HZ": [ { "value": "50000000", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
             "DATA_WIDTH": [ { "value": "32", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "ID_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "ADDR_WIDTH": [ { "value": "16", "value_src": "auto", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "ADDR_WIDTH": [ { "value": "16", "value_src": "auto", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "AWUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "ARUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "WUSER_WIDTH": [ { "value": "0", "value_src": "constant", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
@@ -356,5 +355,5 @@
       }
     }
   },
-  "checksum": "5de0b1ec"
+  "checksum": "5ca13fde"
 }

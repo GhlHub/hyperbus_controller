@@ -860,6 +860,7 @@ static int prvLoadSrecImage( void )
     if( iStatus == XST_SUCCESS )
     {
         prvPrintFinalProgress();
+        prvWaitForSpacebar( "Press spacebar to begin SREC verification..." );
         BL_PRINTF( "Starting SREC verification\r\n" );
         iStatus = prvVerifyLoadedImage();
         if( iStatus != XST_SUCCESS )
@@ -888,6 +889,7 @@ static int prvLoadSrecImage( void )
         if( iStatus == XST_SUCCESS )
         {
             prvPrintFinalProgress();
+            prvWaitForSpacebar( "Press spacebar to begin SREC verification..." );
             BL_PRINTF( "Starting SREC verification\r\n" );
             iStatus = prvVerifyLoadedImage();
             if( iStatus != XST_SUCCESS )
@@ -1012,7 +1014,7 @@ int main( void )
         return iStatus;
     }
 
-    BL_PRINTF( "ODLY calibration complete: min=0x%03x mid=0x%03x max=0x%03x\r\n",
+    BL_PRINTF( "ODLY calibration complete: min=0x%03x target=0x%03x max=0x%03x\r\n",
                ( unsigned ) usCntValueMin,
                ( unsigned ) usCntValueMid,
                ( unsigned ) usCntValueMax );

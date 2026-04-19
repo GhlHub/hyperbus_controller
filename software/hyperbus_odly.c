@@ -296,7 +296,7 @@ static int hb_odly_sweep_to_midpoint_impl(uintptr_t base_addr,
     uint16_t cntvalue;
     uint16_t cntvalue_min;
     uint16_t cntvalue_max;
-    uint16_t cntvalue_mid;
+    uint16_t cntvalue_target;
     uint16_t cntvalue_delta;
     uint16_t cntvalue_prev_valid;
     uint32_t cr0;
@@ -380,9 +380,10 @@ static int hb_odly_sweep_to_midpoint_impl(uintptr_t base_addr,
     }
 
     cntvalue_delta = (uint16_t)((uint32_t)cntvalue_max - (uint32_t)cntvalue_min);
-    cntvalue_mid = (uint16_t)(((uint32_t)cntvalue_delta >> 1) + (uint32_t)cntvalue_min);
+    cntvalue_target = (uint16_t)((uint32_t)cntvalue_min +
+                                 ((uint32_t)cntvalue_delta >> 1));
 
-    while (cntvalue > cntvalue_mid) {
+    while (cntvalue > cntvalue_target) {
         rc = hb_odly_dec(base_addr, 1);
         if (rc != 0) {
             return rc;
@@ -396,9 +397,9 @@ static int hb_odly_sweep_to_midpoint_impl(uintptr_t base_addr,
         }
     }
 
-    xil_printf("ODLY_WINDOW cntvalue_min=0x%03x cntvalue_max=0x%03x cntvalue_delta=0x%03x cntvalue_mid=0x%03x\r\n",
+    xil_printf("ODLY_WINDOW cntvalue_min=0x%03x cntvalue_max=0x%03x cntvalue_delta=0x%03x cntvalue_target=0x%03x\r\n",
                (unsigned)cntvalue_min, (unsigned)cntvalue_max,
-               (unsigned)cntvalue_delta, (unsigned)cntvalue_mid);
+               (unsigned)cntvalue_delta, (unsigned)cntvalue_target);
 
     if (cntvalue_min_out != 0U) {
         *cntvalue_min_out = cntvalue_min;
@@ -407,7 +408,7 @@ static int hb_odly_sweep_to_midpoint_impl(uintptr_t base_addr,
         *cntvalue_max_out = cntvalue_max;
     }
     if (cntvalue_mid_out != 0U) {
-        *cntvalue_mid_out = cntvalue_mid;
+        *cntvalue_mid_out = cntvalue_target;
     }
 
     return 0;

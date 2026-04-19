@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spirit:component xmlns:xilinx="http://www.xilinx.com" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <spirit:vendor>http://github.com/GhlHub</spirit:vendor>
+  <spirit:vendor>github.com</spirit:vendor>
   <spirit:library>user</spirit:library>
   <spirit:name>hyperbus_controller</spirit:name>
   <spirit:version>1.3</spirit:version>
@@ -1964,7 +1964,7 @@
     <spirit:fileSet>
       <spirit:name>xilinx_xpgui_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>xgui/hyperbus_controller_v1_2.tcl</spirit:name>
+        <spirit:name>xgui/hyperbus_controller_v1_3.tcl</spirit:name>
         <spirit:fileType>tclSource</spirit:fileType>
         <spirit:userFileType>CHECKSUM_f11a0fd4</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
@@ -2059,10 +2059,10 @@
       <xilinx:xpmLibraries>
         <xilinx:xpmLibrary>XPM_FIFO</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:vendorDisplayName>User</xilinx:vendorDisplayName>
-      <xilinx:vendorURL>https://example.com</xilinx:vendorURL>
+      <xilinx:vendorDisplayName>GhlHub</xilinx:vendorDisplayName>
+      <xilinx:vendorURL>http://github.com/GhlHub</xilinx:vendorURL>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2026-04-18T10:11:07Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2026-04-19T03:33:38Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.2</xilinx:xilinxVersion>

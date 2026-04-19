@@ -53,8 +53,6 @@
 -- COMP_TAG     ------ Begin cut for COMPONENT Declaration ------
 COMPONENT design_1
   PORT (
-    UART_0_txd : OUT STD_LOGIC;
-    UART_0_rxd : IN STD_LOGIC;
     o_hb_reset_n_0 : OUT STD_LOGIC;
     ext_reset_in_0 : IN STD_LOGIC;
     o_hb_cs_n_0 : OUT STD_LOGIC;
@@ -72,7 +70,9 @@ COMPONENT design_1
     psdone_0 : IN STD_LOGIC;
     psclk_0 : OUT STD_LOGIC;
     psen_0 : OUT STD_LOGIC;
-    psincdec_0 : OUT STD_LOGIC
+    psincdec_0 : OUT STD_LOGIC;
+    UART_0_txd : OUT STD_LOGIC;
+    UART_0_rxd : IN STD_LOGIC
   );
 END COMPONENT;
 -- COMP_TAG_END ------  End cut for COMPONENT Declaration  ------
@@ -83,8 +83,6 @@ END COMPONENT;
 -- INST_TAG     ------ Begin cut for INSTANTIATION Template ------
 your_instance_name : design_1
   PORT MAP (
-    UART_0_txd => UART_0_txd,
-    UART_0_rxd => UART_0_rxd,
     o_hb_reset_n_0 => o_hb_reset_n_0,
     ext_reset_in_0 => ext_reset_in_0,
     o_hb_cs_n_0 => o_hb_cs_n_0,
@@ -102,7 +100,9 @@ your_instance_name : design_1
     psdone_0 => psdone_0,
     psclk_0 => psclk_0,
     psen_0 => psen_0,
-    psincdec_0 => psincdec_0
+    psincdec_0 => psincdec_0,
+    UART_0_txd => UART_0_txd,
+    UART_0_rxd => UART_0_rxd
   );
 -- INST_TAG_END ------  End cut for INSTANTIATION Template  ------
 

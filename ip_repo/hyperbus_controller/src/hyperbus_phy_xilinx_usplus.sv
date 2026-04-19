@@ -134,7 +134,7 @@ module hyperbus_phy_xilinx_usplus #(
 `else
                 .DELAY_TYPE("VARIABLE"),
 `endif
-                .DELAY_VALUE(34),
+                .DELAY_VALUE(0),
                 .IS_CLK_INVERTED(1'b0),
                 .IS_RST_INVERTED(1'b0),
                 .REFCLK_FREQUENCY(300.0),
@@ -216,7 +216,7 @@ module hyperbus_phy_xilinx_usplus #(
 `else
                 .DELAY_TYPE("VARIABLE"),
 `endif
-                .DELAY_VALUE(10),
+                .DELAY_VALUE(0),
                 .IS_CLK_INVERTED(1'b0),
                 .IS_RST_INVERTED(1'b0),
                 .REFCLK_FREQUENCY(300.0),
@@ -356,18 +356,10 @@ module hyperbus_phy_xilinx_usplus #(
                 .R  (              i_iddre1_rst)
             );
         end else begin : g_rwds_iddre1_io_delay
-            // PHY_IO_STYLE=0: IS_C_INVERTED=1 in synthesis is intentional — the
-            // IDELAYE3 delay on RWDS shifts its phase relative to the sampling clock,
-            // and the inverted capture edge corrects the resulting RWDS/DQ alignment.
             IDDRE1 #(
                 .DDR_CLK_EDGE("OPPOSITE_EDGE"),
-`ifndef SYNTHESIS
-                .IS_C_INVERTED(1'b0),
-                .IS_CB_INVERTED(1'b1)
-`else
                 .IS_C_INVERTED(1'b1),
                 .IS_CB_INVERTED(1'b0)
-`endif
             ) u_iddr_rwds (
                 .Q1 (             rwds_q1_raw),
                 .Q2 (             rwds_q2_raw),

@@ -540,7 +540,7 @@
         begin
             axil_read(16'h0024, rd32);
             check_eq32(rd32,
-                       (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 32'h0100_0009 : 32'h0000_0009,
+                       (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 32'h0100_000A : 32'h0000_000A,
                        "VERSION read @0x0024");
 
             axil_read(16'h0000, rd32);

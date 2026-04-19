@@ -54,10 +54,6 @@
 
 module design_1_sv (
   (* X_INTERFACE_IGNORE = "true" *)
-  output wire UART_0_txd,
-  (* X_INTERFACE_IGNORE = "true" *)
-  input wire UART_0_rxd,
-  (* X_INTERFACE_IGNORE = "true" *)
   output wire o_hb_reset_n_0,
   (* X_INTERFACE_IGNORE = "true" *)
   input wire ext_reset_in_0,
@@ -92,12 +88,14 @@ module design_1_sv (
   (* X_INTERFACE_IGNORE = "true" *)
   output wire psen_0,
   (* X_INTERFACE_IGNORE = "true" *)
-  output wire psincdec_0
+  output wire psincdec_0,
+  (* X_INTERFACE_IGNORE = "true" *)
+  output wire UART_0_txd,
+  (* X_INTERFACE_IGNORE = "true" *)
+  input wire UART_0_rxd
 );
 
   design_1 inst (
-    .UART_0_txd(UART_0_txd),
-    .UART_0_rxd(UART_0_rxd),
     .o_hb_reset_n_0(o_hb_reset_n_0),
     .ext_reset_in_0(ext_reset_in_0),
     .o_hb_cs_n_0(o_hb_cs_n_0),
@@ -115,7 +113,9 @@ module design_1_sv (
     .psdone_0(psdone_0),
     .psclk_0(psclk_0),
     .psen_0(psen_0),
-    .psincdec_0(psincdec_0)
+    .psincdec_0(psincdec_0),
+    .UART_0_txd(UART_0_txd),
+    .UART_0_rxd(UART_0_rxd)
   );
 
 endmodule

@@ -48,7 +48,7 @@ extern "C" {
 #define HB_VERSION_CONFIG_MASK          0xFF000000u
 #define HB_VERSION_NUMBER_MASK          0x00FFFFFFu
 #define HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT  (1u << HB_VERSION_CONFIG_SHIFT)
-#define HB_VERSION_NUMBER_VALUE         0x00000009u
+#define HB_VERSION_NUMBER_VALUE         0x0000000Au
 #define HB_VERSION_MAKE(cfg, ver)       ((((uint32_t)(cfg)) & HB_VERSION_CONFIG_MASK) | \
                                          (((uint32_t)(ver)) & HB_VERSION_NUMBER_MASK))
 #define HB_VERSION_PHY_IO_STYLE_CONFIG(phy_io_style) \
@@ -191,7 +191,7 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
 
 /*
  * Find a contiguous passing ODELAY window using HyperRAM ID0 readback, then
- * step back to the midpoint of that window.
+ * step back to the midpoint of the passing window.
  * Default logging mode is terse: only the final ODLY_WINDOW summary line is
  * printed.
  * Flow:
@@ -199,7 +199,8 @@ int hb_odly_sweep(uintptr_t base_addr, uint32_t required_matches);
  *    as cntvalue_min.
  * 2) Continue incrementing until ID0 no longer matches; the previous CNTVALUEOUT
  *    is captured as cntvalue_max.
- * 3) Compute cntvalue_mid = ((cntvalue_max - cntvalue_min) >> 1) + cntvalue_min.
+ * 3) Compute cntvalue_mid = cntvalue_min +
+ *    ((cntvalue_max - cntvalue_min) >> 1).
  * 4) Decrement until CNTVALUEOUT is less than or equal to cntvalue_mid.
  * 5) Optionally return min/max/mid through the output pointers.
  * Return codes:

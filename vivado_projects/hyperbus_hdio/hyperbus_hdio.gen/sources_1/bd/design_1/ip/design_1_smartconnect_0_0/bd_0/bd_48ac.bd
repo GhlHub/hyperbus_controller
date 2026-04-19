@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x94F58807A58BE070",
+      "boundary_crc": "0x94F588077EA78E25",
       "design_src": "SBD",
       "device": "xcsu35p-sbvb625-2-e",
       "name": "bd_48ac",
@@ -79,7 +79,7 @@
         "parameters": {
           "ADDR_WIDTH": {
             "value": "32",
-            "value_src": "ip_prop"
+            "value_src": "default"
           },
           "ARUSER_WIDTH": {
             "value": "0",
@@ -154,14 +154,14 @@
             "value_src": "ip_prop"
           },
           "NUM_READ_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_READ_THREADS": {
             "value": "1",
             "value_src": "default"
           },
           "NUM_WRITE_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_WRITE_THREADS": {
             "value": "1",
@@ -169,7 +169,7 @@
           },
           "PHASE": {
             "value": "0.0",
-            "value_src": "default_prop"
+            "value_src": "default"
           },
           "PROTOCOL": {
             "value": "AXI4LITE",
@@ -300,20 +300,20 @@
             "value": "256"
           },
           "NUM_READ_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_READ_THREADS": {
             "value": "1"
           },
           "NUM_WRITE_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_WRITE_THREADS": {
             "value": "1"
           },
           "PHASE": {
             "value": "0.0",
-            "value_src": "default_prop"
+            "value_src": "default"
           },
           "PROTOCOL": {
             "value": "AXI4",
@@ -428,23 +428,23 @@
           },
           "MAX_BURST_LENGTH": {
             "value": "1",
-            "value_src": "default"
+            "value_src": "default_prop"
           },
           "NUM_READ_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_READ_THREADS": {
             "value": "1"
           },
           "NUM_WRITE_OUTSTANDING": {
-            "value": "1"
+            "value": "2"
           },
           "NUM_WRITE_THREADS": {
             "value": "1"
           },
           "PHASE": {
             "value": "0.0",
-            "value_src": "default_prop"
+            "value_src": "default"
           },
           "PROTOCOL": {
             "value": "AXI4LITE",
@@ -512,7 +512,7 @@
           },
           "PHASE": {
             "value": "0.0",
-            "value_src": "default_prop"
+            "value_src": "default"
           }
         }
       },
@@ -1568,7 +1568,7 @@
                     "value": "2"
                   },
                   "NUM_OUTSTANDING": {
-                    "value": "1"
+                    "value": "2"
                   },
                   "NUM_SI": {
                     "value": "1"
@@ -1746,7 +1746,7 @@
                     "value": "1"
                   },
                   "NUM_OUTSTANDING": {
-                    "value": "1"
+                    "value": "2"
                   },
                   "NUM_SI": {
                     "value": "2"
@@ -1924,7 +1924,7 @@
                     "value": "2"
                   },
                   "NUM_OUTSTANDING": {
-                    "value": "1"
+                    "value": "2"
                   },
                   "NUM_SI": {
                     "value": "1"
@@ -2102,7 +2102,7 @@
                     "value": "2"
                   },
                   "NUM_OUTSTANDING": {
-                    "value": "1"
+                    "value": "2"
                   },
                   "NUM_SI": {
                     "value": "1"
@@ -2280,7 +2280,7 @@
                     "value": "1"
                   },
                   "NUM_OUTSTANDING": {
-                    "value": "1"
+                    "value": "2"
                   },
                   "NUM_SI": {
                     "value": "2"
@@ -2733,13 +2733,13 @@
                 "value": "2"
               },
               "NUM_READ_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SEG": {
                 "value": "9"
               },
               "NUM_WRITE_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "RDATA_WIDTH": {
                 "value": "32"
@@ -2998,13 +2998,13 @@
                 "value": "1"
               },
               "NUM_READ_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_READ_THREADS": {
                 "value": "1"
               },
               "NUM_WRITE_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_WRITE_THREADS": {
                 "value": "1"
@@ -3116,7 +3116,7 @@
                 "value": "2"
               },
               "NUM_READ_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_READ_THREADS": {
                 "value": "1"
@@ -3125,7 +3125,7 @@
                 "value": "9"
               },
               "NUM_WRITE_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_WRITE_THREADS": {
                 "value": "1"
@@ -3644,7 +3644,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -3819,7 +3819,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -3991,7 +3991,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -4163,7 +4163,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -4338,7 +4338,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -4865,7 +4865,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -5034,7 +5034,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -5209,7 +5209,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -5381,7 +5381,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -5553,7 +5553,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -5852,10 +5852,10 @@
                 "value": "2"
               },
               "NUM_READ_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_WRITE_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "RDATA_WIDTH": {
                 "value": "32"
@@ -6270,7 +6270,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -6439,7 +6439,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -6614,7 +6614,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -6786,7 +6786,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -6958,7 +6958,7 @@
                 "value": "1"
               },
               "NUM_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_SI": {
                 "value": "1"
@@ -7224,10 +7224,10 @@
                 "value": "2"
               },
               "NUM_READ_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "NUM_WRITE_OUTSTANDING": {
-                "value": "1"
+                "value": "2"
               },
               "RDATA_WIDTH": {
                 "value": "32"

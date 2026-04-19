@@ -47,7 +47,7 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: SFG:user:e_uart:1.1
+// IP VLNV: github.com:user:e_uart:1.1
 // IP Revision: 19
 
 `timescale 1ns/1ps

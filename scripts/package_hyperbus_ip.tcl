@@ -38,11 +38,12 @@ set_property top hyperbus_controller $src_fs
 set_property top_auto_set 0 $src_fs
 update_compile_order -fileset sources_1
 
-ipx::package_project -root_dir $ip_root -vendor http://github.com/GhlHub -library user -taxonomy /UserIP -import_files -set_current false
+ipx::package_project -root_dir $ip_root -vendor github.com -library user -taxonomy /UserIP -import_files -set_current false
 ipx::unload_core $ip_root/component.xml
 ipx::edit_ip_in_project -upgrade true -name tmp_edit_ip_project -directory $build_dir $ip_root/component.xml
 
 set core [ipx::current_core]
+set_property vendor github.com $core
 set_property name $ip_name $core
 set_property display_name "HyperBus Controller" $core
 set_property description "AXI4/AXI4-Lite to HyperBus HyperRAM controller (Xilinx primitive based)." $core

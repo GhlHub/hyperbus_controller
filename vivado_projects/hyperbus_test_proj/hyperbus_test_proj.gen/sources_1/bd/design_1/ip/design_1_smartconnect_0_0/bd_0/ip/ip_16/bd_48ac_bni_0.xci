@@ -32,7 +32,7 @@
         "S_LATENCY": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "ACLK_RELATIONSHIP": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "ACLKEN_CONVERSION": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "S00_NUM_BYTES": [ { "value": "4", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "S01_NUM_BYTES": [ { "value": "4", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "S02_NUM_BYTES": [ { "value": "4", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -110,7 +110,7 @@
         "C_M_PIPELINE": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_M_SEND_PIPELINE": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_S_LATENCY": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_ACLK_RELATIONSHIP": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_ACLKEN_CONVERSION": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
@@ -245,5 +245,5 @@
       }
     }
   },
-  "checksum": "3beb383b"
+  "checksum": "2f3e8dad"
 }

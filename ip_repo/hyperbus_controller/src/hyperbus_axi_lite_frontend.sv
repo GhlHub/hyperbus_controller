@@ -82,7 +82,7 @@ module hyperbus_axi_lite_frontend #(
     localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
     localparam bit HAS_DELAY_CTRL = (PHY_IO_STYLE == PHY_IO_STYLE_IO_DELAY);
     localparam logic [31:0] HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 32'h0100_0000;
-    localparam logic [31:0] HB_VERSION_NUMBER_VALUE = 32'h0000_0009;
+    localparam logic [31:0] HB_VERSION_NUMBER_VALUE = 32'h0000_000A;
     localparam logic [31:0] HB_VERSION_VALUE =
         ((PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ?
             HB_VERSION_CFG_PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT : 32'h0000_0000) |

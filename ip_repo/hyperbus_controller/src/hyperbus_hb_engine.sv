@@ -117,8 +117,6 @@ module hyperbus_hb_engine #(
 
     logic [15:0] hb_word16;
     logic [15:0] hb_word16_le;
-    logic [15:0] hb_word16_cur;
-    logic [15:0] hb_word16_cur_le;
     logic [15:0] hb_word16_read;
     (* IOB = "true" *) logic hb_cs_n_pad_q;
     logic hb_cs_n_dbg_q;
@@ -137,22 +135,12 @@ module hyperbus_hb_engine #(
 
     assign hb_word16    = {dq_q1_dly, dq_q2_dly};
     assign hb_word16_le = {hb_word16[7:0], hb_word16[15:8]};
-    assign hb_word16_cur = {i_dq_q1, i_dq_q2};
-    assign hb_word16_cur_le = {hb_word16_cur[7:0], hb_word16_cur[15:8]};
-    // In IO_DELAY mode (PHY_IO_STYLE=0), the IDELAYE3 on DQ adds ~1 clock cycle
-    // of physical delay, so the unregistered IDDRE1 output in synthesis is
-    // already aligned with the registered RWDS qualifier (rwds_q1_dly).
-    // In EXT_CLK_PHASE_SHIFT mode (PHY_IO_STYLE=1), there is no IDELAYE3, so
-    // using the unregistered DQ would capture one HyperBus word too late.
-    // Use the registered path (hb_word16) for PHY_IO_STYLE=1 in synthesis so
-    // that DQ and RWDS are both sampled from the same HyperBus clock cycle.
-`ifdef SYNTHESIS
-    localparam bit USE_REG_DQ = (PHY_IO_STYLE == 1);
-`else
-    localparam bit USE_REG_DQ = 1'b1;
-`endif
-    assign hb_word16_read    = USE_REG_DQ ? hb_word16    : hb_word16_cur;
-    assign hb_word16_read_le = USE_REG_DQ ? hb_word16_le : hb_word16_cur_le;
+    // Read data must be packed from the same registered sampling stage that
+    // qualifies RWDS. This avoids dropping the first accepted beat in
+    // IO_DELAY mode while preserving the existing EXT_CLK_PHASE_SHIFT path,
+    // which already relied on the registered DQ stage.
+    assign hb_word16_read    = hb_word16;
+    assign hb_word16_read_le = hb_word16_le;
     assign o_dq_q1_dly_dbg = dq_q1_dly;
     assign o_dq_q2_dly_dbg = dq_q2_dly;
     assign o_rwds_q1_dly_dbg = rwds_q1_dly;

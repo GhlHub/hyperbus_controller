@@ -30,8 +30,8 @@
         "HAS_ACLKEN": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_READ_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SINGLE_ISSUING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SUPPORTS_NARROW": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SEG000_BASE_ADDR": [ { "value": "0x0000000004020000", "value_src": "user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
@@ -2111,8 +2111,8 @@
         "C_S_PROTOCOL": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_READ_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_WRITE_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_READ_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_WRITE_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SINGLE_ISSUING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SUPPORTS_WRAP": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SUPPORTS_NARROW": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -2223,7 +2223,7 @@
             "PROTOCOL": [ { "value": "AXI4LITE", "value_src": "propagated", "value_permission": "bd", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "FREQ_HZ": [ { "value": "50000000", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "ID_WIDTH": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "ADDR_WIDTH": [ { "value": "32", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "ADDR_WIDTH": [ { "value": "32", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "AWUSER_WIDTH": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "ARUSER_WIDTH": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "WUSER_WIDTH": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
@@ -2240,8 +2240,8 @@
             "HAS_BRESP": [ { "value": "1", "value_src": "constant_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "HAS_RRESP": [ { "value": "1", "value_src": "constant_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "SUPPORTS_NARROW_BURST": [ { "value": "0", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_READ_OUTSTANDING": [ { "value": "1", "value_src": "user", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_src": "user", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "user", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "user", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "MAX_BURST_LENGTH": [ { "value": "1", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
             "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_0_clk_out1", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
@@ -2385,5 +2385,5 @@
       }
     }
   },
-  "checksum": "a382f8fb"
+  "checksum": "b30917a1"
 }

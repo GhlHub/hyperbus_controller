@@ -66,8 +66,6 @@
 
 // INST_TAG     ------ Begin cut for WRAPPER INSTANTIATION Template ------
 design_1_sv your_instance_name (
-  .UART_0_txd(UART_0_txd), // output wire UART_0_txd
-  .UART_0_rxd(UART_0_rxd), // input wire UART_0_rxd
   .o_hb_reset_n_0(o_hb_reset_n_0), // output wire o_hb_reset_n_0
   .ext_reset_in_0(ext_reset_in_0), // input wire ext_reset_in_0
   .o_hb_cs_n_0(o_hb_cs_n_0), // output wire o_hb_cs_n_0
@@ -85,7 +83,9 @@ design_1_sv your_instance_name (
   .psdone_0(psdone_0), // input wire psdone_0
   .psclk_0(psclk_0), // output wire psclk_0
   .psen_0(psen_0), // output wire psen_0
-  .psincdec_0(psincdec_0) // output wire psincdec_0
+  .psincdec_0(psincdec_0), // output wire psincdec_0
+  .UART_0_txd(UART_0_txd), // output wire UART_0_txd
+  .UART_0_rxd(UART_0_rxd) // input wire UART_0_rxd
 );
 // INST_TAG_END ------  End cut for WRAPPER INSTANTIATION Template  ------
 

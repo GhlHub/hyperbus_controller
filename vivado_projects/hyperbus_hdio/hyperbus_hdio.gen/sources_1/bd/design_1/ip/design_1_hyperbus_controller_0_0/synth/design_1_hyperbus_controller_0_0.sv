@@ -47,7 +47,7 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: user.org:user:hyperbus_controller:1.2
+// IP VLNV: github.com:user:hyperbus_controller:1.3
 // IP Revision: 1
 
 (* X_CORE_INFO = "hyperbus_controller,Vivado 2025.2" *)
@@ -59,7 +59,6 @@ module design_1_hyperbus_controller_0_0 (
   i_axi_aresetn,
   i_hb_clk_200,
   i_hb_clk_200_gated,
-  i_ref_clk_300,
   i_idelayctrl_rst,
   i_hb_clk_200_samp_90,
   i_iddre1_rst,
@@ -144,7 +143,6 @@ input wire i_axi_aclk;
 input wire i_axi_aresetn;
 input wire i_hb_clk_200;
 input wire i_hb_clk_200_gated;
-input wire i_ref_clk_300;
 (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_idelayctrl_rst RST" *)
 (* X_INTERFACE_MODE = "slave" *)
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_idelayctrl_rst, POLARITY ACTIVE_HIGH, INSERT_VIP 0" *)
@@ -294,7 +292,7 @@ output wire o_dbg_rd_half;
     .i_axi_aresetn(i_axi_aresetn),
     .i_hb_clk_200(i_hb_clk_200),
     .i_hb_clk_200_gated(i_hb_clk_200_gated),
-    .i_ref_clk_300(i_ref_clk_300),
+    .i_ref_clk_300(1'B0),
     .i_idelayctrl_rst(i_idelayctrl_rst),
     .i_hb_clk_200_samp_90(i_hb_clk_200_samp_90),
     .i_iddre1_rst(i_iddre1_rst),

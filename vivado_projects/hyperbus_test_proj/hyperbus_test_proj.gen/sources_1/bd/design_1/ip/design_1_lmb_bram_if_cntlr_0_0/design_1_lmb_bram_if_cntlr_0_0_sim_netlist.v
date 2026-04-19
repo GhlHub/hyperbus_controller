@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Sat Apr 11 13:56:40 2026
+// Date        : Sat Apr 18 20:47:57 2026
 // Host        : YouBing running 64-bit Ubuntu 24.04.4 LTS
-// Command     : write_verilog -force -mode funcsim -rename_top design_1_lmb_bram_if_cntlr_0_0 -prefix
-//               design_1_lmb_bram_if_cntlr_0_0_ design_1_lmb_bram_if_cntlr_0_0_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim
+//               /raid/work/ghl_ip/hyperbus_controller/vivado_projects/hyperbus_test_proj/hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_lmb_bram_if_cntlr_0_0/design_1_lmb_bram_if_cntlr_0_0_sim_netlist.v
 // Design      : design_1_lmb_bram_if_cntlr_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -342,7 +342,7 @@ endmodule
 (* C_PROT_CFG4 = "8'b11111111" *) (* C_PROT_CFG5 = "8'b11111111" *) (* C_PROT_CFG6 = "8'b11111111" *) 
 (* C_PROT_CFG7 = "8'b11111111" *) (* C_S_AXI_CTRL_ADDR_WIDTH = "32" *) (* C_S_AXI_CTRL_BASEADDR = "32'b11111111111111111111111111111111" *) 
 (* C_S_AXI_CTRL_DATA_WIDTH = "32" *) (* C_S_AXI_CTRL_HIGHADDR = "32'b00000000000000000000000000000000" *) (* C_UE_FAILING_REGISTERS = "0" *) 
-(* C_WRITE_ACCESS = "2" *) 
+(* C_WRITE_ACCESS = "2" *) (* ORIG_REF_NAME = "lmb_bram_if_cntlr" *) 
 module design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr
    (LMB_Clk,
     LMB_Rst,
@@ -932,6 +932,7 @@ module design_1_lmb_bram_if_cntlr_0_0_lmb_bram_if_cntlr
         .lmb_select(lmb_select));
 endmodule
 
+(* ORIG_REF_NAME = "lmb_mux" *) 
 module design_1_lmb_bram_if_cntlr_0_0_lmb_mux
    (BRAM_Dout_A,
     BRAM_Addr_A,

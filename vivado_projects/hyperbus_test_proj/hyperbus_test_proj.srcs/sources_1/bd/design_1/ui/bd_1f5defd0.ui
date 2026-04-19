@@ -1,81 +1,81 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.977723",
-   "Default View_TopLeft":"1885,71",
+   "Default View_ScaleFactor":"0.421372",
+   "Default View_TopLeft":"966,282",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 TLS
 #  -string -flagsOSRD
-preplace port CLK_IN1_D_0 -pg 1 -lvl 0 -x 0 -y 570 -defaultsOSRD
-preplace port UART_0 -pg 1 -lvl 8 -x 2810 -y 1050 -defaultsOSRD
-preplace port port-id_o_hb_reset_n_0 -pg 1 -lvl 8 -x 2810 -y 600 -defaultsOSRD
-preplace port port-id_ext_reset_in_0 -pg 1 -lvl 0 -x 0 -y 850 -defaultsOSRD
-preplace port port-id_o_hb_cs_n_0 -pg 1 -lvl 8 -x 2810 -y 40 -defaultsOSRD
-preplace port port-id_o_hb_ck_p_0 -pg 1 -lvl 8 -x 2810 -y 70 -defaultsOSRD
-preplace port port-id_o_hb_ck_n_0 -pg 1 -lvl 8 -x 2810 -y 100 -defaultsOSRD
-preplace port port-id_io_hb_rwds_0 -pg 1 -lvl 8 -x 2810 -y 130 -defaultsOSRD
-preplace portBus io_hb_dq_0 -pg 1 -lvl 8 -x 2810 -y 160 -defaultsOSRD
-preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 130 -y 590 -defaultsOSRD
-preplace inst axi_crossbar_0 -pg 1 -lvl 5 -x 1700 -y 990 -defaultsOSRD
-preplace inst blk_mem_gen_0 -pg 1 -lvl 6 -x 2170 -y 580 -defaultsOSRD
-preplace inst lmb_bram_if_cntlr_0 -pg 1 -lvl 5 -x 1700 -y 590 -defaultsOSRD
-preplace inst axi_intc_0 -pg 1 -lvl 3 -x 920 -y 980 -defaultsOSRD
-preplace inst axi_crossbar_1 -pg 1 -lvl 5 -x 1700 -y 750 -defaultsOSRD
-preplace inst axi_timer_0 -pg 1 -lvl 6 -x 2170 -y 820 -defaultsOSRD
-preplace inst ilconcat_0 -pg 1 -lvl 2 -x 510 -y 1030 -defaultsOSRD
-preplace inst hyperbus_controller_0 -pg 1 -lvl 6 -x 2170 -y 250 -defaultsOSRD
-preplace inst reset_gen -pg 1 -lvl 2 -x 510 -y 830 -defaultsOSRD
-preplace inst e_uart_0 -pg 1 -lvl 6 -x 2170 -y 1010 -defaultsOSRD
-preplace inst axi_quad_spi_0 -pg 1 -lvl 7 -x 2650 -y 1410 -defaultsOSRD
-preplace inst microblaze_0 -pg 1 -lvl 4 -x 1300 -y 700 -defaultsOSRD
-preplace inst mdm_0 -pg 1 -lvl 3 -x 920 -y 700 -defaultsOSRD
-preplace inst pmcbridge_0 -pg 1 -lvl 7 -x 2650 -y 1240 -defaultsOSRD
-preplace inst smartconnect_0 -pg 1 -lvl 6 -x 2170 -y 1180 -defaultsOSRD
-preplace netloc Net 1 6 2 NJ 120 2790J
-preplace netloc Net1 1 6 2 NJ 140 2790J
-preplace netloc axi_clk 1 1 6 250 620 780 620 1070 590 1550 490 1940 1260 2520
-preplace netloc axi_quad_spi_0_ip2intc_irpt 1 1 7 300 940 790J 890 NJ 890 NJ 890 1900J 930 NJ 930 2780
-preplace netloc axi_timer_0_interrupt 1 1 6 310 1110 NJ 1110 NJ 1110 NJ 1110 1970J 1100 2380
-preplace netloc clk_300m 1 1 5 280 430 NJ 430 NJ 430 NJ 430 1850
-preplace netloc clk_wiz_0_locked 1 1 1 260 640n
-preplace netloc e_uart_0_intr 1 1 6 260 1120 NJ 1120 NJ 1120 NJ 1120 1960J 1090 2370
-preplace netloc ext_reset_in_0_1 1 0 2 NJ 850 NJ
-preplace netloc hb_clk_gated 1 1 5 240J 420 NJ 420 NJ 420 NJ 420 1840
-preplace netloc hb_phy_clk 1 1 5 270 230 NJ 230 NJ 230 NJ 230 N
-preplace netloc hb_phy_rx_clk 1 1 5 290 450 NJ 450 NJ 450 NJ 450 1890
-preplace netloc hyperbus_controller_0_o_hb_ck_n 1 6 2 NJ 100 NJ
-preplace netloc hyperbus_controller_0_o_hb_ck_p 1 6 2 2380J 70 NJ
-preplace netloc hyperbus_controller_0_o_hb_cs_n 1 6 2 NJ 40 NJ
-preplace netloc hyperbus_controller_1_o_hb_clk_ce 1 0 7 20 480 NJ 480 NJ 480 NJ 480 NJ 480 1970J 520 2370
-preplace netloc hyperbus_controller_1_o_hb_reset_n 1 6 2 NJ 160 2780J
-preplace netloc ilconcat_0_dout 1 2 1 710 1010n
-preplace netloc mb_debug_sys_rst_1 1 1 3 310 600 NJ 600 1040
-preplace netloc proc_sys_reset_1_interconnect_aresetn 1 2 4 NJ 790 1040J 800 1560 1100 1840
-preplace netloc proc_sys_reset_1_peripheral_aresetn 1 2 5 750 840 NJ 840 NJ 840 1950 1450 N
-preplace netloc reset_gen_bus_struct_reset 1 2 3 730J 610 1050J 600 1540
-preplace netloc reset_gen_mb_reset 1 2 2 770J 630 1050
-preplace netloc reset_gen_peripheral_aresetn 1 2 4 710J 470 NJ 470 NJ 470 1910
-preplace netloc reset_gen_peripheral_reset 1 2 4 720J 440 NJ 440 NJ 440 1870
-preplace netloc reset_gen_peripheral_reset1 1 2 4 760J 460 NJ 460 NJ 460 1900
-preplace netloc CLK_IN1_D_0_1 1 0 1 NJ 570
-preplace netloc axi_crossbar_0_M00_AXI 1 2 4 800 500 NJ 500 NJ 500 1840
-preplace netloc axi_crossbar_0_M01_AXI 1 5 1 1880 170n
-preplace netloc axi_crossbar_0_M02_AXI 1 5 1 N 990
-preplace netloc axi_crossbar_0_M03_AXI 1 5 1 1850 770n
-preplace netloc axi_crossbar_0_M04_AXI 1 5 1 1880 1030n
-preplace netloc axi_crossbar_1_M00_AXI 1 5 1 1860 150n
-preplace netloc axi_intc_0_interrupt 1 3 1 1060 670n
-preplace netloc e_uart_0_UART 1 6 2 NJ 990 2790J
-preplace netloc lmb_bram_if_cntlr_0_BRAM_PORT 1 5 1 1970J 580n
-preplace netloc mdm_0_MBDEBUG_0 1 3 1 N 690
-preplace netloc microblaze_0_DLMB 1 4 1 1530 560n
-preplace netloc microblaze_0_ILMB 1 4 1 1560 580n
-preplace netloc microblaze_0_M_AXI_DC 1 4 1 N 720
-preplace netloc microblaze_0_M_AXI_DP 1 4 1 1540 700n
-preplace netloc microblaze_riscv_0_M_AXI_IC 1 4 1 N 740
-preplace netloc smartconnect_0_M00_AXI 1 6 1 2380 1170n
-preplace netloc smartconnect_0_M01_AXI 1 6 1 2370 1190n
-levelinfo -pg 1 0 130 510 920 1300 1700 2170 2650 2810
-pagesize -pg 1 -db -bbox -sgen -150 -40 2980 1580
+preplace port CLK_IN1_D_0 -pg 1 -lvl 0 -x -160 -y 570 -defaultsOSRD
+preplace port UART_0 -pg 1 -lvl 8 -x 3100 -y 990 -defaultsOSRD
+preplace port port-id_o_hb_reset_n_0 -pg 1 -lvl 8 -x 3100 -y 590 -defaultsOSRD
+preplace port port-id_ext_reset_in_0 -pg 1 -lvl 0 -x -160 -y 720 -defaultsOSRD
+preplace port port-id_o_hb_cs_n_0 -pg 1 -lvl 8 -x 3100 -y 440 -defaultsOSRD
+preplace port port-id_o_hb_ck_p_0 -pg 1 -lvl 8 -x 3100 -y 470 -defaultsOSRD
+preplace port port-id_o_hb_ck_n_0 -pg 1 -lvl 8 -x 3100 -y 500 -defaultsOSRD
+preplace port port-id_io_hb_rwds_0 -pg 1 -lvl 8 -x 3100 -y 530 -defaultsOSRD
+preplace portBus io_hb_dq_0 -pg 1 -lvl 8 -x 3100 -y 560 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x -20 -y 700 -defaultsOSRD
+preplace inst axi_crossbar_0 -pg 1 -lvl 5 -x 1910 -y 670 -defaultsOSRD
+preplace inst blk_mem_gen_0 -pg 1 -lvl 6 -x 2510 -y 1130 -defaultsOSRD
+preplace inst lmb_bram_if_cntlr_0 -pg 1 -lvl 5 -x 1910 -y 1070 -defaultsOSRD
+preplace inst axi_intc_0 -pg 1 -lvl 3 -x 1000 -y 660 -defaultsOSRD
+preplace inst axi_crossbar_1 -pg 1 -lvl 5 -x 1910 -y 910 -defaultsOSRD
+preplace inst axi_timer_0 -pg 1 -lvl 6 -x 2510 -y 100 -defaultsOSRD
+preplace inst ilconcat_0 -pg 1 -lvl 2 -x 380 -y 330 -defaultsOSRD
+preplace inst hyperbus_controller_0 -pg 1 -lvl 6 -x 2510 -y 680 -defaultsOSRD
+preplace inst reset_gen -pg 1 -lvl 2 -x 380 -y 700 -defaultsOSRD
+preplace inst e_uart_0 -pg 1 -lvl 6 -x 2510 -y 1010 -defaultsOSRD
+preplace inst axi_quad_spi_0 -pg 1 -lvl 7 -x 2930 -y 160 -defaultsOSRD
+preplace inst microblaze_0 -pg 1 -lvl 4 -x 1430 -y 860 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 3 -x 1000 -y 900 -defaultsOSRD
+preplace inst pmcbridge_0 -pg 1 -lvl 7 -x 2930 -y 330 -defaultsOSRD
+preplace inst smartconnect_0 -pg 1 -lvl 6 -x 2510 -y 330 -defaultsOSRD
+preplace netloc Net 1 6 2 2750J 530 NJ
+preplace netloc Net1 1 6 2 2710J 560 NJ
+preplace netloc axi_clk 1 1 6 150 810 800 800 1190 690 1710 1160 2210 230 2790
+preplace netloc axi_quad_spi_0_ip2intc_irpt 1 1 7 160 250 NJ 250 NJ 250 NJ 250 NJ 250 2730J 260 3060
+preplace netloc axi_timer_0_interrupt 1 1 6 180 220 NJ 220 NJ 220 NJ 220 NJ 220 2710
+preplace netloc clk_300m 1 1 5 110 820 810J 810 1200J 750 1720J 780 2230J
+preplace netloc clk_wiz_0_locked 1 1 1 100 640n
+preplace netloc e_uart_0_intr 1 1 6 170 1190 NJ 1190 NJ 1190 NJ 1190 NJ 1190 2710
+preplace netloc ext_reset_in_0_1 1 0 2 -140J 810 140
+preplace netloc hb_clk_200_samp_90 1 1 5 120 1070 590J 1170 NJ 1170 NJ 1170 2310
+preplace netloc hb_clk_gated 1 1 5 90 830 N 830 1120 720 1730 810 2250
+preplace netloc hb_phy_clk 1 1 5 130 1080 580J 1180 NJ 1180 NJ 1180 2290
+preplace netloc hyperbus_controller_0_o_hb_ck_n 1 6 2 2740J 500 NJ
+preplace netloc hyperbus_controller_0_o_hb_ck_p 1 6 2 2730J 470 NJ
+preplace netloc hyperbus_controller_0_o_hb_cs_n 1 6 2 2720J 440 NJ
+preplace netloc hyperbus_controller_1_o_hb_clk_ce 1 0 7 -130 410 N 410 N 410 N 410 N 410 NJ 410 2710
+preplace netloc hyperbus_controller_1_o_hb_reset_n 1 6 2 NJ 590 NJ
+preplace netloc ilconcat_0_dout 1 2 1 870 330n
+preplace netloc mb_debug_sys_rst_1 1 1 3 180 1090 NJ 1090 1120
+preplace netloc proc_sys_reset_1_interconnect_aresetn 1 2 4 860 750 1130J 700 1740 350 N
+preplace netloc proc_sys_reset_1_peripheral_aresetn 1 2 5 880 760 NJ 760 1680J 820 2280 210 2730
+preplace netloc reset_gen_bus_struct_reset 1 2 3 830J 1100 NJ 1100 N
+preplace netloc reset_gen_mb_reset 1 2 2 820J 820 1150
+preplace netloc reset_gen_peripheral_aresetn 1 2 4 850J 780 1140J 710 1770J 800 2300
+preplace netloc reset_gen_peripheral_reset 1 2 4 810J 790 1160J 730 1750J 790 2260
+preplace netloc reset_gen_peripheral_reset1 1 2 4 840J 770 1150J 740 1760J 770 2270
+preplace netloc CLK_IN1_D_0_1 1 0 1 -140J 570n
+preplace netloc axi_crossbar_0_M00_AXI 1 2 4 880 570 NJ 570 NJ 570 2050
+preplace netloc axi_crossbar_0_M01_AXI 1 5 1 2080 600n
+preplace netloc axi_crossbar_0_M02_AXI 1 5 1 2240 670n
+preplace netloc axi_crossbar_0_M03_AXI 1 5 1 2060 50n
+preplace netloc axi_crossbar_0_M04_AXI 1 5 1 2070 310n
+preplace netloc axi_crossbar_1_M00_AXI 1 5 1 2220 580n
+preplace netloc axi_intc_0_interrupt 1 3 1 1170 660n
+preplace netloc e_uart_0_UART 1 6 2 NJ 990 NJ
+preplace netloc lmb_bram_if_cntlr_0_BRAM_PORT 1 5 1 2050 1070n
+preplace netloc mdm_0_MBDEBUG_0 1 3 1 1130 850n
+preplace netloc microblaze_0_DLMB 1 4 1 1670 820n
+preplace netloc microblaze_0_ILMB 1 4 1 1660 840n
+preplace netloc microblaze_0_M_AXI_DC 1 4 1 N 880
+preplace netloc microblaze_0_M_AXI_DP 1 4 1 1690 650n
+preplace netloc microblaze_riscv_0_M_AXI_IC 1 4 1 N 900
+preplace netloc smartconnect_0_M00_AXI 1 6 1 N 320
+preplace netloc smartconnect_0_M01_AXI 1 6 1 2720 140n
+levelinfo -pg 1 -160 -20 380 1000 1430 1910 2510 2930 3100
+pagesize -pg 1 -db -bbox -sgen -310 -10 3260 1210
 "
 }
 0

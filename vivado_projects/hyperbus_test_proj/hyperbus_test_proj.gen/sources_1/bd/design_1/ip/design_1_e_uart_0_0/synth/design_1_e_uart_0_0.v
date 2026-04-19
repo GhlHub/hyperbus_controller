@@ -47,7 +47,7 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: SFG:user:e_uart:1.1
+// IP VLNV: github.com:user:e_uart:1.1
 // IP Revision: 19
 
 (* X_CORE_INFO = "e_uart,Vivado 2025.2" *)

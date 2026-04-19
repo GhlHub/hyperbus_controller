@@ -24,8 +24,8 @@
         "HAS_ACLKEN": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_READ_OUTSTANDING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SUPPORTS_READ_DEADLOCK": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SUPPORTS_WRITE_DEADLOCK": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "SINGLE_ISSUING": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -49,8 +49,8 @@
         "C_SUPPORTS_WRITE_DEADLOCK": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_READ_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_WRITE_ACCEPTANCE": [ { "value": "32", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_READ_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_NUM_WRITE_OUTSTANDING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_READ_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_NUM_WRITE_OUTSTANDING": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SINGLE_ISSUING": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
@@ -358,5 +358,5 @@
       }
     }
   },
-  "checksum": "97c97acb"
+  "checksum": "33d16299"
 }
