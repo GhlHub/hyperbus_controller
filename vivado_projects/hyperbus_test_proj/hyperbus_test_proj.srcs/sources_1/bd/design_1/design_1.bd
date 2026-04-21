@@ -801,7 +801,7 @@
             "value": "8"
           },
           "C_DCACHE_USE_WRITEBACK": {
-            "value": "0"
+            "value": "1"
           },
           "C_DIV_ZERO_EXCEPTION": {
             "value": "1"

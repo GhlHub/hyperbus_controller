@@ -294,21 +294,6 @@ static void prvWaitForBreadcrumbOverride( void )
     }
 }
 
-static void prvWaitForSpacebar( const char *pcPrompt )
-{
-    BL_PRINTF( "%s", pcPrompt );
-    euart_console_wait_tx_empty();
-
-    for( ; ; )
-    {
-        if( inbyte() == ' ' )
-        {
-            BL_PRINTF( "\r\n" );
-            return;
-        }
-    }
-}
-
 static int prvRangeTouchesBootloader( uintptr_t uxStart, size_t xLength )
 {
     const uintptr_t uxEnd = uxStart + xLength;
@@ -611,7 +596,6 @@ static void prvPrintAndStartImage( void ( *pxEntryPoint )( void ) )
                ( unsigned long ) uxImageStart,
                ( unsigned long ) uxSize,
                ( unsigned long ) uxEntry );
-    prvWaitForSpacebar( "Press spacebar to continue to the loaded executable..." );
     prvQuiesceInterruptStateForHandoff();
     if( prvInstallApplicationVectorsForHandoff( uxEntry ) != XST_SUCCESS )
     {
@@ -636,151 +620,6 @@ static void prvPrintFinalProgress( void )
 {
     BL_PRINTF( "Processed %lu S-records\r\n",
                ( unsigned long ) ulSrecProcessedCount );
-}
-
-static int prvVerifyRecordData( void )
-{
-    const volatile uint8 *pucTarget = ( const volatile uint8 * ) xSrecInfo.addr;
-    const uint8 *pucExpected = ( const uint8 * ) xSrecInfo.sr_data;
-    uint32_t ulMismatchCount = 0U;
-    uint32_t ulPrintedMismatchCount = 0U;
-    uint32_t ulIndex = 0U;
-
-    if( ( ( ( ( uintptr_t ) pucTarget ) | ( ( uintptr_t ) pucExpected ) ) & 0x3U ) == 0U )
-    {
-        const volatile uint32_t *pulTarget = ( const volatile uint32_t * ) pucTarget;
-        const uint32_t *pulExpected = ( const uint32_t * ) pucExpected;
-        const uint32_t ulWordCount = xSrecInfo.dlen / sizeof( uint32_t );
-        uint32_t ulWordIndex;
-
-        for( ulWordIndex = 0U; ulWordIndex < ulWordCount; ulWordIndex++ )
-        {
-            if( pulTarget[ ulWordIndex ] != pulExpected[ ulWordIndex ] )
-            {
-                const uint32_t ulBaseIndex = ulWordIndex * ( uint32_t ) sizeof( uint32_t );
-                uint32_t ulByteOffset;
-
-                /* Preserve byte-accurate mismatch reporting on word miscompares. */
-                for( ulByteOffset = 0U; ulByteOffset < ( uint32_t ) sizeof( uint32_t ); ulByteOffset++ )
-                {
-                    const uint32_t ulByteIndex = ulBaseIndex + ulByteOffset;
-                    const uint8 ucActual = pucTarget[ ulByteIndex ];
-                    const uint8 ucExpected = pucExpected[ ulByteIndex ];
-
-                    if( ucActual != ucExpected )
-                    {
-                        if( ulPrintedMismatchCount < BOOT_VERIFY_MISMATCH_PRINT_LIMIT )
-                        {
-                            BL_PRINTF( "Verify mismatch @0x%08lx expected=%02X actual=%02X\r\n",
-                                       ( unsigned long ) ( ( uintptr_t ) xSrecInfo.addr + ulByteIndex ),
-                                       ucExpected,
-                                       ucActual );
-                        }
-
-                        ulMismatchCount++;
-                        ulPrintedMismatchCount++;
-                    }
-                }
-            }
-        }
-
-        ulIndex = ulWordCount * ( uint32_t ) sizeof( uint32_t );
-    }
-
-    for( ; ulIndex < xSrecInfo.dlen; ulIndex++ )
-    {
-        const uint8 ucActual = pucTarget[ ulIndex ];
-        const uint8 ucExpected = pucExpected[ ulIndex ];
-
-        if( ucActual != ucExpected )
-        {
-            if( ulPrintedMismatchCount < BOOT_VERIFY_MISMATCH_PRINT_LIMIT )
-            {
-                BL_PRINTF( "Verify mismatch @0x%08lx expected=%02X actual=%02X\r\n",
-                           ( unsigned long ) ( ( uintptr_t ) xSrecInfo.addr + ulIndex ),
-                           ucExpected,
-                           ucActual );
-            }
-
-            ulMismatchCount++;
-            ulPrintedMismatchCount++;
-        }
-    }
-
-    if( ulMismatchCount != 0U )
-    {
-        if( ulMismatchCount > BOOT_VERIFY_MISMATCH_PRINT_LIMIT )
-        {
-            BL_PRINTF( "Additional mismatches not shown: %lu\r\n",
-                       ( unsigned long ) ( ulMismatchCount - BOOT_VERIFY_MISMATCH_PRINT_LIMIT ) );
-        }
-
-        BL_PRINTF( "Verification failed with %lu mismatches\r\n",
-                   ( unsigned long ) ulMismatchCount );
-        return LD_SREC_VERIFY_ERROR;
-    }
-
-    return XST_SUCCESS;
-}
-
-static int prvVerifyLoadedImage( void )
-{
-    uint32_t ulFlashOffset = BOOT_FLASH_IMAGE_OFFSET;
-    void ( *pxEntryPoint )( void ) = NULL;
-    int iStatus;
-
-    xSrecInfo.sr_data = ucSrecData;
-    srec_line = 0;
-    prvResetFlashReadBuffer();
-
-    iStatus = prvFlashGetSrecLineStrict( &ulFlashOffset, ucSrecLine );
-    if( iStatus != XST_SUCCESS )
-    {
-        return LD_SREC_START_ERROR;
-    }
-
-    for( ;; )
-    {
-        const uint8 ucParseStatus = decode_srec_line( ucSrecLine, &xSrecInfo );
-
-        if( ucParseStatus != 0U )
-        {
-            return ucParseStatus;
-        }
-
-        switch( xSrecInfo.type )
-        {
-            case SREC_TYPE_0:
-            case SREC_TYPE_5:
-                break;
-
-            case SREC_TYPE_1:
-            case SREC_TYPE_2:
-            case SREC_TYPE_3:
-                iStatus = prvVerifyRecordData();
-                if( iStatus != XST_SUCCESS )
-                {
-                    return iStatus;
-                }
-                break;
-
-            case SREC_TYPE_7:
-            case SREC_TYPE_8:
-            case SREC_TYPE_9:
-                pxEntryPoint = ( void ( * )( void ) ) xSrecInfo.addr;
-                BL_PRINTF( "SREC image verify passed\r\n" );
-                return ( pxEntryPoint != NULL ) ? XST_SUCCESS : SREC_PARSE_ERROR;
-
-            default:
-                return SREC_PARSE_ERROR;
-        }
-
-        iStatus = prvFlashGetSrecLine( &ulFlashOffset, ucSrecLine );
-        if( iStatus != XST_SUCCESS )
-        {
-            return LD_SREC_LINE_ERROR;
-        }
-    }
 }
 
 static int prvProcessSrecLine( const uint8 *pucLine, void ( **ppxEntryPoint )( void ) )
@@ -860,13 +699,6 @@ static int prvLoadSrecImage( void )
     if( iStatus == XST_SUCCESS )
     {
         prvPrintFinalProgress();
-        prvWaitForSpacebar( "Press spacebar to begin SREC verification..." );
-        BL_PRINTF( "Starting SREC verification\r\n" );
-        iStatus = prvVerifyLoadedImage();
-        if( iStatus != XST_SUCCESS )
-        {
-            return iStatus;
-        }
         prvPrintAndStartImage( pxEntryPoint );
         return XST_SUCCESS;
     }
@@ -889,13 +721,6 @@ static int prvLoadSrecImage( void )
         if( iStatus == XST_SUCCESS )
         {
             prvPrintFinalProgress();
-            prvWaitForSpacebar( "Press spacebar to begin SREC verification..." );
-            BL_PRINTF( "Starting SREC verification\r\n" );
-            iStatus = prvVerifyLoadedImage();
-            if( iStatus != XST_SUCCESS )
-            {
-                return iStatus;
-            }
             prvPrintAndStartImage( pxEntryPoint );
             return XST_SUCCESS;
         }

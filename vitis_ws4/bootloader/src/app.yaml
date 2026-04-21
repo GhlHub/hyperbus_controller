@@ -1,4 +1,4 @@
-domain_path: /raid/work/hyperbus_controller_freertos_port/vitis_ws4/platform/export/platform/sw/standalone_microblaze_0
+domain_path: /raid/work/ghl_ip/hyperbus_controller/vitis_ws4/platform/export/platform/sw/standalone_microblaze_0
 app_src_dir: /raid/work/hyperbus_controller_freertos_port/vitis_ws4/bootloader/src
 template: empty_application
 lang: c

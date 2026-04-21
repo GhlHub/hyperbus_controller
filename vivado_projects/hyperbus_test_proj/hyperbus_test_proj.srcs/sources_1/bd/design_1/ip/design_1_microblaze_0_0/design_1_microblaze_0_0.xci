@@ -17,7 +17,7 @@
         "C_PC_WIDTH": [ { "value": "32", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_INSTANCE": [ { "value": "microblaze", "resolve_type": "user", "usage": "all" } ],
         "C_AVOID_PRIMITIVES": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "C_FAULT_TOLERANT": [ { "value": "0", "value_permission": "bd_and_user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "C_FAULT_TOLERANT": [ { "value": "0", "value_permission": "bd_and_user", "resolve_type": "user", "format": "long", "enabled": false, "usage": "all" } ],
         "C_ECC_USE_CE_EXCEPTION": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_LOCKSTEP_SLAVE": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_TEMPORAL_DEPTH": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -197,7 +197,7 @@
         "C_DCACHE_BYTE_SIZE": [ { "value": "8192", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_LINE_LEN": [ { "value": "8", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_ALWAYS_USED": [ { "value": "1", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "C_DCACHE_USE_WRITEBACK": [ { "value": "0", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "C_DCACHE_USE_WRITEBACK": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_VICTIMS": [ { "value": "0", "resolve_type": "user", "format": "long", "enabled": false, "usage": "all" } ],
         "C_DCACHE_FORCE_TAG_LUTRAM": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_DATA_WIDTH": [ { "value": "0", "resolve_type": "user", "format": "long", "enabled": false, "usage": "all" } ],
@@ -384,7 +384,7 @@
         "C_DCACHE_BYTE_SIZE": [ { "value": "8192", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_LINE_LEN": [ { "value": "8", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_ALWAYS_USED": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_DCACHE_USE_WRITEBACK": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_DCACHE_USE_WRITEBACK": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_VICTIMS": [ { "value": "0", "resolve_type": "generated", "format": "long", "enabled": false, "usage": "all" } ],
         "C_DCACHE_FORCE_TAG_LUTRAM": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DCACHE_DATA_WIDTH": [ { "value": "0", "resolve_type": "generated", "format": "long", "enabled": false, "usage": "all" } ],
@@ -922,5 +922,5 @@
       }
     }
   },
-  "checksum": "4cf2b27f"
+  "checksum": "811c82b3"
 }
