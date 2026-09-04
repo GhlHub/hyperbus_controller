@@ -7,7 +7,6 @@ module hyperbus_hb_engine #(
     parameter int HB_LATENCY_DEFAULT = 7,
     parameter int ODDRE1_TX_PIPE_CYCLES = 1,
     parameter int HB_READ_CS_DEASSERT_DELAY = 2,
-    parameter int HB_READ_STROBE_GATE_CYCLES = 15,
     parameter int RWDS_TIMEOUT_CYCLES = 24,
     parameter int TIMEOUT_HOLDOFF_CYCLES = 92,
     parameter int PHY_IO_STYLE = 0
@@ -386,14 +385,14 @@ module hyperbus_hb_engine #(
                             latency_left <= 8'd0;
                             hb_state <= HB_REG_WRITE_DATA;
                         end else begin
-                            // AXI-full writes and all reads honor RWDS-selected latency.
-                            // Compensate write path by ODDRE1 TX pipeline cycles so first emitted
-                            // write beat aligns to target latency.
-                            latency_left = latency_2x ? ((base_latency - ODDRE1_TX_PIPE_CYCLES[7:0]) << 1) - 1 :
-                                                     (base_latency - ODDRE1_TX_PIPE_CYCLES[7:0]);
+                            // Initial latency overlaps the final CA cycle. The LAT zero-detection
+                            // and registered data-path handoff consume two more cycles
+                            // (HB_WRITE_PRIME for writes, read-state entry for reads).
+                            latency_left = (latency_2x ? (base_latency << 1) : base_latency) - 8'd3;
                             wr_rwds_wait_cnt <= cur_is_write ? 2'd2 : 2'd0;
-                            read_strobe_gate_cnt <= cur_is_write ? 8'd0 :
-                                                     HB_READ_STROBE_GATE_CYCLES[7:0];
+                            // RWDS qualifies the first valid read beat. Additional gating would
+                            // discard initial data, particularly with 1x variable latency.
+                            read_strobe_gate_cnt <= 8'd0;
                             hb_state <= cur_src_axil ? HB_AXIL_LAT : HB_FULL_LAT;
                         end
                     end
