@@ -127,6 +127,7 @@ module hyperbus_hb_engine #(
     logic [5:0] rwds_timeout_cnt;
     logic [7:0] rd_beats_pushed;
     logic [7:0] read_strobe_gate_cnt;
+    logic       read_strobe_gate_active_q;
     logic [7:0] timeout_full_beats_left;
     logic timeout_tripped_cur;
     logic [7:0] timeout_holdoff_cnt;
@@ -203,6 +204,7 @@ module hyperbus_hb_engine #(
             rwds_timeout_cnt <= 6'd0;
             rd_beats_pushed <= 8'd0;
             read_strobe_gate_cnt <= 8'd0;
+            read_strobe_gate_active_q <= 1'b0;
             timeout_full_beats_left <= 8'd0;
             timeout_tripped_cur <= 1'b0;
             timeout_holdoff_cnt <= 8'd0;
@@ -300,6 +302,7 @@ module hyperbus_hb_engine #(
                         last_read_half <= 1'b0;
                         rwds_timeout_cnt <= 6'd0;
                         rd_beats_pushed <= 8'd0;
+                        read_strobe_gate_active_q <= 1'b0;
                         timeout_full_beats_left <= 8'd0;
                         timeout_tripped_cur <= 1'b0;
                         cmd_loaded <= 1'b1;
@@ -390,9 +393,13 @@ module hyperbus_hb_engine #(
                             // (HB_WRITE_PRIME for writes, read-state entry for reads).
                             latency_left = (latency_2x ? (base_latency << 1) : base_latency) - 8'd3;
                             wr_rwds_wait_cnt <= cur_is_write ? 2'd2 : 2'd0;
-                            // RWDS qualifies the first valid read beat. Additional gating would
-                            // discard initial data, particularly with 1x variable latency.
-                            read_strobe_gate_cnt <= 8'd0;
+                            // Some boards exhibit premature RWDS activity, possibly due to noise
+                            // or board layout. Retain protection against it while allowing the
+                            // earlier first valid beat in 1x variable-latency mode.
+                            read_strobe_gate_cnt <= cur_is_write ? 8'd0 :
+                                                     (latency_2x ? ((base_latency << 1) + 8'd1) :
+                                                                   (base_latency + 8'd2));
+                            read_strobe_gate_active_q <= !cur_is_write;
                             hb_state <= cur_src_axil ? HB_AXIL_LAT : HB_FULL_LAT;
                         end
                     end
@@ -426,6 +433,9 @@ module hyperbus_hb_engine #(
                     o_dq_t <= 8'hFF;
                     if (read_strobe_gate_cnt != 0) begin
                         read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                        if (read_strobe_gate_cnt == 8'd1) begin
+                            read_strobe_gate_active_q <= 1'b0;
+                        end
                     end
                     if (cur_is_write) begin
                         // For AXI-full bursts, all write beats are present before command issue.
@@ -481,6 +491,9 @@ module hyperbus_hb_engine #(
                     o_dq_t <= 8'hFF;
                     if (read_strobe_gate_cnt != 0) begin
                         read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                        if (read_strobe_gate_cnt == 8'd1) begin
+                            read_strobe_gate_active_q <= 1'b0;
+                        end
                     end
                     o_rwds_t <= 1'b1;
                     o_rwds_o_d1 <= 1'b0;
@@ -635,7 +648,7 @@ module hyperbus_hb_engine #(
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
                     rd_beats_pushed_next = rd_beats_pushed;
-                    read_strobe_gate_active = (read_strobe_gate_cnt != 0);
+                    read_strobe_gate_active = read_strobe_gate_active_q;
                     // RWDS transition-aligned data: treat RWDS edge activity as data valid qualifier.
                     rwds_data_valid = !read_strobe_gate_active && (rwds_q1_dly ^ rwds_q2_dly);
 
@@ -644,6 +657,9 @@ module hyperbus_hb_engine #(
 
                     if (read_strobe_gate_active) begin
                         read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                        if (read_strobe_gate_cnt == 8'd1) begin
+                            read_strobe_gate_active_q <= 1'b0;
+                        end
                     end
 
                     if (rwds_data_valid && !rd_half) begin
@@ -719,7 +735,7 @@ module hyperbus_hb_engine #(
                     words_done_next = words_done;
                     took_word = 1'b0;
                     rwds_edges_seen_next = rwds_edges_seen;
-                    read_strobe_gate_active = (read_strobe_gate_cnt != 0);
+                    read_strobe_gate_active = read_strobe_gate_active_q;
                     rwds_data_valid = !read_strobe_gate_active && (rwds_q1_dly ^ rwds_q2_dly);
 
                     o_dq_t <= 8'hFF;
@@ -727,6 +743,9 @@ module hyperbus_hb_engine #(
 
                     if (read_strobe_gate_active) begin
                         read_strobe_gate_cnt <= read_strobe_gate_cnt - 8'd1;
+                        if (read_strobe_gate_cnt == 8'd1) begin
+                            read_strobe_gate_active_q <= 1'b0;
+                        end
                     end
 
                     // AXI-Lite 16-bit read support:
