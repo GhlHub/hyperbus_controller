@@ -301,6 +301,17 @@ Observed-system note:
 - Because of that, the controller should not treat the first post-latency RWDS
   transition as automatically valid data. The read path may need an additional
   post-CA gate interval before RWDS transitions are allowed to qualify read data.
+- The read-strobe gate is latency-aware. Its initial count is the RWDS-selected
+  latency plus a small pipeline allowance: `base_latency + 2` for 1x and
+  `2 * base_latency + 1` for 2x. With the supported base latency of seven, the
+  initial counts are therefore 9 and 15. Because the gate counts down alongside
+  the latency state, the 1x and 2x paths retain four and three gate cycles,
+  respectively, on entry to the read state.
+- XSIM sweeps against the S27KS0642 model found that a 1x initial count of 9
+  passes variable-latency data traffic, while a count of 10 masks the first valid
+  read data. Timeout holdoff is verified directly as 92 clocks in the HB domain;
+  measuring it from AXI response delivery is invalid because the response and
+  holdoff cross into the AXI domain through different CDC paths.
 - It is also firmware/software responsibility to avoid HyperRAM accesses until the
   full reset timing window has elapsed. That means software should wait long
   enough to cover both the possible `RESET#` assertion interval and the required
