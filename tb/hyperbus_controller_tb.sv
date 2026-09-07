@@ -29,6 +29,7 @@ module hyperbus_controller_tb;
     localparam int PHY_IO_STYLE = `TB_PHY_IO_STYLE;
     localparam int PHY_IO_STYLE_IO_DELAY = 0;
     localparam int PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT = 1;
+    localparam logic [4:0] HB_ENGINE_FULL_READ_STATE = 5'd12;
     localparam int DEFAULT_TB_SAMP_OFFSET_PS =
         (PHY_IO_STYLE == PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT) ? 2000 : 1250;
     localparam int DEFAULT_TB_EXT_CLK_SHIFT_PS =
@@ -284,6 +285,10 @@ module hyperbus_controller_tb;
     int mask_idx;
     int axif_cmd_push_count;
     int axil_cmd_push_count;
+    int mem_latency_1x_read_count;
+    int mem_latency_1x_write_count;
+    int mem_latency_2x_read_count;
+    int mem_latency_2x_write_count;
     logic [1:0] bresp_chk;
     logic [31:0] burst_base;
     logic [31:0] rd_data [0:31];
@@ -312,6 +317,28 @@ module hyperbus_controller_tb;
             axif_cmd_push_count <= 0;
         end else if (dut.cmd_fifo_wr_en_full) begin
             axif_cmd_push_count <= axif_cmd_push_count + 1;
+        end
+    end
+
+    // Count the RWDS-selected latency for memory commands. ca_cycle changes to
+    // three immediately after the engine samples RWDS during the CA phase.
+    always @(dut.u_hb_engine.ca_cycle) begin
+        if ((dut.u_hb_engine.ca_cycle === 3'd3) &&
+            (dut.u_hb_engine.cur_is_reg === 1'b0)) begin
+            #1ps;
+            if (dut.u_hb_engine.latency_2x === 1'b0) begin
+                if (dut.u_hb_engine.cur_is_write) begin
+                    mem_latency_1x_write_count = mem_latency_1x_write_count + 1;
+                end else begin
+                    mem_latency_1x_read_count = mem_latency_1x_read_count + 1;
+                end
+            end else if (dut.u_hb_engine.latency_2x === 1'b1) begin
+                if (dut.u_hb_engine.cur_is_write) begin
+                    mem_latency_2x_write_count = mem_latency_2x_write_count + 1;
+                end else begin
+                    mem_latency_2x_read_count = mem_latency_2x_read_count + 1;
+                end
+            end
         end
     end
 
@@ -409,6 +436,10 @@ module hyperbus_controller_tb;
         s_axil_arvalid = 1'b0;
         s_axil_rready  = 1'b0;
         odly_dbg_en    = 1'b0;
+        mem_latency_1x_read_count = 0;
+        mem_latency_1x_write_count = 0;
+        mem_latency_2x_read_count = 0;
+        mem_latency_2x_write_count = 0;
 
         axi_aresetn = 1'b0;
         hb_rstn     = 1'b0;
@@ -434,6 +465,8 @@ module hyperbus_controller_tb;
 
         // AXI-Lite register path self-checks (fatal on first mismatch).
         run_axil_self_checks();
+        run_read_strobe_gate_checks();
+        run_variable_latency_memory_checks();
         run_axil_hold_valid_stress();
         run_timeout_recovery_checks();
 
