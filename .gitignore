@@ -1,4 +1,7 @@
 build/
+*.o
+*.obj
+*.d
 *.jou
 *.log
 *.str
@@ -19,7 +22,7 @@ hyperbus_controller_tb.wdb
 *.pb
 .cxl*
 .DS_Store
-._.DS_Store
+._*
 logs/
 rdf0*/
 doc/rdf0*/
@@ -28,10 +31,15 @@ doc/ug1713*.pdf
 doc/xtp808*/
 simlibs/
 compile_simlib.log.save
-hyperbus_test_proj/hyperbus_test_proj.gen/
-hyperbus_test_proj/hyperbus_test_proj.srcs/utils_1/
+vivado_projects/*/*.gen/
+vivado_projects/*/*.srcs/utils_1/
 sim_m/xsim/runs/
 **/compile_commands.json
+vitis_workspace/**/build/
+vitis_workspace/**/build_*/
+vitis_ws4/**/build/
+vitis_ws4/**/build_*/
+infinion/*.zip
 vitis_ws4/_ide/.peers.ini
 vitis_ws4/_ide/.vitisPlatformRepo.json
 vitis_ws4/_ide/version.ini
@@ -40,4 +48,4 @@ vitis_ws4/bootloader_hdio/_ide/bootimage/*.bit
 vitis_ws4/bootloader_hdio/_ide/bootimage/*.rcdo
 vitis_ws4/bootloader_hdio/_ide/bootimage/resources/*.pdi
 vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/lib/
-vitis_ws4/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp/
+vitis_ws4/**/bsp/libsrc/build_configs/
