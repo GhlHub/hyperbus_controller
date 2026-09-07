@@ -62,6 +62,8 @@ After modifying controller RTL:
   - `doc/jpg/` for generated images
   - `doc/pdf/` for PDFs
   - `doc/py/` for documentation helper scripts
+- When adding a new documentation diagram, check in both the Graphviz source under `doc/dot/` and the rendered JPEG under `doc/jpg/`.
+- For configuration-specific diagrams, encode the key assumptions in the filename and in the diagram title or note block, for example the selected `PHY_FAMILY` and `PHY_IO_STYLE`.
 - The packaged IP XGUI now prefills `PHY_FAMILY` from the current Vivado project part on first open, but still allows manual override. Keep that behavior if the packaged-IP customization flow is touched.
 - In the packaged IP GUI, preserve the descriptive enum labels for the PHY options:
   `PHY_FAMILY` uses `0 = UltraScale+`, `1 = Series7`;
