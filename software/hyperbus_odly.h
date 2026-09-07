@@ -116,7 +116,9 @@ extern "C" {
 /*
  * HyperRAM memory-test default range [start, end).
  */
+#ifndef HB_MEMTEST_START_ADDR
 #define HB_MEMTEST_START_ADDR          0x80000000u
+#endif
 #define HB_MEMTEST_END_ADDR            0x807F0000u
 
 /*
