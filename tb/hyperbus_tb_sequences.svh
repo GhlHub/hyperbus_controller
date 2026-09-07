@@ -635,6 +635,151 @@
         end
     endtask
 
+    task automatic run_read_strobe_gate_checks;
+        int mode;
+        int gate_failures;
+        logic [31:0] gate_rd [0:31];
+        logic [31:0] expected_data;
+        begin
+            gate_failures = 0;
+            for (mode = 0; mode < 2; mode++) begin
+                // mode 0: variable 1x; mode 1: fixed 2x.
+                axil_write(16'h0800,
+                           (mode == 0) ? 32'h0000_8F27 : 32'h0000_8F2F);
+                expected_data = (mode == 0) ? 32'hD34D_1A7E : 32'h6CB2_E591;
+                axi_full_write_burst(32'h0000_05C0, 1, expected_data, 4'hF);
+
+                fork
+                    begin : check_read_gate
+                        // A latency-aware gate must remain active at read-state
+                        // entry to reject premature RWDS activity.
+                        wait ((dut.u_hb_engine.hb_state === HB_ENGINE_FULL_READ_STATE) &&
+                              (dut.u_hb_engine.cur_is_reg === 1'b0) &&
+                              (dut.u_hb_engine.cur_is_write === 1'b0));
+                        if (dut.u_hb_engine.latency_2x !== mode[0]) begin
+                            $display("[%0d][ TB] CHECK FAILED: %s read selected latency_2x=%0b",
+                                     ns_time(), (mode == 0) ? "variable 1x" : "fixed 2x",
+                                     dut.u_hb_engine.latency_2x);
+                            gate_failures = gate_failures + 1;
+                        end
+                        if (dut.u_hb_engine.read_strobe_gate_cnt !=
+                            ((mode == 0) ? 8'd4 : 8'd3)) begin
+                            $display("[%0d][ TB] CHECK FAILED: %s read entered with RWDS gate=%0d, expected %0d",
+                                     ns_time(), (mode == 0) ? "variable 1x" : "fixed 2x",
+                                     dut.u_hb_engine.read_strobe_gate_cnt,
+                                     (mode == 0) ? 4 : 3);
+                            gate_failures = gate_failures + 1;
+                        end
+                    end
+                    begin : perform_gated_read
+                        axi_full_read_burst(32'h0000_05C0, 1, gate_rd);
+                    end
+                join
+
+                if (gate_rd[0] !== expected_data) begin
+                    $display("[%0d][ TB] CHECK FAILED: %s gated read got=0x%08x exp=0x%08x",
+                             ns_time(), (mode == 0) ? "variable 1x" : "fixed 2x",
+                             gate_rd[0], expected_data);
+                    gate_failures = gate_failures + 1;
+                end
+            end
+
+            // Leave the device in its reset-default fixed-latency mode.
+            axil_write(16'h0800, 32'h0000_8F2F);
+            if (gate_failures != 0) begin
+                $fatal(1, "Latency-aware read-strobe gating failed %0d directed checks",
+                       gate_failures);
+            end
+            $display("[%0d][ TB]                 TEST PASS: latency-aware RWDS gate active for variable 1x and fixed 2x reads",
+                     ns_time());
+        end
+    endtask
+
+    task automatic run_variable_latency_memory_checks;
+        int burst_idx;
+        int beat_idx;
+        int mask;
+        int burst_sizes [0:5];
+        int one_x_reads_before;
+        int one_x_writes_before;
+        int two_x_reads_before;
+        int two_x_writes_before;
+        logic [31:0] variable_rd [0:31];
+        logic [31:0] base_word;
+        logic [31:0] write_word;
+        logic [31:0] expected_word;
+        begin
+            burst_sizes[0] = 1;
+            burst_sizes[1] = 2;
+            burst_sizes[2] = 4;
+            burst_sizes[3] = 8;
+            burst_sizes[4] = 16;
+            burst_sizes[5] = 32;
+
+            // Clear CR0[3] so non-refresh transactions select normal 1x latency.
+            axil_write(16'h0800, 32'h0000_8F27);
+            axil_expect_read16(16'h0800, 16'h8F27,
+                               "CR0 variable-latency mode enabled");
+            one_x_reads_before = mem_latency_1x_read_count;
+            one_x_writes_before = mem_latency_1x_write_count;
+
+            // Use asymmetric halfwords and a representative 1..32-beat sweep
+            // to catch first-word loss and halfword duplication/alignment bugs.
+            for (burst_idx = 0; burst_idx < 6; burst_idx++) begin
+                axi_full_write_burst(32'h0000_0600, burst_sizes[burst_idx],
+                                     32'hA55A_1000 + (burst_idx << 8), 4'hF);
+                axi_full_read_burst(32'h0000_0600, burst_sizes[burst_idx], variable_rd);
+                for (beat_idx = 0; beat_idx < burst_sizes[burst_idx]; beat_idx++) begin
+                    check_eq32(variable_rd[beat_idx],
+                               32'hA55A_1000 + (burst_idx << 8) + beat_idx,
+                               $sformatf("variable-latency burst=%0d beat=%0d",
+                                         burst_sizes[burst_idx], beat_idx));
+                end
+            end
+
+            // Exercise every byte mask while variable latency is active.
+            base_word = 32'h3CC3_5AA5;
+            write_word = 32'h96E1_2D4B;
+            for (mask = 0; mask < 16; mask++) begin
+                expected_word = apply_wstrb32(base_word, write_word, mask[3:0]);
+                axi_full_write_burst(32'h0000_0680, 1, base_word, 4'hF);
+                axi_full_write_burst(32'h0000_0680, 1, write_word, mask[3:0]);
+                axi_full_read_burst(32'h0000_0680, 1, variable_rd);
+                check_eq32(variable_rd[0], expected_word,
+                           $sformatf("variable-latency WSTRB=0x%1x", mask[3:0]));
+            end
+
+            if ((mem_latency_1x_read_count == one_x_reads_before) ||
+                (mem_latency_1x_write_count == one_x_writes_before)) begin
+                $fatal(1, "Variable-latency tests did not observe both 1x paths: reads=%0d writes=%0d",
+                       mem_latency_1x_read_count - one_x_reads_before,
+                       mem_latency_1x_write_count - one_x_writes_before);
+            end
+            $display("[%0d][ TB]                 TEST PASS: variable 1x latency memory reads/writes, bursts 1/2/4/8/16/32, and WSTRB 0x0..0xF",
+                     ns_time());
+
+            // Restore fixed latency and prove the model/controller select 2x
+            // for both directions before later fixed-latency regressions run.
+            axil_write(16'h0800, 32'h0000_8F2F);
+            axil_expect_read16(16'h0800, 16'h8F2F,
+                               "CR0 fixed-latency mode restored");
+            two_x_reads_before = mem_latency_2x_read_count;
+            two_x_writes_before = mem_latency_2x_write_count;
+            axi_full_write_burst(32'h0000_06C0, 1, 32'hC35A_69A5, 4'hF);
+            axi_full_read_burst(32'h0000_06C0, 1, variable_rd);
+            check_eq32(variable_rd[0], 32'hC35A_69A5,
+                       "fixed 2x latency restored data check");
+            if ((mem_latency_2x_read_count == two_x_reads_before) ||
+                (mem_latency_2x_write_count == two_x_writes_before)) begin
+                $fatal(1, "Fixed-latency restore did not observe both 2x paths: reads=%0d writes=%0d",
+                       mem_latency_2x_read_count - two_x_reads_before,
+                       mem_latency_2x_write_count - two_x_writes_before);
+            end
+            $display("[%0d][ TB]                 TEST PASS: fixed 2x latency restored after variable-latency coverage",
+                     ns_time());
+        end
+    endtask
+
     task automatic run_timeout_recovery_checks;
         logic [31:0] rd32;
         logic [31:0] status32;
