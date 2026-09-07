@@ -1,0 +1,133 @@
+// SPDX-FileCopyrightText: 2026 Glen Lowe
+// SPDX-License-Identifier: Apache-2.0
+digraph hyperbus_partition_7series_ext_clk_phase {
+  graph [
+    rankdir=LR,
+    splines=ortho,
+    nodesep=0.45,
+    ranksep=0.85,
+    pad=0.25,
+    bgcolor="white",
+    label="HyperBus Controller Partitioning\nPHY_FAMILY_7SERIES, PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT",
+    labelloc=t,
+    fontsize=22,
+    fontname="Helvetica-Bold"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Helvetica",
+    fontsize=12,
+    color="#3A3A3A",
+    penwidth=1.2,
+    margin="0.14,0.09"
+  ];
+
+  edge [
+    color="#4A4A4A",
+    penwidth=1.4,
+    arrowsize=0.8,
+    fontname="Helvetica",
+    fontsize=10
+  ];
+
+  axi_bus [label="AXI interconnect / MicroBlaze\nAXI4-Full data path\nAXI4-Lite control path", fillcolor="#F2F2F2"];
+  hb_mem  [label="HyperRAM / HyperBus device\nCS#, CK, RWDS, DQ[7:0], RESET#", fillcolor="#FFE0C2"];
+
+  subgraph cluster_axi_domain {
+    label="AXI Clock Domain: i_axi_aclk";
+    color="#5B8DEF";
+    penwidth=1.5;
+    style="rounded";
+
+    axif [label="u_axi_full_frontend\n32-bit AXI4-Full slave\nburst read/write command creation\nWSTRB -> byte-mask payload", fillcolor="#DCEBFF"];
+    axil [label="u_axi_lite_frontend\nAXI4-Lite registers\nversion/status/control\nHyperBus register transactions", fillcolor="#DCEBFF"];
+    version [label="software-visible control\nversion register\nclock/reset/status controls", fillcolor="#C8DDFF"];
+  }
+
+  subgraph cluster_cdc {
+    label="Clock-Domain Crossing / Elastic Buffers";
+    color="#7A6FD6";
+    penwidth=1.5;
+    style="rounded";
+
+    cmd_fifo [label="u_cmd_fifo\nAXI -> HB\ncommand queue\n{source, R/W, reg/data, addr, beats, wdata}", fillcolor="#E4DFFF"];
+    wr_fifo  [label="u_wr_fifo\nAXI -> HB\nposted write payload\n{WSTRB, WDATA}", fillcolor="#E4DFFF"];
+    rd_fifo  [label="u_rd_fifo\nHB -> AXI\n32-bit read return data", fillcolor="#E4DFFF"];
+    rsp_fifo [label="u_axil_rsp_fifo\nHB -> AXI-Lite\nregister read responses", fillcolor="#E4DFFF"];
+  }
+
+  subgraph cluster_hb_domain {
+    label="HyperBus Controller Domain: i_hb_clk_200";
+    color="#2E9D6F";
+    penwidth=1.5;
+    style="rounded";
+
+    hb_engine [label="u_hb_engine\nHyperBus transaction FSM\nlatency cycles, CS# timing\n16-bit HB beat packing/unpacking\nread data packer -> 32-bit FIFO", fillcolor="#DDF3E9"];
+    tx_regs [label="HB output registers\nDQ/RWDS DDR data + tri-state\nCS# and CK enable control", fillcolor="#C9EBD9"];
+    rx_align [label="HB read alignment\nregistered DQ/RWDS samples\nRWDS-qualified read beat acceptance", fillcolor="#C9EBD9"];
+  }
+
+  subgraph cluster_phy {
+    label="Selected PHY Implementation";
+    color="#E28A2E";
+    penwidth=1.5;
+    style="rounded";
+
+    phy_wrap [label="u_hyperbus_phy\nhyperbus_phy_xilinx\nPHY_FAMILY=7SERIES selects\ng_phy_7series.u_phy_impl", fillcolor="#FFE6CC"];
+    phy_7s [label="hyperbus_phy_xilinx_7series\nPHY_IO_STYLE=EXT_CLK_PHASE_SHIFT", fillcolor="#FFD7A8"];
+    tx_phy [label="TX PHY primitives\nODDR for CK/DQ/RWDS\nIOBUF for DQ/RWDS\nOBUF-equivalent CK output", fillcolor="#FFC987"];
+    rx_phy [label="RX PHY primitives\nIDDR on DQ[7:0] and RWDS\nsample clock = i_hb_clk_200_samp_90", fillcolor="#FFC987"];
+    delay_bypass [label="Delay controls bypassed\nno IDELAYE2/ODELAYE2 in this mode\ncntvalue outputs forced to zero\nidelayctrl_rdy_axi forced high", fillcolor="#FFF2CC"];
+  }
+
+  subgraph cluster_clocks {
+    label="Clocking Assumption";
+    color="#9E9E9E";
+    penwidth=1.2;
+    style="rounded,dashed";
+
+    clk_hb [label="i_hb_clk_200\nHB engine and DDR launch clock", fillcolor="#EFEFEF"];
+    clk_gated [label="i_hb_clk_200_gated\nforwarded CK ODDR clock\ngated by hb_clk_ce", fillcolor="#EFEFEF"];
+    clk_samp [label="i_hb_clk_200_samp_90\nexternal +90 deg sample clock\nused by 7-series IDDRs", fillcolor="#EFEFEF"];
+  }
+
+  axi_bus -> axif [label="AXI4-Full"];
+  axi_bus -> axil [label="AXI4-Lite"];
+  axil -> version [style=dashed, label="local regs"];
+
+  axif -> cmd_fifo [label="read/write cmds"];
+  axif -> wr_fifo [label="write data"];
+  rd_fifo -> axif [label="read data"];
+
+  axil -> cmd_fifo [label="HB reg cmds"];
+  rsp_fifo -> axil [label="HB reg rsp"];
+  axil -> phy_wrap [style=dashed, color="#8A8A8A", label="delay-control ports unused\nin ext-clock mode"];
+
+  cmd_fifo -> hb_engine [label="commands"];
+  wr_fifo -> hb_engine [label="write payload"];
+  hb_engine -> rd_fifo [label="read data"];
+  hb_engine -> rsp_fifo [label="AXI-Lite rsp"];
+
+  hb_engine -> tx_regs [label="CS#, CK_EN,\nDQ/RWDS out"];
+  rx_align -> hb_engine [label="DQ/RWDS samples"];
+
+  tx_regs -> phy_wrap;
+  phy_wrap -> phy_7s;
+  phy_7s -> tx_phy;
+  phy_7s -> rx_phy;
+  phy_7s -> delay_bypass [style=dashed, arrowhead=none];
+
+  tx_phy -> hb_mem [label="CS#, CK, DQ/RWDS drive"];
+  hb_mem -> rx_phy [label="DQ/RWDS return"];
+  rx_phy -> rx_align [label="q1/q2 samples"];
+
+  clk_hb -> hb_engine [style=dashed, label="clock"];
+  clk_hb -> tx_phy [style=dashed, label="DDR launch"];
+  clk_gated -> tx_phy [style=dashed, label="forwarded CK"];
+  clk_samp -> rx_phy [style=dashed, label="DDR sample"];
+
+  note [shape=note, fillcolor="#FFF8CC", label="Configuration-specific notes:\n- PHY_FAMILY_7SERIES selects rtl/hyperbus_phy_xilinx_7series.sv\n- PHY_IO_STYLE_EXT_CLK_PHASE_SHIFT bypasses IDELAYE2/ODELAYE2\n- Read capture timing is set by external i_hb_clk_200_samp_90 phase\n- AXI and HB domains communicate through async FIFOs"];
+  delay_bypass -> note [style=dashed, arrowhead=none];
+}
