@@ -641,12 +641,15 @@
         logic [31:0] rd_timeout [0:31];
         time t_reset_fall;
         time t_reset_rise;
-        time t_resp_done;
         time t_ar_accept;
+        time t_holdoff_rise;
+        time t_holdoff_fall;
         int  wait_cycles;
         begin
             t_reset_fall = 0;
             t_reset_rise = 0;
+            t_holdoff_rise = 0;
+            t_holdoff_fall = 0;
 
             fork
                 begin
@@ -655,6 +658,12 @@
                     @(posedge hb_reset_n);
                     t_reset_rise = $time;
                 end
+                begin
+                    @(posedge dut.u_hb_engine.o_timeout_holdoff_active);
+                    t_holdoff_rise = $time;
+                    @(negedge dut.u_hb_engine.o_timeout_holdoff_active);
+                    t_holdoff_fall = $time;
+                end
             join_none
 
             force hb_rwds = 1'b0;
@@ -662,7 +671,6 @@
             release hb_rwds;
 
             check_eq32(rd32, 32'hFFFF_FFFF, "AXI-Lite timeout read data @0x0000");
-            t_resp_done = $time;
 
             wait_cycles = 0;
             while ((t_reset_fall == 0 || t_reset_rise == 0) && (wait_cycles < 200)) begin
@@ -685,7 +693,9 @@
             end
             $display("[%0d][ TB]                 TEST PASS: timeout status bit set", ns_time());
 
-            // Hold ARVALID high and ensure new command acceptance is blocked for >=450ns.
+            // Hold ARVALID high and ensure the synchronized holdoff blocks AXI
+            // acceptance. The exact duration is checked in the HB domain below;
+            // measuring from response delivery is CDC-phase dependent.
             @(posedge axi_aclk);
             s_axil_araddr  <= 16'h0000;
             s_axil_arvalid <= 1'b1;
@@ -693,6 +703,9 @@
                 @(posedge axi_aclk);
             end
             t_ar_accept = $time;
+            if (dut.hb_timeout_block_axi) begin
+                $fatal(1, "AR accepted while synchronized timeout holdoff was active");
+            end
             @(posedge axi_aclk);
             s_axil_arvalid <= 1'b0;
 
@@ -702,12 +715,22 @@
             @(posedge axi_aclk);
             s_axil_rready <= 1'b0;
 
-            if ((t_ar_accept - t_resp_done) < 450ns) begin
-                $fatal(1, "Holdoff too short: AR accepted after %0d ns (<450ns)",
-                       int'($rtoi((((t_ar_accept - t_resp_done) / 1ns)) + 0.5)));
+            wait_cycles = 0;
+            while ((t_holdoff_rise == 0 || t_holdoff_fall == 0) && (wait_cycles < 200)) begin
+                @(posedge hb_clk_200);
+                wait_cycles = wait_cycles + 1;
             end
-            $display("[%0d][ TB]                 TEST PASS: post-timeout AXI holdoff duration=%0d ns",
-                     ns_time(), int'($rtoi((((t_ar_accept - t_resp_done) / 1ns)) + 0.5)));
+            if (t_holdoff_rise == 0 || t_holdoff_fall == 0) begin
+                $fatal(1, "Timeout holdoff pulse was not observed");
+            end
+            if ((t_holdoff_fall - t_holdoff_rise) != 460ns) begin
+                $fatal(1, "HB-domain holdoff width mismatch: got=%0d ns exp=460 ns",
+                       int'($rtoi((((t_holdoff_fall - t_holdoff_rise) / 1ns)) + 0.5)));
+            end
+            $display("[%0d][ TB]                 TEST PASS: HB-domain timeout holdoff width=%0d ns; AXI AR accepted only after synchronized release @%0d ns",
+                     ns_time(),
+                     int'($rtoi((((t_holdoff_fall - t_holdoff_rise) / 1ns)) + 0.5)),
+                     int'($rtoi(((t_ar_accept / 1ns) + 0.5))));
 
             // Clear timeout sticky status by write-1-to-clear.
             axil_write(16'h0080, 32'h0000_0001);
