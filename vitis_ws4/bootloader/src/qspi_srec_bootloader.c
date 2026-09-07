@@ -78,6 +78,7 @@ static uintptr_t uxImageStart;
 static uintptr_t uxImageEnd;
 static int iImageRangeValid;
 static uint32_t ulSrecProcessedCount;
+static uint32_t ulVerifyMismatchPrintCount;
 static volatile uint32_t ulBootContinueFlag = BOOT_CONTINUE_FLAG_SET;
 static const char * const ppcErrorStrings[] =
 {
@@ -586,6 +587,7 @@ static void prvPrintAndStartImage( void ( *pxEntryPoint )( void ) )
 {
     const uintptr_t uxEntry = ( uintptr_t ) pxEntryPoint;
     const uintptr_t uxSize = ( iImageRangeValid != 0 ) ? ( uxImageEnd - uxImageStart ) : 0U;
+    uint32_t ulHandoffReadback;
 
     Xil_DCacheFlush();
     Xil_ICacheInvalidate();
@@ -597,12 +599,36 @@ static void prvPrintAndStartImage( void ( *pxEntryPoint )( void ) )
                ( unsigned long ) uxSize,
                ( unsigned long ) uxEntry );
     prvQuiesceInterruptStateForHandoff();
+
+    /* The application C runtime clears .bss before its init_platform() has a
+     * chance to establish cache state.  Do not transfer the bootloader's live
+     * cache state across that boundary: a warm handoff can otherwise stall on
+     * the application's first HyperRAM data store. */
+    Xil_DCacheFlush();
+    Xil_DCacheDisable();
+    Xil_ICacheInvalidate();
+    Xil_ICacheDisable();
+
+    /* AXI-full writes are posted before their HyperBus payload has completely
+     * drained.  With caches disabled, this read must reach the controller and
+     * complete behind every queued S-record write before the application is
+     * allowed to issue its first transaction. */
+    ulHandoffReadback = Xil_In32( uxImageStart );
+    BL_PRINTF( "Handoff drain read @0x%08lx = 0x%08lx\r\n",
+               ( unsigned long ) uxImageStart,
+               ( unsigned long ) ulHandoffReadback );
+
     if( prvInstallApplicationVectorsForHandoff( uxEntry ) != XST_SUCCESS )
     {
         prvBusyLoopForever();
     }
+
     BL_PRINTF( "Jumping to 0x%08lx\r\n", ( unsigned long ) uxEntry );
     euart_console_wait_tx_empty();
+
+    /* Keep the final transfer sequence free of library calls which may save
+     * and restore the bootloader's former cache-enable bits. */
+    __asm__ volatile ( "msrclr r0, 0xA0" ::: "memory" );
     pxEntryPoint();
 }
 
@@ -620,6 +646,37 @@ static void prvPrintFinalProgress( void )
 {
     BL_PRINTF( "Processed %lu S-records\r\n",
                ( unsigned long ) ulSrecProcessedCount );
+}
+
+static int prvCopyAndVerifySrecData( uint8 *pucDestination,
+                                     const uint8 *pucSource,
+                                     size_t xLength )
+{
+    volatile uint8_t *pucReadback = ( volatile uint8_t * ) pucDestination;
+    size_t xIndex;
+    int iStatus = XST_SUCCESS;
+
+    memcpy( pucDestination, pucSource, xLength );
+
+    for( xIndex = 0U; xIndex < xLength; xIndex++ )
+    {
+        const uint8_t ucActual = pucReadback[ xIndex ];
+
+        if( ucActual != pucSource[ xIndex ] )
+        {
+            if( ulVerifyMismatchPrintCount < BOOT_VERIFY_MISMATCH_PRINT_LIMIT )
+            {
+                BL_PRINTF( "SREC verify mismatch @0x%08lx expected=0x%02x actual=0x%02x\r\n",
+                           ( unsigned long ) ( ( uintptr_t ) pucDestination + xIndex ),
+                           ( unsigned ) pucSource[ xIndex ],
+                           ( unsigned ) ucActual );
+                ulVerifyMismatchPrintCount++;
+            }
+            iStatus = LD_SREC_VERIFY_ERROR;
+        }
+    }
+
+    return iStatus;
 }
 
 static int prvProcessSrecLine( const uint8 *pucLine, void ( **ppxEntryPoint )( void ) )
@@ -649,7 +706,12 @@ static int prvProcessSrecLine( const uint8 *pucLine, void ( **ppxEntryPoint )( v
             {
                 return LD_MEM_WRITE_ERROR;
             }
-            memcpy( xSrecInfo.addr, xSrecInfo.sr_data, xSrecInfo.dlen );
+            if( prvCopyAndVerifySrecData( xSrecInfo.addr,
+                                         xSrecInfo.sr_data,
+                                         xSrecInfo.dlen ) != XST_SUCCESS )
+            {
+                return LD_SREC_VERIFY_ERROR;
+            }
             prvUpdateImageRange( ( uintptr_t ) xSrecInfo.addr, xSrecInfo.dlen );
             break;
 
@@ -678,6 +740,7 @@ static int prvLoadSrecImage( void )
     uxImageEnd = 0U;
     iImageRangeValid = 0;
     ulSrecProcessedCount = 0U;
+    ulVerifyMismatchPrintCount = 0U;
     srec_line = 0;
     prvResetFlashReadBuffer();
 
@@ -855,6 +918,12 @@ int main( void )
     }
 
     /* prvWaitForSpacebar( "Press spacebar to begin reading the SREC image from flash..." ); */
+
+    /* The MicroBlaze write-through D-cache can retain stale HyperRAM lines
+     * across a long S-record load.  Load and verify the external image using
+     * uncached accesses so every record reaches the controller pins. */
+    Xil_DCacheFlush();
+    Xil_DCacheDisable();
 
     iStatus = prvLoadSrecImage();
     if( ( iStatus > 0 ) && ( iStatus < ( int ) ( sizeof( ppcErrorStrings ) / sizeof( ppcErrorStrings[ 0 ] ) ) ) )
