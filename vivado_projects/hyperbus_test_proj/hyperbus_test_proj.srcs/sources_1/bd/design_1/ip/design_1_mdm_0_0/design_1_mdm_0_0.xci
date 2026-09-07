@@ -4,7 +4,7 @@
     "xci_name": "design_1_mdm_0_0",
     "cell_name": "mdm_0",
     "component_reference": "xilinx.com:ip:mdm:3.2",
-    "ip_revision": "29",
+    "ip_revision": "30",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_mdm_0_0",
     "parameters": {
       "component_parameters": {
@@ -95,12 +95,12 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "29" } ],
+        "IPREVISION": [ { "value": "30" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_mdm_0_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
-        "SWVERSION": [ { "value": "2025.2" } ],
+        "SWVERSION": [ { "value": "2026.1" } ],
         "SYNTHESISFLOW": [ { "value": "OUT_OF_CONTEXT" } ]
       }
     },
@@ -164,5 +164,5 @@
       }
     }
   },
-  "checksum": "1cba215a"
+  "checksum": "47eddd37"
 }

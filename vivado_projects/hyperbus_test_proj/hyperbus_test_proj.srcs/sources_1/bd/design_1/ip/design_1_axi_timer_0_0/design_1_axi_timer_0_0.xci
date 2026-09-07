@@ -4,7 +4,7 @@
     "xci_name": "design_1_axi_timer_0_0",
     "cell_name": "axi_timer_0",
     "component_reference": "xilinx.com:ip:axi_timer:2.0",
-    "ip_revision": "37",
+    "ip_revision": "38",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_timer_0_0",
     "parameters": {
       "component_parameters": {
@@ -43,24 +43,24 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "37" } ],
+        "IPREVISION": [ { "value": "38" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_timer_0_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
-        "SWVERSION": [ { "value": "2025.2" } ],
+        "SWVERSION": [ { "value": "2026.1" } ],
         "SYNTHESISFLOW": [ { "value": "OUT_OF_CONTEXT" } ]
       }
     },
     "boundary": {
       "ports": {
-        "capturetrig0": [ { "direction": "in", "driver_value": "0" } ],
-        "capturetrig1": [ { "direction": "in", "driver_value": "0" } ],
+        "capturetrig0": [ { "direction": "in", "driver_value": "0x0" } ],
+        "capturetrig1": [ { "direction": "in", "driver_value": "0x0" } ],
         "generateout0": [ { "direction": "out" } ],
         "generateout1": [ { "direction": "out" } ],
         "pwm0": [ { "direction": "out" } ],
         "interrupt": [ { "direction": "out" } ],
-        "freeze": [ { "direction": "in", "driver_value": "0" } ],
+        "freeze": [ { "direction": "in", "driver_value": "0x0" } ],
         "s_axi_aclk": [ { "direction": "in" } ],
         "s_axi_aresetn": [ { "direction": "in", "driver_value": "0x1" } ],
         "s_axi_awaddr": [ { "direction": "in", "size_left": "4", "size_right": "0" } ],
@@ -109,8 +109,8 @@
             "HAS_BRESP": [ { "value": "1", "value_src": "constant", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "HAS_RRESP": [ { "value": "1", "value_src": "constant", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "SUPPORTS_NARROW_BURST": [ { "value": "0", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "default_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "default_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_READ_OUTSTANDING": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "MAX_BURST_LENGTH": [ { "value": "1", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
             "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_0_clk_out1", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
@@ -241,7 +241,7 @@
                       "bit_offset": 4,
                       "bit_width": 1,
                       "display_name": "Auto Reload/Hold Timer 0",
-                      "description": "Auto Reload/Hold Timer 0.\nWhen the timer is in Generate mode, this bit determines whether the counter reloads the generate value and continues running or holds at the termination value. \nIn Capture mode, this bit determines whether a new capture trigger overwrites the previous captured value or if the previous value is held.      0 = Hold counter or capture value. The TLR must be read before providing the external capture.      1 = Reload generate value or overwrite capture value\n",
+                      "description": "Auto Reload/Hold Timer 0.\nWhen the timer is in Generate mode, this bit determines whether the counter reloads the generate value and continues running or holds at the termination value. \nIn Capture mode, this bit determines whether a new capture trigger overwrites the previous captured value or if the previous value is held.   \n  0 = Hold counter or capture value. The TLR must be read before providing the external capture.   \n  1 = Reload generate value or overwrite capture value\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -249,7 +249,7 @@
                       "bit_offset": 5,
                       "bit_width": 1,
                       "display_name": "Load Timer 0",
-                      "description": "Load Timer 0      0 = No load      1 = Loads timer with value in TLR0 Setting this bit loads timer/counter register (TCR0) with a specified value in the timer/counter load register (TLR0).  This bit prevents the running of the timer/counter; hence, this should be cleared alongside setting Enable Timer/ Counter (ENT0) bit in TCSR0.\n",
+                      "description": "Load Timer 0   \n  0 = No load   \n  1 = Loads timer with value in TLR0 Setting this bit loads timer/counter register (TCR0) with a specified value in the timer/counter load register (TLR0). \nThis bit prevents the running of the timer/counter; hence, this should be cleared alongside setting Enable Timer/ Counter (ENT0) bit in TCSR0.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -257,7 +257,7 @@
                       "bit_offset": 6,
                       "bit_width": 1,
                       "display_name": "Enable Interrupt for Timer 0",
-                      "description": "Enable Interrupt for Timer 0\nEnables the assertion of the interrupt signal for this timer. Has no effect on the interrupt flag (T0INT) in TCSR0.      0 - Disable interrupt signal   1 - Enable interrupt signal\n",
+                      "description": "Enable Interrupt for Timer 0\nEnables the assertion of the interrupt signal for this timer. Has no effect on the interrupt flag (T0INT) in TCSR0.   \n  0 - Disable interrupt signal\n  1 - Enable interrupt signal\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -273,7 +273,7 @@
                       "bit_offset": 8,
                       "bit_width": 1,
                       "display_name": "Timer 0 Interrupt",
-                      "description": "Timer 0 Interrupt\nIndicates that the condition for an interrupt on this timer has occurred. If the timer mode is capture and the timer is enabled, this bit indicates a capture has occurred. If the mode is generate, this bit indicates the counter has rolled over. Must be cleared by writing a 1.\nRead:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:      0 - No change in state of T0INT   1 - Clear T0INT (clear to 0)\n",
+                      "description": "Timer 0 Interrupt\nIndicates that the condition for an interrupt on this timer has occurred. If the timer mode is capture and the timer is enabled, this bit indicates a capture has occurred. If the mode is generate, this bit indicates the counter has rolled over. Must be cleared by writing a 1.\nRead:   \n  0 - No interrupt has occurred   \n  1 - Interrupt has occurred \nWrite:   \n  0 - No change in state of T0INT\n  1 - Clear T0INT (clear to 0)\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -281,7 +281,7 @@
                       "bit_offset": 9,
                       "bit_width": 1,
                       "display_name": "Pulse Width Modulation for Timer 0",
-                      "description": "Enable Pulse Width Modulation for Timer 0      0 - Disable pulse width modulation      1 - Enable pulse width modulation PWM requires using Timer 0 and Timer 1 together as a pair.  Timer 0 sets the period of the PWM output, and Timer 1 sets the high time for the PWM output. For PWM mode, MDT0 and MDT1 must be 0 and C_GEN0_ASSERT and C_GEN1_ASSERT must be 1.\n",
+                      "description": "Enable Pulse Width Modulation for Timer 0   \n  0 - Disable pulse width modulation   \n  1 - Enable pulse width modulation PWM requires using Timer 0 and Timer 1 together as a pair. \nTimer 0 sets the period of the PWM output, and Timer 1 sets the high time for the PWM output. For PWM mode, MDT0 and MDT1 must be 0 and C_GEN0_ASSERT and C_GEN1_ASSERT must be 1.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -289,7 +289,7 @@
                       "bit_offset": 10,
                       "bit_width": 1,
                       "display_name": "Enable All Timers",
-                      "description": "Enable All Timers      0 - No effect on timers      1 - Enable all timers (counters run) This bit is mirrored in all control/status registers and is used to enable all counters simultaneously. Writing a 1 to this bit sets ENALL, ENT0, and ENT1. \nWriting a 0 to this register clears ENALL but has no effect on ENT0 and ENT1. \n",
+                      "description": "Enable All Timers   \n  0 - No effect on timers   \n  1 - Enable all timers (counters run)\nThis bit is mirrored in all control/status registers and is used to enable all counters simultaneously. Writing a 1 to this bit sets ENALL, ENT0, and ENT1. \nWriting a 0 to this register clears ENALL but has no effect on ENT0 and ENT1. \n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -297,7 +297,7 @@
                       "bit_offset": 11,
                       "bit_width": 1,
                       "display_name": "Cascade Mode of Timers",
-                      "description": "Enable cascade mode of timers      0 - Disable cascaded operation      1 - Enable cascaded operation Cascaded operation requires using Timer 0 and Timer 1 together as a pair.  The counting event for the Timer 1 is when the Timer 0 rolls over from all 1s to all 0s or vice-versa when counting down.\nTLR0 and TLR1 are used for lower 32-bit and higher 32-bit respectively. Similarly, TCR0 contains lower 32-bits for the 64-bit counter and TCR1 contains the higher 32-bits.\nOnly TCSR0 is valid for both the timer/counters in this mode.\nThis CASC bit must be set before enabling the timer/counter.\n",
+                      "description": "Enable cascade mode of timers   \n  0 - Disable cascaded operation   \n  1 - Enable cascaded operation Cascaded operation requires using Timer 0 and Timer 1 together as a pair. \nThe counting event for the Timer 1 is when the Timer 0 rolls over from all 1s to all 0s or vice-versa when counting down.\nTLR0 and TLR1 are used for lower 32-bit and higher 32-bit respectively. Similarly, TCR0 contains lower 32-bits for the 64-bit counter and TCR1 contains the higher 32-bits.\nOnly TCSR0 is valid for both the timer/counters in this mode.\nThis CASC bit must be set before enabling the timer/counter.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     }
@@ -394,7 +394,7 @@
                       "bit_offset": 5,
                       "bit_width": 1,
                       "display_name": "Load Timer 1",
-                      "description": "Load Timer 1      0 = No load      1 = Loads timer with value in TLR1 Setting this bit loads timer/counter register (TCR1) with a specified value in the timer/counter load register (TLR1).  This bit prevents the running of the timer/counter; hence, this should be cleared alongside setting Enable Timer/ Counter (ENT1) bit in TCSR1.\n",
+                      "description": "Load Timer 1   \n  0 = No load   \n  1 = Loads timer with value in TLR1 Setting this bit loads timer/counter register (TCR1) with a specified value in the timer/counter load register (TLR1). \nThis bit prevents the running of the timer/counter; hence, this should be cleared alongside setting Enable Timer/ Counter (ENT1) bit in TCSR1.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -402,7 +402,7 @@
                       "bit_offset": 6,
                       "bit_width": 1,
                       "display_name": "Enable Interrupt for Timer 1",
-                      "description": "Enable Interrupt for Timer 1\nEnables the assertion of the interrupt signal for this timer. Has no effect on the interrupt flag (T1INT) in TCSR1.      0 - Disable interrupt signal      1 - Enable interrupt signal\n",
+                      "description": "Enable Interrupt for Timer 1\nEnables the assertion of the interrupt signal for this timer. Has no effect on the interrupt flag (T1INT) in TCSR1.   \n  0 - Disable interrupt signal   \n  1 - Enable interrupt signal\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -418,7 +418,7 @@
                       "bit_offset": 8,
                       "bit_width": 1,
                       "display_name": "Timer 1 Interrupt",
-                      "description": "Timer 1 Interrupt\nIndicates that the condition for an interrupt on this timer has occurred. If the timer mode is capture and the timer is enabled, this bit indicates a capture has occurred. If the mode is generate, this bit indicates the counter has rolled over. Must be cleared by writing a 1.\nRead:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:      0 - No change in state of T0INT      1 - Clear T1INT (clear to 0)\n",
+                      "description": "Timer 1 Interrupt\nIndicates that the condition for an interrupt on this timer has occurred. If the timer mode is capture and the timer is enabled, this bit indicates a capture has occurred. If the mode is generate, this bit indicates the counter has rolled over. Must be cleared by writing a 1.\nRead:   \n  0 - No interrupt has occurred   \n  1 - Interrupt has occurred \nWrite:   \n  0 - No change in state of T0INT   \n  1 - Clear T1INT (clear to 0)\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -426,7 +426,7 @@
                       "bit_offset": 9,
                       "bit_width": 1,
                       "display_name": "Pulse Width Modulation for Timer 1",
-                      "description": "Enable Pulse Width Modulation for Timer 1      0 - Disable pulse width modulation      1 - Enable pulse width modulation  PWM requires using Timer 0 and Timer 1 together as a pair. Timer 0 sets the period of the PWM output, and Timer 1 sets the high time for the PWM output. For PWM mode, MDT0 and MDT1 must be 0.\n",
+                      "description": "Enable Pulse Width Modulation for Timer 1   \n  0 - Disable pulse width modulation   \n  1 - Enable pulse width modulation \nPWM requires using Timer 0 and Timer 1 together as a pair. Timer 0 sets the period of the PWM output, and Timer 1 sets the high time for the PWM output. For PWM mode, MDT0 and MDT1 must be 0.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -434,7 +434,7 @@
                       "bit_offset": 10,
                       "bit_width": 1,
                       "display_name": "Enable All Timers",
-                      "description": "Enable All Timers      0 - No effect on timers      1 - Enable all timers (counters run)  This bit is mirrored in all control/status registers and is used to enable all counters simultaneously. Writing a 1 to this bit sets ENALL, ENT0, and ENT1. Writing a 0 to this register clears ENALL but has no effect on ENT0 and ENT1. \n",
+                      "description": "Enable All Timers   \n  0 - No effect on timers   \n  1 - Enable all timers (counters run) \nThis bit is mirrored in all control/status registers and is used to enable all counters simultaneously. Writing a 1 to this bit sets ENALL, ENT0, and ENT1. Writing a 0 to this register clears ENALL but has no effect on ENT0 and ENT1. \n",
                       "is_volatile": true,
                       "access": "read-write"
                     }
@@ -485,5 +485,5 @@
       }
     }
   },
-  "checksum": "0a8ddaf9"
+  "checksum": "a61e7179"
 }

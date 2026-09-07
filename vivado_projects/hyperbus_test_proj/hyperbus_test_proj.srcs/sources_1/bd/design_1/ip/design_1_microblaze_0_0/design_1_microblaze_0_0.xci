@@ -4,7 +4,7 @@
     "xci_name": "design_1_microblaze_0_0",
     "cell_name": "microblaze_0",
     "component_reference": "xilinx.com:ip:microblaze:11.0",
-    "ip_revision": "16",
+    "ip_revision": "17",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0",
     "parameters": {
       "component_parameters": {
@@ -60,7 +60,7 @@
         "C_M_AXI_DC_USER_SIGNALS": [ { "value": "0", "value_src": "propagated", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_M_AXI_IC_USER_SIGNALS": [ { "value": "0", "value_src": "propagated", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "G_TEMPLATE_LIST": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "G_USE_EXCEPTIONS": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "G_USE_EXCEPTIONS": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_USE_MSR_INSTR": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_USE_PCMP_INSTR": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_USE_REORDER_INSTR": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -173,7 +173,7 @@
         "C_ICACHE_HIGHADDR": [ { "value": "0x00000000807FFFFF", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_USE_ICACHE": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ALLOW_ICACHE_WR": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "C_ADDR_TAG_BITS": [ { "value": "10", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "C_ADDR_TAG_BITS": [ { "value": "10", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_CACHE_BYTE_SIZE": [ { "value": "8192", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ICACHE_LINE_LEN": [ { "value": "8", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ICACHE_ALWAYS_USED": [ { "value": "1", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -193,7 +193,7 @@
         "C_DCACHE_HIGHADDR": [ { "value": "0x00000000807FFFFF", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "user", "format": "bitString", "usage": "all" } ],
         "C_USE_DCACHE": [ { "value": "1", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_ALLOW_DCACHE_WR": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "C_DCACHE_ADDR_TAG": [ { "value": "10", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "C_DCACHE_ADDR_TAG": [ { "value": "10", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_BYTE_SIZE": [ { "value": "8192", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_LINE_LEN": [ { "value": "8", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "C_DCACHE_ALWAYS_USED": [ { "value": "1", "value_src": "propagated", "value_permission": "bd_and_user", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -414,12 +414,12 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "16" } ],
+        "IPREVISION": [ { "value": "17" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_microblaze_0_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
-        "SWVERSION": [ { "value": "2025.2" } ],
+        "SWVERSION": [ { "value": "2026.1" } ],
         "SYNTHESISFLOW": [ { "value": "OUT_OF_CONTEXT" } ]
       }
     },
@@ -476,7 +476,7 @@
         "Dbg_Capture": [ { "direction": "in", "driver_value": "0" } ],
         "Dbg_Update": [ { "direction": "in", "driver_value": "0" } ],
         "Debug_Rst": [ { "direction": "in", "driver_value": "0" } ],
-        "Dbg_Disable": [ { "direction": "in", "driver_value": "0" } ],
+        "Dbg_Disable": [ { "direction": "in", "driver_value": "0x0" } ],
         "M_AXI_IC_AWID": [ { "direction": "out", "size_left": "0", "size_right": "0" } ],
         "M_AXI_IC_AWADDR": [ { "direction": "out", "size_left": "31", "size_right": "0" } ],
         "M_AXI_IC_AWLEN": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],
@@ -607,7 +607,7 @@
             "ADDR_WIDTH": [ { "value": "32", "value_permission": "bd", "resolve_type": "generated", "format": "long", "usage": "all" } ],
             "DATA_WIDTH": [ { "value": "32", "value_permission": "bd", "resolve_type": "dependent", "format": "long", "usage": "all" } ],
             "PROTOCOL": [ { "value": "STANDARD", "value_permission": "bd", "resolve_type": "dependent", "usage": "all" } ],
-            "HAS_PROT": [ { "value": "0", "value_src": "default_prop", "value_permission": "bd", "resolve_type": "generated", "usage": "all" } ],
+            "HAS_PROT": [ { "value": "0", "value_src": "default_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "usage": "all" } ],
             "READ_WRITE_MODE": [ { "value": "READ_WRITE", "value_src": "constant", "value_permission": "bd", "usage": "all" } ]
           },
           "port_maps": {
@@ -922,5 +922,5 @@
       }
     }
   },
-  "checksum": "811c82b3"
+  "checksum": "9bf1f95c"
 }

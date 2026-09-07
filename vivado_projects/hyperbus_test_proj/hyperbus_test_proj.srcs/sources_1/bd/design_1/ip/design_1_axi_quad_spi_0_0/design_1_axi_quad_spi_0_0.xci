@@ -4,7 +4,7 @@
     "xci_name": "design_1_axi_quad_spi_0_0",
     "cell_name": "axi_quad_spi_0",
     "component_reference": "xilinx.com:ip:axi_quad_spi:3.2",
-    "ip_revision": "35",
+    "ip_revision": "36",
     "gen_directory": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_quad_spi_0_0",
     "parameters": {
       "component_parameters": {
@@ -87,12 +87,12 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "35" } ],
+        "IPREVISION": [ { "value": "36" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../hyperbus_test_proj.gen/sources_1/bd/design_1/ip/design_1_axi_quad_spi_0_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
-        "SWVERSION": [ { "value": "2025.2" } ],
+        "SWVERSION": [ { "value": "2026.1" } ],
         "SYNTHESISFLOW": [ { "value": "OUT_OF_CONTEXT" } ]
       }
     },
@@ -175,15 +175,15 @@
             "HAS_BRESP": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "HAS_RRESP": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "SUPPORTS_NARROW_BURST": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_READ_OUTSTANDING": [ { "value": "2", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_WRITE_OUTSTANDING": [ { "value": "2", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_READ_OUTSTANDING": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_WRITE_OUTSTANDING": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "MAX_BURST_LENGTH": [ { "value": "1", "value_src": "default_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
             "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_0_clk_out1", "value_src": "ip_propagated", "value_permission": "bd", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_READ_THREADS": [ { "value": "1", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "NUM_WRITE_THREADS": [ { "value": "1", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "RUSER_BITS_PER_BYTE": [ { "value": "0", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "WUSER_BITS_PER_BYTE": [ { "value": "0", "value_src": "user_prop", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_READ_THREADS": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "NUM_WRITE_THREADS": [ { "value": "1", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "RUSER_BITS_PER_BYTE": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "WUSER_BITS_PER_BYTE": [ { "value": "0", "value_permission": "bd", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "INSERT_VIP": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "simulation.rtl", "is_ips_inferred": true, "is_static_object": false } ]
           },
           "port_maps": {
@@ -316,7 +316,7 @@
                       "bit_offset": 0,
                       "bit_width": 1,
                       "display_name": "Loopback Mode",
-                      "description": "Local loopback mode\nEnables local loopback operation and is functional only in standard SPI master mode.\nWhen set to:   0 - Normal operation.   1 - Loopback mode. The transmitter output is internally connected to the receiver input. The receiver and transmitter operate normally, except that received data (from remote slave) is ignored.\n",
+                      "description": "Local loopback mode\nEnables local loopback operation and is functional only in standard SPI master mode.\nWhen set to:\n  0 - Normal operation.\n  1 - Loopback mode. The transmitter output is internally connected to the receiver input. The receiver and transmitter operate normally, except that received data (from remote slave) is ignored.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -356,7 +356,7 @@
                       "bit_offset": 5,
                       "bit_width": 1,
                       "display_name": "Transmit FIFO reset",
-                      "description": "Transmit FIFO reset\nWhen written to 1, this bit forces a reset of the transmit FIFO to the empty condition. One AXI clock cycle after reset, this bit is again set to 0.\nWhen set to:   0 - Transmit FIFO normal operation.   1 - Reset transmit FIFO pointer\n",
+                      "description": "Transmit FIFO reset\nWhen written to 1, this bit forces a reset of the transmit FIFO to the empty condition. One AXI clock cycle after reset, this bit is again set to 0.\nWhen set to:\n  0 - Transmit FIFO normal operation.\n  1 - Reset transmit FIFO pointer\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -364,7 +364,7 @@
                       "bit_offset": 6,
                       "bit_width": 1,
                       "display_name": "Receive FIFO reset",
-                      "description": "Receive FIFO reset\nWhen written to 1, this bit forces a reset of the receive FIFO to the empty condition. One AXI clock cycle after reset, this bit is again set to 0.\nWhen set to:   0 - Receive FIFO normal operation.   1 - Reset receive FIFO pointer.\n",
+                      "description": "Receive FIFO reset\nWhen written to 1, this bit forces a reset of the receive FIFO to the empty condition. One AXI clock cycle after reset, this bit is again set to 0.\nWhen set to:\n  0 - Receive FIFO normal operation.\n  1 - Reset receive FIFO pointer.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -372,7 +372,7 @@
                       "bit_offset": 7,
                       "bit_width": 1,
                       "display_name": "Manual Slave Select Assertion Enable",
-                      "description": "Manual slave select assertion enable\nThis bit forces the data in the slave select register to be asserted on the slave select output anytime the device is configured as a master and the device is enabled (SPE asserted).\nThis bit has no effect on slave operation.\nWhen set to:   0 - Slave select output asserted by master core logic.   1 - Slave select output follows data in slave select register. The manual slave assertion mode is supported in standard SPI mode only.\n",
+                      "description": "Manual slave select assertion enable\nThis bit forces the data in the slave select register to be asserted on the slave select output anytime the device is configured as a master and the device is enabled (SPE asserted).\nThis bit has no effect on slave operation.\nWhen set to:\n  0 - Slave select output asserted by master core logic.\n  1 - Slave select output follows data in slave select register.\nThe manual slave assertion mode is supported in standard SPI mode only.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -380,7 +380,7 @@
                       "bit_offset": 8,
                       "bit_width": 1,
                       "display_name": "Master_Transaction_Inhibit",
-                      "description": "Master transaction inhibit\nThis bit inhibits master transactions.\nThis bit has no effect on slave operation.\nWhen set to:   0 - Master transactions enabled.   1 - Master transactions disabled. This bit immediately inhibits the transaction. Setting this bit while transfer is in progress would result in unpredictable outcome\n",
+                      "description": "Master transaction inhibit\nThis bit inhibits master transactions.\nThis bit has no effect on slave operation.\nWhen set to:\n  0 - Master transactions enabled.\n  1 - Master transactions disabled.\nThis bit immediately inhibits the transaction. Setting this bit while transfer is in progress would result in unpredictable outcome\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -439,7 +439,7 @@
                       "bit_offset": 4,
                       "bit_width": 1,
                       "display_name": "Mode-fault error flag",
-                      "description": "Mode-fault error flag.\nThis flag is set if the SS signal goes active while the SPI device is configured as a master. MODF is automatically cleared by reading the SPISR. \nA Low-to-High MODF transition generates a single-cycle strobe interrupt.   0 - No error.   1 - Error condition detected\n",
+                      "description": "Mode-fault error flag.\nThis flag is set if the SS signal goes active while the SPI device is configured as a master. MODF is automatically cleared by reading the SPISR. \nA Low-to-High MODF transition generates a single-cycle strobe interrupt.\n  0 - No error.\n  1 - Error condition detected\n",
                       "is_volatile": true,
                       "access": "read-only"
                     },
@@ -455,7 +455,7 @@
                       "bit_offset": 6,
                       "bit_width": 1,
                       "display_name": "CPOL_CPHA_Error",
-                      "description": "CPOL_CPHA_Error flag.\nWhen set to:   0 - Default.   1 - The CPOL and CPHA are set to 01 or 10. When the SPI memory is chosen as either Winbond, Micron or Spansion, and CPOL and CPHA are configured as 01 or 10, this bit is set.\nThese memories support CPOL=CPHA mode in 00 or in 11 mode. CPOL_CPHA_Error flag is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface\n",
+                      "description": "CPOL_CPHA_Error flag.\nWhen set to:\n  0 - Default.\n  1 - The CPOL and CPHA are set to 01 or 10.\nWhen the SPI memory is chosen as either Winbond, Micron or Spansion, and CPOL and CPHA are configured as 01 or 10, this bit is set.\nThese memories support CPOL=CPHA mode in 00 or in 11 mode. CPOL_CPHA_Error flag is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface\n",
                       "is_volatile": true,
                       "access": "read-only"
                     },
@@ -463,7 +463,7 @@
                       "bit_offset": 7,
                       "bit_width": 1,
                       "display_name": "Slave mode error",
-                      "description": "Slave mode error flag.\nWhen set to:   1 - This bit is set when the core is configured with dual or quad SPI mode and the master is set to 0 in the control register (SPICR).   0 - Master mode is set in the control register (SPICR). Note: Quad SPI mode, only the master mode of the core is allowed. Slave mode error flag is only applicable when the core is configured either in dual or qu ad mode in legacy or enhanced AXI4 mode interface\n",
+                      "description": "Slave mode error flag.\nWhen set to:\n  1 - This bit is set when the core is configured with dual or quad SPI mode and the master is set to 0 in the control register (SPICR).\n  0 - Master mode is set in the control register (SPICR).\nNote: Quad SPI mode, only the master mode of the core is allowed. Slave mode error flag is only applicable when the core is configured either in dual or qu ad mode in legacy or enhanced AXI4 mode interface\n",
                       "is_volatile": true,
                       "access": "read-only"
                     },
@@ -471,7 +471,7 @@
                       "bit_offset": 8,
                       "bit_width": 1,
                       "display_name": "MSB Error",
-                      "description": "MSB error flag.\nWhen set to:   0 - Default.   1 - This bit is set when the core is configured to transfer the SPI transactions in either dual or quad SPI mode and LSB first bit is set in the control register (SPICR). Note: In dual/quad SPI mode, only the MSB first mode of the core is allowed. MSB error flag is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface\n",
+                      "description": "MSB error flag.\nWhen set to:\n  0 - Default.\n  1 - This bit is set when the core is configured to transfer the SPI transactions in either dual or quad SPI mode and LSB first bit is set in the control register (SPICR).\nNote: In dual/quad SPI mode, only the MSB first mode of the core is allowed. MSB error flag is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface\n",
                       "is_volatile": true,
                       "access": "read-only"
                     },
@@ -479,7 +479,7 @@
                       "bit_offset": 9,
                       "bit_width": 1,
                       "display_name": "Loopback Error",
-                      "description": "Loopback error flag.\nWhen set to:   0 - Default. The loopback bit in the control register is at default state.   1 - When the SPI command, address, and data bits are set to be transferred in other than standard SPI protocol mode and this bit is set in control register (SPICR). Note: Loopback is only allowed when the core is configured in standard mode. Other modes setting of the bit causes an error and the interrupt bit is set in legacy or enhanced mode AXI4 interface\n",
+                      "description": "Loopback error flag.\nWhen set to:\n  0 - Default. The loopback bit in the control register is at default state.\n  1 - When the SPI command, address, and data bits are set to be transferred in other than standard SPI protocol mode and this bit is set in control register (SPICR).\nNote: Loopback is only allowed when the core is configured in standard mode. Other modes setting of the bit causes an error and the interrupt bit is set in legacy or enhanced mode AXI4 interface\n",
                       "is_volatile": true,
                       "access": "read-only"
                     },
@@ -487,7 +487,7 @@
                       "bit_offset": 10,
                       "bit_width": 1,
                       "display_name": "Command Error",
-                      "description": "Command error flag.\nWhen set to:   0 - Default.   1 - When the core is configured in dual/quad SPI mode and the first entry in the SPI DTR FIFO (after reset) do not match with the supported command list for the particular memory, this bit is set. Note: Command error is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface.\n",
+                      "description": "Command error flag.\nWhen set to:\n  0 - Default.\n  1 - When the core is configured in dual/quad SPI mode and the first entry in the SPI DTR FIFO (after reset) do not match with the supported command list for the particular memory, this bit is set.\nNote: Command error is only applicable when the core is configured either in dual or quad mode in legacy or enhanced mode AXI4 interface.\n",
                       "is_volatile": true,
                       "access": "read-only"
                     }
@@ -563,7 +563,7 @@
                       "bit_offset": 31,
                       "bit_width": 1,
                       "display_name": "Global Interrupt Enable",
-                      "description": "Global Interrupt Enable.\nAllows passing all individually enabled interrupts to the interrupt controller.\nWhen set to:   0 - Disabled.   1 - Enabled. \n",
+                      "description": "Global Interrupt Enable.\nAllows passing all individually enabled interrupts to the interrupt controller.\nWhen set to:\n  0 - Disabled.\n  1 - Enabled. \n",
                       "is_volatile": true,
                       "access": "read-write"
                     }
@@ -724,7 +724,7 @@
                       "bit_offset": 13,
                       "bit_width": 1,
                       "display_name": "Command Error",
-                      "description": "Command error.\nThis flag is asserted when:   The core is configured in dual/quad SPI mode and   The first entry in the SPI DTR FIFO (after reset) does not match with the supported command list for particular memory. When the SPI command in DTR FIFO does not match with the internal supported command list, the core completes the SPI transactions in standard SPI format. This bit is set to show this behavior of the core.\nIn standard SPI mode this bit is always in default state.\n",
+                      "description": "Command error.\nThis flag is asserted when:\n  The core is configured in dual/quad SPI mode and\n  The first entry in the SPI DTR FIFO (after reset) does not match with the supported command list for particular memory.\nWhen the SPI command in DTR FIFO does not match with the internal supported command list, the core completes the SPI transactions in standard SPI format. This bit is set to show this behavior of the core.\nIn standard SPI mode this bit is always in default state.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     }
@@ -791,7 +791,7 @@
                       "bit_offset": 6,
                       "bit_width": 1,
                       "display_name": "Transmit FIFO half empty",
-                      "description": "Transmit FIFO half empty.   0 - Disabled.   1 - Enabled. Note: This bit is meaningful only if the AXI Quad SPI core is configured with FIFOs.\n",
+                      "description": "Transmit FIFO half empty.\n  0 - Disabled.\n  1 - Enabled.\nNote: This bit is meaningful only if the AXI Quad SPI core is configured with FIFOs.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -799,7 +799,7 @@
                       "bit_offset": 7,
                       "bit_width": 1,
                       "display_name": "Slave_Select_Mode",
-                      "description": "Slave_Select_Mode.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in slave mode by selecting the active-Low status on spisel.\nIn master mode, setting this bit has no effect.\n",
+                      "description": "Slave_Select_Mode.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in slave mode by selecting the active-Low status on spisel.\nIn master mode, setting this bit has no effect.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -807,7 +807,7 @@
                       "bit_offset": 8,
                       "bit_width": 1,
                       "display_name": "DRR_Not_Empty",
-                      "description": "DRR_Not_Empty.   0 - Disabled.   1 - Enabled. Note: The setting of this bit is applicable only when FIFO Depth is set to 1 and the core is configured in slave mode of standard SPI mode.\nIf FIFO Depth is set to 0, the setting of this bit has no effect. This is allowed only in standard SPI configuration. It means this bit is not set in the IPIER register. Therefore, this bit should only be used when FIFO Depth is set to 1 and when the core is configured in slave mode.\nThis bit has no significance in dual or quad mode.\n",
+                      "description": "DRR_Not_Empty.\n  0 - Disabled.\n  1 - Enabled.\nNote: The setting of this bit is applicable only when FIFO Depth is set to 1 and the core is configured in slave mode of standard SPI mode.\nIf FIFO Depth is set to 0, the setting of this bit has no effect. This is allowed only in standard SPI configuration. It means this bit is not set in the IPIER register. Therefore, this bit should only be used when FIFO Depth is set to 1 and when the core is configured in slave mode.\nThis bit has no significance in dual or quad mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -815,7 +815,7 @@
                       "bit_offset": 9,
                       "bit_width": 1,
                       "display_name": "CPOL_CPHA error",
-                      "description": "CPOL_CPHA error.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in dual or quad SPI mode.\n",
+                      "description": "CPOL_CPHA error.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in dual or quad SPI mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -823,7 +823,7 @@
                       "bit_offset": 10,
                       "bit_width": 1,
                       "display_name": "Slave_Mode_Error",
-                      "description": "I/O mode instruction error.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in dual or quad SPI mode.\n",
+                      "description": "I/O mode instruction error.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in dual or quad SPI mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -831,7 +831,7 @@
                       "bit_offset": 11,
                       "bit_width": 1,
                       "display_name": "MSB_Error",
-                      "description": "MSB_Error.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in dual or quad SPI mode.\n",
+                      "description": "MSB_Error.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in dual or quad SPI mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -839,7 +839,7 @@
                       "bit_offset": 12,
                       "bit_width": 1,
                       "display_name": "Loopback Error",
-                      "description": "Loopback Error.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in dual or quad SPI mode.\n",
+                      "description": "Loopback Error.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in dual or quad SPI mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     },
@@ -847,7 +847,7 @@
                       "bit_offset": 13,
                       "bit_width": 1,
                       "display_name": "Command_Error",
-                      "description": "Command_Error.   0 - Disabled.   1 - Enabled. This bit is applicable only when the core is configured in dual or quad SPI mode.\n",
+                      "description": "Command_Error.\n  0 - Disabled.\n  1 - Enabled.\nThis bit is applicable only when the core is configured in dual or quad SPI mode.\n",
                       "is_volatile": true,
                       "access": "read-write"
                     }
@@ -860,5 +860,5 @@
       }
     }
   },
-  "checksum": "9aab4875"
+  "checksum": "11ed04cd"
 }

@@ -41,7 +41,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports ext_reset_in_0]
 set_property IOSTANDARD LVCMOS18 [get_ports o_hb_reset_n_0]
 
 # DQ lane matching uses legal per-lane datapath constraints here because
-# Vivado 2025.2 does not accept set_bus_skew on these direct I/O paths.
+# Vivado does not accept set_bus_skew on these direct I/O paths.
 # The old 0.050 ns / 0.095 ns budgets are not achievable in the current
 # direct-pad implementation. These budgets are set to the current routed
 # reality with a small rounding margin over the measured worst lanes:
