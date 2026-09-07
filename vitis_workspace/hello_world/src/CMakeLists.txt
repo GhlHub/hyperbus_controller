@@ -4,6 +4,21 @@ cmake_minimum_required(VERSION 3.16)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/Hello_worldExample.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/UserConfig.cmake)
+
+# This application is loaded by the QSPI SREC bootloader and executes from
+# HyperRAM.  Reuse the maintained MicroBlaze startup/linker and e_uart support
+# from the current Vitis workspace instead of the legacy BRAM-only template.
+list(REMOVE_ITEM USER_COMPILE_SOURCES "platform.c")
+list(APPEND USER_COMPILE_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../../vitis_ws4/hello_world/src/platform.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../../vitis_ws4/hello_world/src/euart_console.c"
+)
+set(USER_LINKER_SCRIPT
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../../vitis_ws4/hello_world/src/lscript.ld"
+)
+# The SREC application executes from the bottom of HyperRAM.  Keep its image,
+# heap, and stack outside the destructive memory-test range.
+list(APPEND USER_COMPILE_DEFINITIONS "HB_MEMTEST_START_ADDR=0x80010000u")
 set(APP_NAME hello_world)
 project(${APP_NAME})
 
