@@ -71,6 +71,15 @@ set ooc_run "design_1_hyperbus_controller_0_0_synth_1"
 set top_synth_run "synth_1"
 set impl_run "impl_1"
 
+if {[llength [get_runs -quiet $ooc_run]] == 0} {
+    set hyperbus_xci [get_files -quiet *design_1_hyperbus_controller_0_0.xci]
+    if {[llength $hyperbus_xci] != 1} {
+        error "Expected one HyperBus controller XCI, found: $hyperbus_xci"
+    }
+    puts "INFO: Recreating invalidated HyperBus OOC run after IP upgrade"
+    create_ip_run $hyperbus_xci
+}
+
 if {$do_reset} {
     puts "INFO: Resetting runs: $ooc_run, $top_synth_run, $impl_run"
     catch {reset_run $ooc_run}
