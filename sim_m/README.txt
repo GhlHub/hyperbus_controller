@@ -1,5 +1,5 @@
 ################################################################################
-# Vivado (TM) v2025.2 (64-bit)
+# Vivado (TM) v2026.1 (64-bit)
 #
 # README.txt: Please read the sections below to understand the steps required
 #             to simulate the design for a simulator, the directory structure
@@ -80,4 +80,3 @@ with the -simulator switch.
 For example, if the target simulator is "xcelium", export_simulation will create the
 'cds.lib', 'hdl.var' and design library diectories and mappings in the 'cds.lib'
 file.
-

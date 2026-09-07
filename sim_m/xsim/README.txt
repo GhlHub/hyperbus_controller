@@ -1,5 +1,5 @@
 ################################################################################
-# Vivado (TM) v2025.2 (64-bit)
+# Vivado (TM) v2026.1 (64-bit)
 #
 # README.txt: Please read the sections below to understand the steps required to
 #             run the exported script and how to fetch design source file details
@@ -47,4 +47,3 @@ contains information about the file name, type, library it is compiled into, whe
 it is part of the IP, associated library, file path information in a comma separated
 format. This file can be parsed to extract the required information for generating a
 custom script or can be read from verification test infra.
-

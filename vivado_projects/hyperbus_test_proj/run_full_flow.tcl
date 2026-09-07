@@ -56,14 +56,34 @@ open_project $xpr_path
 puts "INFO: Step 1/5: Upgrade IP"
 set ips [get_ips -quiet]
 if {[llength $ips] > 0} {
-    catch {report_ip_status -name ip_status_before_upgrade}
+    catch {report_ip_status}
     set rc [catch {upgrade_ip $ips} upgrade_msg]
     if {$rc != 0} {
         error "IP upgrade failed: $upgrade_msg"
     }
-    catch {report_ip_status -name ip_status_after_upgrade}
+    catch {report_ip_status}
 } else {
     puts "INFO: No IPs returned by get_ips; skipping upgrade step."
+}
+
+set bd_files [get_files -quiet -filter {FILE_TYPE == "Block Designs"}]
+foreach bd_file $bd_files {
+    puts "INFO: Validating and generating block design: $bd_file"
+    open_bd_design $bd_file
+    validate_bd_design
+    generate_target all $bd_file
+}
+
+if {[llength $bd_files] > 0} {
+    make_wrapper -files $bd_files -top
+    set wrapper_file [file join $script_dir "hyperbus_test_proj.gen" "sources_1" "bd" "design_1" "hdl" "design_1_wrapper.v"]
+    if {![file exists $wrapper_file]} {
+        error "Generated block-design wrapper not found: $wrapper_file"
+    }
+    if {[llength [get_files -quiet $wrapper_file]] == 0} {
+        add_files -norecurse $wrapper_file
+    }
+    set_property top design_1_wrapper [get_filesets sources_1]
 }
 update_compile_order -fileset sources_1
 
@@ -99,7 +119,7 @@ puts "INFO: Step 5/5: Export device image artifacts"
 open_run $impl_run
 file mkdir $export_dir
 
-set top_name [get_property top [get_runs $top_synth_run]]
+set top_name [get_property top [get_filesets sources_1]]
 if {$top_name eq ""} {
     set top_name "design_1_wrapper"
 }

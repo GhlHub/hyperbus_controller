@@ -1,7 +1,7 @@
-verilog xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" \
+verilog xil_defaultlib -i "../../../../../tools/Xilinx/2026.1/data/rsb/busdef" \
 "../../infinion/002-26518_0B/s27kl0642.v" \
 
-sv xil_defaultlib -i "../../../../../tools/Xilinx/2025.2/data/rsb/busdef" -i "../../tb" \
+sv xil_defaultlib -i "../../../../../tools/Xilinx/2026.1/data/rsb/busdef" -i "../../tb" \
 "../../rtl/hyperbus_fifo_bank_xilinx.sv" \
 "../../rtl/hyperbus_phy_xilinx.sv" \
 "../../rtl/hyperbus_phy_xilinx_usplus.sv" \
