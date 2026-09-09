@@ -181,6 +181,10 @@ For writes:
 
 - accepted AXI write data beats are packed with `WSTRB` and pushed into the write
   FIFO
+- registered `WREADY` deasserts on the final beat's handshake, preventing a
+  following burst's early write data from being acknowledged before it can be
+  stored; `bash scripts/test_axi_wready.sh` checks this boundary with continuous
+  `WVALID` across INCR and WRAP bursts
 - once the final beat is accepted, the frontend emits a write command into the
   command FIFO
 - malformed `WLAST` handling is detected in the AXI domain and reported back as

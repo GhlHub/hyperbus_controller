@@ -258,6 +258,12 @@ module hyperbus_axi_full_frontend #(
                     wr_proto_err <= 1'b1;
                 end
                 w_beats_rcvd <= w_beats_rcvd + 8'd1;
+                // The registered READY must fall on the final handshake.
+                // Otherwise the next burst's first W beat can be acknowledged
+                // one cycle later while the FIFO enqueue count guard drops it.
+                if (w_beats_rcvd == aw_len_q) begin
+                    s_axi_wready <= 1'b0;
+                end
                 // Push write command at final beat when cmd_fifo has space.
                 if ((w_beats_rcvd == aw_len_q) && !i_cmd_fifo_full && !bresp_q_full) begin
                     if ((aw_burst_q == 2'b10) && (aw_split_beats2_q != 8'd0)) begin
